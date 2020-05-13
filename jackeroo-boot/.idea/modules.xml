@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/jackeroo-boot-parent.iml" filepath="$PROJECT_DIR$/jackeroo-boot-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jackeroo-boot-module-common/jackeroo-boot-module-common.iml" filepath="$PROJECT_DIR$/jackeroo-boot-module-common/jackeroo-boot-module-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jackeroo-boot-module-online/jackeroo-boot-module-online.iml" filepath="$PROJECT_DIR$/jackeroo-boot-module-online/jackeroo-boot-module-online.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jackeroo-boot-module-root/jackeroo-boot-module-root.iml" filepath="$PROJECT_DIR$/jackeroo-boot-module-root/jackeroo-boot-module-root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jackeroo-boot-module-system/jackeroo-boot-module-system.iml" filepath="$PROJECT_DIR$/jackeroo-boot-module-system/jackeroo-boot-module-system.iml" />
+    </modules>
+  </component>
+</project>
