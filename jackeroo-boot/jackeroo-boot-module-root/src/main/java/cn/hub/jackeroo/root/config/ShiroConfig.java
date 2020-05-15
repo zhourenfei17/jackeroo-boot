@@ -3,7 +3,6 @@ package cn.hub.jackeroo.root.config;
 import cn.hub.jackeroo.root.shiro.CredentialsMatcher;
 import cn.hub.jackeroo.root.shiro.SessionControlFilter;
 import cn.hub.jackeroo.root.shiro.ShiroRealm;
-import cn.hub.jackeroo.utils.UserUtils;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -112,7 +111,7 @@ public class ShiroConfig {
 	public RedisCacheManager cacheManager() {
 		RedisCacheManager redisCacheManager = new RedisCacheManager();
 		redisCacheManager.setRedisManager(redisManager());
-		redisCacheManager.setKeyPrefix(UserUtils.USER_CACHE); // 设置前缀
+		//redisCacheManager.setKeyPrefix(UserUtils.USER_CACHE); // 设置前缀
 		return redisCacheManager;
 	}
 
@@ -123,7 +122,7 @@ public class ShiroConfig {
 	public RedisSessionDAO redisSessionDAO() {
 		RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
 		redisSessionDAO.setRedisManager(redisManager());
-		redisSessionDAO.setKeyPrefix(UserUtils.USER_SESSION);
+		//redisSessionDAO.setKeyPrefix(UserUtils.USER_SESSION);
 		return redisSessionDAO;
 	}
 

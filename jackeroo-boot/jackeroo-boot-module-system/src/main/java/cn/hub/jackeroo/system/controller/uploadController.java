@@ -25,15 +25,15 @@ import java.util.UUID;
 @Controller
 public class uploadController {
 
-	@Value("${ueditor.imageUrlPrefix}")
+	/*@Value("${ueditor.imageUrlPrefix}")
 	private String imageUrlPrefix;
 
-	/**
+	*//**
 	 * 上传图片
 	 * 
 	 * @param request
 	 * @return
-	 */
+	 *//*
 	@RequestMapping(value = "/uploadImg", method = RequestMethod.POST)
 	@ResponseBody
 	public Json uploadImg(HttpServletRequest request) {
@@ -101,5 +101,5 @@ public class uploadController {
 		}
 		json.setMsg("请上传图片");
 		return json;
-	}
+	}*/
 }

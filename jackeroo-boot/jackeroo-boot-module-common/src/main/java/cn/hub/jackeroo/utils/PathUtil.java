@@ -143,9 +143,4 @@ public class PathUtil {
 		return getProjectPath() + path;
 	}
 
-	public static void main(String[] args) {
-		// System.out.println(getProjectPath());
-		// createSoftLink("
-		// D:\\apache-tomcat-7.0\\webapps\\DnionWorkflowII\\UserFiles");
-	}
 }

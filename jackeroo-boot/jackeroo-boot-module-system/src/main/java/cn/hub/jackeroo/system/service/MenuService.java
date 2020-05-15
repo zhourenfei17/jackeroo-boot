@@ -21,8 +21,8 @@ import java.util.List;
  * @version 2018-11-14
  */
 @Service
-public class MenuService extends CrudService<MenuDao, Menu, Integer> {
-	@Resource
+public class MenuService {
+	/*@Resource
 	private MenuDao dao;
 	@Autowired
 	private RedisTemplate redisTemplate;
@@ -33,13 +33,13 @@ public class MenuService extends CrudService<MenuDao, Menu, Integer> {
 		return dao.getAllMenuByRoleId(roleId);
 	}
 
-	/**
+	*//**
 	 * 获取所有菜单--以树状显示
 	 * @param pid
 	 * @return
 	 * @author
 	 * @date 2016年3月10日
-	 */
+	 *//*
 	public List<Menu> getAllMenuTree(int pid, Long roleId){
 		Menu m = new Menu();
 		m.setRoleId(roleId);
@@ -56,12 +56,12 @@ public class MenuService extends CrudService<MenuDao, Menu, Integer> {
 		}
 	}
 
-	/**
+	*//**
 	 * 获取菜单的html代码
 	 * @return
 	 * @author
 	 * @date 2016年3月10日
-	 */
+	 *//*
 	public String getMenuHtml(String adminPath){
 		List<Menu> menus = this.getUserMenuTree();
 
@@ -137,39 +137,39 @@ public class MenuService extends CrudService<MenuDao, Menu, Integer> {
 		}
 
 		// 更新子节点 parentIds
-		/*Menu m = new Menu();
+		*//*Menu m = new Menu();
 		m.setParentIds("%,"+menu.getId()+",%");
 		List<Menu> list = dao.findByParentIdsLike(m);
 		for (Menu e : list){
 			e.setParentIds(e.getParentIds().replace(oldParentIds, menu.getParentIds()));
 			dao.updateParentIds(e);
-		}*/
+		}*//*
 
 		//更新缓存
 	}
 
-	/**
+	*//**
 	 * 根据pid获取子目录最大排序值
 	 * @param pid
 	 * @return
-	 */
+	 *//*
 	public int getMaxSortByPid(Integer pid){
 		return dao.getMaxSortByPid(pid);
 	}
 
 
-	/**
+	*//**
 	 * 获取当前用户的菜单列表
-	 */
+	 *//*
 	public List<Menu> getUserMenuTree(){
 		Long roleId = UserUtils.getUser().getRoleId();
 		List<Menu> list;
 
-		/*if(redisService.lLen(UserUtils.USER_ROLE_MENULIST + roleId) > 0){
+		*//*if(redisService.lLen(UserUtils.USER_ROLE_MENULIST + roleId) > 0){
 			list =  redisService.lRangeToObj(UserUtils.USER_ROLE_MENULIST + roleId, 0L, -1L);
 		}else {
 			list = this.getAllMenuTree(1, roleId);
-		}*/
+		}*//*
 		if(redisTemplate.opsForList().size(UserUtils.USER_ROLE_MENULIST + roleId) > 0){
 			list =  redisTemplate.opsForList().range(UserUtils.USER_ROLE_MENULIST + roleId, 0L, -1L);
 		}else {
@@ -180,18 +180,18 @@ public class MenuService extends CrudService<MenuDao, Menu, Integer> {
 		return list;
 	}
 
-	/**
+	*//**
 	 * 更新用户的菜单列表
 	 * @param roleId
-	 */
+	 *//*
 	public void updateUserMenuTree(Long roleId){
 		//先清空redis中的菜单列表
-		/*if(redisService.lLen(UserUtils.USER_ROLE_MENULIST + roleId) > 0){
+		*//*if(redisService.lLen(UserUtils.USER_ROLE_MENULIST + roleId) > 0){
 			redisService.lLeftPop(UserUtils.USER_ROLE_MENULIST + roleId);
 		}
 
 		//储存
-		redisService.lRightPushAll(UserUtils.USER_ROLE_MENULIST + roleId, this.getAllMenuTree(1, roleId));*/
+		redisService.lRightPushAll(UserUtils.USER_ROLE_MENULIST + roleId, this.getAllMenuTree(1, roleId));*//*
 
 		if(redisTemplate.opsForList().size(UserUtils.USER_ROLE_MENULIST + roleId) > 0){
 			redisTemplate.opsForList().trim(UserUtils.USER_ROLE_MENULIST + roleId, redisTemplate.opsForList().size(UserUtils.USER_ROLE_MENULIST + roleId) , -1);
@@ -201,11 +201,11 @@ public class MenuService extends CrudService<MenuDao, Menu, Integer> {
 		redisTemplate.opsForList().rightPushAll(UserUtils.USER_ROLE_MENULIST + roleId, this.getAllMenuTree(1, roleId));
 	}
 
-	/**
+	*//**
 	 * 根据角色查询菜单列表,查询所有的菜单，标记自己拥有的
 	 * @param roleId
 	 * @return
-	 */
+	 *//*
 	public List<ZTree> findMenuByRole(Long roleId){
 		Menu menu = new Menu();
 		menu.setRoleId(roleId);
@@ -223,5 +223,5 @@ public class MenuService extends CrudService<MenuDao, Menu, Integer> {
 			trees.add(tree);
 		}
 		return trees;
-	}
+	}*/
 }

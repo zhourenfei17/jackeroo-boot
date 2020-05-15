@@ -1,7 +1,6 @@
 package cn.hub.jackeroo.persistence;
 
 import cn.hub.jackeroo.utils.UserUtils;
-import cn.hub.jackeroo.vo.IUser;
 import cn.hub.jackeroo.vo.LoginUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Maps;

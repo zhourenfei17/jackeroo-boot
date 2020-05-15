@@ -1,6 +1,6 @@
 package cn.hub.jackeroo.online.dao;
 
-import cn.hub.jackeroo.online.model.GenScheme;
+import cn.hub.jackeroo.online.entity.GenScheme;
 import cn.hub.jackeroo.persistence.CrudDao;
 
 /**

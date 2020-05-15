@@ -1,11 +1,11 @@
 package cn.hub.jackeroo.online.utils;
 
-import cn.hub.jackeroo.online.model.GenCategory;
-import cn.hub.jackeroo.online.model.GenConfig;
-import cn.hub.jackeroo.online.model.GenScheme;
-import cn.hub.jackeroo.online.model.GenTable;
-import cn.hub.jackeroo.online.model.GenTableColumn;
-import cn.hub.jackeroo.online.model.GenTemplate;
+import cn.hub.jackeroo.online.entity.GenCategory;
+import cn.hub.jackeroo.online.entity.GenConfig;
+import cn.hub.jackeroo.online.entity.GenScheme;
+import cn.hub.jackeroo.online.entity.GenTable;
+import cn.hub.jackeroo.online.entity.GenTableColumn;
+import cn.hub.jackeroo.online.entity.GenTemplate;
 import cn.hub.jackeroo.utils.DateUtils;
 import cn.hub.jackeroo.utils.FileUtils;
 import cn.hub.jackeroo.utils.FreeMarkers;

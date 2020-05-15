@@ -1,13 +1,11 @@
 package cn.hub.jackeroo.persistence;
 
 import com.google.common.collect.Maps;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.ModelMap;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.annotation.Resource;
-import javax.validation.Validator;
 import java.util.Map;
 
 public abstract class BaseController {
@@ -19,12 +17,6 @@ public abstract class BaseController {
 	 */
 	@Value("${adminPath}")
 	protected String adminPath;
-
-	/**
-	 * 验证Bean实例对象
-	 */
-	@Autowired
-	protected Validator validator;
 
 	/**
 	 * 为Thymeleaf添加全局参数

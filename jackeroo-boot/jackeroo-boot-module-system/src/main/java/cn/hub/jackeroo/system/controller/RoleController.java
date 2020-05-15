@@ -28,33 +28,24 @@ import java.util.List;
 @RequestMapping(value = "${adminPath}/system/role")
 public class RoleController extends BaseController {
 
-	@Autowired
+	/*@Autowired
 	private RoleService roleService;
 	@Autowired
 	private MenuService menuService;
 	
-	/**
+	*//**
 	 * @Description：系统角色列表页面
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping("index")
 	public String index(){
 		return "/system/roleList";
 	}
 	
-	/**
-	 * @Description：系统角色列表数据
-	 * @ahutor
-	 */
-	@RequestMapping("list")
-	@ResponseBody
-	public Grid list(Role role, GridParam param) {
-		return roleService.findPage(role, param);
-	}
-	/**
+	*//**
 	 * @Description：系统角色表单页面--新增/编辑
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping(value = "form")
 	public String form(Role role, ModelMap model) {
 		if(role.getName() == null && role.getId() != null){
@@ -63,10 +54,10 @@ public class RoleController extends BaseController {
 		model.addAttribute("role", role);
 		return "/system/roleForm";
 	}
-	/**
+	*//**
 	 * @Description：系统角色新增/编辑 保存方法
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping("saveRole")
 	public String saveRole(Role role, ModelMap model){
 		try{
@@ -83,10 +74,10 @@ public class RoleController extends BaseController {
 		}
 		return successPath;
 	}
-	/**
+	*//**
 	 * @Description：系统角色数据删除方法
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping("delRole")
 	@ResponseBody
 	public Json delRole(Role role){
@@ -103,11 +94,11 @@ public class RoleController extends BaseController {
 		return json;
 	}
 
-	/**
+	*//**
 	 * 权限设置页面
 	 * @param model
 	 * @return
-	 */
+	 *//*
 	@RequestMapping("editPermission")
 	public String editPermission(ModelMap model){
 		return "/system/permissionSelectForm";
@@ -119,7 +110,7 @@ public class RoleController extends BaseController {
 		return menuService.findMenuByRole(Long.parseLong(roleId));
 	}
 
-	/**
+	*//**
 	 * @Description: 编辑保存角色菜单关系
 	 * @param roleId
 	 * @param addMenus
@@ -127,7 +118,7 @@ public class RoleController extends BaseController {
 	 * @return
 	 * @ahutor
 	 * @date 2016年9月21日
-	 */
+	 *//*
 	@RequestMapping("editRoleMenu")
 	@ResponseBody
 	public Json editRoleMenu(String roleId, String addMenus, String delMenus){
@@ -142,5 +133,5 @@ public class RoleController extends BaseController {
 			json.setMsg("操作失败！");
 		}
 		return json;
-	}
+	}*/
 }

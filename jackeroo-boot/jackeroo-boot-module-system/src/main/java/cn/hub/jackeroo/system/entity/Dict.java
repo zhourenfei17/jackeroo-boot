@@ -1,6 +1,8 @@
 package cn.hub.jackeroo.system.entity;
 
 import cn.hub.jackeroo.persistence.DataEntity;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
@@ -10,9 +12,12 @@ import javax.validation.constraints.NotNull;
  * @author
  * @version 2018-11-14
  */
-public class Dict extends DataEntity<Dict, Integer> {
+@TableName(value = "sys_dict")
+public class Dict extends DataEntity<Dict, Long> {
 	
 	private static final long serialVersionUID = 1L;
+	@TableId
+	private Long id;
 	private String value;		// 数据值
 	private String label;		// 标签名
 	private String type;		// 类型
@@ -24,11 +29,20 @@ public class Dict extends DataEntity<Dict, Integer> {
 		super();
 	}
 
-	public Dict(Integer id){
+	public Dict(Long id){
 		super(id);
 	}
 
-	@Length(min=1, max=100, message="数据值长度必须介于 1 和 100 之间")
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Length(min=1, max=100, message="数据值长度必须介于 1 和 100 之间")
 	public String getValue() {
 		return value;
 	}

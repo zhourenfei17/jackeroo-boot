@@ -27,32 +27,22 @@ import java.util.List;
 @RequestMapping(value = "${adminPath}/system/user")
 public class UserController extends BaseController {
 
-	@Autowired
+	/*@Autowired
 	private UserService userService;
 	
-	/**
+	*//**
 	 * @Description：系统用户信息列表页面
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping("index")
 	public String index(){
 		return "/system/userList";
 	}
 	
-	/**
-	 * @Description：系统用户信息列表数据
-	 * @ahutor
-	 */
-	@RequestMapping("list")
-	@ResponseBody
-	@Cacheable(value = "userListCache", key = "#param.offset + '_' + #param.limit")
-	public Grid list(User user, GridParam param) {
-		return userService.findPage(user, param);
-	}
-	/**
+	*//**
 	 * @Description：系统用户信息表单页面--新增/编辑
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping(value = "form")
 	public String form(IUser user, ModelMap model) {
 		if(user.getName() == null && user.getId() != null){
@@ -61,10 +51,10 @@ public class UserController extends BaseController {
 		model.addAttribute("user", user);
 		return "/system/userForm";
 	}
-	/**
+	*//**
 	 * @Description：系统用户信息新增/编辑 保存方法
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping("saveUser")
 	public String saveUser(User user, ModelMap model){
 		try{
@@ -77,10 +67,10 @@ public class UserController extends BaseController {
 		}
 		return successPath;
 	}
-	/**
+	*//**
 	 * @Description：系统用户信息数据删除方法
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping("delUser")
 	@ResponseBody
 	public Json delUser(User user){
@@ -103,5 +93,5 @@ public class UserController extends BaseController {
 		User user = new User();
 		user.setNature(0);		//管理
 		return userService.findList(user);
-	}
+	}*/
 }

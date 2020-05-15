@@ -1,6 +1,6 @@
 package cn.hub.jackeroo.online.controller;
 
-import cn.hub.jackeroo.online.model.GenScheme;
+import cn.hub.jackeroo.online.entity.GenScheme;
 import cn.hub.jackeroo.online.service.GenSchemeService;
 import cn.hub.jackeroo.online.service.GenTableService;
 import cn.hub.jackeroo.persistence.BaseController;

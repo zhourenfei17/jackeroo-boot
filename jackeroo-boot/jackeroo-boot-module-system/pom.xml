@@ -25,11 +25,6 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>cn.hub.jackeroo</groupId>
-                <artifactId>jackeroo-boot-module-common</artifactId>
-            </plugin>
-        </plugins>
+
     </build>
 </project>

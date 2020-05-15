@@ -16,8 +16,8 @@ import java.util.Date;
  * @version 2018-11-14
  */
 @Service
-public class UserService extends CrudService<UserDao, IUser, Long> {
-	@Resource
+public class UserService {
+	/*@Resource
 	private UserDao dao;
 
 	public User getUserByName(String name){
@@ -40,6 +40,6 @@ public class UserService extends CrudService<UserDao, IUser, Long> {
 		}else{
 			//更新
 		}
-	}
+	}*/
 
 }

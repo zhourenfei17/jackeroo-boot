@@ -13,8 +13,8 @@ import javax.annotation.Resource;
  * @version 2018-11-14
  */
 @Service
-public class UserRoleService extends CrudService<UserRoleDao, UserRole, Long> {
-	@Resource
-	private UserRoleDao dao;
+public class UserRoleService {
+	/*@Resource
+	private UserRoleDao dao;*/
 
 }

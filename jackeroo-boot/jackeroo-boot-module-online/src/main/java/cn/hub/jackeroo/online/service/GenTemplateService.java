@@ -1,11 +1,9 @@
 package cn.hub.jackeroo.online.service;
 
 import cn.hub.jackeroo.online.dao.GenTemplateDao;
-import cn.hub.jackeroo.online.model.GenTemplate;
-import cn.hub.jackeroo.utils.PageUtils;
+import cn.hub.jackeroo.online.entity.GenTemplate;
 import cn.hub.jackeroo.vo.Grid;
 import cn.hub.jackeroo.vo.GridParam;
-import com.github.pagehelper.Page;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +31,10 @@ public class GenTemplateService {
 
 		Grid grid = new Grid();
 
-		Page page = PageUtils.offsetPage(gridParam);
+		//Page page = PageUtils.offsetPage(gridParam);
 		genTemplateDao.findList(genTemplate);
 
-		grid.setPage(page);
+		//grid.setPage(page);
 		return grid;
 	}
 	

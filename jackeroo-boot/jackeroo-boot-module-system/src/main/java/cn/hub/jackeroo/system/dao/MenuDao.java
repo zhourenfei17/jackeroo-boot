@@ -3,6 +3,7 @@ package cn.hub.jackeroo.system.dao;
 
 import cn.hub.jackeroo.system.entity.Menu;
 import cn.hub.jackeroo.persistence.CrudDao;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

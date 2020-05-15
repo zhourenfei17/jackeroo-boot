@@ -3,15 +3,13 @@ package cn.hub.jackeroo.online.service;
 import cn.hub.jackeroo.online.dao.GenDataBaseDictDao;
 import cn.hub.jackeroo.online.dao.GenTableColumnDao;
 import cn.hub.jackeroo.online.dao.GenTableDao;
-import cn.hub.jackeroo.online.model.GenTable;
-import cn.hub.jackeroo.online.model.GenTableColumn;
+import cn.hub.jackeroo.online.entity.GenTable;
+import cn.hub.jackeroo.online.entity.GenTableColumn;
 import cn.hub.jackeroo.online.utils.GenUtils;
 import cn.hub.jackeroo.persistence.CrudService;
-import cn.hub.jackeroo.utils.PageUtils;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.Grid;
 import cn.hub.jackeroo.vo.GridParam;
-import com.github.pagehelper.Page;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -46,10 +44,10 @@ public class GenTableService extends CrudService<GenTableDao, GenTable, Integer>
 		return page;*/
 		Grid grid = new Grid();
 
-		Page page = PageUtils.offsetPage(gridParam);
+		//Page page = PageUtils.offsetPage(gridParam);
 		genTableDao.findList(genTable);
 
-		grid.setPage(page);
+		//grid.setPage(page);
 		return grid;
 	}
 

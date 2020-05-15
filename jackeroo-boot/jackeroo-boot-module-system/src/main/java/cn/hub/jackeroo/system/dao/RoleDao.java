@@ -4,6 +4,7 @@ import cn.hub.jackeroo.system.entity.Role;
 import cn.hub.jackeroo.system.entity.RoleMenu;
 import cn.hub.jackeroo.persistence.CrudDao;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

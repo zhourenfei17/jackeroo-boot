@@ -1,6 +1,6 @@
 package cn.hub.jackeroo.online.dao;
 
-import cn.hub.jackeroo.online.model.GenTableColumn;
+import cn.hub.jackeroo.online.entity.GenTableColumn;
 import cn.hub.jackeroo.persistence.CrudDao;
 
 /**

@@ -1,4 +1,4 @@
-package cn.hub.jackeroo.online.model;
+package cn.hub.jackeroo.online.entity;
 
 import cn.hub.jackeroo.mo.DictMo;
 

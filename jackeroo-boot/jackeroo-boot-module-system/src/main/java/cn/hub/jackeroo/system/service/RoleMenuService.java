@@ -13,8 +13,8 @@ import javax.annotation.Resource;
  * @version 2018-11-14
  */
 @Service
-public class RoleMenuService extends CrudService<RoleMenuDao, RoleMenu, Integer> {
-	@Resource
-	private RoleMenuDao dao;
+public class RoleMenuService {
+	/*@Resource
+	private RoleMenuDao dao;*/
 
 }

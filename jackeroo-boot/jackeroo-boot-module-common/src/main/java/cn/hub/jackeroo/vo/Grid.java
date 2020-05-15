@@ -1,6 +1,5 @@
 package cn.hub.jackeroo.vo;
 
-import com.github.pagehelper.Page;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,10 +26,4 @@ public class Grid implements Serializable {
 		this.rows = rows;
 	}
 
-	public void setPage(Page page) {
-		if (page != null) {
-			this.total = page.getTotal();
-			this.rows = page.getResult();
-		}
-	}
 }

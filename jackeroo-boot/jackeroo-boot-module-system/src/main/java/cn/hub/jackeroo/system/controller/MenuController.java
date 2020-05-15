@@ -26,32 +26,32 @@ import java.util.List;
 @RequestMapping(value = "${adminPath}/system/menu")
 public class MenuController extends BaseController {
 
-	@Autowired
+	/*@Autowired
 	private MenuService menuService;
 	
-	/**
+	*//**
 	 * @Description：菜单信息列表页面
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping("index")
 	public String index(){
 		return "/system/menuList";
 	}
 	
-	/**
+	*//**
 	 * @Description：菜单信息列表数据
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping("list")
 	@ResponseBody
 	public List<Menu> list(Menu menu) {
 		menu.setIsShow(null);
 		return menuService.findAllList(menu);
 	}
-	/**
+	*//**
 	 * @Description：菜单信息表单页面--新增/编辑
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping(value = "form")
 	public String form(Menu menu, ModelMap model) {
 		if(menu.getName() == null && menu.getId() != null){
@@ -68,10 +68,10 @@ public class MenuController extends BaseController {
 		model.addAttribute("menu", menu);
 		return "/system/menuForm";
 	}
-	/**
+	*//**
 	 * @Description：菜单信息新增/编辑 保存方法
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping("saveMenu")
 	public String saveMenu(Menu menu, ModelMap model){
 		try{
@@ -84,10 +84,10 @@ public class MenuController extends BaseController {
 		}
 		return successPath;
 	}
-	/**
+	*//**
 	 * @Description：菜单信息数据删除方法
 	 * @ahutor
-	 */
+	 *//*
 	@RequestMapping("delMenu")
 	@ResponseBody
 	public Json delMenu(Menu menu){
@@ -104,10 +104,10 @@ public class MenuController extends BaseController {
 		return json;
 	}
 
-	/**
+	*//**
 	 * 获取所有的菜单列表
 	 * @return
-	 */
+	 *//*
 	@RequestMapping("getMenuList")
 	@ResponseBody
 	public List<ZTree> getMenuList(String menuId){
@@ -132,14 +132,14 @@ public class MenuController extends BaseController {
 		return trees;
 	}
 
-	/**
+	*//**
 	 * 上级菜单选择页
 	 * @return
-	 */
+	 *//*
 	@RequestMapping("menuSelect")
 	public String menuSelect(String menuId, ModelMap model){
 		model.addAttribute("menuId", menuId);
 		return "/system/menuSelectForm";
-	}
+	}*/
 
 }

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("${adminPath}/login")
 public class LoginController extends BaseController {
 
-	@RequestMapping("")
+	/*@RequestMapping("")
 	private String index(ModelMap model) {
 		return "login";
 	}
@@ -58,14 +58,14 @@ public class LoginController extends BaseController {
 		}
 	}
 
-	/**
+	*//**
 	 * 退出登录
 	 * 
 	 * @return
-	 */
+	 *//*
 	@RequestMapping("/logout")
 	public String logout() {
 		SecurityUtils.getSubject().logout();
 		return "redirect:" + adminPath + "/login";
-	}
+	}*/
 }

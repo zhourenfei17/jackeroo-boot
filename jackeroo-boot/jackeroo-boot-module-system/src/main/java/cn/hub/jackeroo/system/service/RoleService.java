@@ -19,8 +19,8 @@ import java.util.List;
  * @version 2018-11-14
  */
 @Service
-public class RoleService extends CrudService<RoleDao, Role, Long> {
-	@Resource
+public class RoleService {
+	/*@Resource
 	private RoleDao dao;
 	@Resource
 	private MenuService menuService;
@@ -60,5 +60,5 @@ public class RoleService extends CrudService<RoleDao, Role, Long> {
 		}else {
 			dao.update(role);
 		}
-	}
+	}*/
 }

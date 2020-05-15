@@ -79,15 +79,4 @@ public class IDUtil {
 		return ts;
 	}
 
-	public static void main(String[] args) throws Exception {
-		System.out.println(System.currentTimeMillis());
-		IDUtil idUtil = new IDUtil();
-		Set<Long> set = new HashSet<Long>();
-		long begin = System.nanoTime();
-		for (int i = 0; i < 10; i++) {
-			set.add(nextId());
-		}
-		System.out.println("time=" + (System.nanoTime() - begin) / 1000.0 + " us");
-		System.out.println(set);
-	}
 }

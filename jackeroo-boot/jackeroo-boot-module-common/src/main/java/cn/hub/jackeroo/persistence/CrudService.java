@@ -1,9 +1,6 @@
 package cn.hub.jackeroo.persistence;
 
-import cn.hub.jackeroo.vo.Grid;
-import cn.hub.jackeroo.vo.GridParam;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
@@ -92,21 +89,4 @@ public abstract class CrudService<D extends CrudDao<T, Pk>, T extends DataEntity
 		dao.delete(id);
 	}
 
-	/**
-	 * @description 查询并返回列表数据
-	 * @param
-	 * @author
-	 * @date 2018/1/2
-	 * @return
-	 */
-	public Grid findPage(T entity, GridParam param) {
-		Grid grid = new Grid();
-
-		Page page = PageHelper.offsetPage(param.getOffset(), param.getLimit(), true);
-		dao.findList(entity);
-
-		grid.setRows(page.getResult());
-		grid.setTotal(page.getTotal());
-		return grid;
-	}
 }
