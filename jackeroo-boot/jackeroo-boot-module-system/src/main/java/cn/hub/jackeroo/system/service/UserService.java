@@ -1,14 +1,9 @@
 package cn.hub.jackeroo.system.service;
 
-import cn.hub.jackeroo.system.entity.User;
-import cn.hub.jackeroo.persistence.CrudService;
 import cn.hub.jackeroo.system.dao.UserDao;
-import cn.hub.jackeroo.utils.MD5Util;
-import cn.hub.jackeroo.vo.IUser;
+import cn.hub.jackeroo.system.entity.User;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * 系统用户信息Service
@@ -16,7 +11,7 @@ import java.util.Date;
  * @version 2018-11-14
  */
 @Service
-public class UserService {
+public class UserService extends ServiceImpl<UserDao, User> {
 	/*@Resource
 	private UserDao dao;
 

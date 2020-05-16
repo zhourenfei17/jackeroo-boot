@@ -6,3 +6,4 @@ mvnw*
 logs
 .DS_Store
 *.yml
+node_modules

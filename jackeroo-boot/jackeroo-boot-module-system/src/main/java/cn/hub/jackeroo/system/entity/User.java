@@ -1,43 +1,36 @@
 package cn.hub.jackeroo.system.entity;
 
-import cn.hub.jackeroo.vo.IUser;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 /**
- * 系统用户信息Entity
- * @author
- * @version 2018-11-14
+ * 用户信息
  */
-public class User extends IUser {
-	
-	private static final long serialVersionUID = 1L;
-	private cn.hub.jackeroo.system.entity.Role role;
-
-	private String managerName;
-	
-	public User() {
-		super();
-	}
-
-	public User(Long id){
-		super();
-		this.id = id;
-	}
-
-	public String getManagerName() {
-		return managerName;
-	}
-
-	public void setManagerName(String managerName) {
-		this.managerName = managerName;
-	}
-
-
-	public cn.hub.jackeroo.system.entity.Role getRole() {
-		return role;
-	}
-
-	public void setRole(cn.hub.jackeroo.system.entity.Role role) {
-		this.role = role;
-	}
+@Data
+@TableName("sys_user")
+public class User implements Serializable {
+	@TableId
+    private Long id;
+    private String name;
+    private String account;
+    private String password;
+    private String salt;
+    private Integer gender;
+    private String phone;
+    private String code;
+    private String avatar;
+    private Integer status;
+    private String remark;
+    @TableLogic
+    private Integer delFlag;
+    private String createBy;
+    private LocalDateTime createTime;
+    private String updateBy;
+    private LocalDateTime updateTime;
 }
