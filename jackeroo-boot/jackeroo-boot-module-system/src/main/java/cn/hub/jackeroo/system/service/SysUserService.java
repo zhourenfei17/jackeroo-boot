@@ -2,8 +2,10 @@ package cn.hub.jackeroo.system.service;
 
 import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.mapper.SysUserMapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
 
 /**
  * <p>
@@ -16,4 +18,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
 
+    /**
+     * 通过登录账号获取用户信息
+     * @param account
+     * @return
+     */
+    public SysUser findByAccount(String account){
+        LambdaQueryWrapper<SysUser> query = new LambdaQueryWrapper<>();
+        query.eq(SysUser::getAccount, account);
+
+        return super.getOne(query);
+    }
 }

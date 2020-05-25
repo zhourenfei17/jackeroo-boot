@@ -1,7 +1,6 @@
 package cn.hub.jackeroo.system.entity;
 
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import cn.hub.jackeroo.persistence.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -17,7 +16,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SysUserRole implements Serializable {
+public class SysUserRole extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,26 +29,5 @@ public class SysUserRole implements Serializable {
      * 角色id
      */
     private Long roleId;
-
-    /**
-     * 创建人
-     */
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新人
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
-
 
 }

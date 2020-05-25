@@ -1,6 +1,6 @@
 package cn.hub.jackeroo.system.entity;
 
-import cn.hub.jackeroo.persistence.DataEntity;
+import cn.hub.jackeroo.persistence.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.hibernate.validator.constraints.Length;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * @version 2018-11-14
  */
 @TableName(value = "sys_dict")
-public class Dict extends DataEntity<Dict, Long> {
+public class Dict extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
 	@TableId
@@ -29,11 +29,6 @@ public class Dict extends DataEntity<Dict, Long> {
 		super();
 	}
 
-	public Dict(Long id){
-		super(id);
-	}
-
-    @Override
     public Long getId() {
         return id;
     }

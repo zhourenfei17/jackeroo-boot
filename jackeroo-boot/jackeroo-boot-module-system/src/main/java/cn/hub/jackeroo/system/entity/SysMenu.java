@@ -1,8 +1,7 @@
 package cn.hub.jackeroo.system.entity;
 
-import java.time.LocalDateTime;
+import cn.hub.jackeroo.persistence.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -18,7 +17,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SysMenu implements Serializable {
+public class SysMenu extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -84,26 +83,5 @@ public class SysMenu implements Serializable {
      * 删除标识
      */
     private Integer delFlag;
-
-    /**
-     * 创建人
-     */
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新人
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
-
 
 }
