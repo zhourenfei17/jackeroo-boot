@@ -23,4 +23,8 @@ public interface Constant {
      * 用户状态 - 冻结
      */
     int USER_STATUS_FROZEN = 1;
+    /**
+     * 自定义系统异常代码
+     */
+    int SYSTEM_ERROR_CODE = 5000;
 }
