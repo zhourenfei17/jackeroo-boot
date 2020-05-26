@@ -33,6 +33,6 @@ ${AnsiColor.CYAN}
                 佛祖保佑                   永无BUG
 
 ${AnsiColor.BRIGHT_GREEN}
-jackeroo-boot Version: ${application.version}
+Jackeroo-boot Version: ${application.version}
 Spring Boot Version: ${spring-boot.version}
 ${AnsiColor.BLACK}
