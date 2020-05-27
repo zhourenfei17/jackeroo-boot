@@ -11,12 +11,12 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Controller
+@RestController
 public class LoginController extends BaseController {
 
 	@RequestMapping("/login")
@@ -31,7 +31,7 @@ public class LoginController extends BaseController {
 				// JSON json = new JSONObject();
 				// ((JSONObject) json).put("token", subject.getSession().getId());
 
-				return ok();
+				return ok(subject.getSession().getId());
 			} else {
 				return error("登录失败");
 			}

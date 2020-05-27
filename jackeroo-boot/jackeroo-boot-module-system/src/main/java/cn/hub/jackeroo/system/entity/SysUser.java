@@ -1,12 +1,9 @@
 package cn.hub.jackeroo.system.entity;
 
 import cn.hub.jackeroo.persistence.BaseEntity;
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDate;
 
 /**
  * <p>
@@ -26,13 +23,11 @@ public class SysUser extends BaseEntity {
     /**
      * 姓名
      */
-    @TableField("NAME")
     private String name;
 
     /**
      * 员工号
      */
-    @TableField("CODE")
     private String code;
 
     /**
@@ -43,7 +38,6 @@ public class SysUser extends BaseEntity {
     /**
      * 登录密码
      */
-    @TableField("PASSWORD")
     private String password;
 
     /**
@@ -64,7 +58,7 @@ public class SysUser extends BaseEntity {
     /**
      * 生日
      */
-    private LocalDate birthday;
+    private String birthday;
 
     /**
      * 手机
@@ -79,7 +73,6 @@ public class SysUser extends BaseEntity {
     /**
      * 冻结状态(1-正常，2-冻结)
      */
-    @TableField("STATUS")
     private Integer status;
 
     /**

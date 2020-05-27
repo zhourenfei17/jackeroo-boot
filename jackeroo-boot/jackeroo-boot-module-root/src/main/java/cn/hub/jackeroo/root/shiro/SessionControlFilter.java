@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.root.shiro;
 
+import cn.hub.jackeroo.vo.LoginUser;
 import com.alibaba.fastjson.JSON;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
@@ -55,8 +56,8 @@ public class SessionControlFilter extends AccessControlFilter {
 		}
 
 		Session session = subject.getSession();
-		Map<String, Object> user = (Map) subject.getPrincipal();
-		String username = (String)user.get("name");
+        LoginUser user = (LoginUser) subject.getPrincipal();
+		String username = user.getAccount();
 		Serializable sessionId = session.getId();
 
 		// 读取缓存 没有就存入

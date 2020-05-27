@@ -1,6 +1,6 @@
 package cn.hub.jackeroo.persistence;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.poi.ss.formula.functions.T;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
@@ -12,7 +12,7 @@ import java.util.List;
  * @author
  * @version 2014-05-16
  */
-public abstract class CrudService<D extends CrudDao<T, Pk>, T extends DataEntity<T, Pk>, Pk extends Serializable> {
+public abstract class CrudService<D extends CrudDao<T, Pk>, Pk extends Serializable> {
 
 	/**
 	 * 持久层对象
@@ -67,13 +67,7 @@ public abstract class CrudService<D extends CrudDao<T, Pk>, T extends DataEntity
 	 * @param entity
 	 */
 	public void save(T entity) {
-		if (entity.getIsNewRecord()) {
-			entity.preInsert();
-			dao.insert(entity);
-		} else {
-			entity.preUpdate();
-			dao.update(entity);
-		}
+
 	}
 
 	/**

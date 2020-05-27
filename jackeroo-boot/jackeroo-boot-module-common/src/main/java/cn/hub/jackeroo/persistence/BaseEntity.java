@@ -1,13 +1,11 @@
 package cn.hub.jackeroo.persistence;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.Maps;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -26,15 +24,16 @@ public abstract class BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String createBy;
-    private LocalDateTime createTime;
+    private Date createTime;
     private String updateBy;
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
 	/**
 	 * 自定义SQL（SQL标识，SQL内容）
 	 */
+	@TableField(exist = false)
 	protected Map<String, String> sqlMap;
-
+    @TableField(exist = false)
 	private String dbName = "mysql"; // 当前数据库类型
 
 

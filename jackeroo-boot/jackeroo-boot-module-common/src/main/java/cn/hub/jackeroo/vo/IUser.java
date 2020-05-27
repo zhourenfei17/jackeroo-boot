@@ -1,17 +1,19 @@
 package cn.hub.jackeroo.vo;
 
-import cn.hub.jackeroo.persistence.DataEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author alex
  * @date 2020/05/13
  */
-public abstract class IUser extends DataEntity<IUser, Long> {
+public abstract class IUser implements Serializable {
+
+    private Long id;
     private String code;		// 员工号
     private String name;		// 姓名
     private String phone;		// 手机号
@@ -25,10 +27,11 @@ public abstract class IUser extends DataEntity<IUser, Long> {
     private Date createTime;		// 创建时间
     private Date updateTime;		// 更新时间
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
-    public void setId(Long id){
+
+    public void setId(Long id) {
         this.id = id;
     }
 
