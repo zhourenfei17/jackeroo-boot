@@ -5,6 +5,7 @@ import lombok.Data;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -24,9 +25,9 @@ public abstract class BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String createBy;
-    private Date createTime;
+    private LocalDateTime createTime;
     private String updateBy;
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
 	/**
 	 * 自定义SQL（SQL标识，SQL内容）
