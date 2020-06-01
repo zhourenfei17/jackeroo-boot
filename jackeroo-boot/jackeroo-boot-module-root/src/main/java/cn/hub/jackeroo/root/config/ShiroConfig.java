@@ -11,7 +11,6 @@ import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
@@ -38,6 +37,10 @@ public class ShiroConfig {
 	private String redisPassword;
     @Value("${spring.redis.database}")
 	private int database;
+    //@Autowired
+    //private JackerooRedisManager redisManager;
+    // @Autowired
+    // private JackerooRedisSessionDao redisSessionDao;
 
 	@Bean
 	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
@@ -56,6 +59,7 @@ public class ShiroConfig {
 		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
 		// 公共请求
 		filterChainDefinitionMap.put("/common/**", "anon");
+		filterChainDefinitionMap.put("/getUser", "anon");
 		// 静态资源
 		filterChainDefinitionMap.put("/static/**", "anon");
 		// 登录方法
@@ -115,6 +119,7 @@ public class ShiroConfig {
 	public RedisSessionDAO redisSessionDAO() {
 		RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
 		redisSessionDAO.setRedisManager(redisManager());
+
 		redisSessionDAO.setKeyPrefix(UserUtils.USER_SESSION);
 		return redisSessionDAO;
 	}

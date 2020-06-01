@@ -4,6 +4,8 @@ import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.mapper.SysUserMapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 
@@ -27,6 +29,8 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         LambdaQueryWrapper<SysUser> query = new LambdaQueryWrapper<>();
         query.eq(SysUser::getAccount, account);
 
-        return super.getOne(query);
+        SysUser user = super.getOne(query);
+
+        return user;
     }
 }
