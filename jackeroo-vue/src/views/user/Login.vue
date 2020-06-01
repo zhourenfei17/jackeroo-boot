@@ -125,7 +125,6 @@ export default {
       // this.form.resetFields()
     },
     handleSubmit (e) {
-      e.preventDefault()
       const {
         form: { validateFields },
         state,
