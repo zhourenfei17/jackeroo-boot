@@ -26,8 +26,8 @@ const userApi = {
  */
 export function login (parameter) {
   return request({
-    url: userApi.Login,
-    method: 'post',
+    url: userApi.Login + '?account=admin&pwd=123456',
+    method: 'get',
     data: parameter
   })
 }

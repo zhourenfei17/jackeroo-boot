@@ -260,6 +260,21 @@ export const asyncRouterMap = [
             ]
           }
         ]
+      },
+      {
+        path: '/user',
+        name: 'user',
+        component: RouteView,
+        redirect: '/user/list',
+        meta: { title: '用户列表', icon: 'warning', permission: [ 'exception' ] },
+        children: [
+          {
+            path: '/user/list',
+            name: 'UserList',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/user/UserList'),
+            meta: { title: '用户列表', permission: [ 'exception' ] }
+          }
+        ]
       }
 
       // other

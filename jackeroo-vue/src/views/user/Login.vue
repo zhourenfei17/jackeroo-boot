@@ -5,7 +5,6 @@
       class="user-layout-login"
       ref="formLogin"
       :form="form"
-      @submit="handleSubmit"
     >
       <a-tabs
         :activeKey="customActiveKey"
@@ -53,6 +52,7 @@
           class="login-button"
           :loading="state.loginBtn"
           :disabled="state.loginBtn"
+          @click.stop.prevent="handleSubmit"
         >确定</a-button>
       </a-form-item>
 
@@ -72,7 +72,8 @@ import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
+import { getSmsCaptcha, get2step, login } from '@/api/login'
+import {getAction, postAction} from '@/api/manage'
 
 export default {
   components: {
@@ -125,6 +126,10 @@ export default {
       // this.form.resetFields()
     },
     handleSubmit (e) {
+
+      /* postAction('/login?account=admin&pwd=123456',{}).then(res => {
+        this.loginSuccess()
+      }) */
       const {
         form: { validateFields },
         state,
@@ -135,14 +140,13 @@ export default {
       state.loginBtn = true
 
       const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
-
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
+      validateFields(['username', 'password'], { force: true }, (err, values) => {
         if (!err) {
-          console.log('login form', values)
           const loginParams = { ...values }
           delete loginParams.username
           loginParams[!state.loginType ? 'email' : 'username'] = values.username
           loginParams.password = md5(values.password)
+
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))
