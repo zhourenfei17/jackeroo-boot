@@ -65,6 +65,13 @@ public class ShiroConfig {
 		// 登录方法
 		filterChainDefinitionMap.put("/login", "anon"); // 表示可以匿名访问
 
+        // swagger相关直接放行
+        filterChainDefinitionMap.put("/swagger-resources", "anon");
+        filterChainDefinitionMap.put("/v2/api-docs", "anon");
+        filterChainDefinitionMap.put("/v2/api-docs-ext", "anon");
+        filterChainDefinitionMap.put("/doc.html", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+
 		// 此处需要添加一个kickout，上面添加的自定义拦截器才能生效
 		filterChainDefinitionMap.put("/**", "authc,kickout");// 表示需要认证才可以访问
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
