@@ -54,6 +54,16 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
+  if(response.data.code == 401){
+    notification.error({
+      message: '退出登录',
+      description: '登录信息失效，请重新登录'
+    })
+
+    store.dispatch('Logout').then(() => {
+      window.location.reload()
+    })
+  }
   return response.data
 }, errorHandler)
 

@@ -4,51 +4,42 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
-              <a-form-item label="规则编号">
-                <a-input v-model="queryParam.id" placeholder=""/>
+            <a-col :md="6" :sm="12">
+              <a-form-item label="姓名">
+                <a-input v-model="queryParam.name" placeholder="请输入姓名"/>
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="使用状态">
+            <a-col :md="6" :sm="12">
+              <a-form-item label="账号">
+                <a-input v-model="queryParam.account" placeholder="请输入账号"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="12">
+              <a-form-item label="状态">
                 <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
-                  <a-select-option value="0">全部</a-select-option>
-                  <a-select-option value="1">关闭</a-select-option>
-                  <a-select-option value="2">运行中</a-select-option>
+                  <a-select-option value="">请选择</a-select-option>
+                  <a-select-option value="0">正常</a-select-option>
+                  <a-select-option value="1">冻结</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
             <template v-if="advanced">
-              <a-col :md="8" :sm="24">
-                <a-form-item label="调用次数">
-                  <a-input-number v-model="queryParam.callNo" style="width: 100%"/>
+              <a-col :md="6" :sm="12">
+                <a-form-item label="手机号">
+                  <a-input v-model="queryParam.phone" placeholder="请输入手机号"/>
                 </a-form-item>
               </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="更新日期">
-                  <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
+              <a-col :md="6" :sm="12">
+                <a-form-item label="性别">
                   <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
+                    <a-select-option value="">请选择</a-select-option>
+                    <a-select-option value="1">男</a-select-option>
+                    <a-select-option value="2">女</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
             </template>
-            <a-col :md="!advanced && 8 || 24" :sm="24">
+            <a-col :md="!advanced && 6 || 24" :sm="12">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
                 <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
@@ -102,6 +93,8 @@
         </span>
       </s-table>
 
+
+      <user-form-modal ref="UserFormModal"></user-form-modal>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -110,7 +103,7 @@
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import { getRoleList, getServiceList, getAction } from '@/api/manage'
-
+import UserFormModal from './modal/UserFormModal'
 
 const columns = [
   {
@@ -176,6 +169,7 @@ export default {
   components: {
     STable,
     Ellipsis,
+    UserFormModal
   },
   data () {
     this.columns = columns
@@ -223,8 +217,7 @@ export default {
   },
   methods: {
     handleAdd () {
-      this.mdl = null
-      this.visible = true
+      this.$refs.UserFormModal.visible = true
     },
     handleEdit (record) {
       this.visible = true

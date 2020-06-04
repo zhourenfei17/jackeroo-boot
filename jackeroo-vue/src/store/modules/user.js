@@ -35,7 +35,6 @@ const user = {
   actions: {
     // 登录
     Login ({ commit }, userInfo) {
-      alert(333)
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
           const result = response
@@ -82,6 +81,7 @@ const user = {
 
     // 登出
     Logout ({ commit, state }) {
+      alert(555)
       return new Promise((resolve) => {
         logout(state.token).then(() => {
           resolve()
