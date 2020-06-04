@@ -63,10 +63,10 @@ public class JacksonConfig {
 			}
 		}));
 		// 将long转化成String，避免长度过长出现经度丢失
-		SimpleModule simpleModule = new SimpleModule();
+		/*SimpleModule simpleModule = new SimpleModule();
 		simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
 		simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
-		objectMapper.registerModule(simpleModule);
+		objectMapper.registerModule(simpleModule);*/
 		// 取消时间的转化格式,默认是时间戳,可以取消,同时需要设置要表现的时间格式
 		objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
