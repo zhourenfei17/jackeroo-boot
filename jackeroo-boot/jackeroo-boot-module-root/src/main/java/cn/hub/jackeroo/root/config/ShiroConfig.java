@@ -51,12 +51,13 @@ public class ShiroConfig {
 		Map<String, Filter> filtersMap = new LinkedHashMap<>();
         //自定义authc访问拦截器
         filtersMap.put("authc", new AuthcShiroFilter());
+
 		// 限制同一帐号同时在线的个数。
 		filtersMap.put("kickout", kickoutSessionControlFilter());
 		shiroFilterFactoryBean.setFilters(filtersMap);
 
 		// 权限控制map.
-		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 		// 公共请求
 		filterChainDefinitionMap.put("/common/**", "anon");
 		filterChainDefinitionMap.put("/getUser", "anon");
@@ -66,11 +67,14 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/login", "anon"); // 表示可以匿名访问
 
         // swagger相关直接放行
-        filterChainDefinitionMap.put("/swagger-resources", "anon");
-        filterChainDefinitionMap.put("/v2/api-docs", "anon");
-        filterChainDefinitionMap.put("/v2/api-docs-ext", "anon");
-        filterChainDefinitionMap.put("/doc.html", "anon");
+        filterChainDefinitionMap.put("/", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
+        filterChainDefinitionMap.put("/swagger**/**", "anon");
+        filterChainDefinitionMap.put("/v2/**", "anon");
         filterChainDefinitionMap.put("/webjars/**", "anon");
+        filterChainDefinitionMap.put("/**/*.js", "anon");
+        filterChainDefinitionMap.put("/**/*.css", "anon");
+        filterChainDefinitionMap.put("/**/*.html", "anon");
 
 		// 此处需要添加一个kickout，上面添加的自定义拦截器才能生效
 		filterChainDefinitionMap.put("/**", "authc,kickout");// 表示需要认证才可以访问
@@ -169,7 +173,7 @@ public class ShiroConfig {
 	 *
 	 * @return
 	 */
-	@Bean
+	// @Bean
 	public SessionControlFilter kickoutSessionControlFilter() {
 		SessionControlFilter kickoutSessionControlFilter = new SessionControlFilter();
 		kickoutSessionControlFilter.setCache(cacheManager());

@@ -14,9 +14,12 @@ import org.apache.shiro.web.util.WebUtils;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.Writer;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -130,13 +133,13 @@ public class SessionControlFilter extends AccessControlFilter {
 		return true;
 	}
 
-	private void out(ServletResponse hresponse, Map<String, String> resultMap) throws IOException {
+	private void out(ServletResponse response, Map<String, String> resultMap) throws IOException {
 		try {
-			hresponse.setCharacterEncoding("UTF-8");
-			hresponse.setContentType("application/json; charset=utf-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json; charset=utf-8");
 
-			PrintWriter out = hresponse.getWriter();
-			out.println(JSON.toJSONString(resultMap));
+			Writer out = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
+			out.write(JSON.toJSONString(resultMap));
 			out.flush();
 			out.close();
 		}
