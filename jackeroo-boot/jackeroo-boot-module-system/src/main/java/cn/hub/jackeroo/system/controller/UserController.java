@@ -1,8 +1,11 @@
 package cn.hub.jackeroo.system.controller;
 
+import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.service.SysUserService;
+import cn.hub.jackeroo.utils.PasswordUtil;
+import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.utils.groups.First;
 import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.PageParam;
@@ -15,10 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 
 /**
  * 系统用户模块接口
@@ -45,13 +52,34 @@ public class UserController extends BaseController {
     }
 
     /**
+     * 根据id查询用户详情
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation(value = "用户详情", notes = "根据id获取用户详情")
+    public Result getById(@PathVariable String id){
+        return ok(userService.getById(id));
+    }
+
+    /**
      * 添加用户
      * @param user
      * @return
      */
     @PostMapping("add")
     @ApiOperation(value = "添加用户", notes = "添加用户信息")
-    public Result add(@Validated SysUser user){
+    public Result add(@Validated @RequestBody SysUser user){
+        String salt = StringUtils.randomGen(8);
+        user.setSalt(salt);
+        String passwordEncode = PasswordUtil.encrypt(user.getAccount(), user.getPassword(), salt);
+        user.setPassword(passwordEncode);
+        user.setDelFlag(Constant.DEL_FLAG_NORMAL);
+        user.setStatus(0);
+        user.setCreateBy("admin");
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateBy("admin");
+        user.setUpdateTime(LocalDateTime.now());
         userService.save(user);
         return ok();
     }

@@ -266,13 +266,13 @@ export const asyncRouterMap = [
         name: 'user',
         component: RouteView,
         redirect: '/user/list',
-        meta: { title: '用户列表', icon: 'warning', permission: [ 'exception' ] },
+        meta: { title: '系统管理', icon: 'warning', permission: [ 'exception' ] },
         children: [
           {
             path: '/user/list',
             name: 'UserList',
             component: () => import(/* webpackChunkName: "fail" */ '@/views/user/UserList'),
-            meta: { title: '用户列表', permission: [ 'exception' ] }
+            meta: { title: '用户管理', permission: [ 'exception' ] }
           }
         ]
       }

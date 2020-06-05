@@ -81,7 +81,6 @@ const user = {
 
     // 登出
     Logout ({ commit, state }) {
-      alert(555)
       return new Promise((resolve) => {
         logout(state.token).then(() => {
           resolve()
