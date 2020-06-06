@@ -1,6 +1,8 @@
 package cn.hub.jackeroo.system.entity;
 
 import cn.hub.jackeroo.utils.groups.First;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -22,7 +25,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SysUser {
+public class SysUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -97,17 +100,21 @@ public class SysUser {
     /**
      * 创建人
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String createBy;
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime createTime;
     /**
      * 更新人
      */
+    @TableField(fill = FieldFill.UPDATE)
     private String updateBy;
     /**
      * 更新时间
      */
+    @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }

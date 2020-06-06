@@ -70,17 +70,7 @@ public class UserController extends BaseController {
     @PostMapping("add")
     @ApiOperation(value = "添加用户", notes = "添加用户信息")
     public Result add(@Validated @RequestBody SysUser user){
-        String salt = StringUtils.randomGen(8);
-        user.setSalt(salt);
-        String passwordEncode = PasswordUtil.encrypt(user.getAccount(), user.getPassword(), salt);
-        user.setPassword(passwordEncode);
-        user.setDelFlag(Constant.DEL_FLAG_NORMAL);
-        user.setStatus(0);
-        user.setCreateBy("admin");
-        user.setCreateTime(LocalDateTime.now());
-        user.setUpdateBy("admin");
-        user.setUpdateTime(LocalDateTime.now());
-        userService.save(user);
+        userService.insertUser(user);
         return ok();
     }
 
