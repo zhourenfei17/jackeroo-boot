@@ -44,6 +44,7 @@
 
 <script>
 import { getAction, postAction } from '@/api/manage'
+import md5 from 'md5'
 
 export default {
   data(){
@@ -55,12 +56,22 @@ export default {
       form: {
         name: '',
         account: '',
-        code: ''
+        code: '',
+        password: '',
+        gender: undefined,
+        phone: '',
+        telephone: '',
+        birthday: undefined
       },
       rules: {
         name: [{required: true, message: '请输入姓名'}],
         account: [{required: true, message: '请输入账号'}],
-        code: []
+        code: [],
+        password: [{required: true, message: '请输入密码'}],
+        gender: [],
+        phone: [{required: true, message: '请输入手机'}],
+        telephone: [],
+        birthday: []
       },
       layout: {
         labelCol: {span: 4},
@@ -94,7 +105,9 @@ export default {
     handleSubmit(){
       this.$refs.formModel.validate((success) => {
         if(success){
-          postAction(this.url.add, this.form).then(result => {
+          const formData = this.form
+          formData.password = md5(formData.password)
+          postAction(this.url.add, formData).then(result => {
             if(result.code === 0){
               this.$message.success('保存成功！')
             }else{

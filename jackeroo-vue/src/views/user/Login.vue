@@ -12,15 +12,15 @@
         @change="handleTabClick"
       >
         <a-tab-pane key="tab1" tab="账号密码登录">
-          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误（admin/ant.design )" />
+          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误" />
           <a-form-item>
             <a-input
               size="large"
               type="text"
-              placeholder="账户: admin"
+              placeholder="请输入账号"
               v-decorator="[
-                'username',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                'account',
+                {rules: [{ required: true, message: '请输入登录账号' }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -34,7 +34,7 @@
               autocomplete="false"
               placeholder="密码: admin or ant.design"
               v-decorator="[
-                'password',
+                'pwd',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
               ]"
             >
@@ -126,10 +126,6 @@ export default {
       // this.form.resetFields()
     },
     handleSubmit (e) {
-
-      /* postAction('/login?account=admin&pwd=123456',{}).then(res => {
-        this.loginSuccess()
-      }) */
       const {
         form: { validateFields },
         state,
@@ -139,16 +135,22 @@ export default {
 
       state.loginBtn = true
 
-      const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
-      validateFields(['username', 'password'], { force: true }, (err, values) => {
+      const validateFieldsKey = customActiveKey === 'tab1' ? ['account', 'pwd'] : ['mobile', 'captcha']
+      validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           const loginParams = { ...values }
-          delete loginParams.username
-          loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          loginParams.password = md5(values.password)
+          //delete loginParams.username
+          //loginParams[!state.loginType ? 'email' : 'username'] = values.username
+          loginParams.pwd = md5(values.pwd)
 
           Login(loginParams)
-            .then((res) => this.loginSuccess(res))
+            .then((res) => {
+              if(res.code == 0){
+                this.loginSuccess(res)
+              }else{
+                this.$message.error(res.msg)
+              }
+            })
             .catch(err => this.requestFailed(err))
             .finally(() => {
               state.loginBtn = false
