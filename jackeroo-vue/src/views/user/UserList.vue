@@ -94,7 +94,7 @@
       </s-table>
 
 
-      <user-form-modal ref="UserFormModal"></user-form-modal>
+      <user-form-modal ref="UserFormModal" @ok="handleOk"></user-form-modal>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -235,6 +235,9 @@ export default {
       this.queryParam = {
         date: moment(new Date())
       }
+    },
+    handleOk(){
+      this.$refs.table.refresh(true)
     }
   }
 }

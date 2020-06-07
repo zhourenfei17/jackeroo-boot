@@ -1,4 +1,5 @@
 import {axios} from '@/utils/request'
+import qs from 'qs'
 
 const api = {
   user: '/user',
@@ -12,11 +13,13 @@ const api = {
 export default api
 
 //post
+//使用application / x-www-form-urlencoded格式发送数据
 export function postAction(url,parameter) {
   return axios({
     url: url,
     method:'post' ,
-    data: parameter
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    data: qs.stringify(parameter)
   })
 }
 
@@ -34,7 +37,8 @@ export function putAction(url,parameter) {
   return axios({
     url: url,
     method:'put',
-    data: parameter
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    data: qs.stringify(parameter)
   })
 }
 

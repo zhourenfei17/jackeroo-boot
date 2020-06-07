@@ -1,11 +1,8 @@
 package cn.hub.jackeroo.system.controller;
 
-import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.service.SysUserService;
-import cn.hub.jackeroo.utils.PasswordUtil;
-import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.utils.groups.First;
 import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.PageParam;
@@ -21,11 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
 
 /**
  * 系统用户模块接口
@@ -59,6 +53,11 @@ public class UserController extends BaseController {
     @GetMapping("/{id}")
     @ApiOperation(value = "用户详情", notes = "根据id获取用户详情")
     public Result getById(@PathVariable String id){
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return ok(userService.getById(id));
     }
 
@@ -69,7 +68,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("add")
     @ApiOperation(value = "添加用户", notes = "添加用户信息")
-    public Result add(@Validated @RequestBody SysUser user){
+    public Result add(@Validated SysUser user){
         userService.insertUser(user);
         return ok();
     }
@@ -79,9 +78,9 @@ public class UserController extends BaseController {
      * @param user
      * @return
      */
-    @PutMapping("edit")
+    @PutMapping("update")
     @ApiOperation(value = "编辑用户", notes = "编辑用户信息")
-    public Result edit(@Validated(First.class) SysUser user){
+    public Result update(@Validated(First.class) SysUser user){
         userService.updateById(user);
         return ok();
     }

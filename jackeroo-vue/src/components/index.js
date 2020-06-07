@@ -27,6 +27,8 @@ import ArticleListContent from '@/components/ArticleListContent'
 
 import Dialog from '@/components/Dialog'
 
+//import JSpin from '@/components/jackeroo/Spin'
+
 export {
   AvatarList,
   Bar,
@@ -52,5 +54,6 @@ export {
   StandardFormRow,
   ArticleListContent,
 
-  Dialog
+  Dialog,
+  //JSpin
 }

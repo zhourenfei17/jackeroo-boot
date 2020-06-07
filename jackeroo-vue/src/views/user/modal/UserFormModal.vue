@@ -7,7 +7,10 @@
     @ok="handleSubmit"
     @cancel="cancel"
   >
-    <a-spin :spinning="loading">
+    <a-spin :spinning="loading" size="large" tip="loading..." wrapperClassName="jackeroo-spin">
+      <template slot="indicator">
+        <img src="@/assets/loading_dog.gif">
+      </template>
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
         <a-form-model-item ref="name" label="姓名" prop="name">
           <a-input v-model="form.name" placeholder="请输入姓名"></a-input>
@@ -19,7 +22,7 @@
           <a-input v-model="form.code" placeholder="请输入员工号"></a-input>
         </a-form-model-item>
         <a-form-model-item ref="password" label="密码" prop="password">
-          <a-input v-model="form.password" placeholder="请输入密码" type="password"></a-input>
+          <a-input v-model="form.password" placeholder="请输入密码" type="password" @focus="() => form.password = ''"></a-input>
         </a-form-model-item>
         <a-form-model-item ref="gender" label="性别" prop="gender">
           <a-select v-model="form.gender" placeholder="请选择性别">
@@ -35,7 +38,7 @@
           <a-input v-model="form.telephone" placeholder="请输入座机"></a-input>
         </a-form-model-item>
         <a-form-model-item ref="birthday" label="生日" prop="birthday">
-          <a-date-picker v-model="form.birthday" placeholder="请选择生日"></a-date-picker>
+          <a-date-picker v-model="form.birthday" placeholder="请选择生日" valueFormat="YYYY-MM-DD"></a-date-picker>
         </a-form-model-item>
       </a-form-model>
     </a-spin>
@@ -47,6 +50,9 @@ import { getAction, postAction } from '@/api/manage'
 import md5 from 'md5'
 
 export default {
+  components:{
+    
+  },
   data(){
     return {
       title: '用户信息',
@@ -79,7 +85,8 @@ export default {
       },
       url: {
         getById: '/user/',
-        add: '/user/add'
+        add: '/user/add',
+        update: '/user/update'
       }
     }
   },
@@ -107,9 +114,14 @@ export default {
         if(success){
           const formData = this.form
           formData.password = md5(formData.password)
+          console.log('formData', formData)
+
+          let url = this.from.id ? this.url.update : this.url.add
           postAction(this.url.add, formData).then(result => {
             if(result.code === 0){
               this.$message.success('保存成功！')
+              this.visible = false
+              this.$emit('ok')
             }else{
               this.$message.error(result.msg)
             }
@@ -123,3 +135,14 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+  .jackeroo-spin{
+    background-color: #fff;
+    opacity: 1.0;
+
+    .ant-spin-blur{
+      opacity: 0;
+    }
+  }
+</style>
