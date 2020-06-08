@@ -7,10 +7,7 @@
     @ok="handleSubmit"
     @cancel="cancel"
   >
-    <a-spin :spinning="loading" size="large" tip="loading..." wrapperClassName="jackeroo-spin">
-      <template slot="indicator">
-        <img src="@/assets/loading_dog.gif">
-      </template>
+    <j-spin :spinning="loading" size="large" tip="loading...">
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
         <a-form-model-item ref="name" label="姓名" prop="name">
           <a-input v-model="form.name" placeholder="请输入姓名"></a-input>
@@ -41,17 +38,19 @@
           <a-date-picker v-model="form.birthday" placeholder="请选择生日" valueFormat="YYYY-MM-DD"></a-date-picker>
         </a-form-model-item>
       </a-form-model>
-    </a-spin>
+    </j-spin>
   </a-modal>
 </template>
 
 <script>
 import { getAction, postAction } from '@/api/manage'
 import md5 from 'md5'
+import JSpin from '@/components/jackeroo/Spin'
+// import { JSpin } from '@/components'
 
 export default {
   components:{
-    
+    JSpin
   },
   data(){
     return {
@@ -135,14 +134,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less" scoped>
-  .jackeroo-spin{
-    background-color: #fff;
-    opacity: 1.0;
-
-    .ant-spin-blur{
-      opacity: 0;
-    }
-  }
-</style>

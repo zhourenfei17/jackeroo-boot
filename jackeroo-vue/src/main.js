@@ -10,7 +10,6 @@ import i18n from './locales'
 import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
-import { FormModel } from 'ant-design-vue';
 
 // mock
 // WARNING: `mockjs` NOT SUPPORT `IE` PLEASE DO NOT USE IN `production` ENV.
@@ -25,7 +24,6 @@ import './global.less'
 Vue.config.productionTip = false
 
 // mount axios to `Vue.$http` and `this.$http`
-Vue.use(FormModel)
 Vue.use(VueAxios)
 Vue.component('pro-layout', ProLayout)
 Vue.component('page-header-wrapper', PageHeaderWrapper)
