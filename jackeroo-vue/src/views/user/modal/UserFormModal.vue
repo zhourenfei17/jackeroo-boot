@@ -7,7 +7,7 @@
     @ok="handleSubmit"
     @cancel="cancel"
   >
-    <j-spin :spinning="loading" size="large" tip="loading...">
+    <j-spin :spinning="loading">
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
         <a-form-model-item ref="name" label="姓名" prop="name">
           <a-input v-model="form.name" placeholder="请输入姓名"></a-input>

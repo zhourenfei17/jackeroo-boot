@@ -7,6 +7,10 @@ export default{
     wrapperClassName: {
       type: String,
       default: 'jackeroo-spin'
+    },
+    tip: {
+      type: String,
+      default: '正在努力加载中...'
     }
   }),
   mixins: [Spin]
