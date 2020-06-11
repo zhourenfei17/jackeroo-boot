@@ -53,11 +53,6 @@ public class UserController extends BaseController {
     @GetMapping("/{id}")
     @ApiOperation(value = "用户详情", notes = "根据id获取用户详情")
     public Result getById(@PathVariable String id){
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return ok(userService.getById(id));
     }
 
@@ -81,6 +76,7 @@ public class UserController extends BaseController {
     @PutMapping("update")
     @ApiOperation(value = "编辑用户", notes = "编辑用户信息")
     public Result update(@Validated(First.class) SysUser user){
+        user.setPassword(null);
         userService.updateById(user);
         return ok();
     }

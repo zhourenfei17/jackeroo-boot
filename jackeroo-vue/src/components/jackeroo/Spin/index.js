@@ -27,12 +27,5 @@ export default{
       default: 'jackeroo-spin'
     }
   }),
-  mixins: [Spin],
-  methods: {
-    /* indicator: {
-      render() {
-        return `<img src="loadImg" />`
-      },
-    }, */
-  },
+  mixins: [Spin]
 }

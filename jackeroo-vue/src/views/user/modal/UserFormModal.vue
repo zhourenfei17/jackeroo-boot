@@ -18,14 +18,14 @@
         <a-form-model-item ref="code" label="员工号" prop="code">
           <a-input v-model="form.code" placeholder="请输入员工号"></a-input>
         </a-form-model-item>
-        <a-form-model-item ref="password" label="密码" prop="password">
+        <a-form-model-item ref="password" label="密码" prop="password" v-show="flag.add">
           <a-input v-model="form.password" placeholder="请输入密码" type="password" @focus="() => form.password = ''"></a-input>
         </a-form-model-item>
         <a-form-model-item ref="gender" label="性别" prop="gender">
           <a-select v-model="form.gender" placeholder="请选择性别">
             <a-select-option value="">请选择</a-select-option>
-            <a-select-option value="1">男</a-select-option>
-            <a-select-option value="2">女</a-select-option>
+            <a-select-option :value="1">男</a-select-option>
+            <a-select-option :value="2">女</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item ref="phone" label="手机" prop="phone">
@@ -35,7 +35,7 @@
           <a-input v-model="form.telephone" placeholder="请输入座机"></a-input>
         </a-form-model-item>
         <a-form-model-item ref="birthday" label="生日" prop="birthday">
-          <a-date-picker v-model="form.birthday" placeholder="请选择生日" valueFormat="YYYY-MM-DD"></a-date-picker>
+          <a-date-picker v-model="form.birthday" placeholder="请选择生日" valueFormat="YYYY-MM-DD" style="width:100%"></a-date-picker>
         </a-form-model-item>
       </a-form-model>
     </j-spin>
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { getAction, postAction } from '@/api/manage'
+import { getAction, postAction, httpAction } from '@/api/manage'
 import md5 from 'md5'
 import JSpin from '@/components/jackeroo/Spin'
 // import { JSpin } from '@/components'
@@ -59,6 +59,7 @@ export default {
       visible: false,
       loading: false,
       form: {
+        id: null,
         name: '',
         account: '',
         code: '',
@@ -82,6 +83,11 @@ export default {
         labelCol: {span: 4},
         wrapperCol: {span: 14}
       },
+      flag: {
+        add: false,
+        edit: false,
+        view: false
+      },
       url: {
         getById: '/user/',
         add: '/user/add',
@@ -91,22 +97,28 @@ export default {
   },
   methods: {
     add(){
-      this.loading = false
-      this.$nextTick(() => {
-        this.$refs.formModel.resetFields()
-      })
-      
+      this.form.id = null
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+      }, 200);
     },
     edit(id){
       this.loading = true
-      this.$nextTick(() => {
-        this.$refs.formModel.resetFields()
-      })
       getAction(this.url.getById + id).then(result => {
-        this.form = result.data
+        this.copyProperties(result.data, this.form)
       }).finally(() => {
-        this.loading = false
+        setTimeout(() => {
+          this.loading = false
+        }, 200);
       })
+    },
+    copyProperties(source, target){
+      for(var prop in target){
+        if(source.hasOwnProperty(prop)){
+          target[prop] = source[prop]
+        }
+      }
     },
     handleSubmit(){
       this.$refs.formModel.validate((success) => {
@@ -115,11 +127,12 @@ export default {
           formData.password = md5(formData.password)
           console.log('formData', formData)
 
-          let url = this.from.id ? this.url.update : this.url.add
-          postAction(this.url.add, formData).then(result => {
+          let url = this.flag.add ? this.url.add : this.url.update
+          let method = this.flag.add ? 'post' : 'put'
+          httpAction(url, formData, method).then(result => {
             if(result.code === 0){
               this.$message.success('保存成功！')
-              this.visible = false
+              this.cancel()
               this.$emit('ok')
             }else{
               this.$message.error(result.msg)
@@ -130,6 +143,12 @@ export default {
     },
     cancel(){
       this.visible = false
+      this.flag.add = false
+      this.flag.edit = false
+      this.flag.view = false
+
+      this.$refs.formModel.resetFields()
+      this.$refs.formModel.clearValidate()
     }
   }
 }

@@ -28,7 +28,8 @@ export function httpAction(url,parameter,method) {
   return axios({
     url: url,
     method:method ,
-    data: parameter
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    data: qs.stringify(parameter)
   })
 }
 

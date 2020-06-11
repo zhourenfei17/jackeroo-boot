@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import storage from 'store'
-import notification from 'ant-design-vue/es/notification'
+import {notification, message} from 'ant-design-vue'
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
@@ -18,24 +18,17 @@ const errorHandler = (error) => {
     const data = error.response.data
     // 从 localstorage 获取 token
     const token = storage.get(ACCESS_TOKEN)
-    if (error.response.status === 403) {
+    if (error.response.status === 401) {
       notification.error({
-        message: 'Forbidden',
-        description: data.message
+        message: '退出登录',
+        description: '登录信息失效，请重新登录'
       })
-    }
-    if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
-      notification.error({
-        message: 'Unauthorized',
-        description: 'Authorization verification failed'
+  
+      store.dispatch('Logout').then(() => {
+        window.location.reload()
       })
-      if (token) {
-        store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
-        })
-      }
+    }else{
+      message.error(data.msg)
     }
   }
   return Promise.reject(error)
@@ -54,7 +47,9 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
-  if(response.data.code == 401){
+  if(response.data.code === 0){
+    return response.data
+  }else if(response.data.code === 401){
     notification.error({
       message: '退出登录',
       description: '登录信息失效，请重新登录'
@@ -63,8 +58,10 @@ request.interceptors.response.use((response) => {
     store.dispatch('Logout').then(() => {
       window.location.reload()
     })
+  }else{
+    message.error(response.data.msg)
   }
-  return response.data
+  
 }, errorHandler)
 
 const installer = {

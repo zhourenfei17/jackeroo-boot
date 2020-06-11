@@ -218,10 +218,17 @@ export default {
   methods: {
     handleAdd () {
       this.$refs.UserFormModal.visible = true
+      this.$refs.UserFormModal.flag.add = true
       this.$refs.UserFormModal.add()
     },
     handleEdit (record) {
       this.$refs.UserFormModal.visible = true
+      this.$refs.UserFormModal.flag.edit = true
+      this.$refs.UserFormModal.edit(record.id)
+    },
+    handleView (record){
+      this.$refs.UserFormModal.visible = true
+      this.$refs.UserFormModal.flag.view = true
       this.$refs.UserFormModal.edit(record.id)
     },
     onSelectChange (selectedRowKeys, selectedRows) {
