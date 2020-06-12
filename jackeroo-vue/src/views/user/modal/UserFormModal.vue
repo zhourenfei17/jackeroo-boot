@@ -46,18 +46,17 @@
 import { getAction, postAction, httpAction } from '@/api/manage'
 import md5 from 'md5'
 import JSpin from '@/components/jackeroo/Spin'
-// import { JSpin } from '@/components'
+import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 
 export default {
   components:{
     JSpin
   },
+  mixins: [JackerooFromMixins],
   data(){
     return {
       title: '用户信息',
       width: '50vw',
-      visible: false,
-      loading: false,
       form: {
         id: null,
         name: '',
@@ -75,18 +74,13 @@ export default {
         code: [],
         password: [{required: true, message: '请输入密码'}],
         gender: [],
-        phone: [{required: true, message: '请输入手机'}],
+        phone: [{required: true, message: '请输入手机'},{validator: this.validPhone, trigger: 'blur'}],
         telephone: [],
         birthday: []
       },
       layout: {
         labelCol: {span: 4},
         wrapperCol: {span: 14}
-      },
-      flag: {
-        add: false,
-        edit: false,
-        view: false
       },
       url: {
         getById: '/user/',
@@ -113,13 +107,6 @@ export default {
         }, 200);
       })
     },
-    copyProperties(source, target){
-      for(var prop in target){
-        if(source.hasOwnProperty(prop)){
-          target[prop] = source[prop]
-        }
-      }
-    },
     handleSubmit(){
       this.$refs.formModel.validate((success) => {
         if(success){
@@ -141,15 +128,6 @@ export default {
         }
       })
     },
-    cancel(){
-      this.visible = false
-      this.flag.add = false
-      this.flag.edit = false
-      this.flag.view = false
-
-      this.$refs.formModel.resetFields()
-      this.$refs.formModel.clearValidate()
-    }
   }
 }
 </script>
