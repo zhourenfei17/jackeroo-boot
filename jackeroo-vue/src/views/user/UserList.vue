@@ -55,7 +55,7 @@
 
       <div class="table-operator">
         <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-        <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
+        <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
             <!-- lock | unlock -->
@@ -86,9 +86,15 @@
 
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">编辑</a>
-            <a-divider type="vertical" />
-            <a @click="handleSub(record)">订阅报警</a>
+            <action-list>
+              <a @click="handleSub(record)">详情</a>
+              <a @click="handleEdit(record)">编辑</a>
+              <a @click="handleEdit(record)" v-show="false">重置密码</a>
+              <action-menu-list>
+                <a @click="handleEdit(record)">冻结</a>
+                <a @click="handleEdit(record)">删除</a>
+              </action-menu-list>
+            </action-list>
           </template>
         </span>
       </s-table>
@@ -148,7 +154,6 @@ const columns = [
   {
     title: '操作',
     dataIndex: 'action',
-    width: '150px',
     scopedSlots: { customRender: 'action' }
   }
 ]
@@ -169,7 +174,7 @@ export default {
   components: {
     STable,
     Ellipsis,
-    UserFormModal
+    UserFormModal,
   },
   data () {
     this.columns = columns

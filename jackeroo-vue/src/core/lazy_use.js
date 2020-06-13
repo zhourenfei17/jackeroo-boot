@@ -57,6 +57,8 @@ import PageLoading from '@/components/PageLoading'
 import PermissionHelper from '@/utils/helper/permission'
 import './directives/action'
 
+import {ActionList} from '@/components'
+
 Vue.use(ConfigProvider)
 Vue.use(Layout)
 Vue.use(Input)
@@ -115,5 +117,7 @@ Vue.use(PermissionHelper)
 Vue.use(VueCropper)
 
 Vue.use(FormModel)
+
+Vue.use(ActionList)
 
 process.env.NODE_ENV !== 'production' && console.warn('[antd-pro] NOTICE: Antd use lazy-load.')
