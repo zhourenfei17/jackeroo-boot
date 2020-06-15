@@ -92,19 +92,13 @@ export default {
   methods: {
     add(){
       this.form.id = null
-      this.loading = true
-      setTimeout(() => {
-        this.loading = false
-      }, 200);
+      this.loading = false
     },
     edit(id){
-      this.loading = true
       getAction(this.url.getById + id).then(result => {
         this.copyProperties(result.data, this.form)
       }).finally(() => {
-        setTimeout(() => {
-          this.loading = false
-        }, 200);
+        this.loading = false
       })
     },
     handleSubmit(){

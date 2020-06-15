@@ -10,7 +10,7 @@ export const JackerooFromMixins = {
         view: false
       },
       visible: false,
-      loading: false,
+      loading: true,
       layout: {
         labelCol: {span: 4},
         wrapperCol: {span: 14}
@@ -33,6 +33,7 @@ export const JackerooFromMixins = {
 
       this.$refs.formModel.resetFields()
       this.$refs.formModel.clearValidate()
+      this.loading = true
     }
   },
 }
