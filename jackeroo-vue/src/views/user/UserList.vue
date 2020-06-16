@@ -1,5 +1,5 @@
 <template>
-  <page-header-wrapper :title="titleShow">
+  <page-header-wrapper>
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
@@ -87,7 +87,7 @@
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
-              <a @click="handleSub(record)">详情</a>
+              <a @click="handleView(record)">详情</a>
               <a @click="handleEdit(record)">编辑</a>
               <a @click="handleEdit(record)" v-show="false">重置密码</a>
               <action-menu-list>
@@ -179,7 +179,7 @@ export default {
   data () {
     this.columns = columns
     return {
-      titleShow: true,
+      titleShow: false,
       // create model
       visible: false,
       confirmLoading: false,
