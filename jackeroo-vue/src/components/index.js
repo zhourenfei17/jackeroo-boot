@@ -29,6 +29,7 @@ import Dialog from '@/components/Dialog'
 
 import JSpin from '@/components/jackeroo/Spin'
 import ActionList from '@/components/jackeroo/ActionList'
+import JModal from '@/components/jackeroo/Modal'
 
 export {
   AvatarList,
@@ -57,5 +58,6 @@ export {
 
   Dialog,
   JSpin,
-  ActionList
+  ActionList,
+  JModal
 }

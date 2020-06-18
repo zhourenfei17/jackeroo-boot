@@ -19,9 +19,6 @@ export default{
       default: 200
     }
   }),
-  created() {
-    console.log('初始值', this.$data.sSpinning)
-  },
   computed: {
     loadingTransitionStatus(){
       return this.$data.sSpinning

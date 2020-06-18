@@ -10,10 +10,21 @@ export const JackerooFromMixins = {
         view: false
       },
       visible: false,
+      // 是否全屏
+      fullscreen: false,
+      // 是否显示全屏按钮
+      showFullscreenBtn: true,
       loading: true,
       layout: {
-        labelCol: {span: 4},
-        wrapperCol: {span: 14}
+        labelCol: {span: 6},
+        wrapperCol: {span: 16}
+      },
+      // 表单展示列数
+      column: {
+        // 普通情况
+        normal: 1,
+        // 全屏情况
+        fullscreen: 2
       },
     }
   },
@@ -34,6 +45,13 @@ export const JackerooFromMixins = {
         return 'PUT'
       }else{
         return ''
+      }
+    },
+    rowSpan(){
+      if(!this.fullscreen){
+        return 24 / this.column.normal
+      }else{
+        return 24 / this.column.fullscreen
       }
     }
   },

@@ -15,8 +15,8 @@ import {
   Form,
   Row,
   Col,
-  Modal,
   Table,
+  Modal,
   Tabs,
   Icon,
   Badge,
@@ -57,7 +57,7 @@ import PageLoading from '@/components/PageLoading'
 import PermissionHelper from '@/utils/helper/permission'
 import './directives/action'
 
-import {ActionList} from '@/components'
+import {ActionList, JModal, JSpin} from '@/components'
 
 Vue.use(ConfigProvider)
 Vue.use(Layout)
@@ -117,7 +117,8 @@ Vue.use(PermissionHelper)
 Vue.use(VueCropper)
 
 Vue.use(FormModel)
-
 Vue.use(ActionList)
+Vue.component('j-spin', JSpin)
+Vue.component('j-modal',JModal)
 
 process.env.NODE_ENV !== 'production' && console.warn('[antd-pro] NOTICE: Antd use lazy-load.')
