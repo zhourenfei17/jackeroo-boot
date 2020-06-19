@@ -333,9 +333,15 @@ result.then(r => {
 }
 ```
 
+======更新时间 2020.6.19======
 
+`alert` 属性对象添加multiPageSelect：
 
-更新时间
-----
-
-该文档最后更新于： 2019-06-23 PM 17:19
+```javascript
+alert: {
+  show: Boolean, 
+  clear: [Function, Boolean],
+  // 是否可跨页选择，默认为false
+  multiPageSelect: Boolean
+}
+```

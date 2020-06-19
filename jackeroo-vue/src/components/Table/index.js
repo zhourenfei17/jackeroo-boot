@@ -4,11 +4,12 @@ import get from 'lodash.get'
 export default {
   data () {
     return {
+      // 需要统计的行数据
       needTotalList: [],
-
+      // 已选择的行数据
       selectedRows: [],
+      // 已选择的行key
       selectedRowKeys: [],
-
       localLoading: false,
       localDataSource: [],
       localPagination: Object.assign({}, this.pagination)
@@ -76,6 +77,12 @@ export default {
       default: false
     }
   }),
+  computed: {
+    // 是否支持跨页选择，默认为false
+    multiPageSelect(){
+      return (typeof this.alert.multiPageSelect === 'boolean' && this.alert.multiPageSelect) ? this.alert.multiPageSelect : false
+    }
+  },
   watch: {
     'localPagination.current' (val) {
       this.pageURI && this.$router.push({
@@ -87,8 +94,11 @@ export default {
       })
       // change pagination, reset total data
       this.needTotalList = this.initTotalList(this.columns)
-      this.selectedRowKeys = []
-      this.selectedRows = []
+      
+      if(!this.multiPageSelect){
+        this.selectedRowKeys = []
+        this.selectedRows = []
+      }
     },
     pageNum (val) {
       Object.assign(this.localPagination, {
@@ -205,8 +215,18 @@ export default {
      * @param selectedRows
      */
     updateSelect (selectedRowKeys, selectedRows) {
-      this.selectedRows = selectedRows
+      // 由于Antd的onSelect方法的selectedRowKeys参数传过来的会携带历史选中的key，因此不需要处理；而selectedRows传过来的仅是当前页选中的行
+      if(this.multiPageSelect){
+        // 跨页多选时需要拼接集合
+        this.selectedRows.push(...selectedRows)
+      }else{
+        // 单页多选直接覆盖
+        this.selectedRows = selectedRows
+      }
       this.selectedRowKeys = selectedRowKeys
+
+      typeof this['rowSelection'].onChange !== 'undefined' && this['rowSelection'].onChange(this.selectedRowKeys, this.selectedRows)
+      
       const list = this.needTotalList
       this.needTotalList = list.map(item => {
         return {
@@ -289,7 +309,7 @@ export default {
             selectedRowKeys: this.selectedRowKeys,
             onChange: (selectedRowKeys, selectedRows) => {
               this.updateSelect(selectedRowKeys, selectedRows)
-              typeof this[k].onChange !== 'undefined' && this[k].onChange(selectedRowKeys, selectedRows)
+              // typeof this[k].onChange !== 'undefined' && this[k].onChange(selectedRowKeys, selectedRows)
             }
           }
           return props[k]

@@ -73,7 +73,7 @@
         rowKey="id"
         :columns="columns"
         :data="loadData"
-        :alert="true"
+        :alert="tableAlert"
         :rowSelection="rowSelection"
         showPagination="auto"
       >
@@ -89,9 +89,12 @@
             <action-list>
               <a @click="handleView(record)">详情</a>
               <a @click="handleEdit(record)">编辑</a>
-              <a @click="handleEdit(record)" v-show="false">重置密码</a>
+              <a @click="handleEdit(record)">重置密码</a>
+              <a-popconfirm title="您确定要冻结该用户吗？" v-if="record.status == 0" @confirm="() => frozen(record)">
+                <a>冻结</a>
+              </a-popconfirm>
+              <a @click="handleEdit(record)" v-if="record.status == 1">解冻</a>
               <action-menu-list>
-                <a @click="handleEdit(record)">冻结</a>
                 <a @click="handleEdit(record)">删除</a>
               </action-menu-list>
             </action-list>
@@ -99,64 +102,15 @@
         </span>
       </s-table>
 
-
-      <user-form-modal ref="UserFormModal" @ok="handleOk"></user-form-modal>
+      <user-form-modal ref="formModal" @ok="handleOk"></user-form-modal>
     </a-card>
   </page-header-wrapper>
 </template>
 
 <script>
-import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getRoleList, getServiceList, getAction } from '@/api/manage'
 import UserFormModal from './modal/UserFormModal'
-
-const columns = [
-  {
-    title: '#',
-    scopedSlots: { customRender: 'serial' }
-  },
-  {
-    title: '姓名',
-    dataIndex: 'name'
-  },
-  {
-    title: '账号',
-    dataIndex: 'account',
-  },
-  {
-    title: '性别',
-    dataIndex: 'gender',
-    sorter: true,
-    customRender: ((text) => {
-      if(text == 1){
-        return '男'
-      }else{
-        return '女'
-      }
-    })
-  },
-  {
-    title: '手机',
-    dataIndex: 'phone',
-    sorter: false,
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    scopedSlots: { customRender: 'status' }
-  },
-  {
-    title: '更新时间',
-    dataIndex: 'updateTime',
-    sorter: true
-  },
-  {
-    title: '操作',
-    dataIndex: 'action',
-    scopedSlots: { customRender: 'action' }
-  }
-]
+import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 
 const statusMap = {
   0: {
@@ -176,29 +130,58 @@ export default {
     Ellipsis,
     UserFormModal,
   },
+  mixins:[JackerooListMixins],
   data () {
-    this.columns = columns
     return {
-      titleShow: false,
-      // create model
-      visible: false,
-      confirmLoading: false,
-      mdl: null,
-      // 高级搜索 展开/关闭
-      advanced: false,
-      // 查询参数
-      queryParam: {},
-      // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {
-        const requestParameters = Object.assign({}, parameter, this.queryParam)
-        console.log('loadData request parameters:', requestParameters)
-        return getAction('/user/list',requestParameters)
-          .then(res => {
-            return res.data
+      columns: [
+        {
+          title: '#',
+          scopedSlots: { customRender: 'serial' }
+        },
+        {
+          title: '姓名',
+          dataIndex: 'name'
+        },
+        {
+          title: '账号',
+          dataIndex: 'account',
+        },
+        {
+          title: '性别',
+          dataIndex: 'gender',
+          sorter: true,
+          customRender: ((text) => {
+            if(text == 1){
+              return '男'
+            }else{
+              return '女'
+            }
           })
-      },
-      selectedRowKeys: [],
-      selectedRows: []
+        },
+        {
+          title: '手机',
+          dataIndex: 'phone',
+          sorter: false,
+        },
+        {
+          title: '状态',
+          dataIndex: 'status',
+          scopedSlots: { customRender: 'status' }
+        },
+        {
+          title: '更新时间',
+          dataIndex: 'updateTime',
+          sorter: true
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          scopedSlots: { customRender: 'action' }
+        }
+      ],
+      url: {
+        list: '/user/list'
+      }
     }
   },
   filters: {
@@ -209,48 +192,11 @@ export default {
       return statusMap[type].status
     }
   },
-  created () {
-    getRoleList({ t: new Date() })
-  },
-  computed: {
-    rowSelection () {
-      return {
-        selectedRowKeys: this.selectedRowKeys,
-        onChange: this.onSelectChange
-      }
-    }
-  },
   methods: {
-    handleAdd () {
-      this.$refs.UserFormModal.visible = true
-      this.$refs.UserFormModal.flag.add = true
-      this.$refs.UserFormModal.add()
+    //冻结用户
+    frozen(){
+
     },
-    handleEdit (record) {
-      this.$refs.UserFormModal.visible = true
-      this.$refs.UserFormModal.flag.edit = true
-      this.$refs.UserFormModal.edit(record.id)
-    },
-    handleView (record){
-      this.$refs.UserFormModal.visible = true
-      this.$refs.UserFormModal.flag.view = true
-      this.$refs.UserFormModal.edit(record.id)
-    },
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-    },
-    toggleAdvanced () {
-      this.advanced = !this.advanced
-    },
-    resetSearchForm () {
-      this.queryParam = {
-        date: moment(new Date())
-      }
-    },
-    handleOk(){
-      this.$refs.table.refresh(true)
-    }
   }
 }
 </script>
