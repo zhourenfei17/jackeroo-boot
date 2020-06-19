@@ -7,6 +7,8 @@ import cn.hub.jackeroo.utils.groups.First;
 import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -90,6 +92,45 @@ public class UserController extends BaseController {
     @ApiOperation(value = "删除用户", notes = "根据id删除用户")
     public Result delete(@Validated Id id){
         userService.removeById(id.getId());
+
+        return ok();
+    }
+
+    /**
+     * 冻结用户
+     * @param id
+     * @return
+     */
+    @PutMapping("frozen")
+    @ApiOperation(value = "冻结用户")
+    public Result frozen(@Validated Id id){
+        userService.frozenUser(id.getId());
+
+        return ok();
+    }
+
+    /**
+     * 解冻用户
+     * @param id
+     * @return
+     */
+    @PutMapping("unfrozen")
+    @ApiOperation(value = "解冻用户")
+    public Result unfrozen(@Validated Id id){
+        userService.unfrozenUser(id.getId());
+
+        return ok();
+    }
+
+    /**
+     * 重置密码
+     * @param id
+     * @return
+     */
+    @PutMapping("resetPwd")
+    @ApiOperation(value = "重置密码")
+    public Result resetPassword(@Validated Id id){
+        userService.resetPassword(id.getId());
 
         return ok();
     }

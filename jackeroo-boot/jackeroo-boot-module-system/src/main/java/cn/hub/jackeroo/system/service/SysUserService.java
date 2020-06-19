@@ -5,17 +5,13 @@ import cn.hub.jackeroo.enums.ResultStatusCode;
 import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.mapper.SysUserMapper;
+import cn.hub.jackeroo.utils.Assert;
 import cn.hub.jackeroo.utils.PasswordUtil;
 import cn.hub.jackeroo.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-
 
 /**
  * <p>
@@ -60,4 +56,48 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         super.save(user);
     }
 
+    /**
+     * 冻结用户
+     * @param id
+     */
+    public void frozenUser(String id){
+        SysUser sysUser = getById(id);
+        if(sysUser != null){
+            sysUser.setStatus(Constant.USER_STATUS_FROZEN);
+
+            super.updateById(sysUser);
+
+            // TODO 冻结用户需要清除用户的redis缓存，避免用户仍然在登录状态
+        }
+    }
+
+    /**
+     * 解冻用户
+     * @param id
+     */
+    public void unfrozenUser(String id){
+        SysUser sysUser = getById(id);
+        if(sysUser != null){
+            sysUser.setStatus(Constant.USER_STATUS_NORMAL);
+
+            super.updateById(sysUser);
+        }
+    }
+
+    /**
+     * 重置密码，默认密码为手机号后6位
+     * @param id
+     */
+    public void resetPassword(String id){
+        SysUser sysUser = getById(id);
+        if(sysUser != null){
+            Assert.isEmpty(sysUser.getPhone(), "重置密码失败");
+
+            String passwordEncode = PasswordUtil.encrypt(sysUser.getAccount(),
+                    sysUser.getPhone().substring(sysUser.getPhone().length() - 6), sysUser.getSalt());
+            sysUser.setPassword(passwordEncode);
+
+            super.updateById(sysUser);
+        }
+    }
 }
