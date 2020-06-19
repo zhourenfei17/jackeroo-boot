@@ -1,4 +1,4 @@
-import { getAction } from '@/api/manage'
+import { getAction, deleteAction } from '@/api/manage'
 
 export const JackerooListMixins = {
   data(){
@@ -83,7 +83,26 @@ export const JackerooListMixins = {
     },
     // formModal保存后刷新table
     handleOk(){
-      this.$refs.table.refresh(true)
+      this.refreshData(true)
+    },
+    // 刷新表数据，true返回首页并刷新，false仅刷新当前页，默认只刷新当前页
+    refreshData(backFirstPage = false){
+      this.$refs.table.refresh(backFirstPage)
+    },
+    // 删除
+    handleDelete(record){
+      this.$confirm({
+        title: "删除数据",
+        content: "确认删除该条数据吗？",
+        onOk: () => {
+          this.$loading.show()
+          deleteAction(this.url.delete, {id: record.id}).then(res => {
+            this.$message.success('操作成功')
+          }).finally(() => {
+            this.$loading.hide()
+          })
+        }
+      });
     }
   }
 }

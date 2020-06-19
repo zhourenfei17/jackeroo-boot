@@ -89,13 +89,15 @@
             <action-list>
               <a @click="handleView(record)">详情</a>
               <a @click="handleEdit(record)">编辑</a>
-              <a @click="handleEdit(record)">重置密码</a>
               <a-popconfirm title="您确定要冻结该用户吗？" v-if="record.status == 0" @confirm="() => frozen(record)">
-                <a>冻结</a>
+                <a class="careful">冻结</a>
               </a-popconfirm>
-              <a @click="handleEdit(record)" v-if="record.status == 1">解冻</a>
+              <a-popconfirm title="您确定要解冻该用户吗？" v-if="record.status == 1" @confirm="() => unfrozen(record)">
+                <a class="warning">解冻</a>
+              </a-popconfirm>
               <action-menu-list>
-                <a @click="handleEdit(record)">删除</a>
+                <a @click="resetPwd(record)">重置密码</a>
+                <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
             </action-list>
           </template>
@@ -111,6 +113,7 @@
 import { STable, Ellipsis } from '@/components'
 import UserFormModal from './modal/UserFormModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
+import { putAction } from '@/api/manage'
 
 const statusMap = {
   0: {
@@ -180,7 +183,11 @@ export default {
         }
       ],
       url: {
-        list: '/user/list'
+        list: '/user/list',
+        frozen: '/user/frozen',
+        unfrozen: '/user/unfrozen',
+        resetPwd: '/user/resetPwd',
+        delete: '/user/delete'
       }
     }
   },
@@ -193,10 +200,65 @@ export default {
     }
   },
   methods: {
-    //冻结用户
-    frozen(){
-
+    // 冻结用户
+    frozen(record){
+      this.$loading.show()
+      putAction(this.url.frozen, {id: record.id}).then(res => {
+        this.$message.success('操作成功')
+        this.refreshData()
+      }).finally(() => {
+        this.$loading.hide()
+      })
     },
+    // 解冻用户
+    unfrozen(record){
+      this.$loading.show()
+      putAction(this.url.unfrozen, {id: record.id}).then(res => {
+        this.$message.success('操作成功')
+        this.refreshData()
+      }).finally(() => {
+        this.$loading.hide()
+      })
+    },
+    // 重置密码
+    resetPwd(record){
+      this.$confirm({
+        title: "重置密码",
+        content: "确认重置用户【" + record.name + "】密码为手机号后六位？",
+        onOk: () => {
+          this.$loading.show()
+          putAction(this.url.resetPwd, {id: record.id}).then(res => {
+            this.$message.success('操作成功')
+          }).finally(() => {
+            this.$loading.hide()
+          })
+        }
+      });
+    },
+    // 删除
+    handleDelete(record){
+      this.$confirm({
+        title: "删除用户",
+        content: "确认删除用户【" + record.name + "】吗？",
+        onOk: () => {
+          this.$loading.show()
+          deleteAction(this.url.delete, {id: record.id}).then(res => {
+            this.$message.success('操作成功')
+          }).finally(() => {
+            this.$loading.hide()
+          })
+        }
+      });
+    }
   }
 }
 </script>
+
+<style lang="less" scoped>
+  .warning{
+    color: #dc8545
+  }
+  .careful{
+    color: #8a8282
+  }
+</style>

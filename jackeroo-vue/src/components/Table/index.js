@@ -8,6 +8,8 @@ export default {
       needTotalList: [],
       // 已选择的行数据
       selectedRows: [],
+      // 已选中且缓存的行数据，用于存储跨页选中行的数据
+      selectedCacheRows: [],
       // 已选择的行key
       selectedRowKeys: [],
       localLoading: false,
@@ -98,6 +100,8 @@ export default {
       if(!this.multiPageSelect){
         this.selectedRowKeys = []
         this.selectedRows = []
+      }else{
+        this.selectedCacheRows = this.selectedRows
       }
     },
     pageNum (val) {
@@ -218,7 +222,7 @@ export default {
       // 由于Antd的onSelect方法的selectedRowKeys参数传过来的会携带历史选中的key，因此不需要处理；而selectedRows传过来的仅是当前页选中的行
       if(this.multiPageSelect){
         // 跨页多选时需要拼接集合
-        this.selectedRows.push(...selectedRows)
+        this.selectedRows = this.selectedCacheRows.concat(selectedRows)
       }else{
         // 单页多选直接覆盖
         this.selectedRows = selectedRows
@@ -244,7 +248,22 @@ export default {
     clearSelected () {
       if (this.rowSelection) {
         this.rowSelection.onChange([], [])
-        this.updateSelect([], [])
+        //this.updateSelect([], [])
+
+        this.selectedRows = []
+        this.selectedCacheRows = []
+        this.selectedRowKeys = []
+
+        const list = this.needTotalList
+        this.needTotalList = list.map(item => {
+          return {
+            ...item,
+            total: this.selectedRows.reduce((sum, val) => {
+              const total = sum + parseInt(get(val, item.dataIndex))
+              return isNaN(total) ? 0 : total
+            }, 0)
+          }
+        })
       }
     },
     /**
