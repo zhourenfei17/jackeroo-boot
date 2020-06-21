@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
         if(e.getStatusCode() != null){
             return new Result(e.getStatusCode());
         }else{
-            return new Result(ResultStatusCode.BUSSINESS_ERROR, e.getMessage());
+            return new Result(ResultStatusCode.BUSSINESS_ERROR.getCode(), e.getMessage());
         }
     }
 

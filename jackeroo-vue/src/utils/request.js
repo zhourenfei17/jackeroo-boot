@@ -47,9 +47,7 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
-  if(response.data.code === 0){
-    return response.data
-  }else if(response.data.code === 401){
+  if(response.data.code === 401){
     notification.error({
       message: '退出登录',
       description: '登录信息失效，请重新登录'
@@ -58,10 +56,10 @@ request.interceptors.response.use((response) => {
     store.dispatch('Logout').then(() => {
       window.location.reload()
     })
-  }else{
+  }else if(response.data.code != 0){
     message.error(response.data.msg)
   }
-  
+  return response.data
 }, errorHandler)
 
 const installer = {

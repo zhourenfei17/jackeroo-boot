@@ -204,8 +204,10 @@ export default {
     frozen(record){
       this.$loading.show()
       putAction(this.url.frozen, {id: record.id}).then(res => {
-        this.$message.success('操作成功')
-        this.refreshData()
+        if(res.code === 0){
+          this.$message.success('操作成功')
+          this.refreshData()
+        }
       }).finally(() => {
         this.$loading.hide()
       })
@@ -214,8 +216,10 @@ export default {
     unfrozen(record){
       this.$loading.show()
       putAction(this.url.unfrozen, {id: record.id}).then(res => {
-        this.$message.success('操作成功')
-        this.refreshData()
+        if(res.code === 0){
+          this.$message.success('操作成功')
+          this.refreshData()
+        }
       }).finally(() => {
         this.$loading.hide()
       })
@@ -228,7 +232,9 @@ export default {
         onOk: () => {
           this.$loading.show()
           putAction(this.url.resetPwd, {id: record.id}).then(res => {
-            this.$message.success('操作成功')
+            if(res.code === 0){
+              this.$message.success('操作成功')
+            }
           }).finally(() => {
             this.$loading.hide()
           })
@@ -243,7 +249,9 @@ export default {
         onOk: () => {
           this.$loading.show()
           deleteAction(this.url.delete, {id: record.id}).then(res => {
-            this.$message.success('操作成功')
+            if(res.code === 0){
+              this.$message.success('操作成功')
+            }
           }).finally(() => {
             this.$loading.hide()
           })
