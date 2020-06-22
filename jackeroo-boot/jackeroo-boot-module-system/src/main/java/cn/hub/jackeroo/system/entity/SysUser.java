@@ -1,9 +1,11 @@
 package cn.hub.jackeroo.system.entity;
 
+import cn.hub.jackeroo.persistence.BaseEntity;
 import cn.hub.jackeroo.utils.groups.First;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -11,7 +13,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -25,7 +26,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SysUser implements Serializable {
+public class SysUser extends BaseEntity<SysUser> {
 
     private static final long serialVersionUID = 1L;
 
@@ -105,6 +106,7 @@ public class SysUser implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime createTime;
     /**
@@ -115,6 +117,7 @@ public class SysUser implements Serializable {
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }

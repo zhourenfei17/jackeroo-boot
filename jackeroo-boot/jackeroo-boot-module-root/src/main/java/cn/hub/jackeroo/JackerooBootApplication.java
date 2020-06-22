@@ -1,6 +1,5 @@
 package cn.hub.jackeroo;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -9,7 +8,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @SpringBootApplication
-@MapperScan("cn.hub.jackeroo.system.mapper")
 public class JackerooBootApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {

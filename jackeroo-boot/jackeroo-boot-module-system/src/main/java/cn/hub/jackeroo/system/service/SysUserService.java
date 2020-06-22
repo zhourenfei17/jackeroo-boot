@@ -8,10 +8,15 @@ import cn.hub.jackeroo.system.mapper.SysUserMapper;
 import cn.hub.jackeroo.utils.Assert;
 import cn.hub.jackeroo.utils.PasswordUtil;
 import cn.hub.jackeroo.utils.StringUtils;
+import cn.hub.jackeroo.vo.PageParam;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -24,6 +29,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
 
+    @Resource
+    private SysUserMapper mapper;
+
+    /**
+     * 查询数据列表-带分页
+     * @param sysUser
+     * @return
+     */
+    public IPage<SysUser> findPage(SysUser sysUser, PageParam pageParam){
+        Page<SysUser> page = pageParam.getPage();
+        sysUser.setPage(page);
+        page.setRecords(mapper.findList(sysUser));
+
+        return page;
+    }
     /**
      * 通过登录账号获取用户信息
      * @param account

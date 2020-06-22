@@ -28,7 +28,7 @@ public class MyBatisPlusConfig implements MetaObjectHandler {
      */
     @Bean
     public PaginationInterceptor paginationInterceptor(){
-        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
+        PaginationInterceptor paginationInterceptor = new MyBatisPaginationInterceptor();
         // 开启count的join优化，只针对部分 left join
         paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
 

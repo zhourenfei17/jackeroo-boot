@@ -1,12 +1,11 @@
 package cn.hub.jackeroo.persistence;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -20,31 +19,27 @@ import java.util.Map;
  * @version 2014-05-16
  */
 @Data
-public abstract class BaseEntity implements Serializable {
+public abstract class BaseEntity<T extends Serializable> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String createBy;
-    private LocalDateTime createTime;
-    private String updateBy;
-    private LocalDateTime updateTime;
 
 	/**
 	 * 自定义SQL（SQL标识，SQL内容）
 	 */
 	@TableField(exist = false)
+    @JsonIgnore
 	protected Map<String, String> sqlMap;
     @TableField(exist = false)
+    @JsonIgnore
 	private String dbName = "mysql"; // 当前数据库类型
-
-
-	public BaseEntity() {
-
-	}
-
-	@Override
-	public String toString() {
-		return ReflectionToStringBuilder.toString(this);
-	}
-
+    /**
+     * 排序字段
+     */
+    @TableField(exist = false)
+    @JsonIgnore
+    private String orderBy;
+    @TableField(exist = false)
+    @JsonIgnore
+    private Page<T> page;
 }
