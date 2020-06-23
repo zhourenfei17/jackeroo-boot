@@ -38,8 +38,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * @return
      */
     public IPage<SysUser> findPage(SysUser sysUser, PageParam pageParam){
-        Page<SysUser> page = pageParam.getPage();
-        sysUser.setPage(page);
+        Page<SysUser> page = sysUser.initPage(pageParam);
         page.setRecords(mapper.findList(sysUser));
 
         return page;

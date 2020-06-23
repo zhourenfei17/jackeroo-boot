@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.persistence;
 
+import cn.hub.jackeroo.vo.PageParam;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,4 +43,12 @@ public abstract class BaseEntity<T extends Serializable> implements Serializable
     @TableField(exist = false)
     @JsonIgnore
     private Page<T> page;
+
+    public Page<T> initPage(PageParam pageParam){
+        page = new Page();
+        page.setCurrent(pageParam.getPageNo());
+        page.setSize(pageParam.getPageSize());
+
+        return page;
+    }
 }

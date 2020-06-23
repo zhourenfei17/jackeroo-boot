@@ -27,17 +27,17 @@
           <include refid="baseColumns"></include>
         from sys_user a
         <where>
-            <if test="name != null">
-                and a.name = #{name}
+            <if test="name != null and name != ''">
+                and a.name like CONCAT('%', #{name}, '%')
             </if>
-            <if test="account != null">
-                and a.account = #{account}
+            <if test="account != null and account != ''">
+                and a.account like CONCAT('%', #{account}, '%')
             </if>
             <if test="status != null">
                 and a.status = #{status}
             </if>
-            <if test="telephone != null">
-                and a.telephone = #{telephone}
+            <if test="phone != null and phone != ''">
+                and a.phone like CONCAT('%', #{phone}, '%')
             </if>
             <if test="gender != null">
                 and a.gender = #{gender}
