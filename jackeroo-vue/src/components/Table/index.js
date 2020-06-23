@@ -1,5 +1,6 @@
 import T from 'ant-design-vue/es/table/Table'
 import get from 'lodash.get'
+import './index.less'
 
 export default {
   data () {
@@ -40,7 +41,7 @@ export default {
     },
     size: {
       type: String,
-      default: 'default'
+      default: 'small'
     },
     /**
      * alert: {
@@ -77,6 +78,12 @@ export default {
     pageURI: {
       type: Boolean,
       default: false
+    },
+    rowClassName: {
+      type: Function,
+      default: () => {
+        return 'jackeroo-row'
+      }
     }
   }),
   computed: {
@@ -126,7 +133,11 @@ export default {
     this.localPagination = ['auto', true].includes(this.showPagination) && Object.assign({}, this.localPagination, {
       current: localPageNum,
       pageSize: this.pageSize,
-      showSizeChanger: this.showSizeChanger
+      showSizeChanger: this.showSizeChanger,
+      size: 'small',
+      showTotal: (total, range) => {
+        return '共' + total + '条数据'
+      }
     }) || false
     this.needTotalList = this.initTotalList(this.columns)
     this.loadData()

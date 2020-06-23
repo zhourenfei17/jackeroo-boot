@@ -16,8 +16,8 @@
             </a-col>
             <a-col :md="6" :sm="12">
               <a-form-item label="状态">
-                <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
-                  <a-select-option value="">请选择</a-select-option>
+                <a-select v-model="queryParam.status" placeholder="请选择状态" default-value="0">
+                  <a-select-option value="" disabled>请选择</a-select-option>
                   <a-select-option value="0">正常</a-select-option>
                   <a-select-option value="1">冻结</a-select-option>
                 </a-select>
@@ -31,8 +31,8 @@
               </a-col>
               <a-col :md="6" :sm="12">
                 <a-form-item label="性别">
-                  <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
-                    <a-select-option value="">请选择</a-select-option>
+                  <a-select v-model="queryParam.gender" placeholder="请选择性别" default-value="0">
+                    <a-select-option value="" disabled>请选择</a-select-option>
                     <a-select-option value="1">男</a-select-option>
                     <a-select-option value="2">女</a-select-option>
                   </a-select>
