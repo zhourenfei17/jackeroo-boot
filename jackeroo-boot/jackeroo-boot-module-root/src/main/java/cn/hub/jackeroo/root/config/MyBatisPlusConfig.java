@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.root.config;
 
+import cn.hub.jackeroo.root.config.bean.MyBatisPaginationInterceptor;
 import cn.hub.jackeroo.utils.UserUtils;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;

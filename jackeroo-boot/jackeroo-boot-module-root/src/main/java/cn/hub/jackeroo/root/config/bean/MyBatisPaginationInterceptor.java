@@ -1,4 +1,4 @@
-package cn.hub.jackeroo.root.config;
+package cn.hub.jackeroo.root.config.bean;
 
 import cn.hub.jackeroo.utils.Reflections;
 import com.baomidou.mybatisplus.annotation.DbType;
