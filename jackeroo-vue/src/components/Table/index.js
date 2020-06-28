@@ -178,10 +178,14 @@ export default {
       }
       )
       const result = this.data(parameter)
+      console.log('result', result)
       // 对接自己的通用数据接口需要修改下方代码中的 r.pageNo, r.totalCount, r.data
       // eslint-disable-next-line
       if ((typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
         result.then(r => {
+          if(r === undefined){
+            return
+          }
           // 由于后端传递时将Long类型转为了String，因此需要处理下
           let pageNo = Number(r.current), totalCount = Number(r.total)
           this.localPagination = this.showPagination && Object.assign({}, this.localPagination, {

@@ -182,11 +182,11 @@ export default {
         }
       ],
       url: {
-        list: '/user/list',
-        frozen: '/user/frozen',
-        unfrozen: '/user/unfrozen',
-        resetPwd: '/user/resetPwd',
-        delete: '/user/delete'
+        list: '/system/user/list',
+        frozen: '/system/user/frozen',
+        unfrozen: '/system/user/unfrozen',
+        resetPwd: '/system/user/resetPwd',
+        delete: '/system/user/delete'
       }
     }
   },

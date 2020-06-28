@@ -4,6 +4,7 @@ const GitRevisionPlugin = require('git-revision-webpack-plugin')
 const GitRevision = new GitRevisionPlugin()
 const buildDate = JSON.stringify(new Date().toLocaleString())
 const createThemeColorReplacerPlugin = require('./config/plugin.config')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -40,7 +41,12 @@ const vueConfig = {
         APP_VERSION: `"${require('./package.json').version}"`,
         GIT_HASH: JSON.stringify(GitRevision.version()),
         BUILD_DATE: buildDate
-      })
+      }),
+      new CleanWebpackPlugin({
+        cleanOnceBeforeBuildPatterns: [`**/*.hot-update.*`],
+        dry: false,
+        dangerouslyAllowCleanPatternsOutsideProject: true
+      }),
     ],
     // if prod, add externals
     externals: isProd ? assetsCDN.externals : {}

@@ -28,14 +28,11 @@ export const JackerooListMixins = {
           return
         }
         const requestParameters = Object.assign({}, parameter, this.queryParam)
+        console.log('param', requestParameters)
         return getAction(this.url.list, requestParameters)
           .then(res => {
             return res.data
           })
-      },
-      orderBy:{
-        sort: 'createTime',
-        order: 'desc',
       },
     }
   },

@@ -3,7 +3,7 @@ import qs from 'qs'
 
 const api = {
   user: '/user',
-  role: '/role',
+  role: '/system/role/list',
   service: '/service',
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',

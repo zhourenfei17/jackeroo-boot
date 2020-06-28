@@ -265,7 +265,7 @@ export const asyncRouterMap = [
         path: '/system',
         name: 'user',
         component: RouteView,
-        redirect: '/user/list',
+        redirect: '/system/user',
         meta: { title: '系统管理', icon: 'warning', permission: [ 'exception' ] },
         children: [
           {

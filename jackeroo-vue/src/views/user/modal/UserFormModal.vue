@@ -106,9 +106,9 @@ export default {
         birthday: []
       },
       url: {
-        getById: '/user/',
-        add: '/user/add',
-        update: '/user/update'
+        getById: '/system/user/',
+        add: '/system/user/add',
+        update: '/system/user/update'
       }
     }
   },
