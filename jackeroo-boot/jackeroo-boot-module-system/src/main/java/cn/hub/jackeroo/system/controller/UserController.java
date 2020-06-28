@@ -4,6 +4,7 @@ import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.service.SysUserService;
 import cn.hub.jackeroo.utils.groups.First;
+import cn.hub.jackeroo.vo.Grid;
 import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
@@ -20,13 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 系统用户模块接口
+ * 系统用户相关接口
  * @author alex
  * @date 2020/06/01
  */
-@Api(value = "系统用户模块", description = "系统用户模块api", tags = "系统管理", position = 1)
+@Api(value = "系统用户", description = "系统用户api", tags = "系统管理", position = 1)
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/system/user")
 public class UserController extends BaseController {
     @Autowired
     private SysUserService userService;

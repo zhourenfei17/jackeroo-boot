@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hub.jackeroo.system.mapper.SysRoleMapper">
+
+    <sql id="baseColumns">
+        a.id as id,
+        a.role_name as roleName,
+        a.role_code as roleCode,
+        a.remark as remark,
+        a.create_by as createBy,
+        a.create_time as createTime,
+        a.update_by as updateBy,
+        a.update_time as updateTime
+    </sql>
+
+    <select id="findList" resultType="cn.hub.jackeroo.system.entity.SysRole">
+        SELECT <include refid="baseColumns" />
+        FROM sys_role a
+        <where>
+            <if test="roleName != null and roleName != ''">
+                a.role_name like CONCAT('%', #{roleName},'%')
+            </if>
+            <if test="roleCode != null and roleCode != ''">
+                a.role_code like CONCAT('%', #{roleCode},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

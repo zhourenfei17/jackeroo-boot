@@ -3,6 +3,8 @@ package cn.hub.jackeroo.system.mapper;
 import cn.hub.jackeroo.system.entity.SysRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  * 角色信息 Mapper 接口
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SysRoleMapper extends BaseMapper<SysRole> {
 
+    List<SysRole> findList(SysRole sysRole);
 }
