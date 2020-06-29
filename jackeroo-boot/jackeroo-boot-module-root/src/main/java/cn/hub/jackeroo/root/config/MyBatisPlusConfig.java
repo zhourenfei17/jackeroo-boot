@@ -2,6 +2,7 @@ package cn.hub.jackeroo.root.config;
 
 import cn.hub.jackeroo.root.config.bean.MyBatisPaginationInterceptor;
 import cn.hub.jackeroo.utils.UserUtils;
+import cn.hub.jackeroo.vo.LoginUser;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
@@ -42,10 +43,11 @@ public class MyBatisPlusConfig implements MetaObjectHandler {
      */
     @Override
     public void insertFill(MetaObject metaObject) {
+        LoginUser user = UserUtils.getUser();
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "createBy", String.class, UserUtils.getUser().getAccount());
+        this.strictInsertFill(metaObject, "createBy", String.class, user.getAccount());
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "updateBy", LocalDateTime.class, UserUtils.getUser().getAccount());
+        this.strictInsertFill(metaObject, "updateBy", String.class, user.getAccount());
     }
 
     /**
@@ -55,6 +57,6 @@ public class MyBatisPlusConfig implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
-        this.strictUpdateFill(metaObject, "updateBy", LocalDateTime.class, UserUtils.getUser().getAccount());
+        this.strictUpdateFill(metaObject, "updateBy", String.class, UserUtils.getUser().getAccount());
     }
 }

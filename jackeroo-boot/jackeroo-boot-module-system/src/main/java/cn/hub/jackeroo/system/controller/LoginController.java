@@ -23,11 +23,6 @@ public class LoginController extends BaseController {
     @Autowired
     private SysUserService userService;
 
-    @RequestMapping("/getUser")
-    public Result getUser(String account){
-        return ok(userService.findByAccount(account));
-    }
-
 	@RequestMapping("/login")
 	public Result login(@Validated Account account) {
 		try {

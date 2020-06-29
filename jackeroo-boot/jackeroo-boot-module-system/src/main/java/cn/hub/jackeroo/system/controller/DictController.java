@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Slf4j
 @Controller
-@RequestMapping(value = "${adminPath}/system/dict")
+@RequestMapping(value = "/system/dict")
 public class DictController extends BaseController {
 
 	/*@Autowired

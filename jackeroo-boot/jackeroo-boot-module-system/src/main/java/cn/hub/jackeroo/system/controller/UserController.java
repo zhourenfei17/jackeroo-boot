@@ -38,7 +38,7 @@ public class UserController extends BaseController {
      */
     @GetMapping("list")
     @ApiOperation(value = "用户列表", notes = "根据条件查询用户列表", response = Result.class)
-    public Result list(SysUser sysUser, PageParam pageParam){
+    public Result list(SysUser sysUser, @Validated PageParam pageParam){
         return ok(userService.findPage(sysUser, pageParam));
     }
 

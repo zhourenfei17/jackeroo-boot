@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping("${adminPath}/upload")
+@RequestMapping("/upload")
 @Controller
-public class uploadController {
+public class UploadController {
 
 	/*@Value("${ueditor.imageUrlPrefix}")
 	private String imageUrlPrefix;

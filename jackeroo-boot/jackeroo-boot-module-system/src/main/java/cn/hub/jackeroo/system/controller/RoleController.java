@@ -36,7 +36,7 @@ public class RoleController extends BaseController {
      */
     @GetMapping("list")
     @ApiOperation(value = "角色列表", response = Result.class)
-    public Result list(SysRole sysRole, PageParam pageParam){
+    public Result list(SysRole sysRole, @Validated PageParam pageParam){
         return ok(roleService.findPage(sysRole, pageParam));
     }
 
