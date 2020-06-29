@@ -110,7 +110,7 @@
 import { STable, Ellipsis } from '@/components'
 import UserFormModal from './modal/UserFormModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
-import { putAction } from '@/api/manage'
+import { putAction, getAction } from '@/api/manage'
 
 const statusMap = {
   0: {

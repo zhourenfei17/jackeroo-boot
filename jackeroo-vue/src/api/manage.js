@@ -2,22 +2,27 @@ import {axios} from '@/utils/request'
 import qs from 'qs'
 
 const api = {
-  user: '/user',
-  role: '/system/role/list',
-  service: '/service',
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
-  orgTree: '/org/tree'
+  orgTree: '/org/tree',
+  validUniqueUrl: '/system/valid/unique'
 }
 
 export default api
+
+const method = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE'
+}
 
 //post
 //使用application / x-www-form-urlencoded格式发送数据
 export function postAction(url,parameter) {
   return axios({
     url: url,
-    method:'post' ,
+    method: method.POST ,
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
     data: qs.stringify(parameter)
   })
@@ -37,7 +42,7 @@ export function httpAction(url,parameter,method) {
 export function putAction(url,parameter) {
   return axios({
     url: url,
-    method:'put',
+    method: method.PUT,
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
     data: qs.stringify(parameter)
   })
@@ -47,7 +52,7 @@ export function putAction(url,parameter) {
 export function getAction(url,parameter) {
   return axios({
     url: url,
-    method: 'get',
+    method: method.GET,
     params: parameter
   })
 }
@@ -56,31 +61,7 @@ export function getAction(url,parameter) {
 export function deleteAction(url,parameter) {
   return axios({
     url: url,
-    method: 'delete',
-    params: parameter
-  })
-}
-
-export function getUserList (parameter) {
-  return axios({
-    url: api.user,
-    method: 'get',
-    params: parameter
-  })
-}
-
-export function getRoleList (parameter) {
-  return axios({
-    url: api.role,
-    method: 'get',
-    params: parameter
-  })
-}
-
-export function getServiceList (parameter) {
-  return axios({
-    url: api.service,
-    method: 'get',
+    method: method.DELETE,
     params: parameter
   })
 }
@@ -101,20 +82,10 @@ export function getOrgTree (parameter) {
   })
 }
 
-// id == 0 add     post
-// id != 0 update  put
-export function saveService (parameter) {
+export function validtedUnique(parameter){
   return axios({
-    url: api.service,
-    method: parameter.id === 0 ? 'post' : 'put',
-    data: parameter
-  })
-}
-
-export function saveSub (sub) {
-  return axios({
-    url: '/sub',
-    method: sub.id === 0 ? 'post' : 'put',
-    data: sub
+    url: api.validUniqueUrl,
+    method: method.GET,
+    params: parameter
   })
 }

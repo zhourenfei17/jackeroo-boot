@@ -164,7 +164,7 @@
 <script>
 import pick from 'lodash.pick'
 import { STable } from '@/components'
-import { getRoleList, getServiceList } from '@/api/manage'
+import { getRoleList } from '@/api/manage'
 import { PERMISSION_ENUM } from '@/utils/helper/permission'
 
 const STATUS = {
@@ -252,10 +252,6 @@ export default {
     }
   },
   created () {
-    getServiceList().then(res => {
-      console.log('getServiceList.call()', res)
-    })
-
     getRoleList().then(res => {
       console.log('getRoleList.call()', res)
     })

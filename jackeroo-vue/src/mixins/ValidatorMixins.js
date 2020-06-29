@@ -1,3 +1,5 @@
+import {validtedUnique} from '@/api/manage'
+
 export const ValidatorMixins = {
   methods: {
     // 验证手机号
@@ -23,6 +25,22 @@ export const ValidatorMixins = {
       }else{
         callback('请输入正确的邮政编码')
       }
-    }
+    },
+    // 唯一性校验
+    validUnique(rule, value, callback){
+      var params = {
+        tableName: rule.tableName ? rule.tableName : this.tableName,
+        columnName: rule.columnName ? rule.columnName : rule.field, //接口会进行去驼峰处理
+        dataValue: value,
+        dataId : rule.dataId ? rule.dataId : this.form.id
+      };
+      validtedUnique(params).then((res) => {
+        if (res.data) {
+          callback(rule.message)
+        } else {
+          callback()
+        }
+      })
+    },
   },
 }

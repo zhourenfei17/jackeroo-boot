@@ -113,26 +113,7 @@ export default {
         list: '/system/role/list',
         delete: '/system/role/delete'
       },
-      queryParam: {},
-      loadData: (parameter) => {
-        if(!this.url.list){
-          this.$message.error("请设置url.list属性!")
-          return
-        }
-        /* const requestParameters = Object.assign({}, this.queryParam)
-        console.log('param', requestParameters)
-        return getAction(this.url.list, requestParameters)
-          .then(res => {
-            return res.data
-          }) */
-      },
     }
-  },
-  created(){
-    const requestParameters = Object.assign({}, this.queryParam)
-    getAction('/system/role/list', requestParameters).then(res => {
-      this.dataSource = res.data
-    })
   },
   methods: {
     // 删除

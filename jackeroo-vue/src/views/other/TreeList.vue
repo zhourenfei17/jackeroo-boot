@@ -53,7 +53,7 @@
 import STree from '@/components/Tree/Tree'
 import { STable } from '@/components'
 import OrgModal from './modules/OrgModal'
-import { getOrgTree, getServiceList } from '@/api/manage'
+import { getOrgTree } from '@/api/manage'
 
 export default {
   name: 'TreeList',
@@ -104,10 +104,7 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return getServiceList(Object.assign(parameter, this.queryParam))
-          .then(res => {
-            return res.result
-          })
+        
       },
       orgTree: [],
       selectedRowKeys: [],

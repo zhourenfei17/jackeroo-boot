@@ -44,6 +44,7 @@ export default {
   data(){
     return {
       title: '用户信息',
+      tableName: 'sys_role',
       width: '40vw',
       form: {
         id: null,
@@ -52,8 +53,8 @@ export default {
         remark: ''
       },
       rules: {
-        roleName: [{required: true, message: '请输入角色名'}],
-        roleCode: [{required: true, message: '请输入角色代码'}],
+        roleName: [{required: true, message: '请输入角色名'}, {validator: this.validUnique, message: '角色名不能重复', trigger: 'blur'}],
+        roleCode: [{required: true, message: '请输入角色代码'}, {validator: this.validUnique, message: '角色代码不能重复', trigger: 'blur'}],
         remark: [],
       },
       url: {
