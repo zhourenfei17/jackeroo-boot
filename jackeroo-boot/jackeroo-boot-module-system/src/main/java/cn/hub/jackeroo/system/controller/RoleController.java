@@ -3,7 +3,7 @@ package cn.hub.jackeroo.system.controller;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.service.SysRoleService;
-import cn.hub.jackeroo.utils.groups.First;
+import cn.hub.jackeroo.utils.validator.groups.First;
 import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;

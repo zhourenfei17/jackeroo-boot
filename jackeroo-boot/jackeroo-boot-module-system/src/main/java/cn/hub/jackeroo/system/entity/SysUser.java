@@ -1,7 +1,9 @@
 package cn.hub.jackeroo.system.entity;
 
+import cn.hub.jackeroo.constant.CodeType;
 import cn.hub.jackeroo.persistence.BaseEntity;
-import cn.hub.jackeroo.utils.groups.First;
+import cn.hub.jackeroo.utils.validator.annotation.CodeNum;
+import cn.hub.jackeroo.utils.validator.groups.First;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -82,11 +84,13 @@ public class SysUser extends BaseEntity<SysUser> {
     /**
      * 手机
      */
+    @CodeNum(type = CodeType.MOBILE)
     private String phone;
 
     /**
      * 座机
      */
+    @CodeNum(type = CodeType.TELEPHONE)
     private String telephone;
 
     /**

@@ -1,4 +1,4 @@
-package cn.hub.jackeroo.utils.groups;
+package cn.hub.jackeroo.utils.validator.groups;
 
 /**
  * @author alex
