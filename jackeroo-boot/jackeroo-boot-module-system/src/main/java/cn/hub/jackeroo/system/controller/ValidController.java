@@ -38,6 +38,6 @@ public class ValidController extends BaseController {
         if(mapUnderscoreToCamelCase){
             uniqueVo.setColumnName(StringUtils.toUnderScoreCase(uniqueVo.getColumnName()));
         }
-        return ok(service.unique(uniqueVo));
+        return ok(service.isUnique(uniqueVo));
     }
 }

@@ -1,6 +1,7 @@
 package cn.hub.jackeroo.system.entity;
 
 import cn.hub.jackeroo.persistence.BaseEntity;
+import cn.hub.jackeroo.utils.validator.annotation.Unique;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -33,12 +34,14 @@ public class SysRole extends BaseEntity<SysRole> {
     /**
      * 角色名称
      */
+    @Unique(name = "角色名称")
     @NotBlank
     @Length(max = 20)
     private String roleName;
     /**
      * 角色代码
      */
+    @Unique(name = "角色代码")
     @NotBlank
     @Length(max = 30)
     private String roleCode;

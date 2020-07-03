@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
-@RequestMapping("${adminPath}/gen/genScheme")
+@RequestMapping("/gen/genScheme")
 @Controller
 public class GenSchemeController extends BaseController {
     @Autowired

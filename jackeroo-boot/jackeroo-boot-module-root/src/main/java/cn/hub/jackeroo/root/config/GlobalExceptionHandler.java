@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 
 /**
  * 全局异常处理中心
@@ -55,6 +56,16 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage(), e);
 
         return new Result(ResultStatusCode.UNAUTHO_ERROR);
+    }
+
+    /**
+     * 数据校验异常处理
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(ValidationException.class)
+    public Result validationException(ValidationException e){
+        return new Result(ResultStatusCode.BAD_REQUEST.getCode(), e.getMessage());
     }
 
     /**

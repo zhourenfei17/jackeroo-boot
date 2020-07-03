@@ -20,7 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Slf4j
-@RequestMapping("${adminPath}/gen/genTable")
+@RequestMapping("/gen/genTable")
 @Controller
 public class GenTableController extends BaseController {
     @Autowired
