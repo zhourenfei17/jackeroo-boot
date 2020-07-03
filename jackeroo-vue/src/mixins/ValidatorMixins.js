@@ -12,7 +12,7 @@ export const ValidatorMixins = {
     },
     // 验证身份证号
     validIdNumber(rule, value, callback){
-      if(/(^\d{15}$)|(^\d{17}([0-9]|X)$)/.test(value)){
+      if(/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X|x)$/.test(value)){
         callback()
       }else{
         callback('请输入正确的身份证号')
@@ -36,9 +36,9 @@ export const ValidatorMixins = {
       };
       validtedUnique(params).then((res) => {
         if (res.data) {
-          callback(rule.message)
-        } else {
           callback()
+        } else {
+          callback(rule.message)
         }
       })
     },

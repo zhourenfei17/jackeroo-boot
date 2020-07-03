@@ -2,7 +2,7 @@
   <page-header-wrapper>
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
+        <a-form layout="inline" @keyup.enter.native="refreshData(true)">
           <a-row :gutter="48">
             <a-col :md="6" :sm="12">
               <a-form-item label="角色名">
@@ -16,7 +16,7 @@
             </a-col>
             <a-col :md="!advanced && 6 || 24" :sm="12">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+                <a-button type="primary" @click="refreshData(true)">查询</a-button>
                 <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
               </span>
             </a-col>
@@ -72,7 +72,7 @@ import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
 
 export default {
-  name: 'TableList',
+  name: 'RoleList',
   components: {
     STable,
     RoleFormModal,
@@ -119,13 +119,14 @@ export default {
     // 删除
     handleDelete(record){
       this.$confirm({
-        title: "删除用户",
-        content: "确认删除用户【" + record.name + "】吗？",
+        title: "删除角色",
+        content: "确认删除角色【" + record.roleName + "】吗？",
         onOk: () => {
           this.$loading.show()
           deleteAction(this.url.delete, {id: record.id}).then(res => {
             if(res.code === 0){
               this.$message.success('操作成功')
+              this.refreshData()
             }
           }).finally(() => {
             this.$loading.hide()

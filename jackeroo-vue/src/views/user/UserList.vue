@@ -2,7 +2,7 @@
   <page-header-wrapper>
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
+        <a-form layout="inline" @keyup.enter.native="refreshData(true)">
           <a-row :gutter="48">
             <a-col :md="6" :sm="12">
               <a-form-item label="姓名">
@@ -41,7 +41,7 @@
             </template>
             <a-col :md="!advanced && 6 || 24" :sm="12">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+                <a-button type="primary" @click="refreshData(true)">查询</a-button>
                 <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
                 <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}

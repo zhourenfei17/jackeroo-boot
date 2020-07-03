@@ -78,6 +78,7 @@ export default {
   data(){
     return {
       title: '用户信息',
+      tableName: 'sys_user',
       width: '40vw',
       form: {
         id: null,
@@ -93,15 +94,23 @@ export default {
       },
       rules: {
         name: [{required: true, message: '请输入姓名'}],
-        account: [{required: true, message: '请输入账号'}],
+        account: [
+          {required: true, message: '请输入账号'},
+          {validator: this.validUnique, message: '该账号已存在', trigger: 'blur'}
+        ],
         code: [],
         password: [{required: true, message: '请输入密码'}],
-        passwordAgain: [{required: true, message: '请再次输入密码'}, 
+        passwordAgain: [
+          {required: true, message: '请再次输入密码'}, 
           {validator:(rule, value, callback)=>{
             return value != this.form.password ? callback('两次输入的密码不一致') : callback()
           }, trigger: 'blur'}],
         gender: [],
-        phone: [{required: true, message: '请输入手机'},{validator: this.validPhone, trigger: 'blur'}],
+        phone: [
+          {required: true, message: '请输入手机'},
+          {validator: this.validPhone, trigger: 'blur'},
+          {validator: this.validUnique, message: '该手机号已存在', trigger: 'blur'}
+        ],
         telephone: [],
         birthday: []
       },

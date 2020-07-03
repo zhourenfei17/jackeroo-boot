@@ -88,8 +88,6 @@ export default {
               this.$message.success('保存成功！')
               this.cancel()
               this.$emit('ok')
-            }else{
-              this.$message.error(result.msg)
             }
           }).finally(() => {
             this.$loading.hide()
