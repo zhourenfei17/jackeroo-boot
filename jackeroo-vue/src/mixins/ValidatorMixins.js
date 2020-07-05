@@ -35,10 +35,12 @@ export const ValidatorMixins = {
         dataId : rule.dataId ? rule.dataId : this.form.id
       };
       validtedUnique(params).then((res) => {
-        if (res.data) {
-          callback()
-        } else {
-          callback(rule.message)
+        if(res.code == 0){
+          if (res.data) {
+            callback()
+          } else {
+            callback(rule.message)
+          }
         }
       })
     },
