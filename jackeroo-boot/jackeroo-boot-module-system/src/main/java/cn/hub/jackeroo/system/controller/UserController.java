@@ -3,12 +3,15 @@ package cn.hub.jackeroo.system.controller;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.service.SysUserService;
+import cn.hub.jackeroo.system.service.ValidService;
 import cn.hub.jackeroo.utils.validator.groups.First;
+import cn.hub.jackeroo.utils.validator.groups.Second;
 import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController extends BaseController {
     @Autowired
     private SysUserService userService;
+    @Autowired
+    private ValidService validService;
 
     /**
      * 用户列表
@@ -60,6 +65,7 @@ public class UserController extends BaseController {
     @PostMapping("add")
     @ApiOperation(value = "添加用户", notes = "添加用户信息")
     public Result add(@Validated SysUser user){
+        validService.validEntityUniqueField(user, First.class);
         userService.insertUser(user);
         return ok();
     }
@@ -72,8 +78,13 @@ public class UserController extends BaseController {
     @PutMapping("update")
     @ApiOperation(value = "编辑用户", notes = "编辑用户信息")
     public Result update(@Validated(First.class) SysUser user){
-        user.setPassword(null);
-        userService.updateById(user);
+        SysUser sysUser = new SysUser();
+        BeanUtils.copyProperties(user, sysUser);
+        // 编辑用户无法修改密码和账号
+        sysUser.setPassword(null);
+        sysUser.setAccount(null);
+        validService.validEntityUniqueField(sysUser, Second.class);
+        userService.updateById(sysUser);
         return ok();
     }
 

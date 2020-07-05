@@ -3,6 +3,7 @@ package cn.hub.jackeroo.utils.validator.annotation;
 import cn.hub.jackeroo.utils.validator.annotation.validator.CodeNumValidator;
 
 import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -25,4 +26,6 @@ public @interface Unique {
     String message() default "不能重复";
 
     Class<?>[] groups() default { };
+
+    Class<? extends Payload>[] payload() default { };
 }

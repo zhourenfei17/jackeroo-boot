@@ -3,6 +3,7 @@ package cn.hub.jackeroo.system.service;
 import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.mapper.ValidMapper;
 import cn.hub.jackeroo.system.query.UniqueVo;
+import cn.hub.jackeroo.utils.ArrayUtils;
 import cn.hub.jackeroo.utils.Reflections;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.utils.validator.annotation.Unique;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.validation.ValidationException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 /**
  * @author alex
@@ -32,11 +34,14 @@ public class ValidService {
         return mapper.uniqueFromTable(uniqueVo) == 0;
     }
 
+    public void validEntityUniqueField(Object obj){
+        this.validEntityUniqueField(obj, null);
+    }
     /**
      * 验证实体类带有@Unique注解的字段
      * @param obj
      */
-    public void validEntityUniqueField(Object obj){
+    public void validEntityUniqueField(Object obj, Class<?> validGroupClass){
         String tableNameStr;
         TableName tableName = obj.getClass().getAnnotation(TableName.class);
         if(tableName != null){
@@ -51,6 +56,11 @@ public class ValidService {
                 Unique unique = field.getAnnotation(Unique.class);
                 if(unique == null){
                     continue;
+                }
+                if(validGroupClass != null){
+                    if(!ArrayUtils.contains(unique.groups(), validGroupClass)){
+                        continue;
+                    }
                 }
                 // 值为空则不进行唯一性判断
                 String dataValue = Reflections.getFieldValue(obj, field.getName()).toString();

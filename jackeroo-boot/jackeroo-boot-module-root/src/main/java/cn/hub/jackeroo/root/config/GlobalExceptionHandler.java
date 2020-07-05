@@ -65,6 +65,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ValidationException.class)
     public Result validationException(ValidationException e){
+        e.printStackTrace();
         return new Result(ResultStatusCode.BAD_REQUEST.getCode(), e.getMessage());
     }
 

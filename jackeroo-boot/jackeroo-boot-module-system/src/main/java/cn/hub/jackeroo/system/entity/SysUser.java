@@ -3,7 +3,9 @@ package cn.hub.jackeroo.system.entity;
 import cn.hub.jackeroo.constant.CodeType;
 import cn.hub.jackeroo.persistence.BaseEntity;
 import cn.hub.jackeroo.utils.validator.annotation.CodeNum;
+import cn.hub.jackeroo.utils.validator.annotation.Unique;
 import cn.hub.jackeroo.utils.validator.groups.First;
+import cn.hub.jackeroo.utils.validator.groups.Second;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -51,6 +53,7 @@ public class SysUser extends BaseEntity<SysUser> {
     /**
      * 登录帐号
      */
+    @Unique(name = "登录账号", groups = {First.class})
     @NotBlank
     @Length(max = 30)
     private String account;
@@ -84,6 +87,7 @@ public class SysUser extends BaseEntity<SysUser> {
     /**
      * 手机
      */
+    @Unique(name = "手机号", groups = {First.class, Second.class})
     @CodeNum(type = CodeType.MOBILE)
     private String phone;
 

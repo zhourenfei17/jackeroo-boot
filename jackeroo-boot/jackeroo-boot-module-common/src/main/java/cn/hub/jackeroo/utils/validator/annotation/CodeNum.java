@@ -3,6 +3,7 @@ package cn.hub.jackeroo.utils.validator.annotation;
 import cn.hub.jackeroo.utils.validator.annotation.validator.CodeNumValidator;
 
 import javax.validation.Constraint;
+import javax.validation.Payload;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -25,4 +26,5 @@ public @interface CodeNum {
 
     Class<?>[] groups() default { };
 
+    Class<? extends Payload>[] payload() default { };
 }
