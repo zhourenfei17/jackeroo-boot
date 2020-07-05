@@ -33,7 +33,7 @@ export const JackerooFromMixins = {
       if(this.flag.add){
         return this.url.add
       }else if(this.flag.edit){
-        return this.url.edit
+        return this.url.update
       }else{
         return ''
       }

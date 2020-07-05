@@ -20,7 +20,7 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="账号" prop="account">
-              <a-input v-model="form.account" placeholder="请输入账号" :disabled="flag.view"></a-input>
+              <a-input v-model="form.account" placeholder="请输入账号" :disabled="flag.view || flag.edit"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -28,13 +28,13 @@
               <a-input v-model="form.code" placeholder="请输入员工号" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="密码" prop="password" v-show="flag.add">
+          <a-col :span="rowSpan" v-if="flag.add">
+            <a-form-model-item label="密码" prop="password">
               <a-input v-model="form.password" placeholder="请输入密码" type="password"></a-input>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="确认密码" prop="passwordAgain" v-show="flag.add">
+          <a-col :span="rowSpan" v-if="flag.add">
+            <a-form-model-item label="确认密码" prop="passwordAgain">
               <a-input v-model="form.passwordAgain" placeholder="请再次输入密码" type="password"></a-input>
             </a-form-model-item>
           </a-col>
@@ -80,6 +80,7 @@ export default {
       title: '用户信息',
       tableName: 'sys_user',
       width: '40vw',
+      md5Flag: false,
       form: {
         id: null,
         name: '',
@@ -137,14 +138,20 @@ export default {
       this.$refs.formModel.validate((success) => {
         if(success){
           const formData = this.form
-          formData.password = md5(formData.password)
-          formData.passwordAgain = md5(formData.passwordAgain)
+          if(!this.md5Flag && this.flag.add){
+            formData.password = md5(formData.password)
+            formData.passwordAgain = md5(formData.passwordAgain)
+
+            this.md5Flag = true
+          }
+          
           console.log('formData', formData)
 
           this.$loading.show()
           httpAction(this.requestUrl, formData, this.requestMethod).then(result => {
             if(result.code === 0){
               this.$message.success('保存成功！')
+              this.md5Flag = false
               this.cancel()
               this.$emit('ok')
             }else{
