@@ -4,8 +4,11 @@ import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.service.SysUserService;
 import cn.hub.jackeroo.system.service.ValidService;
+import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.First;
+import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Second;
+import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
@@ -64,8 +67,9 @@ public class UserController extends BaseController {
      */
     @PostMapping("add")
     @ApiOperation(value = "添加用户", notes = "添加用户信息")
+    @ValidatedUnique(clazz = SysUser.class)
     public Result add(@Validated SysUser user){
-        validService.validEntityUniqueField(user, First.class);
+        // validService.validEntityUniqueField(user, Insert.class);
         userService.insertUser(user);
         return ok();
     }
@@ -77,13 +81,14 @@ public class UserController extends BaseController {
      */
     @PutMapping("update")
     @ApiOperation(value = "编辑用户", notes = "编辑用户信息")
-    public Result update(@Validated(First.class) SysUser user){
+    @ValidatedUnique(clazz = SysUser.class, groups = Update.class)
+    public Result update(@Validated(Update.class) SysUser user){
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
         // 编辑用户无法修改密码和账号
         sysUser.setPassword(null);
         sysUser.setAccount(null);
-        validService.validEntityUniqueField(sysUser, Second.class);
+        // validService.validEntityUniqueField(sysUser, Update.class);
         userService.updateById(sysUser);
         return ok();
     }

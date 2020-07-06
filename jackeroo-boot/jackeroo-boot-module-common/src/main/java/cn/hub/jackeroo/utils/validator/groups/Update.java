@@ -4,7 +4,7 @@ import javax.validation.groups.Default;
 
 /**
  * @author alex
- * @date 2020/06/05
+ * @date 2020/07/06
  */
-public interface Second extends Default {
+public interface Update extends Default {
 }

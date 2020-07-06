@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -67,6 +68,17 @@ public class GlobalExceptionHandler {
     public Result validationException(ValidationException e){
         e.printStackTrace();
         return new Result(ResultStatusCode.BAD_REQUEST.getCode(), e.getMessage());
+    }
+
+    /**
+     * 数据校验异常处理2
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(BindException.class)
+    public Result bindException(BindException e){
+        e.printStackTrace();
+        return new Result(ResultStatusCode.BAD_REQUEST);
     }
 
     /**

@@ -1,6 +1,5 @@
 package cn.hub.jackeroo.system.service;
 
-import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.mapper.ValidMapper;
 import cn.hub.jackeroo.system.query.UniqueVo;
 import cn.hub.jackeroo.utils.ArrayUtils;
@@ -12,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.validation.ValidationException;
+import javax.validation.constraints.Null;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 
 /**
  * @author alex
@@ -57,8 +56,15 @@ public class ValidService {
                 if(unique == null){
                     continue;
                 }
-                if(validGroupClass != null){
+
+                // 1.如果传递了组别，且不包含在@Unique的groups中，则不予校验
+                if(validGroupClass != null && validGroupClass != Null.class){
                     if(!ArrayUtils.contains(unique.groups(), validGroupClass)){
+                        continue;
+                    }
+                }else{
+                    // 2.如果@Unique的groups组别不为空，但是拦截的时候并没有传group，则不予校验
+                    if(unique.groups().length > 0){
                         continue;
                     }
                 }
