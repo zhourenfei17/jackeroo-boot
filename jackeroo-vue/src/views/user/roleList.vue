@@ -129,7 +129,7 @@ export default {
               this.refreshData()
             }
           }).finally(() => {
-            this.$loading.hide()
+            this.$loading.hide() 
           })
         }
       });

@@ -2,6 +2,8 @@ package cn.hub.jackeroo.system.entity;
 
 import cn.hub.jackeroo.persistence.BaseEntity;
 import cn.hub.jackeroo.utils.validator.annotation.Unique;
+import cn.hub.jackeroo.utils.validator.groups.Insert;
+import cn.hub.jackeroo.utils.validator.groups.Update;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -12,6 +14,8 @@ import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 
 /**
@@ -30,6 +34,8 @@ public class SysRole extends BaseEntity<SysRole> {
     private static final long serialVersionUID = 1L;
 
     @TableId
+    @NotNull(groups = Update.class)
+    @Null(groups = Insert.class)
     private Long id;
     /**
      * 角色名称

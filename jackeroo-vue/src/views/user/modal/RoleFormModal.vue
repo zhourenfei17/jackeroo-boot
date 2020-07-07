@@ -53,9 +53,17 @@ export default {
         remark: ''
       },
       rules: {
-        roleName: [{required: true, message: '请输入角色名'}, {validator: this.validUnique, message: '角色名不能重复', trigger: 'blur'}],
-        roleCode: [{required: true, message: '请输入角色代码'}, {validator: this.validUnique, message: '角色代码不能重复', trigger: 'blur'}],
-        remark: [],
+        roleName: [
+          {required: true, message: '请输入角色名'}, 
+          {validator: this.validUnique, message: '角色名不能重复', trigger: 'blur'},
+          {max: 20, message: '长度需要在0到20之间'}
+        ],
+        roleCode: [
+          {required: true, message: '请输入角色代码'}, 
+          {validator: this.validUnique, message: '角色代码不能重复', trigger: 'blur'},
+          {max: 30, message: '长度需要在0到30之间'}
+        ],
+        remark: [{max: 100, message: '长度需要在0到100之间'}],
       },
       url: {
         getById: '/system/role/',

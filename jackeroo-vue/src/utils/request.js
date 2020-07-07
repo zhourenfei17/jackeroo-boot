@@ -27,7 +27,9 @@ const errorHandler = (error) => {
       store.dispatch('Logout').then(() => {
         window.location.reload()
       })
-    }else{
+    }else if (error.response.status === 500) {
+      message.error('系统服务器异常')
+    }else {
       message.error(data.msg)
     }
   }

@@ -1,8 +1,5 @@
 package cn.hub.jackeroo.utils.validator.annotation;
 
-import cn.hub.jackeroo.utils.validator.annotation.validator.CodeNumValidator;
-
-import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -94,25 +94,30 @@ export default {
         birthday: undefined
       },
       rules: {
-        name: [{required: true, message: '请输入姓名'}],
+        name: [
+          {required: true, message: '请输入姓名'},
+          {max: 20, message: '长度需要在0和20之间'}
+        ],
         account: [
           {required: true, message: '请输入账号'},
-          {validator: this.validUnique, message: '该账号已存在', trigger: 'blur'}
+          {validator: this.validUnique, message: '该账号已存在', trigger: 'blur'},
+          {min: 5, max: 30, message: '长度需要在5和30之间'}
         ],
-        code: [],
+        code: [{max: 60, message: '长度需要在0到60之间'}],
         password: [{required: true, message: '请输入密码'}],
         passwordAgain: [
           {required: true, message: '请再次输入密码'}, 
           {validator:(rule, value, callback)=>{
             return value != this.form.password ? callback('两次输入的密码不一致') : callback()
-          }, trigger: 'blur'}],
+          }, trigger: 'blur'}
+        ],
         gender: [],
         phone: [
           {required: true, message: '请输入手机'},
-          {validator: this.validPhone, trigger: 'blur'},
+          {validator: this.validMobile, trigger: 'blur'},
           {validator: this.validUnique, message: '该手机号已存在', trigger: 'blur'}
         ],
-        telephone: [],
+        telephone: [{validator: this.validPhone, trigger: 'blur'}],
         birthday: []
       },
       url: {
@@ -143,6 +148,8 @@ export default {
             formData.passwordAgain = md5(formData.passwordAgain)
 
             this.md5Flag = true
+          }else if(this.flag.edit){
+            delete formData.password
           }
           
           console.log('formData', formData)
@@ -154,8 +161,6 @@ export default {
               this.md5Flag = false
               this.cancel()
               this.$emit('ok')
-            }else{
-              this.$message.error(result.msg)
             }
           }).finally(() => {
             this.$loading.hide()

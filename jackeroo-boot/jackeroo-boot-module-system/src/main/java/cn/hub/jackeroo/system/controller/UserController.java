@@ -68,7 +68,7 @@ public class UserController extends BaseController {
     @PostMapping("add")
     @ApiOperation(value = "添加用户", notes = "添加用户信息")
     @ValidatedUnique(clazz = SysUser.class)
-    public Result add(@Validated SysUser user){
+    public Result add(@Validated(Insert.class) SysUser user){
         // validService.validEntityUniqueField(user, Insert.class);
         userService.insertUser(user);
         return ok();

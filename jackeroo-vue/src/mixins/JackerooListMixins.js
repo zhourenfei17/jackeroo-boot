@@ -79,7 +79,7 @@ export const JackerooListMixins = {
     },
     // formModal保存后刷新table
     handleOk(){
-      this.refreshData(true)
+      this.refreshData()
     },
     // 刷新表数据，true返回首页并刷新，false仅刷新当前页，默认只刷新当前页
     refreshData(backFirstPage = false){

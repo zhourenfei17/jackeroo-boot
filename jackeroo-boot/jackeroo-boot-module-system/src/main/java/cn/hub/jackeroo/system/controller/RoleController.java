@@ -4,7 +4,10 @@ import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.service.SysRoleService;
 import cn.hub.jackeroo.system.service.ValidService;
+import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.First;
+import cn.hub.jackeroo.utils.validator.groups.Insert;
+import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
@@ -61,7 +64,8 @@ public class RoleController extends BaseController {
      */
     @PostMapping("add")
     @ApiOperation(value = "添加角色", response = Result.class)
-    public Result add(@Validated SysRole role){
+    @ValidatedUnique(clazz = SysRole.class)
+    public Result add(@Validated(Insert.class) SysRole role){
         validService.validEntityUniqueField(role);
         roleService.save(role);
         return ok();
@@ -74,7 +78,8 @@ public class RoleController extends BaseController {
      */
     @PutMapping("update")
     @ApiOperation(value = "编辑角色", response = Result.class)
-    public Result update(@Validated(First.class) SysRole role){
+    @ValidatedUnique(clazz = SysRole.class)
+    public Result update(@Validated(Update.class) SysRole role){
         validService.validEntityUniqueField(role);
         roleService.updateById(role);
         return ok();

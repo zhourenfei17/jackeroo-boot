@@ -1,6 +1,5 @@
 package cn.hub.jackeroo.utils.validator.annotation;
 
-import javax.validation.Payload;
 import javax.validation.constraints.Null;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
