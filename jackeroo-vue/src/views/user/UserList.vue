@@ -111,6 +111,7 @@ import { STable, Ellipsis } from '@/components'
 import UserFormModal from './modal/UserFormModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction } from '@/api/manage'
+import JSelect from '@/components/jackeroo/JSelect'
 
 const statusMap = {
   0: {
@@ -129,6 +130,7 @@ export default {
     STable,
     Ellipsis,
     UserFormModal,
+    JSelect,
   },
   mixins:[JackerooListMixins],
   data () {

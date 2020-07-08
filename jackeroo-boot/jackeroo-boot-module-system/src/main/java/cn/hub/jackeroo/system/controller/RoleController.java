@@ -47,6 +47,16 @@ public class RoleController extends BaseController {
     }
 
     /**
+     * 所有角色列表
+     * @return
+     */
+    @GetMapping("findAll")
+    @ApiOperation(value = "所有角色", response = Result.class)
+    public Result findAll(){
+        return ok(roleService.list());
+    }
+
+    /**
      * 根据id查询角色详情
      * @param id
      * @return

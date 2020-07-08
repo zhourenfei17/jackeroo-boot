@@ -38,6 +38,11 @@
               <a-input v-model="form.passwordAgain" placeholder="请再次输入密码" type="password"></a-input>
             </a-form-model-item>
           </a-col>
+          <a-col :span="rowSpan" v-if="flag.add">
+            <a-form-model-item label="角色" prop="role">
+              <j-select v-model="form.role" placeholder="请选择角色" url="/system/role/findAll" textField="roleName"></j-select>
+            </a-form-model-item>
+          </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="性别" prop="gender">
               <a-select v-model="form.gender" placeholder="请选择性别" :disabled="flag.view">
@@ -72,8 +77,12 @@
 import { getAction, postAction, httpAction } from '@/api/manage'
 import md5 from 'md5'
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import JSelect from '@/components/jackeroo/JSelect'
 
 export default {
+  components: {
+    JSelect
+  },
   mixins: [JackerooFromMixins],
   data(){
     return {
@@ -91,7 +100,8 @@ export default {
         gender: undefined,
         phone: '',
         telephone: '',
-        birthday: undefined
+        birthday: undefined,
+        role: undefined
       },
       rules: {
         name: [
@@ -168,6 +178,9 @@ export default {
         }
       })
     },
+    roleChange(value){
+      this.form.role = value
+    }
   }
 }
 </script>
