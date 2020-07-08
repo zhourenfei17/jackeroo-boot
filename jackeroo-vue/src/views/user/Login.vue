@@ -100,17 +100,17 @@ export default {
     }
   },
   created () {
-    get2step({ })
+    /* get2step({ })
       .then(res => {
         this.requiredTwoStepCaptcha = res.result.stepCode
       })
       .catch(() => {
         this.requiredTwoStepCaptcha = false
-      })
+      }) */
     // this.requiredTwoStepCaptcha = true
   },
   methods: {
-    ...mapActions(['Login', 'Logout']),
+    ...mapActions(['Login']),
     // handler
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
+@RequestMapping("/auth")
 public class LoginController extends BaseController {
     @Autowired
     private SysUserService userService;
@@ -53,7 +54,7 @@ public class LoginController extends BaseController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/auth/logout")
+	@RequestMapping("/logout")
 	public Result logout() {
 		SecurityUtils.getSubject().logout();
 		return ok();

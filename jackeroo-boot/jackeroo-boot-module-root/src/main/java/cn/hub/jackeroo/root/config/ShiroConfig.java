@@ -60,12 +60,10 @@ public class ShiroConfig {
 		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 		// 公共请求
 		filterChainDefinitionMap.put("/common/**", "anon");
-		filterChainDefinitionMap.put("/getUser", "anon");
 		// 静态资源
 		filterChainDefinitionMap.put("/static/**", "anon");
 		// 登录方法
-		filterChainDefinitionMap.put("/login", "anon"); // 表示可以匿名访问
-        filterChainDefinitionMap.put("/auth/logout", "anon");
+		filterChainDefinitionMap.put("/auth/login", "anon");
 
         // swagger相关直接放行
         filterChainDefinitionMap.put("/", "anon");
