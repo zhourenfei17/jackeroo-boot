@@ -1,6 +1,5 @@
 package cn.hub.jackeroo.vo;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -20,8 +19,4 @@ public class PageParam {
     @Min(5)
     @Max(200)
     private Integer pageSize;
-
-    public Page getPage(){
-        return new Page(pageNo, pageSize);
-    }
 }

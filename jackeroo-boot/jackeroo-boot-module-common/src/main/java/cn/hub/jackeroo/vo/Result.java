@@ -7,21 +7,21 @@ import cn.hub.jackeroo.enums.ResultStatusCode;
  * 
  * @author
  */
-public class Result {
+public class Result<T> {
 
 	private int code; // 返回的代码，0表示成功，其他表示失败
 
 	private String msg; // 成功或失败时返回的错误信息
 
-	private Object data; // 成功时返回的数据信息
+	private T data; // 成功时返回的数据信息
 
-	public Result(int code, String msg, Object data) {
+	public Result(int code, String msg, T data) {
 		this.code = code;
 		this.msg = msg;
 		this.data = data;
 	}
 
-	public Result(ResultStatusCode resultStatusCode, Object data) {
+	public Result(ResultStatusCode resultStatusCode, T data) {
 		this(resultStatusCode.getCode(), resultStatusCode.getMsg(), data);
 	}
 
@@ -49,11 +49,11 @@ public class Result {
 		this.msg = msg;
 	}
 
-	public Object getData() {
+	public T getData() {
 		return data;
 	}
 
-	public void setData(Object data) {
+	public void setData(T data) {
 		this.data = data;
 	}
 

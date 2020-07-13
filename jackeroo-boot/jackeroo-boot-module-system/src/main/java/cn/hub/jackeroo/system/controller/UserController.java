@@ -3,15 +3,14 @@ package cn.hub.jackeroo.system.controller;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.service.SysUserService;
-import cn.hub.jackeroo.system.service.ValidService;
+import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
-import cn.hub.jackeroo.utils.validator.groups.First;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
-import cn.hub.jackeroo.utils.validator.groups.Second;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -24,28 +23,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 系统用户相关接口
  * @author alex
  * @date 2020/06/01
  */
-@Api(value = "系统用户", description = "系统用户api", tags = "系统管理", position = 1)
+@ApiModule(moduleName = "系统管理")
+@Api(tags = "用户管理")
 @RestController
 @RequestMapping("/system/user")
 public class UserController extends BaseController {
     @Autowired
     private SysUserService userService;
-    @Autowired
-    private ValidService validService;
 
     /**
      * 用户列表
      * @return
      */
     @GetMapping("list")
-    @ApiOperation(value = "用户列表", notes = "根据条件查询用户列表", response = Result.class)
-    public Result list(SysUser sysUser, @Validated PageParam pageParam){
+    @ApiOperation(value = "用户列表", notes = "根据条件查询用户列表")
+    public Result<IPage<SysUser>> list(@ApiIgnore SysUser sysUser, @Validated PageParam pageParam){
         return ok(userService.findPage(sysUser, pageParam));
     }
 

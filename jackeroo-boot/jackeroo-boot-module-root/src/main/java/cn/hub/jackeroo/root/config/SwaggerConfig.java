@@ -1,24 +1,47 @@
 package cn.hub.jackeroo.root.config;
 
+import cn.hub.jackeroo.enums.ResultStatusCode;
+import cn.hub.jackeroo.utils.annotation.ApiModule;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
-import com.google.common.collect.Lists;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.context.annotation.Bean;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.util.UriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
-import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.Parameter;
+import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * swagger2配置
@@ -28,19 +51,12 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 @EnableSwaggerBootstrapUI
-public class SwaggerConfig {
-    @Bean
-    public Docket createRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("后台接口管理")
-                .apiInfo(apiInfo())
-                .host("localhost:8081")
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("cn.hub.jackeroo"))
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                .paths(PathSelectors.any())
-                .build();
-    }
+@EnableWebMvc
+@Slf4j
+public class SwaggerConfig implements InitializingBean {
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
@@ -52,21 +68,107 @@ public class SwaggerConfig {
                 .build();
     }
 
-    private ApiKey apiKey() {
-        return new ApiKey("Access-Token", "Authorization", "header");
+    /**
+     * 全局请求参数定义
+     * @return
+     */
+    private List<Parameter> parameters(){
+        List<Parameter> parameters = new ArrayList<>();
+        parameters.add(new ParameterBuilder()
+                .name("Access-Token")
+                .description("认证token")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header")
+                .required(true)
+                .build());
+
+        return parameters;
     }
 
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.regex("/.*"))
-                .build();
+    /**
+     * 全局错误码定义
+     * @return
+     */
+    private List<ResponseMessage> responseCode(){
+        List<ResponseMessage> responseMessageList = new ArrayList<>();
+        for (ResultStatusCode status : ResultStatusCode.values()) {
+            responseMessageList.add(new ResponseMessageBuilder().code(status.getCode()).message(status.getMsg()).build());
+        }
+        return responseMessageList;
     }
 
-    List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Lists.newArrayList(new SecurityReference("BearerToken", authorizationScopes));
+    private Class[] initIgnorableTypes() {
+        Set<Class> ignored = new HashSet();
+        ignored.add(ServletRequest.class);
+        ignored.add(Class.class);
+        ignored.add(Void.class);
+        ignored.add(Void.TYPE);
+        ignored.add(HttpServletRequest.class);
+        ignored.add(HttpServletResponse.class);
+        ignored.add(HttpHeaders.class);
+        ignored.add(BindingResult.class);
+        ignored.add(ServletContext.class);
+        ignored.add(UriComponentsBuilder.class);
+        ignored.add(Page.class);
+        ignored.add(ApiIgnore.class); //Used to ignore parameters
+
+        Class[] array = ignored.toArray(new Class[0]);
+        return array;
+    }
+
+    private Docket buildDocketWithGroupName(String groupName) {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .groupName(groupName)
+                .globalOperationParameters(parameters())
+                .globalResponseMessage(RequestMethod.GET, responseCode())
+                .globalResponseMessage(RequestMethod.POST, responseCode())
+                .globalResponseMessage(RequestMethod.PUT, responseCode())
+                .globalResponseMessage(RequestMethod.DELETE, responseCode())
+                .select()
+                .apis(input -> {
+                    if (input.getHandlerMethod().hasMethodAnnotation(ApiModule.class)) {
+                        ApiModule apiModule = input.getHandlerMethod().getMethodAnnotation(ApiModule.class);
+                        if (apiModule.moduleName().equals(groupName)) {
+                            return true;
+                        }
+
+                    }
+                    ApiModule clazzApiModule = input.getHandlerMethod().getBeanType().getAnnotation(ApiModule.class);
+                    if (clazzApiModule != null) {
+                        if (clazzApiModule.moduleName().equals(groupName)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })//controller路径
+                .paths(PathSelectors.any())
+                .build()
+                .ignoredParameterTypes(initIgnorableTypes());
+    }
+
+    /**
+     * 自动扫描所有@ApiModule的类，根据一级模块分组，并生成swagger文档
+     * @throws Exception
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Map<String, Object> map = applicationContext.getBeansWithAnnotation(ApiModule.class);
+        Map<String, ApiModule> apiVersionMap = new HashMap();
+        for (String key : map.keySet()) {
+            ApiModule apiModule = map.get(key).getClass().getAnnotation(ApiModule.class);
+
+            apiVersionMap.put(apiModule.moduleName(), apiModule);
+        }
+
+        AutowireCapableBeanFactory autowireCapableBeanFactory = applicationContext.getAutowireCapableBeanFactory();
+        if(autowireCapableBeanFactory instanceof DefaultListableBeanFactory){
+            DefaultListableBeanFactory capableBeanFactory = (DefaultListableBeanFactory) autowireCapableBeanFactory;
+            for (String key : apiVersionMap.keySet()) {
+                AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition().setFactoryMethodOnBean("buildDocketWithGroupName", "swaggerConfig")
+                        .addConstructorArgValue(apiVersionMap.get(key).moduleName()).getBeanDefinition();
+                capableBeanFactory.registerBeanDefinition(apiVersionMap.get(key).moduleName(), beanDefinition);
+            }
+        }
     }
 }

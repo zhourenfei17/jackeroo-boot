@@ -4,8 +4,8 @@ import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.service.SysRoleService;
 import cn.hub.jackeroo.system.service.ValidService;
+import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
-import cn.hub.jackeroo.utils.validator.groups.First;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
@@ -28,7 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author alex
  * @date 2020/06/28
  */
-@Api(value = "系统角色", description = "系统角色api", tags = "系统管理", position = 2)
+@ApiModule(moduleName = "系统管理")
+@Api(tags = "角色管理")
 @RestController
 @RequestMapping("/system/role")
 public class RoleController extends BaseController {
