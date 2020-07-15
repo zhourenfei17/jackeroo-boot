@@ -1,6 +1,7 @@
 package cn.hub.jackeroo.system.entity;
 
 import cn.hub.jackeroo.constant.CodeType;
+import cn.hub.jackeroo.constant.ParamType;
 import cn.hub.jackeroo.persistence.BaseEntity;
 import cn.hub.jackeroo.utils.validator.annotation.CodeNum;
 import cn.hub.jackeroo.utils.validator.annotation.Unique;
@@ -10,7 +11,10 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -40,18 +44,21 @@ public class SysUser extends BaseEntity<SysUser> {
     @NotNull(groups = Update.class)
     @Null(groups = Insert.class)
     @TableId
+    @ApiModelProperty(value = "用户id")
     private Long id;
     /**
      * 姓名
      */
     @NotBlank
     @Length(max = 20)
+    @ApiModelProperty(value = "姓名")
     private String name;
 
     /**
      * 员工号
      */
     @Length(max = 60)
+    @ApiModelProperty(value = "员工号")
     private String code;
 
     /**
@@ -60,6 +67,7 @@ public class SysUser extends BaseEntity<SysUser> {
     @Unique(name = "登录账号", groups = {Insert.class})
     @NotBlank
     @Length(min = 5, max = 30)
+    @ApiModelProperty(value = "登录账号")
     private String account;
 
     /**
@@ -67,27 +75,32 @@ public class SysUser extends BaseEntity<SysUser> {
      */
     @NotBlank(groups = Insert.class)
     @Null(groups = Update.class)
+    @ApiModelProperty(hidden = true)
     private String password;
 
     /**
      * 动态盐
      */
     @Null
+    @ApiModelProperty(hidden = true)
     private String salt;
 
     /**
      * 头像
      */
+    @ApiModelProperty(value = "头像")
     private String avatar;
 
     /**
      * 性别
      */
+    @ApiModelProperty(value = "性别")
     private Integer gender;
 
     /**
      * 生日
      */
+    @ApiModelProperty(value = "生日")
     private String birthday;
 
     /**
@@ -96,30 +109,35 @@ public class SysUser extends BaseEntity<SysUser> {
     @Unique(name = "手机号", groups = {Insert.class, Update.class})
     @CodeNum(type = CodeType.MOBILE)
     @NotBlank
+    @ApiModelProperty(value = "手机号")
     private String phone;
 
     /**
      * 座机
      */
     @CodeNum(type = CodeType.TELEPHONE)
+    @ApiModelProperty(value = "座机")
     private String telephone;
 
     /**
      * 冻结状态(1-正常，2-冻结)
      */
     @Null
+    @ApiModelProperty(value = "冻结状态")
     private Integer status;
 
     /**
      * 删除标识
      */
     @Null
+    @ApiModelProperty(hidden = true)
     private Integer delFlag;
     /**
      * 创建人
      */
     @Null
     @TableField(fill = FieldFill.INSERT)
+    @ApiModelProperty(value = "创建人")
     private String createBy;
     /**
      * 创建时间
@@ -127,12 +145,14 @@ public class SysUser extends BaseEntity<SysUser> {
     @Null
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
+    @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
     /**
      * 更新人
      */
     @Null
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @ApiModelProperty(value = "更新人")
     private String updateBy;
     /**
      * 更新时间
@@ -140,5 +160,6 @@ public class SysUser extends BaseEntity<SysUser> {
     @Null
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 }

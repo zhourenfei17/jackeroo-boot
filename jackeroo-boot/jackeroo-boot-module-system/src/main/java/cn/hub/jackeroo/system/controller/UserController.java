@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.system.controller;
 
+import cn.hub.jackeroo.constant.ParamType;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.service.SysUserService;
@@ -12,6 +13,8 @@ import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,11 @@ public class UserController extends BaseController {
      */
     @GetMapping("list")
     @ApiOperation(value = "用户列表", notes = "根据条件查询用户列表")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "name", value = "名称", paramType = ParamType.QUERY),
+        @ApiImplicitParam(name = "account", value = "登录账号", paramType = ParamType.QUERY),
+        @ApiImplicitParam(name = "phone", value = "手机号", paramType = ParamType.QUERY)
+    })
     public Result<IPage<SysUser>> list(@ApiIgnore SysUser sysUser, @Validated PageParam pageParam){
         return ok(userService.findPage(sysUser, pageParam));
     }
@@ -55,7 +63,7 @@ public class UserController extends BaseController {
      */
     @GetMapping("/{id}")
     @ApiOperation(value = "用户详情", notes = "根据id获取用户详情")
-    public Result getById(@PathVariable String id){
+    public Result<SysUser> getById(@PathVariable String id){
         return ok(userService.getById(id));
     }
 

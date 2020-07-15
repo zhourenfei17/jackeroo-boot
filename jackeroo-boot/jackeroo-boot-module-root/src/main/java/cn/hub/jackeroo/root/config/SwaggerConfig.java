@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.root.config;
 
+import cn.hub.jackeroo.constant.ParamType;
 import cn.hub.jackeroo.enums.ResultStatusCode;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -78,7 +79,7 @@ public class SwaggerConfig implements InitializingBean {
                 .name("Access-Token")
                 .description("认证token")
                 .modelRef(new ModelRef("string"))
-                .parameterType("header")
+                .parameterType(ParamType.HEADER)
                 .required(true)
                 .build());
 
