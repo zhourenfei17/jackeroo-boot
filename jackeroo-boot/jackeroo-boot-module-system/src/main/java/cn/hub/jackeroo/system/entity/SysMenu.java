@@ -1,10 +1,21 @@
 package cn.hub.jackeroo.system.entity;
 
 import cn.hub.jackeroo.persistence.BaseEntity;
+import cn.hub.jackeroo.utils.validator.groups.Insert;
+import cn.hub.jackeroo.utils.validator.groups.Update;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Id;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -17,14 +28,19 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SysMenu extends BaseEntity {
+public class SysMenu extends BaseEntity<SysMenu> {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId
+    @NotNull(groups = Update.class)
+    @Null(groups = Insert.class)
+    private Long id;
     /**
      * 上级菜单id
      */
-    private String parentId;
+    @NotNull
+    private Long parentId;
 
     /**
      * 所有上级菜单id
@@ -34,19 +50,18 @@ public class SysMenu extends BaseEntity {
     /**
      * 菜单等级
      */
-    @TableField("LEVEL")
     private Integer level;
 
     /**
      * 菜单名称
      */
-    @TableField("NAME")
+    @NotEmpty
     private String name;
 
     /**
      * 菜单类型(0：菜单，1：权限)
      */
-    @TableField("TYPE")
+    @NotNull
     private Integer type;
 
     /**
@@ -82,6 +97,29 @@ public class SysMenu extends BaseEntity {
     /**
      * 删除标识
      */
+    @TableField(fill = FieldFill.INSERT)
     private Integer delFlag;
+    /**
+     * 创建人
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private String createBy;
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+    /**
+     * 更新人
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private String updateBy;
+    /**
+     * 更新时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
 }

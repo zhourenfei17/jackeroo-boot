@@ -11,6 +11,7 @@ import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class RoleController extends BaseController {
      */
     @GetMapping("list")
     @ApiOperation(value = "角色列表", response = Result.class)
-    public Result list(SysRole sysRole, @Validated PageParam pageParam){
+    public Result<IPage<SysRole>> list(SysRole sysRole, @Validated PageParam pageParam){
         return ok(roleService.findPage(sysRole, pageParam));
     }
 
@@ -53,7 +54,7 @@ public class RoleController extends BaseController {
      */
     @GetMapping("findAll")
     @ApiOperation(value = "所有角色", response = Result.class)
-    public Result findAll(){
+    public Result<SysRole> findAll(){
         return ok(roleService.list());
     }
 
@@ -64,7 +65,7 @@ public class RoleController extends BaseController {
      */
     @GetMapping("/{id}")
     @ApiOperation(value = "角色详情", response = Result.class)
-    public Result getById(@PathVariable String id){
+    public Result<SysRole> getById(@PathVariable String id){
         return ok(roleService.getById(id));
     }
 

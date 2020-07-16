@@ -1,4 +1,4 @@
-package cn.hub.jackeroo.root.config;
+package cn.hub.jackeroo.root.config.swagger;
 
 import cn.hub.jackeroo.constant.ParamType;
 import cn.hub.jackeroo.enums.ResultStatusCode;
