@@ -279,6 +279,12 @@ export const asyncRouterMap = [
             name: 'RoleList',
             component: () => import('@/views/user/RoleList'),
             meta: { title: '角色管理', permission: [ 'exception' ] }
+          },
+          {
+            path: '/system/menu',
+            name: 'MenuList',
+            component: () => import('@/views/system/MenuList'),
+            meta: { title: '菜单管理', permission: [ 'exception' ] }
           }
         ]
       }

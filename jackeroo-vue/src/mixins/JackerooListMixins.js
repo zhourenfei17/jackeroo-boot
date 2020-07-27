@@ -3,6 +3,7 @@ import { getAction, deleteAction } from '@/api/manage'
 export const JackerooListMixins = {
   data(){
     return {
+      useSTable: true,
       dataSource: [],
       // 展开/关闭
       advanced: false,
@@ -23,6 +24,9 @@ export const JackerooListMixins = {
       },
       // 加载数据方法 必须为 Promise 对象
       loadData: (parameter) => {
+        if(!useSTable){
+          return
+        }
         if(!this.url.list){
           this.$message.error("请设置url.list属性!")
           return
