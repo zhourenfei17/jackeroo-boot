@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.system.entity;
 
+import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.persistence.BaseEntity;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
@@ -7,6 +8,8 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -16,6 +19,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -122,4 +126,13 @@ public class SysMenu extends BaseEntity<SysMenu> {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @TableField(exist = false)
+    private List<SysMenu> children;
+
+    /**
+     * 是否是叶子节点
+     */
+    @TableField(exist = false)
+    private Integer isLeaf = Constant.BOOLEAN_YES;
 }

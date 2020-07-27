@@ -27,4 +27,12 @@ public interface Constant {
      * 自定义系统异常代码
      */
     int SYSTEM_ERROR_CODE = 5000;
+    /**
+     * 是
+     */
+    int BOOLEAN_YES = 1;
+    /**
+     * 否
+     */
+    int BOOLEAN_NO = 0;
 }
