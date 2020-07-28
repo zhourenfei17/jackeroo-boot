@@ -1,11 +1,9 @@
 <template>
-  <a-drawer
-      :closable="false"
+  <j-drawer
       :title="title"
       :width="width"
-      :visible="visible"
-      :maskClosable="false"
-      @close="cancel"
+      :visible.sync="visible"
+      @ok="handleSubmit"
     >
     
     <j-spin :spinning="loading">
@@ -72,7 +70,7 @@
     </a-modal>
 
     <!-- 页脚 button -->
-    <div :style="{
+    <!-- <div :style="{
           position: 'absolute',
           right: 0,
           bottom: 0,
@@ -89,8 +87,8 @@
         <a-button type="primary" @click="handleSubmit">
           保存
         </a-button>
-      </div>
-  </a-drawer>
+      </div> -->
+  </j-drawer>
 </template>
 
 <script>
@@ -98,12 +96,13 @@ import { getAction, postAction, httpAction } from '@/api/manage'
 import md5 from 'md5'
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 import JSelect from '@/components/jackeroo/JSelect'
-import {IconSelector} from '@/components'
+import {IconSelector, JDrawer} from '@/components'
 
 export default {
   components: {
     JSelect,
-    IconSelector
+    IconSelector,
+    JDrawer
   },
   mixins: [JackerooFromMixins],
   data(){
