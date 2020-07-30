@@ -11,7 +11,10 @@
         <a-row :gutter="24">
           <a-col :span="rowSpan">
             <a-form-model-item label="上级菜单" prop="parentId">
-              <a-input v-model="form.parentId" placeholder="请选择上级菜单" :disabled="flag.view"></a-input>
+              <a-tree-select v-model="form.parentId" placeholder="请选择上级菜单" :disabled="flag.view" :treeData="treeData" style="width:100%;" 
+                :dropdownStyle="{maxHeight: '200px', overflow: 'auto'}">
+                
+              </a-tree-select>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -30,34 +33,23 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
-            <a-form-model-item label="图标" prop="role">
+            <a-form-model-item label="图标" prop="icon">
               <a-input placeholder="点击选择图标" v-model="form.icon" :readOnly="true">
                 <a-icon slot="addonAfter" type="setting" @click="selectIcons" />
               </a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
-            <a-form-model-item label="性别" prop="gender">
-              <a-select v-model="form.gender" placeholder="请选择性别" :disabled="flag.view">
-                <a-select-option value="">请选择</a-select-option>
-                <a-select-option :value="1">男</a-select-option>
-                <a-select-option :value="2">女</a-select-option>
-              </a-select>
+            <a-form-model-item label="排序号" prop="sort">
+              <a-input-number v-model="form.sort" placeholder="请输入排序号" :disabled="flag.view" style="width:100%;" :min="0"></a-input-number>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
-            <a-form-model-item label="手机" prop="phone">
-              <a-input v-model="form.phone" placeholder="请输入手机" :disabled="flag.view"></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="座机" prop="telephone">
-              <a-input v-model="form.telephone" placeholder="请输入座机" :disabled="flag.view"></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="生日" prop="birthday">
-              <a-date-picker v-model="form.birthday" placeholder="请选择生日" valueFormat="YYYY-MM-DD" style="width:100%" :disabled="flag.view"></a-date-picker>
+            <a-form-model-item label="目标" prop="target">
+              <a-radio-group v-model="form.target" :disabled="flag.view">
+                <a-radio :value="1">内部</a-radio>
+                <a-radio :value="2">外部</a-radio>
+              </a-radio-group>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -68,26 +60,6 @@
     <a-modal :visible="iconVisible" title="选择图标" width="50vw" @cancel="handleIconCancel" @ok="handleIconOk">
       <icon-selector @change="handleIconChange" :value="tempIconValue"></icon-selector>
     </a-modal>
-
-    <!-- 页脚 button -->
-    <!-- <div :style="{
-          position: 'absolute',
-          right: 0,
-          bottom: 0,
-          width: '100%',
-          borderTop: '1px solid #e9e9e9',
-          padding: '10px 16px',
-          background: '#fff',
-          textAlign: 'right',
-          zIndex: 1,
-        }">
-        <a-button :style="{ marginRight: '8px' }" @click="cancel">
-          取消
-        </a-button>
-        <a-button type="primary" @click="handleSubmit">
-          保存
-        </a-button>
-      </div> -->
   </j-drawer>
 </template>
 
@@ -117,48 +89,38 @@ export default {
         href: '',
         component: '',
         icon: '',
-        passwordAgain: '',
-        gender: undefined,
-        phone: '',
-        telephone: '',
-        birthday: undefined,
-        role: undefined
+        sort: null,
+        target: 1
       },
       rules: {
         parentId: [
           {required: true, message: '请选择上级菜单'}
         ],
         name: [
-          {required: true, message: '请输入姓名'},
+          {required: true, message: '请输入菜单名称'},
           {max: 20, message: '长度需要在0和20之间'}
         ],
         href: [
-          {required: true, message: '请输入账号'},
-          {max: 30, message: '长度需要在0和30之间'}
+          {required: true, message: '请输入url路劲'},
+          {max: 100, message: '长度需要在0和30之间'}
         ],
-        component: [{max: 60, message: '长度需要在0到60之间'}],
+        component: [
+          {required: true, message: '请输入组件路劲'},
+          {max: 100, message: '长度需要在0到100之间'}
+        ],
         icon: [],
-        passwordAgain: [
-          {required: true, message: '请再次输入密码'}, 
-          {validator:(rule, value, callback)=>{
-            return value != this.form.password ? callback('两次输入的密码不一致') : callback()
-          }, trigger: 'blur'}
-        ],
-        gender: [],
-        phone: [
-          {required: true, message: '请输入手机'},
-          {validator: this.validMobile, trigger: 'blur'},
-          {validator: this.validUnique, message: '该手机号已存在', trigger: 'blur'}
-        ],
-        telephone: [{validator: this.validPhone, trigger: 'blur'}],
-        birthday: []
+        sort: [{min: 0, max: 999999, message: '长度需要在0到6之间', type: 'number'}],
+        target: [
+          {required: true, message: '请输入手机'}
+        ]
       },
       url: {
         getById: '/system/user/',
         add: '/system/user/add',
         update: '/system/user/update'
       },
-      tempIconValue: ''
+      tempIconValue: '',
+      treeData: []
     }
   },
   methods: {
