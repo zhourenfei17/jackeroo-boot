@@ -5,22 +5,8 @@
         <a-form layout="inline" @keyup.enter.native="refreshData(true)">
           <a-row :gutter="48">
             <a-col :md="6" :sm="12">
-              <a-form-item label="姓名">
-                <a-input v-model="queryParam.name" placeholder="请输入姓名"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="12">
-              <a-form-item label="账号">
-                <a-input v-model="queryParam.account" placeholder="请输入账号"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="12">
-              <a-form-item label="状态">
-                <a-select v-model="queryParam.status" placeholder="请选择状态" default-value="0">
-                  <a-select-option value="" disabled>请选择</a-select-option>
-                  <a-select-option value="0">正常</a-select-option>
-                  <a-select-option value="1">冻结</a-select-option>
-                </a-select>
+              <a-form-item label="菜单名称">
+                <a-input v-model="queryParam.name" placeholder="请输入菜单名称"/>
               </a-form-item>
             </a-col>
             <a-col :md="!advanced && 6 || 24" :sm="12">
@@ -57,7 +43,7 @@
               <a @click="handleView(record)">详情</a>
               <a @click="handleEdit(record)">编辑</a>
               <action-menu-list>
-                <a @click="handleEdit(record)">添加下级菜单</a>
+                <a @click="handleAdd(record)">添加下级菜单</a>
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
             </action-list>
@@ -137,6 +123,26 @@ export default {
     handleExpandedRowsChange(expandedRows){
       this.expandedRowKeys = expandedRows
     },
+    // 添加
+    handleAdd (record) {
+      if(record){
+        // 添加下级菜单
+        this.$refs.formModal.visible = true
+        this.$refs.formModal.flag.add = true
+        this.$refs.formModal.add(record.id.toString(), record.children ? record.children[record.children.length].sort + 10 : 10)
+      }else{
+        // 添加一级菜单
+        this.$refs.formModal.visible = true
+        this.$refs.formModal.flag.add = true
+        this.$refs.formModal.add(null, 10)
+      }
+    },
+    // 编辑
+    handleEdit (record) {
+      this.$refs.formModal.visible = true
+      this.$refs.formModal.flag.edit = true
+      this.$refs.formModal.edit(record.id)
+    },
     // 删除
     handleDelete(record){
       this.$confirm({
@@ -153,6 +159,9 @@ export default {
           })
         }
       });
+    },
+    handleOk(){
+      this.loadDataSource()
     }
   }
 }

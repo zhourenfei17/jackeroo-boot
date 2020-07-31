@@ -24,7 +24,7 @@ export const JackerooListMixins = {
       },
       // 加载数据方法 必须为 Promise 对象
       loadData: (parameter) => {
-        if(!useSTable){
+        if(!this.useSTable){
           return
         }
         if(!this.url.list){
