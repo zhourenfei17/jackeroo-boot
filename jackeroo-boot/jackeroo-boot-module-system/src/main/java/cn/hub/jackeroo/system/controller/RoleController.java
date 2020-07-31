@@ -78,7 +78,7 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "添加角色", response = Result.class)
     @ValidatedUnique(clazz = SysRole.class)
     public Result add(@Validated(Insert.class) SysRole role){
-        validService.validEntityUniqueField(role);
+        // validService.validEntityUniqueField(role);
         roleService.save(role);
         return ok();
     }
@@ -92,7 +92,7 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "编辑角色", response = Result.class)
     @ValidatedUnique(clazz = SysRole.class)
     public Result update(@Validated(Update.class) SysRole role){
-        validService.validEntityUniqueField(role);
+        // validService.validEntityUniqueField(role);
         roleService.updateById(role);
         return ok();
     }

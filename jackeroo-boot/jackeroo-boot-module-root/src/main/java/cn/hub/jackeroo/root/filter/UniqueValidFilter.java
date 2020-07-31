@@ -30,10 +30,6 @@ public class UniqueValidFilter {
     @Autowired
     private ValidService validService;
 
-    @Pointcut("execution(* cn.hub.jackeroo.*.controller.*.*(..))")
-    public void controller() {
-    }
-
     @Pointcut("@annotation(cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique)")
     public void validatedUnique() {
     }

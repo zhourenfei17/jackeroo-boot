@@ -43,7 +43,6 @@ public class SysMenu extends BaseEntity<SysMenu> {
     /**
      * 上级菜单id
      */
-    @NotNull
     private Long parentId;
 
     /**
