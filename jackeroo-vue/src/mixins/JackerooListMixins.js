@@ -34,7 +34,11 @@ export const JackerooListMixins = {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
         return getAction(this.url.list, requestParameters)
           .then(res => {
-            return res.data
+            if(res.code == 0){
+              return res.data
+            }else{
+              return undefined
+            }
           })
       },
     }
