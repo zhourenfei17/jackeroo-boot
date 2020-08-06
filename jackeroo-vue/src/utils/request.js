@@ -3,11 +3,8 @@ import router from '@/router'
 import store from '@/store'
 import storage from 'store'
 import {notification, message} from 'ant-design-vue'
-// import notification from 'ant-design-vue/es/notification'
-// import message from 'ant-design-vue/es/message'
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
-// import Vue from 'vue'
 
 // 创建 axios 实例
 const request = axios.create({
@@ -54,42 +51,39 @@ request.interceptors.request.use(config => {
 // response interceptor
 request.interceptors.response.use((response) => {
   if(response.data.code === 401){
-    notification.error({
-      message: '退出登录',
-      description: '登录信息失效，请重新登录',
-      style: {
-        zIndex : 1200
-      }
-    })
-    
-    // Vue.prototype.$loading.show()
-    store.dispatch('Logout').then(() => {
-      // setTimeout(() => {
-        // window.location.reload()
-
-        router.replace({ path: '/user/login', query: {redirect : router.currentRoute.fullPath}})
-        // Vue.prototype.$loading.hide()
-      // }, 1000)
-    })
-    
+    asyncSkip()
   }else if(response.data.code != 0){
     message.error(response.data.msg)
   }
   return response.data
-  /* if(response.data.code === 401){
-    notification.error({
-      message: '退出登录',
-      description: '登录信息失效，请重新登录'
-    })
-
-    store.dispatch('Logout').then(() => {
-      window.location.reload()
-    })
-  }else if(response.data.code != 0){
-    message.error(response.data.msg)
-  }
-  return response.data */
 }, errorHandler)
+
+async function asyncSkip(){
+  await warningAndSkip()
+}
+
+function warningAndSkip(){
+  return new Promise(function(resolve, reject){
+    let token = storage.get(ACCESS_TOKEN)
+    if(token){
+      notification.error({
+        message: '退出登录',
+        description: '登录信息失效，请重新登录'
+      })
+      
+      store.commit('SET_TOKEN', '')
+      store.commit('SET_ROLES', [])
+      storage.remove(ACCESS_TOKEN)
+
+      setTimeout(() => {
+        router.replace({ path: '/user/login', query: {redirect : router.currentRoute.fullPath}})
+        resolve('ok')
+      }, 1000)
+    }else{
+      reject('error')
+    }
+  })
+}
 
 const installer = {
   vm: {},
