@@ -4,6 +4,7 @@
       :width="width"
       :visible.sync="visible"
       @ok="handleSubmit"
+      @close="cancel"
     >
     
     <j-spin :spinning="loading">
@@ -11,7 +12,7 @@
         <a-row :gutter="24">
           <a-col :span="rowSpan">
             <a-form-model-item label="上级菜单" prop="parentId">
-              <tree-select v-model="form.parentId" placeholder="请选择上级菜单" :disabled="flag.view" :treeData="treeData" style="width:100%;" 
+              <tree-select v-model="form.parentId" placeholder="请选择上级菜单" :disabled="true" :treeData="treeData" style="width:100%;" 
                 :dropdownStyle="{maxHeight: '200px', overflow: 'auto'}">
                 
               </tree-select>
@@ -155,6 +156,7 @@ export default {
             if(result.code === 0){
               this.$message.success('保存成功！')
               this.cancel()
+              this.loadTreeData()
               this.$emit('ok')
             }
           }).finally(() => {

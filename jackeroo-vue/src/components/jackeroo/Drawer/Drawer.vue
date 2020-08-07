@@ -58,6 +58,7 @@ export default {
   methods: {
     cancel(){
       this.close()
+      this.$emit('close')
     },
     ok(){
       this.$emit('ok')
