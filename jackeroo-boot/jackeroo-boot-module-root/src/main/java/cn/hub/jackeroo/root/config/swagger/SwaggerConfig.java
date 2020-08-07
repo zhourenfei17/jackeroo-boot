@@ -52,7 +52,6 @@ import java.util.Set;
 @Configuration
 @EnableSwagger2
 @EnableSwaggerBootstrapUI
-@EnableWebMvc
 @Slf4j
 public class SwaggerConfig implements InitializingBean {
 

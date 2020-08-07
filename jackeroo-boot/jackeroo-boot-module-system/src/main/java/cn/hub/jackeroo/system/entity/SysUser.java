@@ -1,7 +1,6 @@
 package cn.hub.jackeroo.system.entity;
 
 import cn.hub.jackeroo.constant.CodeType;
-import cn.hub.jackeroo.constant.ParamType;
 import cn.hub.jackeroo.persistence.BaseEntity;
 import cn.hub.jackeroo.utils.validator.annotation.CodeNum;
 import cn.hub.jackeroo.utils.validator.annotation.Unique;
@@ -11,10 +10,8 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

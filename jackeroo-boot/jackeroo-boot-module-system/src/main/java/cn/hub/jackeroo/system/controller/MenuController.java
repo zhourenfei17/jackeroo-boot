@@ -44,7 +44,7 @@ public class MenuController extends BaseController {
     @GetMapping("list")
     @ApiOperation("获取完整菜单树")
     public Result<List<SysMenu>> list(String name){
-        return ok(menuService.getMenuFullTree());
+        return ok(menuService.getMenuFullTree(name));
     }
 
     /**

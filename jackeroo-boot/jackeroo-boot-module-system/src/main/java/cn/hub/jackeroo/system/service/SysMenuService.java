@@ -4,6 +4,7 @@ import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.system.entity.SysMenu;
 import cn.hub.jackeroo.system.mapper.SysMenuMapper;
 import cn.hub.jackeroo.system.vo.TreeSelect;
+import cn.hub.jackeroo.utils.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.cache.annotation.Cacheable;
@@ -34,13 +35,39 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * @return
      */
     @Cacheable("FullMenuTree")
-    public List<SysMenu> getMenuFullTree(){
+    public List<SysMenu> getMenuFullTree(String name){
         List<SysMenu> menuList = super.list();
 
         List<SysMenu> rootTreeNode = menuList.stream().filter(node -> node.getParentId().equals(0L)).collect(Collectors.toList());
         buildMenuTree(rootTreeNode, menuList);
 
+        if(StringUtils.isNotBlank(name)){
+            List<SysMenu> newMenuList = new ArrayList<>();
+            for (SysMenu menu : rootTreeNode) {
+                if(menu.getName().contains(name) || filterMenuByName(menu.getChildren(), name)){
+                    newMenuList.add(menu);
+                }
+            }
+            return newMenuList;
+        }
+
         return rootTreeNode;
+    }
+
+    private boolean filterMenuByName(List<SysMenu> menuList, String name){
+        if(CollectionUtils.isEmpty(menuList)){
+            return false;
+        }
+        for (SysMenu menu : menuList) {
+            if(menu.getName().contains(name)){
+                return true;
+            }
+            boolean flag = filterMenuByName(menu.getChildren(), name);
+            if(flag){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -69,7 +96,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         treeSelect.setKey("0");
         treeSelect.setValue("0");
         treeSelect.setTitle("一级菜单");
-        treeSelect.setChildren(initTreeSelect(getMenuFullTree()));
+        treeSelect.setChildren(initTreeSelect(getMenuFullTree(null)));
         return treeSelect;
     }
 
