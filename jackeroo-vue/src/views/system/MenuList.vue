@@ -13,10 +13,6 @@
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="loadDataSource()">查询</a-button>
                 <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-                <a @click="toggleAdvanced" style="margin-left: 8px">
-                  {{ advanced ? '收起' : '展开' }}
-                  <a-icon :type="advanced ? 'up' : 'down'"/>
-                </a>
               </span>
             </a-col>
           </a-row>
@@ -37,13 +33,17 @@
         :expandedRowKeys="expandedRowKeys"
         @expandedRowsChange="handleExpandedRowsChange"
       >
+        <template slot="iconSlot" slot-scope="text">
+          <a-icon v-if="text != '' && text != null" :type="text" style="font-size:18px;"></a-icon>
+        </template>
+
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
               <a @click="handleView(record)">详情</a>
               <a @click="handleEdit(record)">编辑</a>
               <action-menu-list>
-                <a @click="handleAdd(record)">添加下级菜单</a>
+                <a @click="handleAdd(record)" v-if="record.leaf == 0">添加下级菜单</a>
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
             </action-list>
@@ -88,7 +88,8 @@ export default {
         },
         {
           title: '图标',
-          dataIndex: 'icon'
+          dataIndex: 'icon',
+          scopedSlots: {customRender: 'iconSlot'}
         },
         {
           title: '权限',
@@ -130,11 +131,13 @@ export default {
         // 添加下级菜单
         this.$refs.formModal.visible = true
         this.$refs.formModal.flag.add = true
-        this.$refs.formModal.add(record.id, record.children ? record.children[record.children.length].sort + 10 : 10)
+        this.$refs.formModal.form.leaf = 1
+        this.$refs.formModal.add(record.id, record.children ? record.children[record.children.length - 1].sort + 10 : 10)
       }else{
         // 添加一级菜单
         this.$refs.formModal.visible = true
         this.$refs.formModal.flag.add = true
+        this.$refs.formModal.form.leaf = 0
         this.$refs.formModal.add('0', 10)
       }
     },

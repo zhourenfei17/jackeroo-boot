@@ -19,6 +19,14 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
+            <a-form-model-item label="是否叶子菜单" prop="leaf">
+              <a-radio-group v-model="form.leaf" :disabled="flag.view">
+                <a-radio :value="0">否</a-radio>
+                <a-radio :value="1">是</a-radio>
+              </a-radio-group>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="rowSpan">
             <a-form-model-item label="菜单名称" prop="name">
               <a-input v-model="form.name" placeholder="请输入菜单名称" :disabled="flag.view"></a-input>
             </a-form-model-item>
@@ -28,12 +36,12 @@
               <a-input v-model="form.href" placeholder="请输入url路径" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan">
+          <a-col :span="rowSpan" v-if="type == 1">
             <a-form-model-item label="组件路径" prop="component">
               <a-input v-model="form.component" placeholder="请输入组件路径" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan">
+          <a-col :span="rowSpan" v-if="type == 0">
             <a-form-model-item label="图标" prop="icon">
               <a-input placeholder="点击选择图标" v-model="form.icon" :readOnly="true">
                 <a-icon slot="addonAfter" type="setting" @click="selectIcons" />
@@ -45,12 +53,37 @@
               <a-input-number v-model="form.sort" placeholder="请输入排序号" :disabled="flag.view" style="width:100%;" :min="0"></a-input-number>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan">
+          <a-col :span="rowSpan" v-if="type == 1">
             <a-form-model-item label="目标" prop="target">
               <a-radio-group v-model="form.target" :disabled="flag.view">
                 <a-radio :value="1">内部</a-radio>
                 <a-radio :value="2">外部</a-radio>
               </a-radio-group>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="rowSpan">
+            <a-form-model-item label="是否隐藏" prop="hide">
+              <a-radio-group v-model="form.hide" :disabled="flag.view">
+                <a-radio :value="0">否</a-radio>
+                <a-radio :value="1">是</a-radio>
+              </a-radio-group>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="rowSpan">
+            <a-form-model-item label="权限分组" prop="group">
+              <a-input v-model="form.group" placeholder="请输入权限分组" :disabled="flag.view"></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="rowSpan">
+            <a-form-model-item label="权限" prop="auth">
+              <a-checkbox-group v-model="form.auth" name="auth">
+                <a-checkbox value="view">查看</a-checkbox>
+                <a-checkbox value="add">添加</a-checkbox>
+                <a-checkbox value="update">修改</a-checkbox>
+                <a-checkbox value="delete">删除</a-checkbox>
+                <a-checkbox value="import">导入</a-checkbox>
+                <a-checkbox value="export">导出</a-checkbox>
+              </a-checkbox-group>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -88,18 +121,22 @@ export default {
       iconVisible: false,
       form: {
         parentId: null,
+        leaf: 1,
         name: '',
         href: '',
         component: '',
         icon: '',
         sort: null,
         target: 1,
-        type: 0
+        hide: 0,
+        type: 0,
+        auth: ['view', 'add', 'update', 'delete']
       },
       rules: {
         parentId: [
-          
+          {required: true, message: '请选择上级菜单'}
         ],
+        leaf:[],
         name: [
           {required: true, message: '请输入菜单名称'},
           {max: 20, message: '长度需要在0和20之间'}
@@ -114,9 +151,9 @@ export default {
         ],
         icon: [],
         sort: [{min: 0, max: 999999, message: '长度需要在0到6之间', type: 'number'}],
-        target: [
-          
-        ]
+        target: [],
+        hide: [],
+        auth: []
       },
       url: {
         getById: '/system/menu/',
@@ -130,6 +167,12 @@ export default {
   },
   created(){
     this.loadTreeData()
+  },
+  computed: {
+    // 0: 非叶子节点，1：叶子节点
+    type(){
+      return this.form.leaf
+    }
   },
   methods: {
     add(pid, sort){
