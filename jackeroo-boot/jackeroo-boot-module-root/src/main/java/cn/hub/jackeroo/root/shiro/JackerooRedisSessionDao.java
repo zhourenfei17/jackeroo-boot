@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.root.shiro;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.saxon.functions.Serialize;
 import org.apache.shiro.session.Session;
@@ -26,7 +27,7 @@ import java.util.Set;
  * @author alex
  * @date 2020/05/29
  */
-// @Component
+@Component
 @Slf4j
 public class JackerooRedisSessionDao extends AbstractSessionDAO {
 
@@ -37,7 +38,7 @@ public class JackerooRedisSessionDao extends AbstractSessionDAO {
 
     private long sessionInMemoryTimeout = 1000L;
 
-    private String keyPrefix = "SYS:SESSION:USER";
+    private String keyPrefix = "SYS:SESSION:USER:";
 
     @Override
     protected Serializable doCreate(Session session) {
@@ -53,6 +54,7 @@ public class JackerooRedisSessionDao extends AbstractSessionDAO {
 
     private void saveSession(Session session){
         redisTemplate.opsForValue().set(this.keyPrefix + session.getId(), session);
+        log.info("save session: {}", JSON.toJSONString(session));
     }
 
     @Override
@@ -63,6 +65,7 @@ public class JackerooRedisSessionDao extends AbstractSessionDAO {
     @Override
     public void delete(Session session) {
         redisTemplate.delete(this.keyPrefix + session.getId());
+        log.info("delete session from redis");
     }
 
     @Override

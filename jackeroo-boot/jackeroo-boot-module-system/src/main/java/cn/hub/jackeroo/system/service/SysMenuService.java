@@ -1,6 +1,7 @@
 package cn.hub.jackeroo.system.service;
 
 import cn.hub.jackeroo.constant.Constant;
+import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.system.entity.SysMenu;
 import cn.hub.jackeroo.system.mapper.SysMenuMapper;
 import cn.hub.jackeroo.system.vo.TreeSelect;
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -81,7 +83,6 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
                     .sorted(Comparator.comparingInt(SysMenu::getSort))
                     .collect(Collectors.toList()));
             if(CollectionUtils.isNotEmpty(menu.getChildren())){
-                menu.setIsLeaf(Constant.BOOLEAN_NO);
                 buildMenuTree(menu.getChildren(), fullMenu);
             }
         }
@@ -107,7 +108,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
             treeSelect.setKey(menu.getId().toString());
             treeSelect.setValue(treeSelect.getKey());
             treeSelect.setTitle(menu.getName());
-            if(menu.getIsLeaf() == Constant.BOOLEAN_NO){
+            if(menu.getLeaf() == Constant.BOOLEAN_NO){
                 treeSelect.setChildren(initTreeSelect(menu.getChildren()));
             }
             treeSelectList.add(treeSelect);
@@ -115,4 +116,18 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         return treeSelectList;
     }
 
+    @Transactional
+    @Override
+    public boolean save(SysMenu menu) {
+        SysMenu parentMenu = getById(menu.getParentId());
+        if(parentMenu == null){
+            throw new JackerooException("上级菜单不存在");
+        }
+
+        menu.setLevel(parentMenu.getLevel() + 1);
+        menu.setParentIds(parentMenu.getParentIds() + "," + parentMenu.getParentId());
+        super.save(menu);
+
+        return true;
+    }
 }

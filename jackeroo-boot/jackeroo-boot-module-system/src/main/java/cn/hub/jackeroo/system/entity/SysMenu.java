@@ -51,6 +51,10 @@ public class SysMenu extends BaseEntity<SysMenu> {
     private String parentIds;
 
     /**
+     * 是否叶子菜单
+     */
+    private Integer leaf;
+    /**
      * 菜单等级
      */
     private Integer level;
@@ -95,7 +99,12 @@ public class SysMenu extends BaseEntity<SysMenu> {
     /**
      * 打开目标
      */
-    private String target;
+    private Integer target;
+
+    /**
+     * 是否隐藏菜单
+     */
+    private Integer hide;
 
     /**
      * 删除标识
@@ -129,9 +138,4 @@ public class SysMenu extends BaseEntity<SysMenu> {
     @TableField(exist = false)
     private List<SysMenu> children;
 
-    /**
-     * 是否是叶子节点
-     */
-    @TableField(exist = false)
-    private Integer isLeaf = Constant.BOOLEAN_YES;
 }
