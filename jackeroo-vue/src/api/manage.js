@@ -18,13 +18,11 @@ const method = {
 }
 
 //post
-//使用application / x-www-form-urlencoded格式发送数据
 export function postAction(url,parameter) {
   return axios({
     url: url,
     method: method.POST ,
-    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    data: qs.stringify(parameter)
+    data: parameter
   })
 }
 
@@ -33,8 +31,7 @@ export function httpAction(url,parameter,method) {
   return axios({
     url: url,
     method:method ,
-    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    data: qs.stringify(parameter)
+    data: parameter
   })
 }
 
@@ -43,8 +40,7 @@ export function putAction(url,parameter) {
   return axios({
     url: url,
     method: method.PUT,
-    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    data: qs.stringify(parameter)
+    data: parameter
   })
 }
 

@@ -43,8 +43,9 @@
           </a-col>
           <a-col :span="rowSpan" v-if="type == 0">
             <a-form-model-item label="图标" prop="icon">
-              <a-input placeholder="点击选择图标" v-model="form.icon" :readOnly="true">
-                <a-icon slot="addonAfter" type="setting" @click="selectIcons" />
+              <a-input placeholder="点击选择图标" v-model="form.icon" :readOnly="true" :disabled="flag.view">
+                <a-icon v-if="flag.view" slot="addonAfter" type="setting"/>
+                <a-icon v-else slot="addonAfter" type="setting" @click="selectIcons"/>
               </a-input>
             </a-form-model-item>
           </a-col>
@@ -69,20 +70,18 @@
               </a-radio-group>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="权限分组" prop="group">
+          <a-col :span="rowSpan" v-if="type == 1">
+            <a-form-model-item label="权限分组" prop="group" v-if="form.auth.length > 0">
+              <a-input v-model="form.group" placeholder="请输入权限分组" :disabled="flag.view"></a-input>
+            </a-form-model-item>
+            <a-form-model-item label="权限分组" v-else>
               <a-input v-model="form.group" placeholder="请输入权限分组" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan">
+          <a-col :span="rowSpan" v-if="type == 1">
             <a-form-model-item label="权限" prop="auth">
-              <a-checkbox-group v-model="form.auth" name="auth">
-                <a-checkbox value="view">查看</a-checkbox>
-                <a-checkbox value="add">添加</a-checkbox>
-                <a-checkbox value="update">修改</a-checkbox>
-                <a-checkbox value="delete">删除</a-checkbox>
-                <a-checkbox value="import">导入</a-checkbox>
-                <a-checkbox value="export">导出</a-checkbox>
+              <a-checkbox-group v-model="form.auth" name="auth" :disabled="flag.view" :options="auth">
+                
               </a-checkbox-group>
             </a-form-model-item>
           </a-col>
@@ -104,6 +103,7 @@ import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 import JSelect from '@/components/jackeroo/JSelect'
 import {IconSelector, JDrawer} from '@/components'
 import {TreeSelect} from 'ant-design-vue'
+import { values } from 'mockjs2'
 
 export default {
   components: {
@@ -120,6 +120,7 @@ export default {
       width: '40vw',
       iconVisible: false,
       form: {
+        id: null,
         parentId: null,
         leaf: 1,
         name: '',
@@ -130,13 +131,37 @@ export default {
         target: 1,
         hide: 0,
         type: 0,
+        group: '',
         auth: ['view', 'add', 'update', 'delete']
       },
+      auth:[
+        {
+          label: '查看',
+          value: 'view'
+        },{
+          label: '添加',
+          value: 'add'
+        },{
+          label: '修改',
+          value: 'update'
+        },{
+          label: '删除',
+          value: 'delete'
+        },{
+          label: '导入',
+          value: 'import'
+        },{
+          label: '导出',
+          value: 'export'
+        }
+      ],
       rules: {
         parentId: [
           {required: true, message: '请选择上级菜单'}
         ],
-        leaf:[],
+        leaf:[
+          {required: true, message: '请选择是否叶子菜单'}
+        ],
         name: [
           {required: true, message: '请输入菜单名称'},
           {max: 20, message: '长度需要在0和20之间'}
@@ -153,6 +178,7 @@ export default {
         sort: [{min: 0, max: 999999, message: '长度需要在0到6之间', type: 'number'}],
         target: [],
         hide: [],
+        group: [{required: true, message: '请填写权限分组'}],
         auth: []
       },
       url: {
@@ -162,7 +188,8 @@ export default {
         getTreeSelect: '/system/menu/getTreeSelect'
       },
       tempIconValue: '',
-      treeData: []
+      treeData: [],
+      checkedAuth: []
     }
   },
   created(){
@@ -182,8 +209,20 @@ export default {
       this.loading = false
     },
     edit(id){
+      this.loading = true
       getAction(this.url.getById + id).then(result => {
-        this.copyProperties(result.data, this.form)
+        const data = result.data
+        if(data.auth){
+          data.group = data.auth[0].value.substring(0, data.auth[0].value.lastIndexOf(':'))
+
+          const auth = []
+          for(const a of data.auth){
+            auth.push(a.value.substring(a.value.lastIndexOf(':') + 1))
+          }
+          data.auth = auth
+          console.log('data', data)
+        }
+        this.copyProperties(data, this.form)
       }).finally(() => {
         this.loading = false
       })
@@ -191,7 +230,14 @@ export default {
     handleSubmit(){
       this.$refs.formModel.validate((success) => {
         if(success){
-          const formData = this.form
+          const formData = JSON.parse(JSON.stringify(this.form))
+          if(formData.leaf == 1){
+            const auth = this.auth.filter(item => formData.auth.indexOf(item.value) >= 0)
+            formData.auth = auth
+          }else{
+            formData.auth = null
+          }
+          
           console.log('formData', formData)
 
           this.$loading.show()
@@ -229,6 +275,18 @@ export default {
           this.treeData = treeData
         }
       })
+    },
+    cancel(){
+      this.visible = false
+      this.flag.add = false
+      this.flag.edit = false
+      this.flag.view = false
+
+      this.form.auth = ['view', 'add', 'update', 'delete']
+      this.$refs.formModel.resetFields()
+      this.$refs.formModel.clearValidate()
+      
+      this.loading = true
     }
   }
 }

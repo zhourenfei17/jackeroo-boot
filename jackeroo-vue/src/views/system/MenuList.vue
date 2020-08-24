@@ -37,6 +37,10 @@
           <a-icon v-if="text != '' && text != null" :type="text" style="font-size:18px;"></a-icon>
         </template>
 
+        <template slot="permission" slot-scope="text,record">
+          <a-tag v-for="(auth, index) of record.auth" :key="auth.value" :color="getColor(index)">{{auth.label}}</a-tag>
+        </template>
+
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
@@ -93,16 +97,19 @@ export default {
         },
         {
           title: '权限',
-          dataIndex: 'permission'
+          dataIndex: 'permission',
+          scopedSlots: {customRender: 'permission'}
         },
         {
           title: '操作',
           dataIndex: 'action',
+          width: '180px',
           scopedSlots: { customRender: 'action' }
         }
       ],
       // 展开的行
       expandedRowKeys: [],
+      tagColor: ['#1890ff', '#cf1322', '#fa541c', '#faad14', '#13c2c2', '#52c41a', '#2f54eb', '#722ed1'],
       url: {
         list: '/system/menu/list',
         delete: '/system/user/delete'
@@ -126,7 +133,6 @@ export default {
     },
     // 添加
     handleAdd (record) {
-      console.log(record)
       if(record.id){
         // 添加下级菜单
         this.$refs.formModal.visible = true
@@ -150,8 +156,8 @@ export default {
     // 删除
     handleDelete(record){
       this.$confirm({
-        title: "删除用户",
-        content: "确认删除用户【" + record.name + "】吗？",
+        title: "删除菜单",
+        content: "确认删除菜单【" + record.name + "】吗？",
         onOk: () => {
           this.$loading.show()
           deleteAction(this.url.delete, {id: record.id}).then(res => {
@@ -166,6 +172,9 @@ export default {
     },
     handleOk(){
       this.loadDataSource()
+    },
+    getColor(index){
+      return this.tagColor[index % 8]
     }
   }
 }
