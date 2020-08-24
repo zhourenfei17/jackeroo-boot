@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,7 +56,7 @@ public class MenuController extends BaseController {
     @GetMapping("/{id}")
     @ApiOperation(value = "菜单详情")
     public Result<SysMenu> getById(@PathVariable String id){
-        return ok(menuService.getById(id));
+        return ok(menuService.getMenuDetail(id));
     }
 
     /**
@@ -65,7 +66,7 @@ public class MenuController extends BaseController {
      */
     @PostMapping("add")
     @ApiOperation(value = "添加菜单")
-    public Result add(@Validated(Insert.class) SysMenu menu){
+    public Result add(@Validated(Insert.class) @RequestBody SysMenu menu){
         menuService.save(menu);
         return ok();
     }
@@ -77,8 +78,8 @@ public class MenuController extends BaseController {
      */
     @PutMapping("update")
     @ApiOperation(value = "编辑菜单")
-    public Result update(@Validated(Update.class) SysMenu menu){
-        menuService.updateById(menu);
+    public Result update(@Validated(Update.class) @RequestBody SysMenu menu){
+        menuService.update(menu);
         return ok();
     }
 

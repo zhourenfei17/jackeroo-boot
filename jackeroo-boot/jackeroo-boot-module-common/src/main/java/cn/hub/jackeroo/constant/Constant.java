@@ -35,4 +35,12 @@ public interface Constant {
      * 否
      */
     int BOOLEAN_NO = 0;
+    /**
+     * 分隔符-逗号
+     */
+    String SPLIT_COMMA = ",";
+    /**
+     * 分隔符-斜杠
+     */
+    String SPLIT_SLASH = "/";
 }

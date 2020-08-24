@@ -1,7 +1,7 @@
 package cn.hub.jackeroo.system.entity;
 
-import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.persistence.BaseEntity;
+import cn.hub.jackeroo.system.vo.AuthVo;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -137,5 +136,12 @@ public class SysMenu extends BaseEntity<SysMenu> {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @TableField(exist = false)
     private List<SysMenu> children;
+    @TableField(exist = false)
+    private String group;
+    @TableField(exist = false)
+    private List<AuthVo> auth;
 
+
+    public static final int TYPE_MENU = 0;
+    public static final int TYPE_PERMISSION = 1;
 }

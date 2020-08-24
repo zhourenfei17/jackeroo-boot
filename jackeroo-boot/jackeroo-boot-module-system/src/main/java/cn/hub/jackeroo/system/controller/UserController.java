@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
@@ -75,7 +76,7 @@ public class UserController extends BaseController {
     @PostMapping("add")
     @ApiOperation(value = "添加用户", notes = "添加用户信息")
     @ValidatedUnique(clazz = SysUser.class)
-    public Result add(@Validated(Insert.class) SysUser user){
+    public Result add(@Validated(Insert.class) @RequestBody SysUser user){
         // validService.validEntityUniqueField(user, Insert.class);
         userService.insertUser(user);
         return ok();
@@ -89,7 +90,7 @@ public class UserController extends BaseController {
     @PutMapping("update")
     @ApiOperation(value = "编辑用户", notes = "编辑用户信息")
     @ValidatedUnique(clazz = SysUser.class, groups = Update.class)
-    public Result update(@Validated(Update.class) SysUser user){
+    public Result update(@Validated(Update.class) @RequestBody SysUser user){
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
         // 编辑用户无法修改密码和账号
@@ -120,7 +121,7 @@ public class UserController extends BaseController {
      */
     @PutMapping("frozen")
     @ApiOperation(value = "冻结用户")
-    public Result frozen(@Validated Id id){
+    public Result frozen(@Validated @RequestBody Id id){
         userService.frozenUser(id.getId());
 
         return ok();
@@ -133,7 +134,7 @@ public class UserController extends BaseController {
      */
     @PutMapping("unfrozen")
     @ApiOperation(value = "解冻用户")
-    public Result unfrozen(@Validated Id id){
+    public Result unfrozen(@Validated @RequestBody Id id){
         userService.unfrozenUser(id.getId());
 
         return ok();
@@ -146,7 +147,7 @@ public class UserController extends BaseController {
      */
     @PutMapping("resetPwd")
     @ApiOperation(value = "重置密码")
-    public Result resetPassword(@Validated Id id){
+    public Result resetPassword(@Validated @RequestBody Id id){
         userService.resetPassword(id.getId());
 
         return ok();
