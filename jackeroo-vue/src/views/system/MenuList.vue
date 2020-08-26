@@ -63,7 +63,7 @@
 <script>
 import {  Ellipsis } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
-import { putAction, getAction } from '@/api/manage'
+import { putAction, getAction, deleteAction } from '@/api/manage'
 import MenuFormModal from './modal/MenuFormModal'
 
 export default {
@@ -112,7 +112,7 @@ export default {
       tagColor: ['#1890ff', '#cf1322', '#fa541c', '#faad14', '#13c2c2', '#52c41a', '#2f54eb', '#722ed1'],
       url: {
         list: '/system/menu/list',
-        delete: '/system/user/delete'
+        delete: '/system/menu/delete'
       }
     }
   },
@@ -163,6 +163,7 @@ export default {
           deleteAction(this.url.delete, {id: record.id}).then(res => {
             if(res.code === 0){
               this.$message.success('操作成功')
+              this.loadDataSource()
             }
           }).finally(() => {
             this.$loading.hide()

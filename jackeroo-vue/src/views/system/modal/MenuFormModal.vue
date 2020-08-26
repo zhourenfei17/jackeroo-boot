@@ -83,6 +83,8 @@
               <a-checkbox-group v-model="form.auth" name="auth" :disabled="flag.view" :options="auth">
                 
               </a-checkbox-group>
+              <br />
+              <a @click="handleEditAuth">编辑权限 >></a>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -93,24 +95,26 @@
     <a-modal :visible="iconVisible" title="选择图标" width="50vw" @cancel="handleIconCancel" @ok="handleIconOk">
       <icon-selector @change="handleIconChange" :value="tempIconValue"></icon-selector>
     </a-modal>
+
+    <menu-auth-list-modal ref="menuAuthListModal"></menu-auth-list-modal>
   </j-drawer>
 </template>
 
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
-import md5 from 'md5'
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 import JSelect from '@/components/jackeroo/JSelect'
 import {IconSelector, JDrawer} from '@/components'
 import {TreeSelect} from 'ant-design-vue'
-import { values } from 'mockjs2'
+import MenuAuthListModal from './MenuAuthListModal'
 
 export default {
   components: {
     JSelect,
     IconSelector,
     JDrawer,
-    TreeSelect
+    TreeSelect,
+    MenuAuthListModal
   },
   mixins: [JackerooFromMixins],
   data(){
@@ -253,6 +257,9 @@ export default {
           })
         }
       })
+    },
+    handleEditAuth(){
+      this.$refs.menuAuthListModal.edit(this.auth)
     },
     selectIcons(){
       this.iconVisible = true

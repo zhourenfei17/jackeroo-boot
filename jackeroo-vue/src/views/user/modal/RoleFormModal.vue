@@ -36,7 +36,6 @@
 
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
-import md5 from 'md5'
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 
 export default {
