@@ -7,8 +7,8 @@ import cn.hub.jackeroo.utils.validator.groups.Update;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -108,6 +108,7 @@ public class SysMenu extends BaseEntity<SysMenu> {
     /**
      * 删除标识
      */
+    @TableLogic
     @TableField(fill = FieldFill.INSERT)
     private Integer delFlag;
     /**
