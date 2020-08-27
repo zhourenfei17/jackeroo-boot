@@ -37,8 +37,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoleController extends BaseController {
     @Autowired
     private SysRoleService roleService;
-    @Autowired
-    private ValidService validService;
     /**
      * 角色列表
      * @return
