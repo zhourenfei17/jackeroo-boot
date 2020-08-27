@@ -61,7 +61,8 @@ export default {
     add(){
       this.loading = false
     },
-    edit(id){
+    edit(record){
+      this.form = record
       this.loading = false
     },
     handleSubmit(){
@@ -70,7 +71,7 @@ export default {
           const formData = JSON.parse(JSON.stringify(this.form))
           
           this.$emit('ok', formData)
-          this.visible = false
+          this.cancel()
         }
       })
     },

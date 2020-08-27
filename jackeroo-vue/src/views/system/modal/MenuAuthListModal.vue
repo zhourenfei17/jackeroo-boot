@@ -1,42 +1,35 @@
 <template>
-  <j-drawer
+  <a-drawer
       :title="title"
       :width="width"
       :visible="visible"
-      @ok="handleSubmit"
-      @close="cancel"
-    >
+      @close="cancel">
     
-    <j-spin :spinning="loading">
-        <div class="table-operator">
-          <a-button type="primary" icon="plus" @click="handleAdd">添加</a-button>
-        </div>
+    <div class="table-operator">
+      <a-button type="primary" icon="plus" @click="handleAdd">添加</a-button>
+    </div>
 
-        <a-table
-          size="default"
-          rowKey="value"
-          :columns="columns"
-          :data-source="dataSource"
-          :loading="loading"
-          :pagination="false"
-        >
+    <a-table
+      size="default"
+      rowKey="value"
+      :columns="columns"
+      :data-source="dataSource"
+      :loading="loading"
+      :pagination="false"
+    >
 
-          <span slot="action" slot-scope="text, record">
-            <template>
-              <action-list>
-                <a @click="handleView(record)">详情</a>
-                <a @click="handleEdit(record)">编辑</a>
-                <action-menu-list>
-                  <a @click="handleDelete(record)">删除</a>
-                </action-menu-list>
-              </action-list>
-            </template>
-          </span>
-        </a-table>
-    </j-spin>
+      <span slot="action" slot-scope="text, record">
+        <template>
+          <action-list>
+            <a @click="handleEdit(record)">编辑</a>
+            <a @click="handleDelete(record)">删除</a>
+          </action-list>
+        </template>
+      </span>
+    </a-table>
 
     <menu-auth-form-modal ref="formModal" @ok="handleOk"></menu-auth-form-modal>
-  </j-drawer>
+  </a-drawer>
 </template>
 
 <script>
@@ -57,6 +50,7 @@ export default {
       title: '权限列表',
       loading: false,
       useSTable: false,
+      visible: false,
       width: '500px',
       columns: [
         {
@@ -85,8 +79,10 @@ export default {
       this.dataSource = list
       this.visible = true
     },
-    handleSubmit(){
-
+    handleEdit(record){
+      this.$refs.formModal.visible = true
+      this.$refs.formModal.flag.edit = true
+      this.$refs.formModal.edit(record)
     },
     cancel(){
       this.visible = false

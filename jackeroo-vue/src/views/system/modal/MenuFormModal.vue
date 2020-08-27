@@ -119,7 +119,7 @@ export default {
   mixins: [JackerooFromMixins],
   data(){
     return {
-      title: '用户信息',
+      title: '菜单信息',
       tableName: 'sys_user',
       width: '40vw',
       iconVisible: false,
