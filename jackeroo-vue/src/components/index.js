@@ -31,6 +31,7 @@ import JSpin from '@/components/jackeroo/Spin'
 import ActionList from '@/components/jackeroo/ActionList'
 import JModal from '@/components/jackeroo/Modal'
 import JDrawer from '@/components/jackeroo/Drawer'
+import JTag from '@/components/jackeroo/Tag/JTag'
 
 export {
   AvatarList,
@@ -61,5 +62,6 @@ export {
   JSpin,
   ActionList,
   JModal,
-  JDrawer
+  JDrawer,
+  JTag
 }

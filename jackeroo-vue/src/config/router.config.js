@@ -285,6 +285,12 @@ export const asyncRouterMap = [
             name: 'MenuList',
             component: () => import('@/views/system/MenuList'),
             meta: { title: '菜单管理', permission: [ 'exception' ] }
+          },
+          {
+            path: '/system/menu/permission/config',
+            name: 'PermissionConfig',
+            component: () => import('@/views/system/MenuPermissionConfig'),
+            meta: { title: '菜单权限配置', permission: [ 'exception' ] }
           }
         ]
       }
