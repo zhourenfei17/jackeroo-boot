@@ -32,6 +32,14 @@ export const JackerooListMixins = {
           return
         }
         const requestParameters = Object.assign({}, parameter, this.queryParam)
+        if(!parameter){
+          for(const col of this.columns){
+            if(col.defaultSortOrder){
+              requestParameters.sortField = col.dataIndex
+              requestParameters.sortOrder = col.defaultSortOrder
+            }
+          }
+        }
         return getAction(this.url.list, requestParameters)
           .then(res => {
             if(res.code == 0){

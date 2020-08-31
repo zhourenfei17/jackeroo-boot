@@ -14,37 +14,30 @@
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
         <a-row :gutter="24">
           <a-col :span="rowSpan">
-            <a-form-model-item label="权限组名" prop="groupName">
-              <a-input v-model="form.groupName" placeholder="请输入权限组名" :disabled="flag.view"></a-input>
+            <a-form-model-item label="权限名称" prop="label">
+              <a-input v-model="form.label" placeholder="请输入权限名称" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
-            <a-form-model-item label="默认组别" prop="isDefault">
-              <a-radio-group v-model="form.isDefault" size="small" buttonStyle="solid" :disabled="flag.view">
+            <a-form-model-item label="权限标识" prop="value">
+              <a-input v-model="form.value" placeholder="请输入权限标识" :disabled="flag.view"></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="rowSpan">
+            <a-form-model-item label="是否选中" prop="checked">
+              <a-radio-group v-model="form.checked" size="small" buttonStyle="solid" :disabled="flag.view">
                 <a-radio-button :value="0" class="radio-btn">
                   否
                 </a-radio-button>
                 <a-radio-button :value="1" class="radio-btn">
                   是
                 </a-radio-button>
-
-                <a-tooltip title="只能有一个默认权限分组，设置默认后，其他的将自动取消默认"> 
-                  <a-icon type="exclamation-circle" style="margin-left:20px;"></a-icon>
-                </a-tooltip>
-                
               </a-radio-group>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
-            <a-form-model-item label="禁用状态" prop="disabled">
-              <a-radio-group v-model="form.disabled" size="small" buttonStyle="solid" :disabled="flag.view">
-                <a-radio-button :value="0" class="radio-btn">
-                  启用
-                </a-radio-button>
-                <a-radio-button :value="1" class="radio-btn">
-                  禁用
-                </a-radio-button>
-              </a-radio-group>
+            <a-form-model-item label="排序号" prop="sort">
+              <a-input-number v-model="form.sort" placeholder="请输入排序号" :disabled="flag.view" style="width:100%;"></a-input-number>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -54,43 +47,47 @@
 </template>
 
 <script>
-import { getAction, postAction, httpAction } from '@/api/manage'
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import { getAction, httpAction } from '@/api/manage'
 
 export default {
   mixins: [JackerooFromMixins],
   data(){
     return {
-      title: '用户信息',
-      tableName: 'sys_menu_permission_group',
+      title: '权限信息',
       width: '40vw',
       form: {
         id: null,
-        groupName: '',
-        isDefault: 0,
-        disabled: 0
+        label: '',
+        value: '',
+        checked: 1,
+        sort: null,
+        groupId: null
       },
       rules: {
-        groupName: [
-          {required: true, message: '请输入权限组名'}, 
-          {validator: this.validUnique, message: '权限组名不能重复', trigger: 'blur'},
+        label: [
+          {required: true, message: '请输入权限名称'}, 
           {max: 20, message: '长度需要在0到20之间'}
         ],
-        isDefault: [
-          {required: true, message: '请设置是否默认'}, 
+        value: [
+          {required: true, message: '请输入权限标识'}, 
+          {max: 30, message: '长度需要在0到30之间'}
         ],
-        disabled: [{required: true, message: '请设置禁用状态'}],
+        checked: [
+          {required: true, message: '请选择是否选中'}
+        ]
       },
       url: {
-        getById: '/system/menu/permission/group/',
-        add: '/system/menu/permission/group/add',
-        update: '/system/menu/permission/group/update'
+        getById: '/system/menu/permission/config/',
+        add: '/system/menu/permission/config/add',
+        update: '/system/menu/permission/config/update'
       }
     }
   },
   methods: {
-    add(){
+    add(groupId){
       this.form.id = null
+      this.form.groupId = groupId
       this.loading = false
     },
     edit(id){
@@ -122,7 +119,6 @@ export default {
   }
 }
 </script>
-
 <style lang="less" scoped>
 .radio-btn{
   width: 50px;

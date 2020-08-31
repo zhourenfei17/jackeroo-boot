@@ -6,7 +6,7 @@
       @close="cancel">
     
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleAdd">添加</a-button>
+      <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
     </div>
 
     <a-table
@@ -34,7 +34,6 @@
 
 <script>
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 import { JDrawer} from '@/components'
 import MenuAuthFormModal from './MenuAuthFormModal'
 

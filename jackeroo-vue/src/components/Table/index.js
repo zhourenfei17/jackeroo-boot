@@ -23,6 +23,10 @@ export default {
       type: [String, Function],
       default: 'key'
     },
+    lazy: {
+      type: Boolean,
+      default: false
+    },
     data: {
       type: Function,
       required: true
@@ -140,7 +144,9 @@ export default {
       }
     }) || false
     this.needTotalList = this.initTotalList(this.columns)
-    this.loadData()
+    if(!this.lazy){
+      this.loadData()
+    }
   },
   methods: {
     /**
@@ -177,6 +183,14 @@ export default {
         ...filters
       }
       )
+      if(!parameter.sortField){
+        for(const col of this.columns){
+          if(col.defaultSortOrder){
+            parameter.sortField = col.dataIndex
+            parameter.sortOrder = col.defaultSortOrder
+          }
+        }
+      }
       const result = this.data(parameter)
       // 对接自己的通用数据接口需要修改下方代码中的 r.pageNo, r.totalCount, r.data
       // eslint-disable-next-line

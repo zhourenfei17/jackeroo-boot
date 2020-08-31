@@ -54,7 +54,11 @@
             <action-list>
               <a @click="handleView(record)">详情</a>
               <a @click="handleEdit(record)">编辑</a>
+              <a @click="handleOpenPermissionListModal(record)">权限列表</a>
+              <a @click="handleSetDefault(record)" v-if="record.isDefault == 0">设为默认</a>
               <action-menu-list>
+                <a @click="handleDisable(record)" v-if="record.disabled == 0">禁用</a>
+                <a @click="handleEnable(record)" v-if="record.disabled == 1">启用</a>
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
             </action-list>
@@ -63,6 +67,7 @@
       </s-table>
 
       <menu-permission-group-modal ref="formModal" @ok="handleOk"></menu-permission-group-modal>
+      <menu-permission-list-modal ref="permissionListModal"></menu-permission-list-modal>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -72,13 +77,15 @@ import { STable,JTag } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
 import MenuPermissionGroupModal from './modal/MenuPermissionGroupModal'
+import MenuPermissionListModal from './modal/MenuPermissionListModal'
 
 export default {
   name: 'RoleList',
   components: {
     STable,
     JTag,
-    MenuPermissionGroupModal
+    MenuPermissionGroupModal,
+    MenuPermissionListModal
   },
   mixins:[JackerooListMixins],
   data () {
@@ -112,28 +119,71 @@ export default {
       ],
       url: {
         list: '/system/menu/permission/group/list',
-        delete: '/system/menu/permission/group/delete'
+        delete: '/system/menu/permission/group/delete',
+        setDefault: '/system/menu/permission/group/setDefault',
+        disable: '/system/menu/permission/group/disable',
+        enable: '/system/menu/permission/group/enable'
       },
     }
   },
   methods: {
-    // 删除
-    handleDelete(record){
+    // 权限列表
+    handleOpenPermissionListModal(record){
+      this.$refs.permissionListModal.load(record.id)
+    },
+    // 设为默认
+    handleSetDefault(record){
       this.$confirm({
-        title: "删除角色",
-        content: "确认删除角色【" + record.roleName + "】吗？",
+        title: '设为默认',
+        content: '确认将【' + record.groupName + '】设置为默认吗？',
         onOk: () => {
           this.$loading.show()
-          deleteAction(this.url.delete, {id: record.id}).then(res => {
-            if(res.code === 0){
+          putAction(this.url.setDefault, {id: record.id}).then(res => {
+            if(res.code == 0){
               this.$message.success('操作成功')
               this.refreshData()
             }
           }).finally(() => {
-            this.$loading.hide() 
+            this.$loading.hide()
           })
         }
-      });
+      })
+    },
+    // 禁用
+    handleDisable(record){
+      this.$confirm({
+        title: '禁用',
+        content: '确认将【' + record.groupName + '】禁用吗？',
+        onOk: () => {
+          this.$loading.show()
+          putAction(this.url.disable, {id: record.id}).then(res => {
+            if(res.code == 0){
+              this.$message.success('操作成功')
+              this.refreshData()
+            }
+          }).finally(() => {
+            this.$loading.hide()
+          })
+        }
+      })
+    },
+    // 启用
+    handleEnable(record){
+      this.$confirm({
+        title: '启用',
+        content: '确认将【' + record.groupName + '】启用吗？',
+        onOk: () => {
+          this.$loading.show()
+          putAction(this.url.enable, {id: record.id}).then(res => {
+            if(res.code == 0){
+              this.$message.success('操作成功')
+              this.refreshData()
+            }
+          }).finally(() => {
+            this.$loading.hide()
+          })
+        }
+      })
     }
   }
 }
