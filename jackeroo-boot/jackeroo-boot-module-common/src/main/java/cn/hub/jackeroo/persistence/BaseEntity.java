@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.persistence;
 
+import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -55,6 +56,14 @@ public abstract class BaseEntity<T extends Serializable> implements Serializable
         page = new Page();
         page.setCurrent(pageParam.getPageNo());
         page.setSize(pageParam.getPageSize());
+        if(StringUtils.isNotBlank(pageParam.getSortField())){
+            if(StringUtils.isNotBlank(pageParam.getSortOrder())){
+                this.orderBy = StringUtils.toUnderScoreCase(pageParam.getSortField()) + " "
+                        + pageParam.getSortOrder().replace("end", "");
+            }else{
+                this.orderBy = StringUtils.toUnderScoreCase(pageParam.getSortField()) + " asc";
+            }
+        }
 
         return page;
     }

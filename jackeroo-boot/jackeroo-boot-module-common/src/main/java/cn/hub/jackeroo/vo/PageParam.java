@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * @author alex
@@ -22,4 +23,9 @@ public class PageParam {
     @Max(200)
     @ApiParam(value = "每页记录数", required = true, example = "10")
     private Integer pageSize;
+    @ApiParam(value = "排序字段", example = "create_time")
+    private String sortField;
+    @ApiParam(value = "排序方式", example = "ascend")
+    @Pattern(regexp = "^(ascend|descend)$")
+    private String sortOrder;
 }

@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
             ServletRequestBindingException.class, MethodArgumentNotValidException.class, ConstraintViolationException.class })
     public Result handleHttpMessageNotReadableException(Exception e) {
         log.error("参数解析失败", e);
-        return new Result(ResultStatusCode.BAD_REQUEST.getCode(), e.getMessage());
+        return new Result(ResultStatusCode.BAD_REQUEST);
     }
 
     /**
