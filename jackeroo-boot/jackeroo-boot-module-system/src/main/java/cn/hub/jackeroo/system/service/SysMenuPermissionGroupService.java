@@ -1,13 +1,18 @@
 package cn.hub.jackeroo.system.service;
 
+import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.system.entity.SysMenuPermissionConfig;
 import cn.hub.jackeroo.system.entity.SysMenuPermissionGroup;
 import cn.hub.jackeroo.system.mapper.SysMenuPermissionGroupMapper;
 import cn.hub.jackeroo.vo.PageParam;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -35,5 +40,38 @@ public class SysMenuPermissionGroupService extends ServiceImpl<SysMenuPermission
         page.setRecords(mapper.findList(sysMenuPermissionGroup));
 
         return page;
+    }
+
+    /**
+     * 设为默认
+     * @param id
+     */
+    @Transactional
+    public void setDefault(String id){
+        SysMenuPermissionGroup group = super.getById(id);
+        if(group == null){
+            return;
+        }
+
+        LambdaUpdateWrapper<SysMenuPermissionGroup> update = new LambdaUpdateWrapper<>();
+        update.set(SysMenuPermissionGroup::getIsDefault, Constant.BOOLEAN_NO);
+        super.update(update);
+
+        group.setIsDefault(Constant.BOOLEAN_YES);
+        super.updateById(group);
+    }
+
+    /**
+     * 更新禁用状态
+     * @param id
+     * @param disabledFlag
+     */
+    @Transactional
+    public void updateDisabled(String id, Integer disabledFlag){
+        LambdaUpdateWrapper<SysMenuPermissionGroup> update = new LambdaUpdateWrapper<>();
+        update.eq(SysMenuPermissionGroup::getId, id);
+        update.set(SysMenuPermissionGroup::getDisabled, disabledFlag);
+
+        super.update(update);
     }
 }

@@ -12,8 +12,13 @@
         SELECT <include refid="baseColumns" />
         FROM sys_menu_permission_config a
         <where>
-
+            <if test="groupId != null">
+                a.group_id = #{groupId}
+            </if>
         </where>
+        <if test="orderBy != null">
+            order by ${orderBy}
+        </if>
     </select>
 
 </mapper>

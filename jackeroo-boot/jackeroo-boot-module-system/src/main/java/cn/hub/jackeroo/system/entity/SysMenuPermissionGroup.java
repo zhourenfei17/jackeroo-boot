@@ -79,5 +79,7 @@ public class SysMenuPermissionGroup extends BaseEntity<SysMenuPermissionGroup> i
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
+    public static final int DISABLED_FLAG_ENABLE = 0;
+    public static final int DISABLED_FLAG_DISABLE = 1;
 
 }

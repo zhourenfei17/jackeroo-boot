@@ -102,4 +102,40 @@ public class SysMenuPermissionGroupController extends BaseController {
 
         return ok();
     }
+
+    /**
+     * 设为默认
+     * @param id
+     * @return
+     */
+    @PutMapping("setDefault")
+    @ApiOperation(value = "设为默认", response =  Result.class)
+    public Result setDefault(@Validated @RequestBody Id id){
+        permissionGroupService.setDefault(id.getId());
+        return ok();
+    }
+
+    /**
+     * 禁用
+     * @param id
+     * @return
+     */
+    @PutMapping("disable")
+    @ApiOperation(value = "禁用")
+    public Result disable(@Validated @RequestBody Id id){
+        permissionGroupService.updateDisabled(id.getId(), SysMenuPermissionGroup.DISABLED_FLAG_DISABLE);
+        return ok();
+    }
+
+    /**
+     * 启用
+     * @param id
+     * @return
+     */
+    @PutMapping("enable")
+    @ApiOperation(value = "启用")
+    public Result enable(@Validated @RequestBody Id id){
+        permissionGroupService.updateDisabled(id.getId(), SysMenuPermissionGroup.DISABLED_FLAG_ENABLE);
+        return ok();
+    }
 }
