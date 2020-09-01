@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * <p>
  * 菜单权限配置组别 前端控制器
@@ -50,6 +52,16 @@ public class SysMenuPermissionGroupController extends BaseController {
     @ApiOperation(value = "菜单权限配置组别列表", response = Result.class)
     public Result<IPage<SysMenuPermissionGroup>> list(SysMenuPermissionGroup sysMenuPermissionGroup, @Validated PageParam pageParam){
         return ok(permissionGroupService.findPage(sysMenuPermissionGroup, pageParam));
+    }
+
+    /**
+     * 获取所有权限分组
+     * @return
+     */
+    @GetMapping("findAll")
+    @ApiOperation(value = "获取所有权限分组")
+    public Result<List<SysMenuPermissionGroup>> findAll(){
+        return ok(permissionGroupService.findAllEnable());
     }
 
 

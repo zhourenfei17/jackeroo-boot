@@ -24,7 +24,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -52,6 +55,26 @@ public class SysMenuPermissionConfigController extends BaseController {
         return ok(permissionGroupService.findPage(sysMenuPermissionConfig, pageParam));
     }
 
+    /**
+     * 获取默认组权限列表
+     * @return
+     */
+    @GetMapping("findDefaultPermissionConfig")
+    @ApiOperation(value = "获取默认组权限列表")
+    public Result<List<SysMenuPermissionConfig>> findDefaultPermissionConfig(){
+        return ok(permissionGroupService.findListByDefaultGroup());
+    }
+
+    /**
+     * 根据分组id获取权限列表
+     * @param groupId
+     * @return
+     */
+    @GetMapping("findPermissionByGroupId")
+    @ApiOperation(value = "根据分组id获取权限列表")
+    public Result<List<SysMenuPermissionConfig>> findPermissionByGroupId(@RequestParam Long groupId){
+        return ok(permissionGroupService.findListByGroupId(groupId));
+    }
 
     /**
      * 根据id查询菜单权限配置详情

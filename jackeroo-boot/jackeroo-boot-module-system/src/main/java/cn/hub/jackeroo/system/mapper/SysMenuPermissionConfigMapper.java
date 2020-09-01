@@ -16,4 +16,10 @@ import java.util.List;
 public interface SysMenuPermissionConfigMapper extends BaseMapper<SysMenuPermissionConfig> {
 
     List<SysMenuPermissionConfig> findList(SysMenuPermissionConfig sysMenuPermissionConfig);
+
+    /**
+     * 获取默认分组的权限类表
+     * @return
+     */
+    List<SysMenuPermissionConfig> findListByDefaultGroup();
 }

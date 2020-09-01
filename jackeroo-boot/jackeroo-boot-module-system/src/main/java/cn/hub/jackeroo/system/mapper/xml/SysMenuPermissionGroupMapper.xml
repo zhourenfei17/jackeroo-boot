@@ -11,7 +11,9 @@
         SELECT <include refid="baseColumns" />
         FROM sys_menu_permission_group a
         <where>
-
+            <if test="groupName != null">
+                and a.group_name like CONCAT('%', #{groupName}, '%')
+            </if>
         </where>
     </select>
 

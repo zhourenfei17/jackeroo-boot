@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -40,6 +41,17 @@ public class SysMenuPermissionGroupService extends ServiceImpl<SysMenuPermission
         page.setRecords(mapper.findList(sysMenuPermissionGroup));
 
         return page;
+    }
+
+    /**
+     * 获取所有启用状态的权限分组
+     * @return
+     */
+    public List<SysMenuPermissionGroup> findAllEnable(){
+        LambdaQueryWrapper<SysMenuPermissionGroup> query = new LambdaQueryWrapper<>();
+        query.eq(SysMenuPermissionGroup::getDisabled, SysMenuPermissionGroup.DISABLED_FLAG_ENABLE);
+
+        return super.list(query);
     }
 
     /**

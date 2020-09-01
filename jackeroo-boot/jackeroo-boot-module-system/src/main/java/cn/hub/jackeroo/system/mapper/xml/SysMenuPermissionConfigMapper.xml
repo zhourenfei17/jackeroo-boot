@@ -4,8 +4,16 @@
 
     <!-- 通用查询结果列 -->
     <sql id="baseColumns">
-        id,
-        group_id, label, value, checked, sort, create_by, create_time, update_by, update_time
+        a.id AS "id",
+        a.group_id AS "groupId",
+        a.label AS "label",
+        a.value AS "value",
+        a.checked AS "checked",
+        a.sort AS "sort",
+        a.create_by AS "createBy",
+        a.create_time AS "createTime",
+        a.update_by AS "updateBy",
+        a.update_time AS "updateTime"
     </sql>
 
     <select id="findList" resultType="cn.hub.jackeroo.system.entity.SysMenuPermissionConfig">
@@ -21,4 +29,10 @@
         </if>
     </select>
 
+    <select id="findListByDefaultGroup" resultType="cn.hub.jackeroo.system.entity.SysMenuPermissionConfig">
+        SELECT <include refid="baseColumns" />
+        FROM sys_menu_permission_config a left join sys_menu_permission_group b on a.group_id = b.id
+        where b.is_default = '1'
+        order by a.sort asc
+    </select>
 </mapper>
