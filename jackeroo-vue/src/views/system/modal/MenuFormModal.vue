@@ -80,7 +80,7 @@
           </a-col>
           <a-col :span="rowSpan" v-if="type == 1">
             <a-form-model-item label="权限" prop="auth">
-              <a-checkbox-group v-model="form.auth" name="auth" :disabled="flag.view" :options="auth">
+              <a-checkbox-group v-model="form.auth" name="auth" :disabled="flag.view" :options="permissionList">
                 
               </a-checkbox-group>
               <br />
@@ -96,7 +96,7 @@
       <icon-selector @change="handleIconChange" :value="tempIconValue"></icon-selector>
     </a-modal>
 
-    <menu-auth-list-modal ref="menuAuthListModal"></menu-auth-list-modal>
+    <menu-auth-list-modal ref="menuAuthListModal" @change="handleChangeAuth"></menu-auth-list-modal>
   </j-drawer>
 </template>
 
@@ -136,29 +136,9 @@ export default {
         hide: 0,
         type: 0,
         group: '',
-        auth: ['view', 'add', 'update', 'delete']
+        auth: []
       },
-      auth:[
-        {
-          label: '查看',
-          value: 'view'
-        },{
-          label: '添加',
-          value: 'add'
-        },{
-          label: '修改',
-          value: 'update'
-        },{
-          label: '删除',
-          value: 'delete'
-        },{
-          label: '导入',
-          value: 'import'
-        },{
-          label: '导出',
-          value: 'export'
-        }
-      ],
+      permissionList:[],
       rules: {
         parentId: [
           {required: true, message: '请选择上级菜单'}
@@ -189,11 +169,12 @@ export default {
         getById: '/system/menu/',
         add: '/system/menu/add',
         update: '/system/menu/update',
-        getTreeSelect: '/system/menu/getTreeSelect'
+        getTreeSelect: '/system/menu/getTreeSelect',
+        findDefaultGroupPermission: '/system/menu/permission/config/findDefaultPermissionConfig'
       },
       tempIconValue: '',
       treeData: [],
-      checkedAuth: []
+      groupId: null
     }
   },
   created(){
@@ -211,6 +192,24 @@ export default {
       this.form.parentId = pid
       this.form.sort = sort
       this.loading = false
+      getAction(this.url.findDefaultGroupPermission).then(res => {
+        if(!res.code){
+          const permissionList = []
+          const checkedList = []
+          for(const item of res.data){
+            if(!this.groupId){
+              this.groupId = item.groupId
+            }
+            permissionList.push({label: item.label, value: item.value})
+            if(item.checked){
+              checkedList.push(item.value)
+            }
+          }
+
+          this.permissionList = permissionList
+          this.form.auth = checkedList
+        }
+      })
     },
     edit(id){
       this.loading = true
@@ -236,7 +235,7 @@ export default {
         if(success){
           const formData = JSON.parse(JSON.stringify(this.form))
           if(formData.leaf == 1){
-            const auth = this.auth.filter(item => formData.auth.indexOf(item.value) >= 0)
+            const auth = this.permissionList.filter(item => formData.auth.indexOf(item.value) >= 0)
             formData.auth = auth
           }else{
             formData.auth = null
@@ -258,8 +257,15 @@ export default {
         }
       })
     },
+    handleChangeAuth(permissionList, groupId, checked){
+      this.permissionList = permissionList
+      if(checked && groupId){
+        this.form.auth = checked
+        this.groupId = groupId
+      }
+    },
     handleEditAuth(){
-      this.$refs.menuAuthListModal.edit(this.auth)
+      this.$refs.menuAuthListModal.edit(this.permissionList, this.groupId)
     },
     selectIcons(){
       this.iconVisible = true
@@ -289,7 +295,8 @@ export default {
       this.flag.edit = false
       this.flag.view = false
 
-      this.form.auth = ['view', 'add', 'update', 'delete']
+      this.groupId = null
+      this.form.auth = []
       this.$refs.formModel.resetFields()
       this.$refs.formModel.clearValidate()
       

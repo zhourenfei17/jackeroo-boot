@@ -49,20 +49,26 @@ export default {
         ],
         value: [
           {required: true, message: '请输入权限标识'}, 
-          {max: 30, message: '长度需要在0到30之间'}
+          {max: 30, message: '长度需要在0到30之间'},
+          {validator: this.uniqueValue, trigger: 'blur', message: '该权限标识已存在'}
         ]
       },
+      permissionList: [],
+      oldValue: '',
       url: {
         
       }
     }
   },
   methods: {
-    add(){
+    add(permissionList){
       this.loading = false
+      this.permissionList = permissionList
     },
-    edit(record){
-      this.form = record
+    edit(record, permissionList){
+      this.form = JSON.parse(JSON.stringify(record))
+      this.oldValue = record.value
+      this.permissionList = permissionList
       this.loading = false
     },
     handleSubmit(){
@@ -70,11 +76,30 @@ export default {
         if(success){
           const formData = JSON.parse(JSON.stringify(this.form))
           
-          this.$emit('ok', formData)
+          if(this.flag.add){
+            this.$emit('add', formData)
+          }else if(this.flag.edit){
+            this.$emit('edit', formData, this.oldValue)
+          }
+          
           this.cancel()
         }
       })
     },
+    uniqueValue(rule, value, callback){
+      let unique = this.permissionList.some(item => {
+        if(this.flag.add){
+          return item.value == value
+        }else if(this.flag.edit){
+          return item.value == value && value != this.oldValue
+        }
+      })
+      if(unique){
+        callback(rule.message)
+      }else{
+        callback()
+      }
+    }
   }
 }
 </script>
