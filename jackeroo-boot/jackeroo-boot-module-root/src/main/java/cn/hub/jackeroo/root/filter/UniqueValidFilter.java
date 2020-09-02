@@ -1,6 +1,7 @@
 package cn.hub.jackeroo.root.filter;
 
 import cn.hub.jackeroo.system.service.ValidService;
+import cn.hub.jackeroo.utils.HttpUtils;
 import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -44,12 +45,19 @@ public class UniqueValidFilter {
             ServletRequestAttributes sra = (ServletRequestAttributes) ra;
             HttpServletRequest request = sra.getRequest();
 
-            Map<String, String[]> parameterMap = request.getParameterMap();
-            JSONObject entity = new JSONObject();
-            for (String paramKey : parameterMap.keySet()) {
-                entity.put(paramKey, parameterMap.get(paramKey)[0]);
+            if(request.getMethod().equals("POST") || request.getMethod().equals("PUT")){
+                String body = HttpUtils.getBodyString(request);
+
+                validService.validEntityUniqueField(JSONObject.parseObject(body, annotation.clazz()), annotation.groups());
+            }else{
+                Map<String, String[]> parameterMap = request.getParameterMap();
+                JSONObject entity = new JSONObject();
+                for (String paramKey : parameterMap.keySet()) {
+                    entity.put(paramKey, parameterMap.get(paramKey)[0]);
+                }
+                validService.validEntityUniqueField(entity.toJavaObject(annotation.clazz()), annotation.groups());
             }
-            validService.validEntityUniqueField(entity.toJavaObject(annotation.clazz()), annotation.groups());
         }
     }
+
 }

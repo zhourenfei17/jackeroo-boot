@@ -3,6 +3,7 @@ package cn.hub.jackeroo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -15,6 +16,7 @@ import java.net.UnknownHostException;
 @EnableSwagger2
 @SpringBootApplication
 @Slf4j
+@ServletComponentScan("cn.hub.jackeroo.root.filter")
 public class JackerooBootApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) throws UnknownHostException {
