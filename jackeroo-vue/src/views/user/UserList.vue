@@ -110,7 +110,7 @@
 import { STable, Ellipsis } from '@/components'
 import UserFormModal from './modal/UserFormModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
-import { putAction, getAction } from '@/api/manage'
+import { putAction, getAction, deleteAction } from '@/api/manage'
 import JSelect from '@/components/jackeroo/JSelect'
 
 const statusMap = {
@@ -252,6 +252,7 @@ export default {
           deleteAction(this.url.delete, {id: record.id}).then(res => {
             if(res.code === 0){
               this.$message.success('操作成功')
+              this.refreshData()
             }
           }).finally(() => {
             this.$loading.hide()

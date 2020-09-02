@@ -48,6 +48,7 @@
               <a @click="handleEdit(record)">编辑</a>
               <action-menu-list>
                 <a @click="handleAdd(record)" v-if="record.leaf == 0">添加下级菜单</a>
+                <a @click="handleEditPermission(record)" v-if="record.leaf == 1">权限列表</a>
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
             </action-list>
@@ -56,6 +57,7 @@
       </a-table>
 
       <menu-form-modal ref="formModal" @ok="handleOk"></menu-form-modal>
+      <permission-list-modal ref="permissionListModal" @change="handlePermissionChange"></permission-list-modal>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -65,12 +67,14 @@ import {  Ellipsis } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
 import MenuFormModal from './modal/MenuFormModal'
+import PermissionListModal from './modal/PermissionListModal'
 
 export default {
   name: 'TableList',
   components: {
     Ellipsis,
-    MenuFormModal
+    MenuFormModal,
+    PermissionListModal
   },
   mixins:[JackerooListMixins],
   data () {
@@ -144,7 +148,7 @@ export default {
         this.$refs.formModal.visible = true
         this.$refs.formModal.flag.add = true
         this.$refs.formModal.form.leaf = 0
-        this.$refs.formModal.add('0', 10)
+        this.$refs.formModal.add('0', this.dataSource.length > 0 ? this.dataSource[this.dataSource.length - 1].sort + 10 : 10)
       }
     },
     // 编辑
@@ -170,6 +174,13 @@ export default {
           })
         }
       });
+    },
+    handlePermissionChange(){
+      this.loadDataSource()
+    },
+    // 编辑权限列表
+    handleEditPermission(record){
+      this.$refs.permissionListModal.load(record.id)
     },
     handleOk(){
       this.loadDataSource()

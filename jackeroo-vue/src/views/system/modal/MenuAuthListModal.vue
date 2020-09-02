@@ -83,13 +83,13 @@ export default {
     }
   },
   methods: {
-    edit(list, groupId){
-      if(groupId){
-        this.groupId = groupId
+    edit(list, groupId, permissionEdit){
+      if(groupId && !permissionEdit){
         this.loadPermissionByGroupId(groupId)
       }else{
-        this.dataSource = list
+        this.dataSource = JSON.parse(JSON.stringify(list))
       }
+      this.groupId = groupId
       this.visible = true
     },
     loadPermissionByGroupId(groupId){

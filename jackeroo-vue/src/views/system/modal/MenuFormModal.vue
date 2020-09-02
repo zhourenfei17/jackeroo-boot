@@ -84,7 +84,7 @@
                 
               </a-checkbox-group>
               <br />
-              <a @click="handleEditAuth">编辑权限 >></a>
+              <a @click="handleEditAuth" v-if="!flag.view">编辑权限 >></a>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -174,7 +174,8 @@ export default {
       },
       tempIconValue: '',
       treeData: [],
-      groupId: null
+      groupId: null,
+      permissionEdit: false
     }
   },
   created(){
@@ -219,11 +220,16 @@ export default {
           data.group = data.auth[0].value.substring(0, data.auth[0].value.lastIndexOf(':'))
 
           const auth = []
+          const permission = []
+          let index = 0
           for(const a of data.auth){
-            auth.push(a.value.substring(a.value.lastIndexOf(':') + 1))
+            let value = a.value.substring(a.value.lastIndexOf(':') + 1)
+            auth.push(value)
+            index++
+            permission.push({id: index, label: a.label, value: value})
           }
+          this.permissionList = permission
           data.auth = auth
-          console.log('data', data)
         }
         this.copyProperties(data, this.form)
       }).finally(() => {
@@ -258,14 +264,15 @@ export default {
       })
     },
     handleChangeAuth(permissionList, groupId, checked){
-      this.permissionList = permissionList
+      this.permissionEdit = true
+      this.permissionList = JSON.parse(JSON.stringify(permissionList))
       if(checked && groupId){
         this.form.auth = checked
         this.groupId = groupId
       }
     },
     handleEditAuth(){
-      this.$refs.menuAuthListModal.edit(this.permissionList, this.groupId)
+      this.$refs.menuAuthListModal.edit(this.permissionList, this.groupId, this.permissionEdit)
     },
     selectIcons(){
       this.iconVisible = true
@@ -296,6 +303,7 @@ export default {
       this.flag.view = false
 
       this.groupId = null
+      this.permissionEdit = false
       this.form.auth = []
       this.$refs.formModel.resetFields()
       this.$refs.formModel.clearValidate()

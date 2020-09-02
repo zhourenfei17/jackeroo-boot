@@ -110,11 +110,15 @@ export const JackerooListMixins = {
           this.$loading.show()
           deleteAction(this.url.delete, {id: record.id}).then(res => {
             this.$message.success('操作成功')
+            this.refreshData()
           }).finally(() => {
             this.$loading.hide()
           })
         }
       });
+    },
+    syncDataSource(data){
+      this.dataSource = data
     }
   }
 }

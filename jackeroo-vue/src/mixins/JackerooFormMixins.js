@@ -1,4 +1,5 @@
 import {ValidatorMixins} from './ValidatorMixins'
+import { httpAction } from '@/api/manage'
 
 export const JackerooFromMixins = {
   mixins: [ValidatorMixins],
@@ -72,6 +73,9 @@ export const JackerooFromMixins = {
       this.$refs.formModel.resetFields()
       this.$refs.formModel.clearValidate()
       this.loading = true
+    },
+    submit(formData){
+      return httpAction(this.requestUrl, formData, this.requestMethod)
     }
   },
 }

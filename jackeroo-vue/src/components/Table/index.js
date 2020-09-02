@@ -129,6 +129,10 @@ export default {
       Object.assign(this.localPagination, {
         showSizeChanger: val
       })
+    },
+    localDataSource(val){
+      // this.$emit('update:dataSource', val)
+      this.$emit('update', val)
     }
   },
   created () {
