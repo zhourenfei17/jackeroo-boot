@@ -7,14 +7,18 @@ import cn.hub.jackeroo.system.mapper.SysMenuMapper;
 import cn.hub.jackeroo.system.vo.AuthVo;
 import cn.hub.jackeroo.system.vo.TreeSelect;
 import cn.hub.jackeroo.utils.StringUtils;
+import cn.hub.jackeroo.vo.PageParam;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,6 +38,27 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
+
+    @Resource
+    private SysMenuMapper mapper;
+
+    /**
+     * 获取叶子菜单权限列表
+     * @param parentId
+     * @param pageParam
+     * @return
+     */
+    public IPage<SysMenu> findPermissionPage(Long parentId, PageParam pageParam){
+        SysMenu sysMenu = new SysMenu();
+        sysMenu.setParentId(parentId);
+        sysMenu.setType(SysMenu.TYPE_PERMISSION);
+        sysMenu.setDelFlag(Constant.DEL_FLAG_NORMAL);
+
+        Page<SysMenu> page = sysMenu.initPage(pageParam);
+        page.setRecords(mapper.findPermissionList(sysMenu));
+
+        return page;
+    }
 
     /**
      * 获取菜单列表-树形结构
@@ -195,7 +220,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         if(menu == null){
             return null;
         }
-        if(menu.getLeaf() == Constant.BOOLEAN_YES){
+        if(menu.getLeaf() != null && menu.getLeaf() == Constant.BOOLEAN_YES){
             LambdaQueryWrapper<SysMenu> query = new LambdaQueryWrapper<>();
             query.eq(SysMenu::getParentId, menu.getId());
             query.eq(SysMenu::getDelFlag, Constant.DEL_FLAG_NORMAL);

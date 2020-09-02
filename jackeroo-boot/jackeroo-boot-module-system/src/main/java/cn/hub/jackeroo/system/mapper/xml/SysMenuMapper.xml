@@ -19,9 +19,28 @@
         a.hide as "hide",
         a.del_flag as "delFlag",
         a.create_by as "createBy",
-        a.createTime as "createTime",
+        a.create_time as "createTime",
         a.update_by as "updateBy",
-        a.updateTime as "updateTime"
+        a.update_time as "updateTime"
     </sql>
-    
+
+    <select id="findPermissionList" resultType="cn.hub.jackeroo.system.entity.SysMenu">
+        select <include refid="baseColumns"></include>
+        from sys_menu a
+        <where>
+            <if test="parentId != null">
+                and a.parent_id=#{parentId}
+            </if>
+            <if test="type != null">
+                and a.type=#{type}
+            </if>
+            <if test="delFlag != null">
+                and a.del_flag = #{delFlag}
+            </if>
+        </where>
+        <if test="orderBy != null">
+            order by ${orderBy}
+        </if>
+    </select>
+
 </mapper>

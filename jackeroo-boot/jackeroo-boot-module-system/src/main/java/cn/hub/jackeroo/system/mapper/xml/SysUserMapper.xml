@@ -42,6 +42,9 @@
             <if test="gender != null">
                 and a.gender = #{gender}
             </if>
+            <if test="delFlag != null">
+                and a.del_flag = #{delFlag}
+            </if>
         </where>
         <choose>
             <when test="orderBy != null">

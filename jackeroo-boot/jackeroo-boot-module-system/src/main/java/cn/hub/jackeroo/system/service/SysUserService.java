@@ -38,6 +38,8 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * @return
      */
     public IPage<SysUser> findPage(SysUser sysUser, PageParam pageParam){
+        sysUser.setDelFlag(Constant.DEL_FLAG_NORMAL);
+
         Page<SysUser> page = sysUser.initPage(pageParam);
         page.setRecords(mapper.findList(sysUser));
 

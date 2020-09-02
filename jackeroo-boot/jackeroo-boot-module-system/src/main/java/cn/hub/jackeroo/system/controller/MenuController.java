@@ -9,7 +9,9 @@ import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
+import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +45,19 @@ public class MenuController extends BaseController {
      * @return
      */
     @GetMapping("list")
-    @ApiOperation("获取完整菜单树")
+    @ApiOperation(value = "获取完整菜单树")
     public Result<List<SysMenu>> list(String name){
         return ok(menuService.getMenuFullTree(name));
+    }
+
+    /**
+     * 获取叶子菜单的权限列表
+     * @return
+     */
+    @GetMapping("permission")
+    @ApiOperation(value = "获取叶子菜单的权限列表")
+    public Result<Page<SysMenu>> permission(String parentId, @Validated PageParam pageParam){
+        return ok(menuService.findPermissionPage(Long.parseLong(parentId), pageParam));
     }
 
     /**
