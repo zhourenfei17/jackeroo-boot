@@ -69,7 +69,7 @@ export default {
           dataIndex: 'label'
         },
         {
-          title: '权限标识',
+          title: '权限标识后缀',
           dataIndex: 'value',
         },
         {

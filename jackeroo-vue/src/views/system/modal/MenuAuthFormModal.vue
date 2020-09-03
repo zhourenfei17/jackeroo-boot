@@ -19,8 +19,11 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
-            <a-form-model-item label="权限标识" prop="value">
-              <a-input v-model="form.value" placeholder="请输入权限标识" :disabled="flag.view"></a-input>
+            <a-form-model-item label="权限标识后缀" prop="value">
+              <a-input v-model="form.value" placeholder="请输入权限标识后缀" :disabled="flag.view" style="width:90%;"></a-input>
+              <a-tooltip title="此处填写的权限标识不包含权限前缀部分，如：view、add、edit、delete"> 
+                <a-icon type="exclamation-circle" style="margin-left:20px;"></a-icon>
+              </a-tooltip>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -48,9 +51,9 @@ export default {
           {max: 20, message: '长度需要在0到20之间'}
         ],
         value: [
-          {required: true, message: '请输入权限标识'}, 
+          {required: true, message: '请输入权限标识后缀'}, 
           {max: 30, message: '长度需要在0到30之间'},
-          {validator: this.uniqueValue, trigger: 'blur', message: '该权限标识已存在'}
+          {validator: this.uniqueValue, trigger: 'blur', message: '该权限标识后缀已存在'}
         ]
       },
       permissionList: [],

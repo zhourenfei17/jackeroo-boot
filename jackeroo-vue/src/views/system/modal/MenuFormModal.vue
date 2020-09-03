@@ -71,11 +71,41 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan" v-if="type == 1">
-            <a-form-model-item label="权限分组" prop="group" v-if="form.auth.length > 0">
-              <a-input v-model="form.group" placeholder="请输入权限分组" :disabled="flag.view"></a-input>
+            <a-form-model-item label="权限标识前缀" prop="group" v-if="form.auth.length > 0">
+              <a-input v-model="form.group" placeholder="请输入权限标识前缀" :disabled="flag.view" style="width:90%;"></a-input>
+
+              <a-tooltip placement="left"> 
+                <template slot="title">
+                  <span>用来拼接权限标识</span>
+                  <br>
+                  <span class="tooltip-red">示例：</span>
+                  <br>
+                  <span class="tooltip-red">权限标识前缀: system:user</span>
+                  <br>
+                  <span class="tooltip-red">权限标识后缀: add</span>
+                  <br>
+                  <span class="tooltip-red">拼接后权限标识: system:user:add</span>
+                </template>
+                <a-icon type="exclamation-circle" style="margin-left:20px;"></a-icon>
+              </a-tooltip>
             </a-form-model-item>
-            <a-form-model-item label="权限分组" v-else>
-              <a-input v-model="form.group" placeholder="请输入权限分组" :disabled="flag.view"></a-input>
+            <a-form-model-item label="权限标识前缀" v-else>
+              <a-input v-model="form.group" placeholder="请输入权限标识前缀" :disabled="flag.view" style="width:90%;"></a-input>
+
+              <a-tooltip placement="left"> 
+                <template slot="title">
+                  <span>用来拼接权限标识</span>
+                  <br>
+                  <span class="tooltip-red">示例：</span>
+                  <br>
+                  <span class="tooltip-red">权限标识前缀: system:user</span>
+                  <br>
+                  <span class="tooltip-red">权限标识后缀: add</span>
+                  <br>
+                  <span class="tooltip-red">拼接后权限标识: system:user:add</span>
+                </template>
+                <a-icon type="exclamation-circle" style="margin-left:20px;"></a-icon>
+              </a-tooltip>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan" v-if="type == 1">
@@ -162,7 +192,7 @@ export default {
         sort: [{min: 0, max: 999999, message: '长度需要在0到6之间', type: 'number'}],
         target: [],
         hide: [],
-        group: [{required: true, message: '请填写权限分组'}],
+        group: [{required: true, message: '请填写权限标识前缀'}],
         auth: []
       },
       url: {
@@ -313,3 +343,9 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.tooltip-red{
+  color: #ff4545;
+}
+</style>

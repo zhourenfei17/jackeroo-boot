@@ -20,7 +20,10 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="权限标识" prop="permission">
-              <a-input v-model="form.permission" placeholder="请输入权限标识" :disabled="flag.view"></a-input>
+              <a-input v-model="form.permission" placeholder="请输入权限标识" :disabled="flag.view" style="width:90%;"></a-input>
+              <a-tooltip title="此处填写完整的权限标识，如：system:user:view"> 
+                <a-icon type="exclamation-circle" style="margin-left:20px;"></a-icon>
+              </a-tooltip>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
