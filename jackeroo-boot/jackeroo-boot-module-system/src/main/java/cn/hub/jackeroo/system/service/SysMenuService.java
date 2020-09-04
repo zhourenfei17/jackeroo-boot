@@ -5,6 +5,7 @@ import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.system.entity.SysMenu;
 import cn.hub.jackeroo.system.mapper.SysMenuMapper;
 import cn.hub.jackeroo.system.vo.AuthVo;
+import cn.hub.jackeroo.system.vo.Tree;
 import cn.hub.jackeroo.system.vo.TreeSelect;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
@@ -82,6 +83,39 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         }
 
         return rootTreeNode;
+    }
+
+    /**
+     * 获取角色权限配置的完整菜单、权限树
+     * @return
+     */
+    public List<Tree> getRolePermissionTree(){
+        List<SysMenu> menuList = super.list();
+        List<Tree> rootTreeNode = menuList
+                .stream()
+                .filter(node -> node.getParentId().equals(0L))
+                .sorted(Comparator.comparingInt(SysMenu::getSort))
+                .map(node -> new Tree(node.getId(), node.getName()))
+                .collect(Collectors.toList());
+
+        buildFullTree(rootTreeNode, menuList);
+
+        return rootTreeNode;
+    }
+
+    private void buildFullTree(List<Tree> rootTree, List<SysMenu> fullMenu){
+        for (Tree tree : rootTree) {
+            tree.setChildren(fullMenu
+                    .stream()
+                    .filter(node -> node.getParentId().equals(tree.getKey()))
+                    .sorted(Comparator.comparingInt(SysMenu::getSort))
+                    .map(node -> new Tree(node.getId(), node.getName()))
+                    .collect(Collectors.toList()));
+
+            if(CollectionUtils.isNotEmpty(tree.getChildren())){
+                buildFullTree(tree.getChildren(), fullMenu);
+            }
+        }
     }
 
     private boolean filterMenuByName(List<SysMenu> menuList, String name){

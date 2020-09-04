@@ -2,6 +2,9 @@ package cn.hub.jackeroo.system.controller;
 
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysRole;
+import cn.hub.jackeroo.system.entity.SysRoleMenu;
+import cn.hub.jackeroo.system.query.RolePermission;
+import cn.hub.jackeroo.system.service.SysRoleMenuService;
 import cn.hub.jackeroo.system.service.SysRoleService;
 import cn.hub.jackeroo.system.service.ValidService;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
@@ -23,7 +26,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 系统角色相关接口
@@ -37,6 +43,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoleController extends BaseController {
     @Autowired
     private SysRoleService roleService;
+    @Autowired
+    private SysRoleMenuService roleMenuService;
     /**
      * 角色列表
      * @return
@@ -58,6 +66,17 @@ public class RoleController extends BaseController {
     }
 
     /**
+     * 获取角色所拥有的菜单和权限列表
+     * @param roleId
+     * @return
+     */
+    @GetMapping("findRoleMenuAndPermission")
+    @ApiOperation(value = "获取角色所拥有的菜单和权限列表")
+    public Result<List<Long>> findRoleMenuAndPermission(@RequestParam String roleId){
+        return ok(roleMenuService.findRoleMenuByRoleId(Long.parseLong(roleId)));
+    }
+
+    /**
      * 根据id查询角色详情
      * @param id
      * @return
@@ -66,6 +85,18 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "角色详情", response = Result.class)
     public Result<SysRole> getById(@PathVariable String id){
         return ok(roleService.getById(id));
+    }
+
+    /**
+     * 保存角色权限配置
+     * @param rolePermission
+     * @return
+     */
+    @PostMapping("saveRolePermission")
+    @ApiOperation(value = "保存角色权限配置")
+    public Result saveRolePermission(@Validated @RequestBody RolePermission rolePermission){
+        roleMenuService.saveRolePermission(rolePermission);
+        return ok();
     }
 
     /**

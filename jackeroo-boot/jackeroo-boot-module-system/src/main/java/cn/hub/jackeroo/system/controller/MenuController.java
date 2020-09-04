@@ -4,6 +4,7 @@ import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysMenu;
 import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.service.SysMenuService;
+import cn.hub.jackeroo.system.vo.Tree;
 import cn.hub.jackeroo.system.vo.TreeSelect;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
@@ -58,6 +59,16 @@ public class MenuController extends BaseController {
     @ApiOperation(value = "获取叶子菜单的权限列表")
     public Result<Page<SysMenu>> permission(String parentId, @Validated PageParam pageParam){
         return ok(menuService.findPermissionPage(Long.parseLong(parentId), pageParam));
+    }
+
+    /**
+     * 获取角色配置菜单、权限树
+     * @return
+     */
+    @GetMapping("findRolePermissionTree")
+    @ApiOperation(value = "获取角色配置菜单、权限树")
+    public Result<List<Tree>> findRolePermissionTree(){
+        return ok(menuService.getRolePermissionTree());
     }
 
     /**
