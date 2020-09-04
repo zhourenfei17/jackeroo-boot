@@ -52,6 +52,7 @@
             <action-list>
               <a @click="handleView(record)">详情</a>
               <a @click="handleEdit(record)">编辑</a>
+              <a @click="handleSetPermission(record)">配置权限</a>
               <action-menu-list>
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
@@ -61,6 +62,7 @@
       </s-table>
 
       <role-form-modal ref="formModal" @ok="handleOk"></role-form-modal>
+      <role-permission-set-modal ref="rolePermissionSetModal" ></role-permission-set-modal>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -68,6 +70,7 @@
 <script>
 import { STable } from '@/components'
 import RoleFormModal from './modal/RoleFormModal'
+import RolePermissionSetModal from './modal/RolePermissionSetModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
 
@@ -76,6 +79,7 @@ export default {
   components: {
     STable,
     RoleFormModal,
+    RolePermissionSetModal
   },
   mixins:[JackerooListMixins],
   data () {
@@ -133,6 +137,9 @@ export default {
           })
         }
       });
+    },
+    handleSetPermission(record){
+      this.$refs.rolePermissionSetModal.load(record.id)
     }
   }
 }
