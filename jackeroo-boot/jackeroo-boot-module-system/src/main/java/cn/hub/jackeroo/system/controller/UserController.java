@@ -65,7 +65,7 @@ public class UserController extends BaseController {
     @GetMapping("/{id}")
     @ApiOperation(value = "用户详情", notes = "根据id获取用户详情")
     public Result<SysUser> getById(@PathVariable String id){
-        return ok(userService.getById(id));
+        return ok(userService.findById(Long.parseLong(id)));
     }
 
     /**
@@ -77,7 +77,6 @@ public class UserController extends BaseController {
     @ApiOperation(value = "添加用户", notes = "添加用户信息")
     @ValidatedUnique(clazz = SysUser.class)
     public Result add(@Validated(Insert.class) @RequestBody SysUser user){
-        // validService.validEntityUniqueField(user, Insert.class);
         userService.insertUser(user);
         return ok();
     }
@@ -91,13 +90,13 @@ public class UserController extends BaseController {
     @ApiOperation(value = "编辑用户", notes = "编辑用户信息")
     @ValidatedUnique(clazz = SysUser.class, groups = Update.class)
     public Result update(@Validated(Update.class) @RequestBody SysUser user){
-        SysUser sysUser = new SysUser();
-        BeanUtils.copyProperties(user, sysUser);
+        // SysUser sysUser = new SysUser();
+        // BeanUtils.copyProperties(user, sysUser);
         // 编辑用户无法修改密码和账号
-        sysUser.setPassword(null);
-        sysUser.setAccount(null);
-        // validService.validEntityUniqueField(sysUser, Update.class);
-        userService.updateById(sysUser);
+        // sysUser.setPassword(null);
+        // sysUser.setAccount(null);
+        // userService.updateById(sysUser);
+        userService.updateUser(user);
         return ok();
     }
 

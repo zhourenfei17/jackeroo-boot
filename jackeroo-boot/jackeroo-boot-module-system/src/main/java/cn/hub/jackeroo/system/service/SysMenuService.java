@@ -65,7 +65,6 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * 获取菜单列表-树形结构
      * @return
      */
-    @Cacheable("FullMenuTree")
     public List<SysMenu> getMenuFullTree(String name){
         List<SysMenu> menuList = super.list();
 
@@ -101,6 +100,35 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         buildFullTree(rootTreeNode, menuList);
 
         return rootTreeNode;
+    }
+
+    /**
+     * 根据角色获取菜单、权限信息
+     * @param roleId
+     * @return
+     */
+    public List<SysMenu> getMenuByRole(Long roleId){
+        List<SysMenu> menuList = mapper.findMenuByRoleId(roleId);
+
+        List<SysMenu> rootTreeNode = menuList
+                .stream()
+                .filter(node -> node.getParentId().equals(0L))
+                .collect(Collectors.toList());
+        buildNavTree(rootTreeNode, menuList);
+
+        return rootTreeNode;
+    }
+
+    private void buildNavTree(List<SysMenu> rootMenu, List<SysMenu> fullMenu){
+        for (SysMenu menu : rootMenu) {
+            menu.setChildren(fullMenu.stream().filter(node -> menu.getId().equals(node.getParentId()))
+                    .sorted(Comparator.comparingInt(SysMenu::getSort))
+                    .collect(Collectors.toList()));
+
+            if(CollectionUtils.isNotEmpty(menu.getChildren())){
+                buildMenuTree(menu.getChildren(), fullMenu);
+            }
+        }
     }
 
     private void buildFullTree(List<Tree> rootTree, List<SysMenu> fullMenu){

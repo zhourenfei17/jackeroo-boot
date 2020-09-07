@@ -4,15 +4,16 @@ import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.enums.ResultStatusCode;
 import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.system.entity.SysUser;
+import cn.hub.jackeroo.system.entity.SysUserRole;
 import cn.hub.jackeroo.system.mapper.SysUserMapper;
 import cn.hub.jackeroo.utils.Assert;
 import cn.hub.jackeroo.utils.PasswordUtil;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,8 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
 
     @Resource
     private SysUserMapper mapper;
+    @Autowired
+    private SysUserRoleService userRoleService;
 
     /**
      * 查询数据列表-带分页
@@ -51,12 +54,18 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * @return
      */
     public SysUser findByAccount(String account){
-        LambdaQueryWrapper<SysUser> query = new LambdaQueryWrapper<>();
-        query.eq(SysUser::getAccount, account);
-
-        SysUser user = super.getOne(query);
+        SysUser user = mapper.findByAccount(account);
 
         return user;
+    }
+
+    /**
+     * 通过用户id获取用户信息
+     * @param userId
+     * @return
+     */
+    public SysUser findById(Long userId){
+        return mapper.findById(userId);
     }
 
     /**
@@ -75,6 +84,31 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         user.setDelFlag(Constant.DEL_FLAG_NORMAL);
         user.setStatus(0);
         super.save(user);
+
+        // 保存用户角色关系
+        SysUserRole userRole = new SysUserRole();
+        userRole.setRoleId(user.getRoleId());
+        userRole.setUserId(user.getId());
+        userRoleService.save(userRole);
+    }
+
+    /**
+     * 更新用户信息
+     * @param user
+     */
+    @Transactional
+    public void updateUser(SysUser user){
+        // 编辑用户无法修改密码和账号
+        user.setPassword(null);
+        user.setAccount(null);
+
+        super.updateById(user);
+
+        // 保存用户角色关系
+        SysUserRole userRole = new SysUserRole();
+        userRole.setRoleId(user.getRoleId());
+        userRole.setUserId(user.getId());
+        userRoleService.saveOrUpdate(userRole);
     }
 
     /**

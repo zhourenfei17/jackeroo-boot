@@ -159,4 +159,13 @@ public class SysUser extends BaseEntity<SysUser> {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
+
+    /**
+     * 角色id
+     */
+    @NotNull
+    @TableField(exist = false)
+    private Long roleId;
+    @TableField(exist = false)
+    private String roleName;
 }

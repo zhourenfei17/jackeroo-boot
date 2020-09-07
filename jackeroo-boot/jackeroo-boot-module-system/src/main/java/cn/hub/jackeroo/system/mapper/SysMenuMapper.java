@@ -16,4 +16,11 @@ import java.util.List;
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
     List<SysMenu> findPermissionList(SysMenu sysMenu);
+
+    /**
+     * 通过角色获取菜单、权限列表
+     * @param roleId
+     * @return
+     */
+    List<SysMenu> findMenuByRoleId(Long roleId);
 }

@@ -19,7 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 public class LoginController extends BaseController {
-
+    /**
+     * 账号、密码登录
+     * @param account
+     * @return
+     */
 	@RequestMapping("/login")
 	public Result login(@Validated Account account) {
 		try {

@@ -101,7 +101,7 @@ public class CustomizeModelAttributeParameterExpander extends ModelAttributePara
                 });
 
 
-        log.debug("Expanding parameter type: {}", context.getParamType());
+        // log.debug("Expanding parameter type: {}", context.getParamType());
         final AlternateTypeProvider alternateTypeProvider = context.getDocumentationContext().getAlternateTypeProvider();
 
         FluentIterable<ModelAttributeField> attributes =
@@ -115,7 +115,7 @@ public class CustomizeModelAttributeParameterExpander extends ModelAttributePara
                 .filter(not(simpleType()))
                 .filter(not(recursiveType(context)));
         for (ModelAttributeField each : expendables) {
-            log.debug("Attempting to expand expandable property: {}", each.getName());
+            // log.debug("Attempting to expand expandable property: {}", each.getName());
             parameters.addAll(
                     expand(
                             context.childContext(

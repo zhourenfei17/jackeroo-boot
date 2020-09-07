@@ -43,4 +43,14 @@
         </if>
     </select>
 
+    <select id="findMenuByRoleId" resultType="cn.hub.jackeroo.system.entity.SysMenu">
+        select
+          <include refid="baseColumns"></include>
+        from sys_menu a
+        left join sys_role_menu b on a.id=b.menu_id
+        <where>
+            b.role_id = #{roleId}
+        </where>
+    </select>
+
 </mapper>

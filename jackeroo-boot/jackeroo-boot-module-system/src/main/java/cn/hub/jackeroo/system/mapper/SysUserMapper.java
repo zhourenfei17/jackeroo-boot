@@ -22,4 +22,18 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @return
      */
     List<SysUser> findList(SysUser sysUser);
+
+    /**
+     * 通过账号获取用户详细信息
+     * @param account
+     * @return
+     */
+    SysUser findByAccount(String account);
+
+    /**
+     * 通过用户id获取用户详情
+     * @param userId
+     * @return
+     */
+    SysUser findById(Long userId);
 }

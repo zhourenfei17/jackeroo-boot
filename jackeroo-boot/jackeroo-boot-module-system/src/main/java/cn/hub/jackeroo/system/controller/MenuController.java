@@ -6,10 +6,12 @@ import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.service.SysMenuService;
 import cn.hub.jackeroo.system.vo.Tree;
 import cn.hub.jackeroo.system.vo.TreeSelect;
+import cn.hub.jackeroo.utils.UserUtils;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
+import cn.hub.jackeroo.vo.LoginUser;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -69,6 +71,18 @@ public class MenuController extends BaseController {
     @ApiOperation(value = "获取角色配置菜单、权限树")
     public Result<List<Tree>> findRolePermissionTree(){
         return ok(menuService.getRolePermissionTree());
+    }
+
+    /**
+     * 通过角色获取菜单、权限
+     * @return
+     */
+    @GetMapping("getMenuByRole")
+    @ApiOperation(value = "通过角色获取菜单、权限")
+    public Result getMenuByRole(){
+        LoginUser user = UserUtils.getUser();
+
+        return ok(menuService.getMenuByRole(user.getRoleId()));
     }
 
     /**
