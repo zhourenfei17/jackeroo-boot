@@ -38,9 +38,9 @@
               <a-input v-model="form.passwordAgain" placeholder="请再次输入密码" type="password"></a-input>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan" v-if="flag.add">
-            <a-form-model-item label="角色" prop="role">
-              <j-select v-model="form.role" placeholder="请选择角色" url="/system/role/findAll" textField="roleName"></j-select>
+          <a-col :span="rowSpan">
+            <a-form-model-item label="角色" prop="roleId">
+              <j-select v-model="form.roleId" placeholder="请选择角色" url="/system/role/findAll" textField="roleName"></j-select>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -101,7 +101,7 @@ export default {
         phone: '',
         telephone: '',
         birthday: undefined,
-        role: undefined
+        roleId: undefined
       },
       rules: {
         name: [
@@ -120,6 +120,9 @@ export default {
           {validator:(rule, value, callback)=>{
             return value != this.form.password ? callback('两次输入的密码不一致') : callback()
           }, trigger: 'blur'}
+        ],
+        roleId: [
+          {required: true, message: '请 选择角色'}
         ],
         gender: [],
         phone: [
@@ -179,7 +182,7 @@ export default {
       })
     },
     roleChange(value){
-      this.form.role = value
+      this.form.roleId = value
     }
   }
 }

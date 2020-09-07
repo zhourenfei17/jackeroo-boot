@@ -168,6 +168,10 @@ export default {
           sorter: false,
         },
         {
+          title: '角色',
+          dataIndex: 'roleName',
+        },
+        {
           title: '状态',
           dataIndex: 'status',
           scopedSlots: { customRender: 'status' }
