@@ -12,12 +12,12 @@
         a.type as "type",
         a.href as "href",
         a.component as "component",
+        a.layout as "layout",
         a.icon as "icon",
         a.sort as "sort",
         a.permission as "permission",
         a.target as "target",
         a.hide as "hide",
-        a.del_flag as "delFlag",
         a.create_by as "createBy",
         a.create_time as "createTime",
         a.update_by as "updateBy",
@@ -33,9 +33,6 @@
             </if>
             <if test="type != null">
                 and a.type=#{type}
-            </if>
-            <if test="delFlag != null">
-                and a.del_flag = #{delFlag}
             </if>
         </where>
         <if test="orderBy != null">

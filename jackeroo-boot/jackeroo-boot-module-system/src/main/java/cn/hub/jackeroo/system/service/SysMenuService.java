@@ -15,18 +15,13 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -53,7 +48,6 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         SysMenu sysMenu = new SysMenu();
         sysMenu.setParentId(parentId);
         sysMenu.setType(SysMenu.TYPE_PERMISSION);
-        sysMenu.setDelFlag(Constant.DEL_FLAG_NORMAL);
 
         Page<SysMenu> page = sysMenu.initPage(pageParam);
         page.setRecords(mapper.findPermissionList(sysMenu));
@@ -68,7 +62,11 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     public List<SysMenu> getMenuFullTree(String name){
         List<SysMenu> menuList = super.list();
 
-        List<SysMenu> rootTreeNode = menuList.stream().filter(node -> node.getParentId().equals(0L)).collect(Collectors.toList());
+        List<SysMenu> rootTreeNode = menuList
+                .stream()
+                .filter(node -> node.getParentId().equals(0L))
+                .sorted(Comparator.comparingInt(SysMenu::getSort))
+                .collect(Collectors.toList());
         buildMenuTree(rootTreeNode, menuList);
 
         if(StringUtils.isNotBlank(name)){
@@ -113,6 +111,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         List<SysMenu> rootTreeNode = menuList
                 .stream()
                 .filter(node -> node.getParentId().equals(0L))
+                .sorted(Comparator.comparingInt(SysMenu::getSort))
                 .collect(Collectors.toList());
         buildNavTree(rootTreeNode, menuList);
 
@@ -222,6 +221,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     @Override
     public boolean save(SysMenu menu) {
         menu.setId(IdWorker.getId());
+        validMenu(menu);
         if(menu.getParentId() == 0){
             // 根节点
             menu.setLevel(1);
@@ -245,6 +245,17 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         }
 
         return true;
+    }
+
+    private void validMenu(SysMenu menu){
+        if(menu.getLeaf() == Constant.BOOLEAN_YES){
+            menu.setLayout(null);
+        }else{
+            menu.setComponent(null);
+        }
+        if(menu.getTarget() == SysMenu.TARGET_OUTSIDE){
+            menu.setComponent(null);
+        }
     }
 
     private String buildParentIds(String parentIds, Long parentId){
@@ -285,7 +296,6 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         if(menu.getLeaf() != null && menu.getLeaf() == Constant.BOOLEAN_YES){
             LambdaQueryWrapper<SysMenu> query = new LambdaQueryWrapper<>();
             query.eq(SysMenu::getParentId, menu.getId());
-            query.eq(SysMenu::getDelFlag, Constant.DEL_FLAG_NORMAL);
 
             List<SysMenu> authList = super.list(query);
             if(CollectionUtils.isNotEmpty(authList)){
@@ -306,6 +316,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * @param menu
      */
     public void update(SysMenu menu){
+        validMenu(menu);
         if(CollectionUtils.isNotEmpty(menu.getAuth())){
             for (AuthVo authVo : menu.getAuth()) {
                 authVo.setValue(menu.getGroup() + ":" + authVo.getValue());
@@ -319,7 +330,6 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
             LambdaQueryWrapper<SysMenu> query = new LambdaQueryWrapper<>();
             query.eq(SysMenu::getParentId, menu.getId());
-            query.eq(SysMenu::getDelFlag, Constant.DEL_FLAG_NORMAL);
 
             List<AuthVo> existAuthList = super.list(query)
                     .stream()

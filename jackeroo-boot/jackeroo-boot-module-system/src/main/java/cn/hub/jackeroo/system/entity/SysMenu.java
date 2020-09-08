@@ -81,6 +81,11 @@ public class SysMenu extends BaseEntity<SysMenu> {
     private String component;
 
     /**
+     * 布局组件
+     */
+    private String layout;
+
+    /**
      * 图标
      */
     private String icon;
@@ -105,12 +110,6 @@ public class SysMenu extends BaseEntity<SysMenu> {
      */
     private Integer hide;
 
-    /**
-     * 删除标识
-     */
-    @TableLogic
-    @TableField(fill = FieldFill.INSERT)
-    private Integer delFlag;
     /**
      * 创建人
      */
@@ -145,4 +144,7 @@ public class SysMenu extends BaseEntity<SysMenu> {
 
     public static final int TYPE_MENU = 0;
     public static final int TYPE_PERMISSION = 1;
+
+    public static final int TARGET_INSIDE = 1;
+    public static final int TARGET_OUTSIDE = 2;
 }
