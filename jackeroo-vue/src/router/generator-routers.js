@@ -74,9 +74,10 @@ const notFoundRouter = {
 } */
 const rootRouter = {
   name: '首页',
+  routerName: 'index',
   href: '/',
-  component: '/BasicLayout',
-  redirect: '/system/user',
+  layout: 'BasicLayout',
+  redirect: '/dashboard/workplace',
   leaf: 0,
   type: 0,
   children: []
@@ -120,9 +121,9 @@ export const generator = (routerMap, parent) => {
   return routerMap.map(item => {
     // const { title, show, hideChildren, hiddenHeaderContent, target, icon } = item.meta || {}
     const {name, type, href, component, icon, target, hide} = item || {}
-    let routerName = href ? href.replace(new RegExp('/', 'gm'), '-') : ''
-    let componentName = ((component == '/BasicLayout' || component == '/RouteView') ? (() => import(`@/layouts${component}`)) : (() => import(`@/views${component}`)))
-    // console.log('componentName', componentName)
+    let routerName = item.routerName || href ? href.replace(new RegExp('/', 'gm'), '-') : ''
+    // let componentName = ((component == '/BasicLayout' || component == '/RouteView') ? (() => import(`@/layouts${component}`)) : (() => import(`@/views${component}`)))
+    let componentName = (item.layout ? (() => import(`@/layouts/${item.layout}`)) : (() => import(`@/views${component}`)))
     const currentRouter = {
       // 如果路由设置了 path，则作为默认 path，否则 路由地址 动态拼接生成如 /dashboard/workplace
       // path: item.path || `${parent && parent.path || ''}/${item.key}`,

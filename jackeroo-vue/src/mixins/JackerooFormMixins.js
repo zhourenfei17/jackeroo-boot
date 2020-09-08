@@ -60,7 +60,11 @@ export const JackerooFromMixins = {
     copyProperties(source, target){
       for(var prop in target){
         if(source.hasOwnProperty(prop)){
-          target[prop] = source[prop]
+          if(typeof target[prop] == 'object' && typeof source[prop] != 'object' && target[prop] != null){
+            
+          }else{
+            target[prop] = source[prop]
+          }
         }
       }
     },

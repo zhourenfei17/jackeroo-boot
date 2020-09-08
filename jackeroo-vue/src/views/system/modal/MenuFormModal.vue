@@ -36,9 +36,17 @@
               <a-input v-model="form.href" placeholder="请输入url路径" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan" v-if="type == 1">
+          <a-col :span="rowSpan" v-if="type == 1 && target == 1">
             <a-form-model-item label="组件路径" prop="component">
               <a-input v-model="form.component" placeholder="请输入组件路径" :disabled="flag.view"></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="rowSpan" v-if="type == 0">
+            <a-form-model-item label="页面布局" prop="layout">
+              <a-select v-model="form.layout" placeholder="请选择页面布局" :disabled="flag.view">
+                <a-select-option value="PageView">基础布局（包含面包屑）</a-select-option>
+                <a-select-option value="RouteView">空布局</a-select-option>
+              </a-select>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan" v-if="type == 0">
@@ -71,6 +79,14 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan" v-if="type == 1">
+            <a-form-model-item label="是否配置权限" prop="setPermission">
+              <a-radio-group v-model="form.setPermission" :disabled="flag.view">
+                <a-radio :value="0">否</a-radio>
+                <a-radio :value="1">是</a-radio>
+              </a-radio-group>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="rowSpan" v-if="type == 1 && setPermission">
             <a-form-model-item label="权限标识前缀" prop="group" v-if="form.auth.length > 0">
               <a-input v-model="form.group" placeholder="请输入权限标识前缀" :disabled="flag.view" style="width:90%;"></a-input>
 
@@ -108,7 +124,7 @@
               </a-tooltip>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan" v-if="type == 1">
+          <a-col :span="rowSpan" v-if="type == 1 && setPermission">
             <a-form-model-item label="权限" prop="auth">
               <a-checkbox-group v-model="form.auth" name="auth" :disabled="flag.view" :options="permissionList">
                 
@@ -160,11 +176,13 @@ export default {
         name: '',
         href: '',
         component: '',
+        layout: 'PageView',
         icon: '',
         sort: null,
         target: 1,
         hide: 0,
         type: 0,
+        setPermission: 1,
         group: '',
         auth: []
       },
@@ -187,6 +205,9 @@ export default {
         component: [
           {required: true, message: '请输入组件路劲'},
           {max: 100, message: '长度需要在0到100之间'}
+        ],
+        layout:[
+          {required: true, message: '请选择页面布局'}
         ],
         icon: [],
         sort: [{min: 0, max: 999999, message: '长度需要在0到6之间', type: 'number'}],
@@ -215,6 +236,12 @@ export default {
     // 0: 非叶子节点，1：叶子节点
     type(){
       return this.form.leaf
+    },
+    target(){
+      return this.form.target
+    },
+    setPermission(){
+      return this.form.setPermission
     }
   },
   methods: {
@@ -262,6 +289,11 @@ export default {
           data.auth = auth
         }
         this.copyProperties(data, this.form)
+        if(this.form.auth == null || this.form.auth.length == 0){
+          this.form.setPermission = 0
+        }else{
+          this.form.setPermission = 1
+        }
       }).finally(() => {
         this.loading = false
       })
@@ -273,8 +305,15 @@ export default {
           if(formData.leaf == 1){
             const auth = this.permissionList.filter(item => formData.auth.indexOf(item.value) >= 0)
             formData.auth = auth
+            formData.layout = null
           }else{
             formData.auth = null
+          }
+          if(!formData.setPermission){
+            formData.auth = null
+          }
+          if(formData.target == 2){
+            formData.component = null
           }
           
           console.log('formData', formData)
@@ -335,6 +374,11 @@ export default {
       this.groupId = null
       this.permissionEdit = false
       this.form.auth = []
+      this.form.group = ''
+      this.form.layout = 'PageView'
+      this.form.setPermission = 1
+      this.form.hide = 0
+      this.form.target = 1
       this.$refs.formModel.resetFields()
       this.$refs.formModel.clearValidate()
       
