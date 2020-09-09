@@ -91,19 +91,23 @@ const rootRouter = {
 export const generatorDynamicRouter = (token) => {
   return new Promise((resolve, reject) => {
     loginService.getCurrentUserNav(token).then(res => {
-      console.log('res', res)
-      const { data } = res
-      const menuNav = []
-      // const childrenNav = []
-      //      后端数据, 根级树数组,  根级 PID
-      // listToTree(result, childrenNav, 0)
-      rootRouter.children = data
-      menuNav.push(rootRouter)
-      console.log('menuNav', menuNav)
-      const routers = generator(menuNav)
-      routers.push(notFoundRouter)
-      console.log('routers', routers)
-      resolve(routers)
+      if(!res.code){
+        console.log('res', res)
+        const { data } = res
+        const menuNav = []
+        // const childrenNav = []
+        //      后端数据, 根级树数组,  根级 PID
+        // listToTree(result, childrenNav, 0)
+        rootRouter.children = data
+        menuNav.push(rootRouter)
+        console.log('menuNav', menuNav)
+        const routers = generator(menuNav)
+        routers.push(notFoundRouter)
+        console.log('routers', routers)
+        resolve(routers)
+      }else{
+        reject(res.msg)
+      }
     }).catch(err => {
       reject(err)
     })

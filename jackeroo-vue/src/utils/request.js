@@ -76,7 +76,13 @@ function warningAndSkip(){
       storage.remove(ACCESS_TOKEN)
 
       setTimeout(() => {
-        router.replace({ path: '/user/login', query: {redirect : router.currentRoute.fullPath}})
+        let pathname = window.location.pathname
+        if(router.currentRoute.fullPath == '/' && pathname != '/'){
+          router.replace({ path: '/user/login', query: {redirect : pathname}})
+        }else{
+          router.replace({ path: '/user/login', query: {redirect : router.currentRoute.fullPath}})
+        }
+        
         resolve('ok')
       }, 1000)
     }else{
