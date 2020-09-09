@@ -32,6 +32,7 @@ import ActionList from '@/components/jackeroo/ActionList'
 import JModal from '@/components/jackeroo/Modal'
 import JDrawer from '@/components/jackeroo/Drawer'
 import JTag from '@/components/jackeroo/Tag/JTag'
+import SearchCard from '@/components/jackeroo/SearchCard'
 
 export {
   AvatarList,
@@ -63,5 +64,6 @@ export {
   ActionList,
   JModal,
   JDrawer,
-  JTag
+  JTag,
+  SearchCard
 }

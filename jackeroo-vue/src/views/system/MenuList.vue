@@ -1,5 +1,5 @@
 <template>
-  <page-header-wrapper>
+  <div id="body-content">
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
         <a-form layout="inline" @keyup.enter.native="loadDataSource()">
@@ -18,19 +18,31 @@
           </a-row>
         </a-form>
       </div>
-
-      <div class="table-operator">
+    </a-card>
+    <search-card :reload="loadDataSource" :tableSize="tableSize" title="查询表格" :columns="columns">
+      <template slot="table-operator">
         <a-button type="primary" icon="plus" @click="handleAdd">新建菜单</a-button>
-      </div>
+      </template>
+      <!-- <div class="table-operator">
+        <a-button type="primary" icon="plus" @click="handleAdd">新建菜单</a-button>
+        <a-divider type="vertical" />
+        <div class="icons-list">
+          <a-icon type="redo"></a-icon>
+          <a-icon type="column-height"></a-icon>
+          <a-icon type="setting"></a-icon>
+          <a-icon type="fullscreen" @click="fullscreen"></a-icon>
+        </div>
+      </div> -->
 
       <a-table
-        size="default"
         rowKey="id"
         :columns="columns"
         :data-source="dataSource"
         :loading="loading"
         :pagination="false"
         :expandedRowKeys="expandedRowKeys"
+        :size="tableSize"
+        expandRowByClick
         @expandedRowsChange="handleExpandedRowsChange"
       >
         <template slot="iconSlot" slot-scope="text">
@@ -58,12 +70,12 @@
 
       <menu-form-modal ref="formModal" @ok="handleOk"></menu-form-modal>
       <permission-list-modal ref="permissionListModal" @change="handlePermissionChange"></permission-list-modal>
-    </a-card>
-  </page-header-wrapper>
+    </search-card>
+  </div>
 </template>
 
 <script>
-import {  Ellipsis } from '@/components'
+import {  Ellipsis,SearchCard } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
 import MenuFormModal from './modal/MenuFormModal'
@@ -74,13 +86,14 @@ export default {
   components: {
     Ellipsis,
     MenuFormModal,
-    PermissionListModal
+    PermissionListModal,SearchCard
   },
   mixins:[JackerooListMixins],
   data () {
     return {
       loading: false,
       useSTable: false,
+      tableSize: 'default',
       columns: [
         {
           title: '菜单名称',
