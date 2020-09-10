@@ -22,6 +22,7 @@ export const JackerooListMixins = {
         // 是否跨页选择
         multiPageSelect: true
       },
+      tableSize: 'default',
       // 加载数据方法 必须为 Promise 对象
       loadData: (parameter) => {
         if(!this.useSTable){

@@ -1,72 +1,82 @@
 <template>
-  <a-card :bordered="false">
-    <div class="table-page-search-wrapper">
-      <a-form layout="inline" @keyup.enter.native="refreshData(true)">
-        <a-row :gutter="48">
-          <a-col :md="6" :sm="12">
-            <a-form-item label="角色名">
-              <a-input v-model="queryParam.roleName" placeholder="请输入角色名"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="6" :sm="12">
-            <a-form-item label="角色代码">
-              <a-input v-model="queryParam.roleCode" placeholder="请输入角色代码"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="!advanced && 6 || 24" :sm="12">
-            <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-              <a-button type="primary" @click="refreshData(true)">查询</a-button>
-              <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-            </span>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div>
+  <div>
+    <a-card :bordered="false">
+      <div class="table-page-search-wrapper">
+        <a-form layout="inline" @keyup.enter.native="refreshData(true)">
+          <a-row :gutter="48">
+            <a-col :md="6" :sm="12">
+              <a-form-item label="角色名">
+                <a-input v-model="queryParam.roleName" placeholder="请输入角色名"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="12">
+              <a-form-item label="角色代码">
+                <a-input v-model="queryParam.roleCode" placeholder="请输入角色代码"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="!advanced && 6 || 24" :sm="12">
+              <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
+                <a-button type="primary" @click="refreshData(true)">查询</a-button>
+                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+              </span>
+            </a-col>
+          </a-row>
+        </a-form>
+      </div>
 
-    <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-      <a-dropdown v-if="selectedRowKeys.length > 0">
-        <a-menu slot="overlay">
-          <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
-        </a-menu>
-        <a-button style="margin-left: 8px">
-          批量操作 <a-icon type="down" />
-        </a-button>
-      </a-dropdown>
-    </div>
+    </a-card>
 
-    <s-table
-      ref="table"
-      size="default"
-      rowKey="id"
-      :columns="columns"
-      :data="loadData"
-      :alert="tableAlert"
-      :rowSelection="rowSelection"
-      showPagination="auto"
-    >
+    <data-card 
+        :reload="refreshData" 
+        :tableSize.sync="tableSize" 
+        :columns.sync="columns"
+        tableAlign="left">
 
-      <span slot="action" slot-scope="text, record">
-        <template>
-          <action-list>
-            <a @click="handleView(record)">详情</a>
-            <a @click="handleEdit(record)">编辑</a>
-            <a @click="handleSetPermission(record)">配置权限</a>
-            <action-menu-list>
-              <a @click="handleDelete(record)">删除</a>
-            </action-menu-list>
-          </action-list>
-        </template>
-      </span>
-    </s-table>
+      <template slot="toolbar">
+        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-dropdown v-if="selectedRowKeys.length > 0">
+          <a-menu slot="overlay">
+            <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
+          </a-menu>
+          <a-button style="margin-left: 8px">
+            批量操作 <a-icon type="down" />
+          </a-button>
+        </a-dropdown>
+      </template>
 
-    <role-form-modal ref="formModal" @ok="handleOk"></role-form-modal>
-    <role-permission-set-modal ref="rolePermissionSetModal" ></role-permission-set-modal>
-  </a-card>
+      <s-table
+        ref="table"
+        :size="tableSize"
+        rowKey="id"
+        :columns="columns"
+        :data="loadData"
+        :alert="tableAlert"
+        :rowSelection="rowSelection"
+        showPagination="auto"
+      >
+
+        <span slot="action" slot-scope="text, record">
+          <template>
+            <action-list>
+              <a @click="handleView(record)">详情</a>
+              <a @click="handleEdit(record)">编辑</a>
+              <a @click="handleSetPermission(record)">配置权限</a>
+              <action-menu-list>
+                <a @click="handleDelete(record)">删除</a>
+              </action-menu-list>
+            </action-list>
+          </template>
+        </span>
+      </s-table>
+
+      <role-form-modal ref="formModal" @ok="handleOk"></role-form-modal>
+      <role-permission-set-modal ref="rolePermissionSetModal" ></role-permission-set-modal>
+    </data-card>
+  </div>
 </template>
 
 <script>
-import { STable } from '@/components'
+import { STable, DataCard } from '@/components'
 import RoleFormModal from './modal/RoleFormModal'
 import RolePermissionSetModal from './modal/RolePermissionSetModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
@@ -77,7 +87,8 @@ export default {
   components: {
     STable,
     RoleFormModal,
-    RolePermissionSetModal
+    RolePermissionSetModal,
+    DataCard
   },
   mixins:[JackerooListMixins],
   data () {

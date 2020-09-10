@@ -19,8 +19,14 @@
         </a-form>
       </div>
     </a-card>
-    <search-card :reload="loadDataSource" :tableSize="tableSize" title="查询表格" :columns="columns">
-      <template slot="table-operator">
+    <data-card 
+      :reload="loadDataSource" 
+      :tableSize.sync="tableSize" 
+      :columns.sync="columns" 
+      :expandedRowKeys.sync="expandedRowKeys"
+      :icon="['refresh', 'lineHeight', 'treeExpand', 'align', 'columnSet', 'fullscreen']">
+
+      <template slot="toolbar">
         <a-button type="primary" icon="plus" @click="handleAdd">新建菜单</a-button>
       </template>
       <!-- <div class="table-operator">
@@ -70,12 +76,12 @@
 
       <menu-form-modal ref="formModal" @ok="handleOk"></menu-form-modal>
       <permission-list-modal ref="permissionListModal" @change="handlePermissionChange"></permission-list-modal>
-    </search-card>
+    </data-card>
   </div>
 </template>
 
 <script>
-import {  Ellipsis,SearchCard } from '@/components'
+import {  Ellipsis,DataCard } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
 import MenuFormModal from './modal/MenuFormModal'
@@ -86,7 +92,8 @@ export default {
   components: {
     Ellipsis,
     MenuFormModal,
-    PermissionListModal,SearchCard
+    PermissionListModal,
+    DataCard
   },
   mixins:[JackerooListMixins],
   data () {

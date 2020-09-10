@@ -1,111 +1,121 @@
 <template>
-  <a-card :bordered="false">
-    <div class="table-page-search-wrapper">
-      <a-form layout="inline" @keyup.enter.native="refreshData(true)">
-        <a-row :gutter="48">
-          <a-col :md="6" :sm="12">
-            <a-form-item label="姓名">
-              <a-input v-model="queryParam.name" placeholder="请输入姓名"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="6" :sm="12">
-            <a-form-item label="账号">
-              <a-input v-model="queryParam.account" placeholder="请输入账号"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="6" :sm="12">
-            <a-form-item label="状态">
-              <a-select v-model="queryParam.status" placeholder="请选择状态" default-value="0">
-                <a-select-option value="" disabled>请选择</a-select-option>
-                <a-select-option value="0">正常</a-select-option>
-                <a-select-option value="1">冻结</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-          <template v-if="advanced">
+  <div>
+    <a-card :bordered="false">
+      <div class="table-page-search-wrapper">
+        <a-form layout="inline" @keyup.enter.native="refreshData(true)">
+          <a-row :gutter="48">
             <a-col :md="6" :sm="12">
-              <a-form-item label="手机号">
-                <a-input v-model="queryParam.phone" placeholder="请输入手机号"/>
+              <a-form-item label="姓名">
+                <a-input v-model="queryParam.name" placeholder="请输入姓名"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="12">
-              <a-form-item label="性别">
-                <a-select v-model="queryParam.gender" placeholder="请选择性别" default-value="0">
+              <a-form-item label="账号">
+                <a-input v-model="queryParam.account" placeholder="请输入账号"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="12">
+              <a-form-item label="状态">
+                <a-select v-model="queryParam.status" placeholder="请选择状态" default-value="0">
                   <a-select-option value="" disabled>请选择</a-select-option>
-                  <a-select-option value="1">男</a-select-option>
-                  <a-select-option value="2">女</a-select-option>
+                  <a-select-option value="0">正常</a-select-option>
+                  <a-select-option value="1">冻结</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
+            <template v-if="advanced">
+              <a-col :md="6" :sm="12">
+                <a-form-item label="手机号">
+                  <a-input v-model="queryParam.phone" placeholder="请输入手机号"/>
+                </a-form-item>
+              </a-col>
+              <a-col :md="6" :sm="12">
+                <a-form-item label="性别">
+                  <a-select v-model="queryParam.gender" placeholder="请选择性别" default-value="0">
+                    <a-select-option value="" disabled>请选择</a-select-option>
+                    <a-select-option value="1">男</a-select-option>
+                    <a-select-option value="2">女</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+            </template>
+            <a-col :md="!advanced && 6 || 24" :sm="12">
+              <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
+                <a-button type="primary" @click="refreshData(true)">查询</a-button>
+                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+                <a @click="toggleAdvanced" style="margin-left: 8px">
+                  {{ advanced ? '收起' : '展开' }}
+                  <a-icon :type="advanced ? 'up' : 'down'"/>
+                </a>
+              </span>
+            </a-col>
+          </a-row>
+        </a-form>
+      </div>
+
+    </a-card>
+
+    <data-card 
+        :reload="refreshData" 
+        :tableSize.sync="tableSize" 
+        :columns.sync="columns"
+        tableAlign="left">
+
+      <template slot="toolbar">
+        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-dropdown v-if="selectedRowKeys.length > 0">
+          <a-menu slot="overlay">
+            <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
+            <!-- lock | unlock -->
+            <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
+          </a-menu>
+          <a-button style="margin-left: 8px">
+            批量操作 <a-icon type="down" />
+          </a-button>
+        </a-dropdown>
+      </template>
+
+      <s-table
+        ref="table"
+        :size="tableSize"
+        rowKey="id"
+        :columns="columns"
+        :data="loadData"
+        :alert="tableAlert"
+        :rowSelection="rowSelection"
+        showPagination="auto"
+      >
+        <span slot="status" slot-scope="text">
+          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+        </span>
+
+        <span slot="action" slot-scope="text, record">
+          <template>
+            <action-list>
+              <a @click="handleView(record)">详情</a>
+              <a @click="handleEdit(record)">编辑</a>
+              <a-popconfirm title="您确定要冻结该用户吗？" v-if="record.status == 0" @confirm="() => frozen(record)">
+                <a class="careful">冻结</a>
+              </a-popconfirm>
+              <a-popconfirm title="您确定要解冻该用户吗？" v-if="record.status == 1" @confirm="() => unfrozen(record)">
+                <a class="warning">解冻</a>
+              </a-popconfirm>
+              <action-menu-list>
+                <a @click="resetPwd(record)">重置密码</a>
+                <a @click="handleDelete(record)">删除</a>
+              </action-menu-list>
+            </action-list>
           </template>
-          <a-col :md="!advanced && 6 || 24" :sm="12">
-            <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-              <a-button type="primary" @click="refreshData(true)">查询</a-button>
-              <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-              <a @click="toggleAdvanced" style="margin-left: 8px">
-                {{ advanced ? '收起' : '展开' }}
-                <a-icon :type="advanced ? 'up' : 'down'"/>
-              </a>
-            </span>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div>
+        </span>
+      </s-table>
 
-    <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-      <a-dropdown v-if="selectedRowKeys.length > 0">
-        <a-menu slot="overlay">
-          <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
-          <!-- lock | unlock -->
-          <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
-        </a-menu>
-        <a-button style="margin-left: 8px">
-          批量操作 <a-icon type="down" />
-        </a-button>
-      </a-dropdown>
-    </div>
-
-    <s-table
-      ref="table"
-      size="default"
-      rowKey="id"
-      :columns="columns"
-      :data="loadData"
-      :alert="tableAlert"
-      :rowSelection="rowSelection"
-      showPagination="auto"
-    >
-      <span slot="status" slot-scope="text">
-        <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-      </span>
-
-      <span slot="action" slot-scope="text, record">
-        <template>
-          <action-list>
-            <a @click="handleView(record)">详情</a>
-            <a @click="handleEdit(record)">编辑</a>
-            <a-popconfirm title="您确定要冻结该用户吗？" v-if="record.status == 0" @confirm="() => frozen(record)">
-              <a class="careful">冻结</a>
-            </a-popconfirm>
-            <a-popconfirm title="您确定要解冻该用户吗？" v-if="record.status == 1" @confirm="() => unfrozen(record)">
-              <a class="warning">解冻</a>
-            </a-popconfirm>
-            <action-menu-list>
-              <a @click="resetPwd(record)">重置密码</a>
-              <a @click="handleDelete(record)">删除</a>
-            </action-menu-list>
-          </action-list>
-        </template>
-      </span>
-    </s-table>
-
-    <user-form-modal ref="formModal" @ok="handleOk"></user-form-modal>
-  </a-card>
+      <user-form-modal ref="formModal" @ok="handleOk"></user-form-modal>
+    </data-card>
+  </div>
 </template>
 
 <script>
-import { STable, Ellipsis } from '@/components'
+import { STable, Ellipsis, DataCard } from '@/components'
 import UserFormModal from './modal/UserFormModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
@@ -129,6 +139,7 @@ export default {
     Ellipsis,
     UserFormModal,
     JSelect,
+    DataCard
   },
   mixins:[JackerooListMixins],
   data () {
