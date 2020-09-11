@@ -1,59 +1,48 @@
 <template>
   <div>
-    <a-card :bordered="false">
-      <div class="table-page-search-wrapper">
-        <a-form layout="inline" @keyup.enter.native="refreshData(true)">
-          <a-row :gutter="48">
-            <a-col :md="6" :sm="12">
-              <a-form-item label="姓名">
-                <a-input v-model="queryParam.name" placeholder="请输入姓名"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="12">
-              <a-form-item label="账号">
-                <a-input v-model="queryParam.account" placeholder="请输入账号"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="12">
-              <a-form-item label="状态">
-                <a-select v-model="queryParam.status" placeholder="请选择状态" default-value="0">
-                  <a-select-option value="" disabled>请选择</a-select-option>
-                  <a-select-option value="0">正常</a-select-option>
-                  <a-select-option value="1">冻结</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <template v-if="advanced">
-              <a-col :md="6" :sm="12">
-                <a-form-item label="手机号">
-                  <a-input v-model="queryParam.phone" placeholder="请输入手机号"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="6" :sm="12">
-                <a-form-item label="性别">
-                  <a-select v-model="queryParam.gender" placeholder="请选择性别" default-value="0">
-                    <a-select-option value="" disabled>请选择</a-select-option>
-                    <a-select-option value="1">男</a-select-option>
-                    <a-select-option value="2">女</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-            </template>
-            <a-col :md="!advanced && 6 || 24" :sm="12">
-              <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                <a-button type="primary" @click="refreshData(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-                <a @click="toggleAdvanced" style="margin-left: 8px">
-                  {{ advanced ? '收起' : '展开' }}
-                  <a-icon :type="advanced ? 'up' : 'down'"/>
-                </a>
-              </span>
-            </a-col>
-          </a-row>
-        </a-form>
-      </div>
-
-    </a-card>
+    <search-card :enter="refreshData">
+      <a-col :md="6" :sm="12">
+        <a-form-item label="姓名">
+          <a-input v-model="queryParam.name" placeholder="请输入姓名"/>
+        </a-form-item>
+      </a-col>
+      <a-col :md="6" :sm="12">
+        <a-form-item label="账号">
+          <a-input v-model="queryParam.account" placeholder="请输入账号"/>
+        </a-form-item>
+      </a-col>
+      <a-col :md="6" :sm="12">
+        <a-form-item label="状态">
+          <a-select v-model="queryParam.status" placeholder="请选择状态" default-value="0">
+            <a-select-option value="" disabled>请选择</a-select-option>
+            <a-select-option value="0">正常</a-select-option>
+            <a-select-option value="1">冻结</a-select-option>
+          </a-select>
+        </a-form-item>
+      </a-col>
+      
+      <template slot="more">
+        <a-col :md="6" :sm="12">
+          <a-form-item label="手机号">
+            <a-input v-model="queryParam.phone" placeholder="请输入手机号"/>
+          </a-form-item>
+        </a-col>
+        <a-col :md="6" :sm="12">
+          <a-form-item label="性别">
+            <a-select v-model="queryParam.gender" placeholder="请选择性别" default-value="0">
+              <a-select-option value="" disabled>请选择</a-select-option>
+              <a-select-option value="1">男</a-select-option>
+              <a-select-option value="2">女</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+      </template>
+      
+      <template slot="operate">
+          <a-button type="primary" @click="refreshData(true)">查询</a-button>
+          <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+      </template>
+    </search-card>
 
     <data-card 
         :reload="refreshData" 
@@ -115,7 +104,7 @@
 </template>
 
 <script>
-import { STable, Ellipsis, DataCard } from '@/components'
+import { STable, Ellipsis, DataCard, SearchCard } from '@/components'
 import UserFormModal from './modal/UserFormModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
@@ -139,7 +128,8 @@ export default {
     Ellipsis,
     UserFormModal,
     JSelect,
-    DataCard
+    DataCard,
+    SearchCard
   },
   mixins:[JackerooListMixins],
   data () {

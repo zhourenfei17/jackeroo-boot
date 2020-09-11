@@ -5,8 +5,6 @@ export const JackerooListMixins = {
     return {
       useSTable: true,
       dataSource: [],
-      // 展开/关闭
-      advanced: false,
       // 查询参数
       queryParam: {},
       // 选中行的key
@@ -83,10 +81,6 @@ export const JackerooListMixins = {
       this.$refs.formModal.visible = true
       this.$refs.formModal.flag.view = true
       this.$refs.formModal.edit(record.id)
-    },
-    // 查询 展开/收起
-    toggleAdvanced () {
-      this.advanced = !this.advanced
     },
     // 重置
     resetSearchForm () {

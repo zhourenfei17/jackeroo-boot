@@ -1,30 +1,22 @@
 <template>
   <div>
-    <a-card :bordered="false">
-      <div class="table-page-search-wrapper">
-        <a-form layout="inline" @keyup.enter.native="refreshData(true)">
-          <a-row :gutter="48">
-            <a-col :md="6" :sm="12">
-              <a-form-item label="角色名">
-                <a-input v-model="queryParam.roleName" placeholder="请输入角色名"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="12">
-              <a-form-item label="角色代码">
-                <a-input v-model="queryParam.roleCode" placeholder="请输入角色代码"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="!advanced && 6 || 24" :sm="12">
-              <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                <a-button type="primary" @click="refreshData(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-              </span>
-            </a-col>
-          </a-row>
-        </a-form>
-      </div>
-
-    </a-card>
+    <search-card :enter="refreshData">
+      <a-col :md="6" :sm="12">
+        <a-form-item label="角色名">
+          <a-input v-model="queryParam.roleName" placeholder="请输入角色名"/>
+        </a-form-item>
+      </a-col>
+      <a-col :md="6" :sm="12">
+        <a-form-item label="角色代码">
+          <a-input v-model="queryParam.roleCode" placeholder="请输入角色代码"/>
+        </a-form-item>
+      </a-col>
+      
+      <template slot="operate">
+        <a-button type="primary" @click="refreshData(true)">查询</a-button>
+        <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+      </template>
+    </search-card>
 
     <data-card 
         :reload="refreshData" 
@@ -76,7 +68,7 @@
 </template>
 
 <script>
-import { STable, DataCard } from '@/components'
+import { STable, DataCard, SearchCard } from '@/components'
 import RoleFormModal from './modal/RoleFormModal'
 import RolePermissionSetModal from './modal/RolePermissionSetModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
@@ -88,7 +80,8 @@ export default {
     STable,
     RoleFormModal,
     RolePermissionSetModal,
-    DataCard
+    DataCard,
+    SearchCard
   },
   mixins:[JackerooListMixins],
   data () {

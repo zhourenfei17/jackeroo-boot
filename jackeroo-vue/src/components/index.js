@@ -33,6 +33,7 @@ import JModal from '@/components/jackeroo/Modal'
 import JDrawer from '@/components/jackeroo/Drawer'
 import JTag from '@/components/jackeroo/Tag/JTag'
 import DataCard from '@/components/jackeroo/DataCard'
+import SearchCard from '@/components/jackeroo/SearchCard'
 
 export {
   AvatarList,
@@ -65,5 +66,6 @@ export {
   JModal,
   JDrawer,
   JTag,
-  DataCard
+  DataCard,
+  SearchCard
 }

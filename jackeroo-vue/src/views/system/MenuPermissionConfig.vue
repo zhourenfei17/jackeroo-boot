@@ -1,24 +1,17 @@
 <template>
   <div>
-    <a-card :bordered="false">
-      <div class="table-page-search-wrapper">
-        <a-form layout="inline" @keyup.enter.native="refreshData(true)">
-          <a-row :gutter="48">
-            <a-col :md="6" :sm="12">
-              <a-form-item label="权限组名">
-                <a-input v-model="queryParam.groupName" placeholder="请输入权限组名"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="!advanced && 6 || 24" :sm="12">
-              <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                <a-button type="primary" @click="refreshData(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-              </span>
-            </a-col>
-          </a-row>
-        </a-form>
-      </div>
-    </a-card>
+    <search-card :load="enter">
+      <a-col :md="6" :sm="12">
+        <a-form-item label="权限组名">
+          <a-input v-model="queryParam.groupName" placeholder="请输入权限组名"/>
+        </a-form-item>
+      </a-col>
+
+      <template slot="operate">
+        <a-button type="primary" @click="refreshData(true)">查询</a-button>
+        <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+      </template>
+    </search-card>
 
     <data-card 
         :reload="refreshData" 
@@ -80,7 +73,7 @@
 </template>
 
 <script>
-import { STable,JTag, DataCard } from '@/components'
+import { STable, JTag, DataCard, SearchCard } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
 import MenuPermissionGroupModal from './modal/MenuPermissionGroupModal'
@@ -92,6 +85,7 @@ export default {
     STable,
     JTag,
     DataCard,
+    SearchCard,
     MenuPermissionGroupModal,
     MenuPermissionListModal
   },
