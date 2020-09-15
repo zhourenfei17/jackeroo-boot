@@ -38,7 +38,7 @@
           </a-col>
           <a-col :span="rowSpan" v-if="type == 1 && target == 1">
             <a-form-model-item label="组件路径" prop="component">
-              <a-input v-model="form.component" placeholder="请输入组件路径" :disabled="flag.view"></a-input>
+              <a-input v-model="form.component" placeholder="请输入组件路径" :disabled="flag.view" addonBefore="/views"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan" v-if="type == 0">
@@ -287,6 +287,8 @@ export default {
           }
           this.permissionList = permission
           data.auth = auth
+        }else{
+          data.auth = []
         }
         this.copyProperties(data, this.form)
         if(this.form.auth == null || this.form.auth.length == 0){

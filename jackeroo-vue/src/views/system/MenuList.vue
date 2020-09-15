@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search-card :loadData="enter">
+    <search-card :enter="loadDataSource">
       <a-col :md="6" :sm="12">
         <a-form-item label="菜单名称">
           <a-input v-model="queryParam.name" placeholder="请输入菜单名称"/>
@@ -17,6 +17,7 @@
       :tableSize.sync="tableSize" 
       :columns.sync="columns" 
       :expandedRowKeys.sync="expandedRowKeys"
+      :dataSource="dataSource"
       :icon="['refresh', 'lineHeight', 'treeExpand', 'align', 'columnSet', 'fullscreen']">
 
       <template slot="toolbar">

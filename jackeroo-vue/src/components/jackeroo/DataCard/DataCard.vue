@@ -92,6 +92,10 @@ export default {
     tableAlign:{
       type: String
     },
+    // table的dataSouce属性
+    dataSource: {
+      type: Array
+    },
     // table的columns属性
     columns: {
       type: Array
@@ -125,14 +129,12 @@ export default {
       visibleColumn: false,
       // 复制后的原始列
       columnsCopy:[],
-      // table表数据
-      dataSource: [],
       // 对齐方式
       align: ''
     }
   },
   mounted(){
-    const defaultSlot = this.$slots.default
+    /* const defaultSlot = this.$slots.default
     for(const slot of defaultSlot){
       const tags = slot.tag.split('-')
       if(tags[tags.length - 1].toLowerCase() == 'atable'){
@@ -143,7 +145,7 @@ export default {
           }
         }
       }
-    }
+    } */
   },
   created(){
     if(this.columns){

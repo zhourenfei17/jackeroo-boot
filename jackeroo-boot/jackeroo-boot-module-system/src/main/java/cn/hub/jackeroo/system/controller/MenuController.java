@@ -2,7 +2,6 @@ package cn.hub.jackeroo.system.controller;
 
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysMenu;
-import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.service.SysMenuService;
 import cn.hub.jackeroo.system.vo.Tree;
 import cn.hub.jackeroo.system.vo.TreeSelect;
@@ -74,7 +73,7 @@ public class MenuController extends BaseController {
     }
 
     /**
-     * 通过角色获取菜单、权限
+     * 通过角色获取菜单、权限o
      * @return
      */
     @GetMapping("getMenuByRole")
