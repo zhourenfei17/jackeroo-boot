@@ -56,7 +56,11 @@ public class ValidService {
                 if(unique == null){
                     continue;
                 }
-
+                /**
+                 * 仅对以下情况进行唯一性校验
+                 * 1. @ValidateUnique的group为默认值，且entity对象@Unique未设定groups()
+                 * 2. @ValidateUnique的group指定了其他值，且entity对象@Unique的groups()包含了前面指定的值
+                 */
                 // 1.如果传递了组别，且不包含在@Unique的groups中，则不予校验
                 if(validGroupClass != null && validGroupClass != Null.class){
                     if(!ArrayUtils.contains(unique.groups(), validGroupClass)){

@@ -24,5 +24,10 @@ public @interface ValidatedUnique {
      */
     Class<?> clazz();
 
+    /**
+     * 指定校验的分组
+     * @see Unique groups()
+     * @return
+     */
     Class<?> groups() default Null.class;
 }

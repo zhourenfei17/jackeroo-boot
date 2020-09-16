@@ -22,6 +22,10 @@ public @interface Unique {
 
     String message() default "不能重复";
 
+    /**
+     * 支持分组，仅对支持的分组进行校验
+     * @return
+     */
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };
