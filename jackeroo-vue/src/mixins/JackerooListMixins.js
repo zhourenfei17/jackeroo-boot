@@ -83,10 +83,8 @@ export const JackerooListMixins = {
       this.$refs.formModal.edit(record.id)
     },
     // 重置
-    resetSearchForm () {
-      this.queryParam = {
-        date: moment(new Date())
-      }
+    reset () {
+      this.queryParam = {}
     },
     // formModal保存后刷新table
     handleOk(){

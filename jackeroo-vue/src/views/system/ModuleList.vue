@@ -2,16 +2,16 @@
   <div>
     <search-card :enter="refreshData">
       <a-col :md="6" :sm="12">
-        <a-form-item label="角色名">
-          <a-input v-model="queryParam.roleName" placeholder="请输入角色名"/>
+        <a-form-item label="模块名称">
+          <a-input v-model="queryParam.name" placeholder="请输入模块名称"/>
         </a-form-item>
       </a-col>
       <a-col :md="6" :sm="12">
-        <a-form-item label="角色代码">
-          <a-input v-model="queryParam.roleCode" placeholder="请输入角色代码"/>
+        <a-form-item label="模块代码">
+          <a-input v-model="queryParam.code" placeholder="请输入模块代码"/>
         </a-form-item>
       </a-col>
-      
+
       <template slot="operate">
         <a-button type="primary" @click="refreshData(true)">查询</a-button>
         <a-button style="margin-left: 8px" @click="reset">重置</a-button>
@@ -38,7 +38,7 @@
 
       <s-table
         ref="table"
-        :size="tableSize"
+        size="default"
         rowKey="id"
         :columns="columns"
         :data="loadData"
@@ -46,13 +46,11 @@
         :rowSelection="rowSelection"
         showPagination="auto"
       >
-
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
               <a @click="handleView(record)">详情</a>
               <a @click="handleEdit(record)">编辑</a>
-              <a @click="handleSetPermission(record)">配置权限</a>
               <action-menu-list>
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
@@ -60,28 +58,26 @@
           </template>
         </span>
       </s-table>
-
-      <role-form-modal ref="formModal" @ok="handleOk"></role-form-modal>
-      <role-permission-set-modal ref="rolePermissionSetModal" ></role-permission-set-modal>
     </data-card>
+
+    <module-form-modal ref="formModal" @ok="handleOk"></module-form-modal>
   </div>
 </template>
 
 <script>
-import { STable, DataCard, SearchCard } from '@/components'
-import RoleFormModal from './modal/RoleFormModal'
-import RolePermissionSetModal from './modal/RolePermissionSetModal'
+import { STable, JTag, DataCard, SearchCard } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
+import ModuleFormModal from './modal/ModuleFormModal'
 
 export default {
   name: 'RoleList',
   components: {
     STable,
-    RoleFormModal,
-    RolePermissionSetModal,
+    JTag,
     DataCard,
-    SearchCard
+    SearchCard,
+    ModuleFormModal
   },
   mixins:[JackerooListMixins],
   data () {
@@ -94,20 +90,20 @@ export default {
           }
         },
         {
-          title: '角色名',
-          dataIndex: 'roleName'
+          title: '权限名称',
+          dataIndex: 'name'
         },
         {
-          title: '角色代码',
-          dataIndex: 'roleCode',
+          title: '权限代码',
+          dataIndex: 'code',
         },
         {
-          title: '备注',
-          dataIndex: 'remark'
+          title: '排序号',
+          dataIndex: 'sort',
         },
         {
-          title: '更新时间',
-          dataIndex: 'updateTime'
+          title: '描述',
+          dataIndex: 'remark',
         },
         {
           title: '操作',
@@ -116,33 +112,13 @@ export default {
         }
       ],
       url: {
-        list: '/system/role/list',
-        delete: '/system/role/delete'
+        list: '/system/module/list',
+        delete: '/system/module/delete'
       },
     }
   },
   methods: {
-    // 删除
-    handleDelete(record){
-      this.$confirm({
-        title: "删除角色",
-        content: "确认删除角色【" + record.roleName + "】吗？",
-        onOk: () => {
-          this.$loading.show()
-          deleteAction(this.url.delete, {id: record.id}).then(res => {
-            if(res.code === 0){
-              this.$message.success('操作成功')
-              this.refreshData()
-            }
-          }).finally(() => {
-            this.$loading.hide() 
-          })
-        }
-      });
-    },
-    handleSetPermission(record){
-      this.$refs.rolePermissionSetModal.load(record.id)
-    }
+    
   }
 }
 </script>

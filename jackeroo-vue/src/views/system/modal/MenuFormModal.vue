@@ -38,7 +38,7 @@
           </a-col>
           <a-col :span="rowSpan" v-if="type == 1 && target == 1">
             <a-form-model-item label="组件路径" prop="component">
-              <a-input v-model="form.component" placeholder="请输入组件路径" :disabled="flag.view" addonBefore="/views"></a-input>
+              <a-input v-model="form.component" placeholder="请输入组件路径" :disabled="flag.view" addonBefore="/views" addonAfter=".vue"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan" v-if="type == 0">
@@ -49,9 +49,12 @@
               </a-select>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan" v-if="type == 0">
+          <a-col :span="rowSpan">
             <a-form-model-item label="图标" prop="icon">
               <a-input placeholder="点击选择图标" v-model="form.icon" :readOnly="true" :disabled="flag.view">
+                <span v-if="!form.icon" slot="addonBefore" style="width:15px;display: inline-block;"></span>
+                <a-icon v-else :type="form.icon" slot="addonBefore"></a-icon>
+                <a-icon type="close-circle" slot="suffix" @click="clearIcon" class="close"></a-icon>
                 <a-icon v-if="flag.view" slot="addonAfter" type="setting"/>
                 <a-icon v-else slot="addonAfter" type="setting" @click="selectIcons"/>
               </a-input>
@@ -367,6 +370,9 @@ export default {
         }
       })
     },
+    clearIcon(){
+      this.form.icon = ''
+    },
     cancel(){
       this.visible = false
       this.flag.add = false
@@ -393,5 +399,11 @@ export default {
 <style lang="less" scoped>
 .tooltip-red{
   color: #ff4545;
+}
+.close{
+  color: #D3D3D3;
+}
+.close:hover{
+  color: #696969;
 }
 </style>

@@ -8,7 +8,7 @@
       </a-col>
       <template slot="operate">
         <a-button type="primary" @click="loadDataSource()">查询</a-button>
-        <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+        <a-button style="margin-left: 8px" @click="reset">重置</a-button>
       </template>
     </search-card>
     

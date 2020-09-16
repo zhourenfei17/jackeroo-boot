@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search-card :load="enter">
+    <search-card :enter="refreshData">
       <a-col :md="6" :sm="12">
         <a-form-item label="权限组名">
           <a-input v-model="queryParam.groupName" placeholder="请输入权限组名"/>
@@ -9,7 +9,7 @@
 
       <template slot="operate">
         <a-button type="primary" @click="refreshData(true)">查询</a-button>
-        <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+        <a-button style="margin-left: 8px" @click="reset">重置</a-button>
       </template>
     </search-card>
 
