@@ -1,29 +1,15 @@
 package cn.hub.jackeroo.online.controller;
 
-import cn.hub.jackeroo.online.entity.GenTable;
-import cn.hub.jackeroo.online.service.GenTableService;
-import cn.hub.jackeroo.online.utils.GenUtils;
 import cn.hub.jackeroo.persistence.BaseController;
-import cn.hub.jackeroo.utils.StringUtils;
-import cn.hub.jackeroo.vo.Grid;
-import cn.hub.jackeroo.vo.GridParam;
-import cn.hub.jackeroo.vo.Json;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Slf4j
 @RequestMapping("/gen/genTable")
 @Controller
 public class GenTableController extends BaseController {
-    @Autowired
+    /*@Autowired
     private GenTableService service;
 
     @RequestMapping("")
@@ -71,10 +57,10 @@ public class GenTableController extends BaseController {
         return successPath;
     }
 
-    /**
+    *//**
      * 获取数据库所有物理表
      * @return
-     */
+     *//*
     @RequestMapping("/getAllTable")
     @ResponseBody
     public List<GenTable> getAllTable(){
@@ -82,12 +68,12 @@ public class GenTableController extends BaseController {
         return service.findTableListFormDb(new GenTable());
     }
 
-    /**
+    *//**
      * 删除业务表配置
      * @param genTable
      * @param redirectAttributes
      * @return
-     */
+     *//*
     @RequestMapping(value = "delete")
     @ResponseBody
     public Json delete(GenTable genTable, RedirectAttributes redirectAttributes) {
@@ -103,5 +89,5 @@ public class GenTableController extends BaseController {
             json.setMsg("删除失败");
         }
         return json;
-    }
+    }*/
 }

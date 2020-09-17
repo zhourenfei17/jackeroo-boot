@@ -1,19 +1,6 @@
 package cn.hub.jackeroo.online.service;
 
-import cn.hub.jackeroo.online.dao.GenDataBaseDictDao;
-import cn.hub.jackeroo.online.dao.GenTableColumnDao;
-import cn.hub.jackeroo.online.dao.GenTableDao;
-import cn.hub.jackeroo.online.entity.GenTable;
-import cn.hub.jackeroo.online.entity.GenTableColumn;
-import cn.hub.jackeroo.online.utils.GenUtils;
-import cn.hub.jackeroo.persistence.CrudService;
-import cn.hub.jackeroo.utils.StringUtils;
-import cn.hub.jackeroo.vo.Grid;
-import cn.hub.jackeroo.vo.GridParam;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 业务表Service
@@ -21,9 +8,9 @@ import java.util.List;
  * @version 2013-10-15
  */
 @Service
-public class GenTableService extends CrudService<GenTableDao, GenTable, Integer> {
+public class GenTableService {
 
-	@Resource
+	/*@Resource
 	private GenTableDao genTableDao;
 	@Resource
 	private GenTableColumnDao genTableColumnDao;
@@ -39,9 +26,9 @@ public class GenTableService extends CrudService<GenTableDao, GenTable, Integer>
 	}
 	
 	public Grid find(GridParam gridParam, GenTable genTable) {
-		/*genTable.setPage(page);
+		*//*genTable.setPage(page);
 		page.setList(genTableDao.findList(genTable));
-		return page;*/
+		return page;*//*
 		Grid grid = new Grid();
 
 		//Page page = PageUtils.offsetPage(gridParam);
@@ -55,20 +42,20 @@ public class GenTableService extends CrudService<GenTableDao, GenTable, Integer>
 		return genTableDao.findList(new GenTable());
 	}
 	
-	/**
+	*//**
 	 * 获取物理数据表列表
 	 * @param genTable
 	 * @return
-	 */
+	 *//*
 	public List<GenTable> findTableListFormDb(GenTable genTable){
 		return genDataBaseDictDao.findTableList(genTable);
 	}
 	
-	/**
+	*//**
 	 * 验证表名是否可用，如果已存在，则返回false
 	 * @param tableName
 	 * @return
-	 */
+	 *//*
 	public boolean checkTableName(String tableName){
 		if (StringUtils.isBlank(tableName)){
 			return true;
@@ -79,11 +66,11 @@ public class GenTableService extends CrudService<GenTableDao, GenTable, Integer>
 		return list.size() == 0;
 	}
 	
-	/**
+	*//**
 	 * 获取物理数据表列表
 	 * @param genTable
 	 * @return
-	 */
+	 *//*
 	public GenTable getTableFormDb(GenTable genTable){
 		// 如果有表名，则获取物理表
 		if (StringUtils.isNotBlank(genTable.getName())){
@@ -169,6 +156,6 @@ public class GenTableService extends CrudService<GenTableDao, GenTable, Integer>
 	public void delete(GenTable genTable) {
 		genTableDao.delete(genTable.getId());
 		genTableColumnDao.deleteByGenTableId(genTable.getId());
-	}
+	}*/
 	
 }

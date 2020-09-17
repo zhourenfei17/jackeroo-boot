@@ -1,22 +1,6 @@
 package cn.hub.jackeroo.online.service;
 
-import cn.hub.jackeroo.online.dao.GenSchemeDao;
-import cn.hub.jackeroo.online.dao.GenTableColumnDao;
-import cn.hub.jackeroo.online.dao.GenTableDao;
-import cn.hub.jackeroo.online.entity.GenConfig;
-import cn.hub.jackeroo.online.entity.GenScheme;
-import cn.hub.jackeroo.online.entity.GenTable;
-import cn.hub.jackeroo.online.entity.GenTableColumn;
-import cn.hub.jackeroo.online.entity.GenTemplate;
-import cn.hub.jackeroo.online.utils.GenUtils;
-import cn.hub.jackeroo.persistence.CrudService;
-import cn.hub.jackeroo.vo.Grid;
-import cn.hub.jackeroo.vo.GridParam;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 生成方案Service
@@ -24,9 +8,9 @@ import java.util.Map;
  * @version 2013-10-15
  */
 @Service
-public class GenSchemeService extends CrudService<GenSchemeDao, GenScheme, Integer> {
+public class GenSchemeService  {
 
-	@Resource
+	/*@Resource
 	private GenSchemeDao genSchemeDao;
 //	@Autowired
 //	private GenTemplateDao genTemplateDao;
@@ -109,13 +93,13 @@ public class GenSchemeService extends CrudService<GenSchemeDao, GenScheme, Integ
 		for (GenTemplate tpl : templateList){
 			result.append(GenUtils.generateToFile(tpl, model, genScheme.getReplaceFile()));
 		}
-		/*for (int i = 0; i < templateList.size(); i++){
+		*//*for (int i = 0; i < templateList.size(); i++){
 			System.out.println("==================================************************开始生成" + templateList.get(i).getName() + "页面");
 			if(templateList.get(i).getName().equals("mapper")){
 				result.append(GenUtils.generateToFile(templateList.get(i), model, genScheme.getReplaceFile()));
 			}
 			System.out.println("==================================************************生成" + templateList.get(i).getName() + "页面完成");
-		}*/
+		}*//*
 		return result.toString();
-	}
+	}*/
 }

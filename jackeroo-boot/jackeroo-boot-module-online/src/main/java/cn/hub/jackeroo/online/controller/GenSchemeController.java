@@ -1,25 +1,15 @@
 package cn.hub.jackeroo.online.controller;
 
-import cn.hub.jackeroo.online.entity.GenScheme;
-import cn.hub.jackeroo.online.service.GenSchemeService;
-import cn.hub.jackeroo.online.service.GenTableService;
 import cn.hub.jackeroo.persistence.BaseController;
-import cn.hub.jackeroo.vo.Grid;
-import cn.hub.jackeroo.vo.GridParam;
-import cn.hub.jackeroo.vo.Json;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 @RequestMapping("/gen/genScheme")
 @Controller
 public class GenSchemeController extends BaseController {
-    @Autowired
+    /*@Autowired
     private GenSchemeService genSchemeService;
     @Autowired
     private GenTableService genTableService;
@@ -80,5 +70,5 @@ public class GenSchemeController extends BaseController {
             json.setMsg("删除生成方案失败");
         }
         return json;
-    }
+    }*/
 }

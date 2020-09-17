@@ -1,13 +1,6 @@
 package cn.hub.jackeroo.online.service;
 
-import cn.hub.jackeroo.online.dao.GenTemplateDao;
-import cn.hub.jackeroo.online.entity.GenTemplate;
-import cn.hub.jackeroo.vo.Grid;
-import cn.hub.jackeroo.vo.GridParam;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * 代码模板Service
@@ -17,7 +10,7 @@ import javax.annotation.Resource;
 @Service
 public class GenTemplateService {
 
-	@Resource
+	/*@Resource
 	private GenTemplateDao genTemplateDao;
 	
 	public GenTemplate get(Integer id) {
@@ -25,9 +18,9 @@ public class GenTemplateService {
 	}
 	
 	public Grid find(GridParam gridParam, GenTemplate genTemplate) {
-		/*genTemplate.setPage(page);
+		*//*genTemplate.setPage(page);
 		page.setList(genTemplateDao.findList(genTemplate));
-		return page;*/
+		return page;*//*
 
 		Grid grid = new Grid();
 
@@ -53,6 +46,6 @@ public class GenTemplateService {
 	
 	public void delete(GenTemplate genTemplate) {
 		genTemplateDao.delete(genTemplate.getId());
-	}
+	}*/
 	
 }
