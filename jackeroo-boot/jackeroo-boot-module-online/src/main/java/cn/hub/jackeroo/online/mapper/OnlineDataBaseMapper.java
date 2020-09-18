@@ -13,11 +13,10 @@ public interface OnlineDataBaseMapper {
 
     /**
      * 获取业务表信息
-     * @param name
-     * @param dbName
+     * @param onlineTable
      * @return
      */
-    OnlineTable findTableInfo(String name, String dbName);
+    List<OnlineTable> findTableInfo(OnlineTable onlineTable);
 
     /**
      * 获取业务表字段信息

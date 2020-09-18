@@ -17,4 +17,21 @@
         update_time as "updateTime"
     </sql>
 
+    <select id="findList" resultType="cn.hub.jackeroo.online.entity.OnlineTable">
+        select
+            <include refid="baseColumns"/>
+        from online_table a
+        <where>
+
+        </where>
+        <choose>
+            <when test="orderBy != null and orderBy != ''">
+                order by ${orderBy}
+            </when>
+            <otherwise>
+                order by a.update_time desc
+            </otherwise>
+        </choose>
+    </select>
+
 </mapper>

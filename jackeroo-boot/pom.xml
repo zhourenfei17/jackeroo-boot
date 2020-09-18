@@ -22,7 +22,7 @@
         <module>jackeroo-boot-module-root</module>
         <module>jackeroo-boot-module-common</module>
         <module>jackeroo-boot-module-system</module>
-        <!--<module>jackeroo-boot-module-online</module>-->
+        <module>jackeroo-boot-module-online</module>
     </modules>
 
     <properties>

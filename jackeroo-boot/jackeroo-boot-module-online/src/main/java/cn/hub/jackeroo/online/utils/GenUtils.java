@@ -1,11 +1,5 @@
 package cn.hub.jackeroo.online.utils;
 
-import cn.hub.jackeroo.online.entity.GenCategory;
-import cn.hub.jackeroo.online.entity.GenConfig;
-import cn.hub.jackeroo.online.entity.GenScheme;
-import cn.hub.jackeroo.online.entity.GenTable;
-import cn.hub.jackeroo.online.entity.GenTableColumn;
-import cn.hub.jackeroo.online.entity.GenTemplate;
 import cn.hub.jackeroo.utils.DateUtils;
 import cn.hub.jackeroo.utils.FileUtils;
 import cn.hub.jackeroo.utils.FreeMarkers;
@@ -45,7 +39,7 @@ public class GenUtils {
 	 * 
 	 * @param genTable
 	 */
-	public static void initColumnField(GenTable genTable) {
+	/*public static void initColumnField(GenTable genTable) {
 		for (GenTableColumn column : genTable.getColumnList()) {
 
 			// 如果是不是新增列，则跳过。
@@ -125,14 +119,14 @@ public class GenUtils {
 			// 设置特定类型和字段名
 
 			// 用户
-			/*
+			*//*
 			 * if (StringUtils.startsWithIgnoreCase(column.getName(), "user_id")){
 			 * column.setJavaType(User.class.getName());
 			 * column.setJavaField(column.getJavaField().replaceAll("Id", ".id|name"));
 			 * column.setShowType("userselect"); }
-			 */
+			 *//*
 			// 部门
-			/*
+			*//*
 			 * else if (StringUtils.startsWithIgnoreCase(column.getName(), "office_id")){
 			 * column.setJavaType(Office.class.getName());
 			 * column.setJavaField(column.getJavaField().replaceAll("Id", ".id|name"));
@@ -141,7 +135,7 @@ public class GenUtils {
 			 * column.setJavaType(Area.class.getName());
 			 * column.setJavaField(column.getJavaField().replaceAll("Id", ".id|name"));
 			 * column.setShowType("areaselect"); }
-			 */
+			 *//*
 			// 创建者、更新者
 			if (StringUtils.startsWithIgnoreCase(column.getName(), "create_by") || StringUtils.startsWithIgnoreCase(column.getName(), "update_by")) {
 				column.setJavaType(IUser.class.getName());
@@ -174,11 +168,11 @@ public class GenUtils {
 		}
 	}
 
-	/**
+	*//**
 	 * 获取模板路径
 	 * 
 	 * @return
-	 */
+	 *//*
 	public static String getTemplatePath() {
 		try {
 			File file = new DefaultResourceLoader().getResource("").getFile();
@@ -195,13 +189,13 @@ public class GenUtils {
 		return "";
 	}
 
-	/**
+	*//**
 	 * XML文件转换为对象
 	 * 
 	 * @param fileName
 	 * @param clazz
 	 * @return
-	 */
+	 *//*
 	@SuppressWarnings("unchecked")
 	public static <T> T fileToObject(String fileName, Class<?> clazz) {
 		try {
@@ -244,13 +238,13 @@ public class GenUtils {
 		return null;
 	}
 
-	/**
+	*//**
 	 * XML文件转换为对象
 	 * 
 	 * @param fileName
 	 * @param clazz
 	 * @return
-	 */
+	 *//*
 	@SuppressWarnings("unchecked")
 	public static <T> T fileToObjectOther(String fileName, Class<?> clazz) {
 		try {
@@ -293,17 +287,17 @@ public class GenUtils {
 		return null;
 	}
 
-	/**
+	*//**
 	 * 获取代码生成配置对象
 	 * 
 	 * @return
-	 */
+	 *//*
 	public static GenConfig getConfig() {
 		GenConfig config = fileToObject("config.xml", GenConfig.class);
 		return config;
 	}
 
-	/**
+	*//**
 	 * 根据分类获取模板列表
 	 * 
 	 * @param config
@@ -311,7 +305,7 @@ public class GenUtils {
 	 * @param isChildTable
 	 *            是否是子表
 	 * @return
-	 */
+	 *//*
 	public static List<GenTemplate> getTemplateList(GenConfig config, String category, boolean isChildTable) {
 		List<GenTemplate> templateList = Lists.newArrayList();
 		if (config != null && config.getCategoryList() != null && category != null) {
@@ -342,24 +336,24 @@ public class GenUtils {
 		return templateList;
 	}
 
-	/**
+	*//**
 	 * @Description: 获取自定义的模版
 	 * @param file
 	 * @return
 	 * @author
 	 * @date: 2017年8月4日
-	 */
+	 *//*
 	public static GenTemplate getTemplateByName(String file) {
 		return fileToObjectOther(file, GenTemplate.class);
 	}
 
-	/**
+	*//**
 	 * 获取数据模型
 	 * 
 	 * @param genScheme
 	 * @param
 	 * @return
-	 */
+	 *//*
 	public static Map<String, Object> getDataModel(GenScheme genScheme) {
 		Map<String, Object> model = Maps.newHashMap();
 
@@ -394,23 +388,23 @@ public class GenUtils {
 		return model;
 	}
 
-	/**
+	*//**
 	 * 生成到文件
 	 * 
 	 * @param tpl
 	 * @param model
 	 * @param
 	 * @return
-	 */
+	 *//*
 	public static String generateToFile(GenTemplate tpl, Map<String, Object> model, boolean isReplaceFile) {
 		// 获取生成文件
-		/*
+		*//*
 		 * String fileName = Global.getProjectPath() + File.separator +
 		 * StringUtils.replaceEach(FreeMarkers.renderString(tpl.getFilePath() + "/",
 		 * model), new String[]{"//", "/", "."}, new String[]{File.separator,
 		 * File.separator, File.separator}) +
 		 * FreeMarkers.renderString(tpl.getFileName(), model);
-		 */
+		 *//*
 		String fileName = PathUtil.getFileSavePath(File.separator
 		        + StringUtils.replaceEach(FreeMarkers.renderString(tpl.getFilePath() + "/", model), new String[] { "//", "/", "." },
 		                                  new String[] { File.separator, File.separator, File.separator })
@@ -437,14 +431,14 @@ public class GenUtils {
 		}
 	}
 
-	/**
+	*//**
 	 * 生成到文件
 	 * 
 	 * @param tpl
 	 * @param model
 	 * @param
 	 * @return
-	 */
+	 *//*
 	public static String generateToFile(HttpServletRequest request, GenTemplate tpl, Map<String, Object> model, boolean isReplaceFile) {
 		// 获取生成文件
 		String fileName = request.getSession().getServletContext().getRealPath("/")
@@ -483,5 +477,5 @@ public class GenUtils {
 			e.printStackTrace();
 		}
 	}
-
+*/
 }

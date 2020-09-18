@@ -23,10 +23,10 @@
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>cn.hub.jackeroo</groupId>
             <artifactId>jackeroo-boot-module-online</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-        </dependency>-->
+        </dependency>
     </dependencies>
 </project>
