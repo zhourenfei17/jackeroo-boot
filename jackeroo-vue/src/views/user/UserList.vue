@@ -72,7 +72,7 @@
         :data="loadData"
         :alert="tableAlert"
         :rowSelection="rowSelection"
-        showPagination="auto"
+        :showPagination="showPagination"
       >
         <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />

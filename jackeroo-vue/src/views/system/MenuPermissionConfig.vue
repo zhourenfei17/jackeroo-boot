@@ -33,13 +33,13 @@
 
       <s-table
         ref="table"
-        size="default"
+        :size="tableSize"
         rowKey="id"
         :columns="columns"
         :data="loadData"
         :alert="tableAlert"
         :rowSelection="rowSelection"
-        showPagination="auto"
+        :showPagination="showPagination"
       >
         <template slot="isDefault" slot-scope="text">
           <j-tag :type="text == 0 ? 'warning' : 'info'" :text="text == 0 ? '否' : '是'"></j-tag>

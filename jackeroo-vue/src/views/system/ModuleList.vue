@@ -38,13 +38,13 @@
 
       <s-table
         ref="table"
-        size="default"
+        :size="tableSize"
         rowKey="id"
         :columns="columns"
         :data="loadData"
         :alert="tableAlert"
         :rowSelection="rowSelection"
-        showPagination="auto"
+        :showPagination="showPagination"
       >
         <span slot="action" slot-scope="text, record">
           <template>

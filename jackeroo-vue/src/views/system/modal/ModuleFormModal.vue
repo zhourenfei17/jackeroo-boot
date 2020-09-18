@@ -12,7 +12,7 @@
   >
     <j-spin :spinning="loading">
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
-        <a-row :gutter="24">
+        <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
             <a-form-model-item label="模块名称" prop="name">
               <a-input v-model="form.name" placeholder="请输入模块名称" :disabled="flag.view"></a-input>

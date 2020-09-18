@@ -9,7 +9,7 @@
     
     <j-spin :spinning="loading">
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
-        <a-row :gutter="24">
+        <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
             <a-form-model-item label="上级菜单" prop="parentId">
               <tree-select v-model="form.parentId" placeholder="请选择上级菜单" :disabled="true" :treeData="treeData" style="width:100%;" 

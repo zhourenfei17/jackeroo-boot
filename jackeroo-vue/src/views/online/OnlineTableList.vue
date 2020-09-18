@@ -2,16 +2,16 @@
   <div>
     <search-card :enter="refreshData">
       <a-col :md="6" :sm="12">
-        <a-form-item label="角色名">
-          <a-input v-model="queryParam.roleName" placeholder="请输入角色名"/>
+        <a-form-item label="表名">
+          <a-input v-model="queryParam.tableName" placeholder="请输入表名"/>
         </a-form-item>
       </a-col>
       <a-col :md="6" :sm="12">
-        <a-form-item label="角色代码">
-          <a-input v-model="queryParam.roleCode" placeholder="请输入角色代码"/>
+        <a-form-item label="表说明">
+          <a-input v-model="queryParam.code" placeholder="请输入表说明"/>
         </a-form-item>
       </a-col>
-      
+
       <template slot="operate">
         <a-button type="primary" @click="refreshData(true)">查询</a-button>
         <a-button style="margin-left: 8px" @click="reset">重置</a-button>
@@ -46,13 +46,11 @@
         :rowSelection="rowSelection"
         :showPagination="showPagination"
       >
-
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
               <a @click="handleView(record)">详情</a>
               <a @click="handleEdit(record)">编辑</a>
-              <a @click="handleSetPermission(record)">配置权限</a>
               <action-menu-list>
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
@@ -60,28 +58,26 @@
           </template>
         </span>
       </s-table>
-
-      <role-form-modal ref="formModal" @ok="handleOk"></role-form-modal>
-      <role-permission-set-modal ref="rolePermissionSetModal" ></role-permission-set-modal>
     </data-card>
+
+    <select-table-modal ref="selectTableModal"></select-table-modal>
   </div>
 </template>
 
 <script>
-import { STable, DataCard, SearchCard } from '@/components'
-import RoleFormModal from './modal/RoleFormModal'
-import RolePermissionSetModal from './modal/RolePermissionSetModal'
+import { STable, JTag, DataCard, SearchCard } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
+import SelectTableModal from './modal/SelectTableModal'
 
 export default {
-  name: 'RoleList',
+  name: 'OnlineTableList',
   components: {
     STable,
-    RoleFormModal,
-    RolePermissionSetModal,
+    JTag,
     DataCard,
-    SearchCard
+    SearchCard,
+    SelectTableModal
   },
   mixins:[JackerooListMixins],
   data () {
@@ -94,20 +90,20 @@ export default {
           }
         },
         {
-          title: '角色名',
-          dataIndex: 'roleName'
+          title: '表名',
+          dataIndex: 'tableName'
         },
         {
-          title: '角色代码',
-          dataIndex: 'roleCode',
+          title: '表说明',
+          dataIndex: 'comment',
         },
         {
-          title: '备注',
-          dataIndex: 'remark'
+          title: '主键策略',
+          dataIndex: 'idStrategy',
         },
         {
-          title: '更新时间',
-          dataIndex: 'updateTime'
+          title: '创建时间',
+          dataIndex: 'createTime',
         },
         {
           title: '操作',
@@ -116,32 +112,15 @@ export default {
         }
       ],
       url: {
-        list: '/system/role/list',
-        delete: '/system/role/delete'
+        list: '/online/table/list',
+        delete: '/online/table/delete'
       },
     }
   },
   methods: {
-    // 删除
-    handleDelete(record){
-      this.$confirm({
-        title: "删除角色",
-        content: "确认删除角色【" + record.roleName + "】吗？",
-        onOk: () => {
-          this.$loading.show()
-          deleteAction(this.url.delete, {id: record.id}).then(res => {
-            if(res.code === 0){
-              this.$message.success('操作成功')
-              this.refreshData()
-            }
-          }).finally(() => {
-            this.$loading.hide() 
-          })
-        }
-      });
-    },
-    handleSetPermission(record){
-      this.$refs.rolePermissionSetModal.load(record.id)
+    handleAdd(){
+      this.$refs.selectTableModal.visible = true
+      this.$refs.selectTableModal.add()
     }
   }
 }

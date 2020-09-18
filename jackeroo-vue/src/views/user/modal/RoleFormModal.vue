@@ -12,7 +12,7 @@
   >
     <j-spin :spinning="loading">
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
-        <a-row :gutter="24">
+        <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
             <a-form-model-item label="角色名" prop="roleName">
               <a-input v-model="form.roleName" placeholder="请输入角色名" :disabled="flag.view"></a-input>

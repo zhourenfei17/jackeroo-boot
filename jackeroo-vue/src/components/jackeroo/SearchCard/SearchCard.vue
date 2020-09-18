@@ -2,7 +2,7 @@
   <a-card :bordered="false" :bodyStyle="bodyStyle">
       <div class="table-page-search-wrapper">
         <a-form layout="inline" @keyup.enter.native="enter">
-          <a-row :gutter="48">
+          <a-row :gutter="gutter">
             <slot></slot>
 
             <slot name="more" v-if="$slots.more && advanced"></slot>
@@ -28,6 +28,11 @@
 export default {
   name: 'SearchCard',
   props: {
+    // 栅格间距
+    gutter:{
+      type: [Number, Object, Array],
+      default: 48
+    },
     enter: {
       type: Function,
       default: () => {
@@ -71,7 +76,8 @@ export default {
         }
       }
       for(let prop in props){
-        props[prop] = 24 - (props[prop] % 24)
+        let span = 24 - (props[prop] % 24)
+        props[prop] = span < 4 ? 24 : span
       }
       return props
     }

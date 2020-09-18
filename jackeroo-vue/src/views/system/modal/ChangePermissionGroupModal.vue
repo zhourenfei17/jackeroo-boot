@@ -11,7 +11,7 @@
     @cancel="cancel"
   >
     <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
-      <a-row :gutter="24">
+      <a-row :gutter="formGutter">
         <a-col :span="24">
           <a-form-model-item label="权限分组" prop="groupId">
             <j-select v-model="form.groupId" placeholder="请选择权限分组" :url="url.findAllPermissionSelect" textField="groupName"></j-select>

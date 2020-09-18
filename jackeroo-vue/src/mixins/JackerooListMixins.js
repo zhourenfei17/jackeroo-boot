@@ -20,7 +20,32 @@ export const JackerooListMixins = {
         // 是否跨页选择
         multiPageSelect: true
       },
+      // 主键字段
+      tableKey: 'id',
+      rowSelection : {
+        selectedRowKeys: this.selectedRowKeys,
+        onChange: this.onSelectChange
+      },
+      customRow: (record, index) => {
+        return {
+          on: {
+            click: (event) => {
+              let i = this.selectedRowKeys.indexOf(record[this.tableKey])
+              if(i > -1){
+                this.selectedRowKeys.splice(i, 1)
+                this.selectedRows.splice(i, 1)
+              }else{
+                this.selectedRowKeys.push(record[this.tableKey])
+                this.selectedRows.push(record)
+              }
+            }
+          }
+        }
+      },
+      // 表大小
       tableSize: 'default',
+      // 分页，支持['auto', true, false]
+      showPagination: 'auto',
       // 加载数据方法 必须为 Promise 对象
       loadData: (parameter) => {
         if(!this.useSTable){
@@ -51,16 +76,12 @@ export const JackerooListMixins = {
     }
   },
   computed: {
-    rowSelection () {
-      return {
-        selectedRowKeys: this.selectedRowKeys,
-        onChange: this.onSelectChange
-      }
-    }
+    
   },
   methods: {
     // 选中行事件
     onSelectChange (selectedRowKeys, selectedRows) {
+      console.log('selectedRowKeys', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },

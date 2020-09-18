@@ -20,8 +20,10 @@ export const JackerooFromMixins = {
         labelCol: {span: 6},
         wrapperCol: {span: 16}
       },
+      // 表单栅格间距
+      formGutter: 24,
       // 表单展示列数
-      column: {
+      colNums: {
         // 普通情况
         normal: 1,
         // 全屏情况
@@ -50,9 +52,9 @@ export const JackerooFromMixins = {
     },
     rowSpan(){
       if(!this.fullscreen){
-        return 24 / this.column.normal
+        return 24 / this.colNums.normal
       }else{
-        return 24 / this.column.fullscreen
+        return 24 / this.colNums.fullscreen
       }
     }
   },
@@ -74,8 +76,10 @@ export const JackerooFromMixins = {
       this.flag.edit = false
       this.flag.view = false
 
-      this.$refs.formModel.resetFields()
-      this.$refs.formModel.clearValidate()
+      if(this.$refs.formModel){
+        this.$refs.formModel.resetFields()
+        this.$refs.formModel.clearValidate()
+      }
       this.loading = true
     },
     submit(formData){
