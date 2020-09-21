@@ -1,6 +1,7 @@
 package cn.hub.jackeroo.online.service;
 
 import cn.hub.jackeroo.online.entity.OnlineTable;
+import cn.hub.jackeroo.online.entity.OnlineTableField;
 import cn.hub.jackeroo.online.mapper.OnlineDataBaseMapper;
 import cn.hub.jackeroo.vo.PageParam;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -8,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author alex
@@ -30,5 +32,14 @@ public class OnlineGenerateService {
         page.setRecords(dataBaseMapper.findTableInfo(onlineTable));
 
         return page;
+    }
+
+    /**
+     * 获取数据库业务表的所有字段列表
+     * @param tableName
+     * @return
+     */
+    public List<OnlineTableField> findTableColumnList(String tableName){
+        return dataBaseMapper.findTableColumnList(tableName, "mysql");
     }
 }

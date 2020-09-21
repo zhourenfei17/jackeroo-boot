@@ -40,4 +40,15 @@ public class OnlineGenerateController extends BaseController {
     public Result<IPage<OnlineTable>> findTableListFromDataSource(OnlineTable onlineTable, @Validated PageParam pageParam){
         return ok(service.findTableListFromDataSoure(onlineTable, pageParam));
     }
+
+    /**
+     * 获取数据库业务表字段列表
+     * @param tableName
+     * @return
+     */
+    @GetMapping("findTableColumnList")
+    @ApiOperation("获取数据库业务表字段列表")
+    public Result findTableColumnList(String tableName){
+        return ok(service.findTableColumnList(tableName));
+    }
 }
