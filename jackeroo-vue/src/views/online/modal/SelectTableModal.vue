@@ -38,20 +38,11 @@
       :alert="tableAlert"
       :rowSelection="rowSelection"
       :showPagination="showPagination"
-      :customRow="customRow"
     >
-      <span slot="action" slot-scope="text, record">
-        <template>
-          <action-list>
-            <a @click="handleView(record)">详情</a>
-            <a @click="handleEdit(record)">编辑</a>
-            <action-menu-list>
-              <a @click="handleDelete(record)">删除</a>
-            </action-menu-list>
-          </action-list>
-        </template>
-      </span>
+      
     </s-table>
+
+    <generate-table-column ref="generateTableColumn"></generate-table-column>
   </j-modal>
 </template>
 
@@ -60,11 +51,13 @@ import { STable, SearchCard } from '@/components'
 import { getAction, postAction, httpAction } from '@/api/manage'
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
+import GenerateTableColumn from './GenerateTableColumn'
 
 export default {
   components: {
     STable,
-    SearchCard
+    SearchCard,
+    GenerateTableColumn
   },
   mixins: [JackerooFromMixins, JackerooListMixins],
   data(){
@@ -97,10 +90,21 @@ export default {
     add(){
       this.loading = false
     },
+    onSelectChange (selectedRowKeys, selectedRows) {
+      if(selectedRowKeys.length > 1){
+        selectedRowKeys.shift()
+        selectedRows.shift()
+      }
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+    },
     handleSubmit(){
-      this.$refs.formModel.validate((success) => {
-        
-      })
+      if(this.selectedRowKeys.length != 1){
+        this.$message.warning('请选择数据库表')
+        return
+      }
+      this.$refs.generateTableColumn.add(this.selectedRowKeys[0])
+      this.cancel()
     },
   }
 }

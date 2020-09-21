@@ -26,22 +26,6 @@ export const JackerooListMixins = {
         selectedRowKeys: this.selectedRowKeys,
         onChange: this.onSelectChange
       },
-      customRow: (record, index) => {
-        return {
-          on: {
-            click: (event) => {
-              let i = this.selectedRowKeys.indexOf(record[this.tableKey])
-              if(i > -1){
-                this.selectedRowKeys.splice(i, 1)
-                this.selectedRows.splice(i, 1)
-              }else{
-                this.selectedRowKeys.push(record[this.tableKey])
-                this.selectedRows.push(record)
-              }
-            }
-          }
-        }
-      },
       // 表大小
       tableSize: 'default',
       // 分页，支持['auto', true, false]
@@ -81,7 +65,6 @@ export const JackerooListMixins = {
   methods: {
     // 选中行事件
     onSelectChange (selectedRowKeys, selectedRows) {
-      console.log('selectedRowKeys', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
