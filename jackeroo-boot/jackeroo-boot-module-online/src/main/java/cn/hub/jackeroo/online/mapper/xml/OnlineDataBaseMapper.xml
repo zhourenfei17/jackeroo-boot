@@ -85,7 +85,7 @@
               (t.ORDINAL_POSITION) AS sort,
               t.COLUMN_COMMENT AS dbFieldDesc,
               (CASE WHEN t.CHARACTER_MAXIMUM_LENGTH > 0 THEN t.CHARACTER_MAXIMUM_LENGTH ELSE t.NUMERIC_PRECISION END) AS dbFieldLength,
-              t.NUMERIC_SCALE AS dbFieldDecimal
+              t.NUMERIC_SCALE AS dbFieldDecimal,
               t.DATA_TYPE AS dbFieldType,
               (CASE WHEN t.COLUMN_KEY = 'PRI' THEN 1 ELSE 0 END) AS primaryKey
             FROM information_schema.`COLUMNS` t

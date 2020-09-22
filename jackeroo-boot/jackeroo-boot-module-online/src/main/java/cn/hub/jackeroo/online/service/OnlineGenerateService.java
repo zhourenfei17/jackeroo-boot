@@ -3,13 +3,17 @@ package cn.hub.jackeroo.online.service;
 import cn.hub.jackeroo.online.entity.OnlineTable;
 import cn.hub.jackeroo.online.entity.OnlineTableField;
 import cn.hub.jackeroo.online.mapper.OnlineDataBaseMapper;
+import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author alex
@@ -41,5 +45,24 @@ public class OnlineGenerateService {
      */
     public List<OnlineTableField> findTableColumnList(String tableName){
         return dataBaseMapper.findTableColumnList(tableName, "mysql");
+    }
+
+    public Map findTableDetailInfo(String tableName){
+        Map<String, Object> map = new HashMap<>();
+        map.put("columns", findTableColumnList(tableName));
+
+        OnlineTable query = new OnlineTable();
+        query.setTableName(tableName);
+        List<OnlineTable> tableList = dataBaseMapper.findTableInfo(query);
+        if(CollectionUtils.isNotEmpty(tableList)){
+            OnlineTable table = tableList.get(0);
+            table.setClassName(StringUtils.toCapitalizeCamelCase(tableName));
+            table.setIdStrategy("ASSIGN_ID");
+            table.setDelStrategy(0);
+
+            map.put("table", table);
+        }
+
+        return map;
     }
 }

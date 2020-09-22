@@ -51,4 +51,15 @@ public class OnlineGenerateController extends BaseController {
     public Result findTableColumnList(String tableName){
         return ok(service.findTableColumnList(tableName));
     }
+
+    /**
+     * 获取数据库业务表详细内容
+     * @param tableName
+     * @return
+     */
+    @GetMapping("findTableDetailInfo")
+    @ApiOperation("获取数据库业务表详细内容")
+    public Result findTableDetailInfo(String tableName){
+        return ok(service.findTableDetailInfo(tableName));
+    }
 }
