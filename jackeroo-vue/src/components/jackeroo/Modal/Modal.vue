@@ -35,6 +35,7 @@
       <slot :name="slotName"></slot>
     </template>
 
+    <slot name="footer" v-if="$slots.footer"></slot>
   </a-modal>
 </template>
 

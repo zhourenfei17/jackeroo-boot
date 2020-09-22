@@ -57,16 +57,16 @@
         </a-row>
       </a-form-model>
 
-      <a-table
+      <edit-table
         ref="onlineTableField"
         size="default"
-        rowKey="id"
+        rowKey="dbFieldName"
         :columns="columns"
         :dataSource="dataSource"
-        :showPagination="false"
+        :pagination="false"
         v-show="current == 1">
 
-      </a-table>
+      </edit-table>
 
       <a-form-model ref="onlineScheme" :model="form" :rules="rules" v-bind="layout" v-show="current == 2">
         <a-row :gutter="formGutter">
@@ -148,17 +148,27 @@
       </a-form-model>
     </div>
 
-    <div style="text-align:center;">
-      <a-button @click="handlePrev" v-show="current > 0">上一步</a-button>
-      <a-button type="primary" @click="handleNext" v-show="current < 2">下一步</a-button>
-    </div>
+    <template slot="footer">
+      <span style="padding-right:50px;">
+        <a-button @click="handlePrev" :disabled="current == 0" icon="double-left">上一步</a-button>
+        <a-button @click="handleNext" :disabled="current == 2" icon="double-right">下一步</a-button>
+      </span>
+      
+      <a-button @click="cancel">取消</a-button>
+      <a-button type="primary" @click="handleSubmit">保存</a-button>
+    </template>
   </j-modal>
 </template>
 
 <script>
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import { getAction } from '@/api/manage'
+import {EditTable} from '@/components'
 
 export default {
+  components:{
+    EditTable
+  },
   mixins: [JackerooFromMixins],
   data(){
     return {
@@ -194,23 +204,58 @@ export default {
       columns: [
         {
           dataIndex: 'dbFieldName',
-          title: '列名'
+          title: '列名',
+          type: 'text'
         },
         {
           dataIndex: 'dbFieldDesc',
-          title: '列描述'
+          title: '列描述',
+          type: 'input'
         },
         {
           dataIndex: 'dbFieldType',
-          title: '字段类型'
+          title: '字段类型',
+          type: 'text'
         },
         {
           dataIndex: 'entityFieldName',
           title: '属性名称',
+          type: 'input'
         },
         {
           dataIndex: 'entityFieldType',
-          title: '属性类型'
+          title: '属性类型',
+          type: 'select',
+          options: [
+            {
+              text: 'String',
+              value: 'String'
+            },
+            {
+              text: 'Integer',
+              value: 'Integer'
+            },
+            {
+              text: 'Long',
+              value: 'Long'
+            },
+            {
+              text: 'Double',
+              value: 'Double'
+            },
+            {
+              text: 'Float',
+              value: 'Float'
+            },
+            {
+              text: 'BigDecimal',
+              value: 'BigDecimal'
+            },
+            {
+              text: 'LocalDateTime',
+              value: 'LocalDateTime'
+            }
+          ]
         },
         {
           dataIndex: 'dbFieldLength',
@@ -218,15 +263,17 @@ export default {
         },
         {
           dataIndex: 'primaryKey',
-          title: '主键'
+          title: '主键',
+          type: 'checkbox'
         },
         {
           dataIndex: 'nullable',
-          title: '非空'
+          title: '非空',
+          type: 'checkbox'
         }
       ],
       url: {
-        list: '/online/generate/findTableListFromDataSource'
+        detail: '/online/generate/findTableDetailInfo'
       },
       tableName: ''
     }
@@ -236,6 +283,13 @@ export default {
       this.tableName = tableName
       this.loading = false
       this.visible = true
+
+      getAction(this.url.detail, {tableName: tableName}).then(res => {
+        if(!res.code){
+          this.form = res.data.table
+          this.dataSource = res.data.columns
+        }
+      })
     },
     handleStepChange(current){
       this.current = current

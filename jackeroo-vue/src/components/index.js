@@ -34,6 +34,7 @@ import JDrawer from '@/components/jackeroo/Drawer'
 import JTag from '@/components/jackeroo/Tag/JTag'
 import DataCard from '@/components/jackeroo/DataCard'
 import SearchCard from '@/components/jackeroo/SearchCard'
+import EditTable from '@/components/jackeroo/EditTable'
 
 export {
   AvatarList,
@@ -67,5 +68,6 @@ export {
   JDrawer,
   JTag,
   DataCard,
-  SearchCard
+  SearchCard,
+  EditTable
 }
