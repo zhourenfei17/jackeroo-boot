@@ -1,20 +1,53 @@
 <template>
   <a-table :dataSource="dataSource" :columns="columnsCopy"
     v-bind="$attrs">
-    <template v-for="col in columnsSlot" :slot="col.dataIndex" slot-scope="text, record">
+    <template v-for="col in columnsSlot" :slot="col.dataIndex" slot-scope="text, record, index">
       <div :key="col.dataIndex">
-        <a-input v-if="col.type == 'input'" :value="text" @change="e => handleChange(e.target.value, record, col.dataIndex)">
-        </a-input>
+        <a-form-model :ref="col.dataIndex + index" :rules="col.rule || {}">
+          <a-form-model-item>
+            <a-input 
+              v-if="col.type == 'input'" 
+              :value="text" 
+              @change="e => handleChange(e.target.value, record, col.dataIndex)" 
+              :disabled="col.disabled || !record.enable || false"
+              :size="size">
+            </a-input>
 
-        <a-select v-else-if="col.type == 'select'" :value="text" @change="(v) => handleChange(v, record, col.dataIndex)" style="width: 100%;">
-          <a-select-option v-for="opt in col.options" :key="opt.value" :value="opt.value">{{opt.text}}</a-select-option>
-        </a-select>
+            <a-select 
+              v-else-if="col.type == 'select'" 
+              :value="text" 
+              @change="(v) => handleChange(v, record, col.dataIndex)" 
+              allowClear
+              style="width: 100%;" 
+              :disabled="col.disabled || !record.enable || false"
+              :size="size">
+              <a-select-option v-for="opt in col.options" :key="opt.value" :value="opt.value">{{opt.text}}</a-select-option>
+            </a-select>
 
-        <a-checkbox v-else-if="col.type == 'checkbox'" :checked="text == 1" @change="(e) => handleChange(e.target.checked ? 1 : 0, record, col.dataIndex)"></a-checkbox>
+            <a-select 
+              v-else-if="col.type == 'multiple'" 
+              mode="multiple"
+              :value="text ? text.split(',') : []" 
+              @change="(v) => handleChange(v.join(','), record, col.dataIndex)" 
+              style="width: 100%;" 
+              :disabled="col.disabled || !record.enable || false"
+              :size="size">
+              <a-select-option v-for="opt in col.options" :key="opt.value" :value="opt.value">{{opt.text}}</a-select-option>
+            </a-select>
 
-        <template v-else-if="col.type != 'slot'">
-          {{text}}
-        </template>
+            <a-checkbox 
+              v-else-if="col.type == 'checkbox'" 
+              :checked="text == 1" 
+              @change="(e) => handleChange(e.target.checked ? 1 : 0, record, col.dataIndex)"
+              :disabled="col.disabled || !record.enable || false">
+
+            </a-checkbox>
+
+            <template v-else-if="col.type != 'slot'">
+              {{text}}
+            </template>
+          </a-form-model-item>
+        </a-form-model>
       </div>
     </template>
 
@@ -50,7 +83,7 @@ export default {
   },
   data(){
     return {
-      
+      size: 'default'
     }
   },
   computed: {
@@ -84,6 +117,20 @@ export default {
 
         //this.$emit('update', newData)
       // }
+    },
+    validate(){
+      const refs = this.$refs
+      console.log('refs', refs)
+
+      this.$refs.dbFieldName0.validate((success) => {
+        console.log('success')
+      })
+      /* for(let ref in refs){
+        console.log(ref)
+        this.$refs[ref].validate((success) => {
+          console.log(success)
+        })
+      } */
     }
   }
 }

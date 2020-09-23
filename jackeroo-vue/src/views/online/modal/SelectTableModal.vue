@@ -35,7 +35,7 @@
       :rowKey="tableKey"
       :columns="columns"
       :data="loadData"
-      :alert="tableAlert"
+      :alert="{show: false}"
       :rowSelection="rowSelection"
       :showPagination="showPagination"
     >
@@ -81,6 +81,11 @@ export default {
           dataIndex: 'comment',
         }
       ],
+      rowSelection : {
+        selectedRowKeys: this.selectedRowKeys,
+        onChange: this.onSelectChange,
+        type: 'radio'
+      },
       url: {
         list: '/online/generate/findTableListFromDataSource'
       }
@@ -91,10 +96,10 @@ export default {
       this.loading = false
     },
     onSelectChange (selectedRowKeys, selectedRows) {
-      if(selectedRowKeys.length > 1){
+      /* if(selectedRowKeys.length > 1){
         selectedRowKeys.shift()
         selectedRows.shift()
-      }
+      } */
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },

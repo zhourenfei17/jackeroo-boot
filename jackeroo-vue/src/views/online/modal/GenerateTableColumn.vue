@@ -59,11 +59,12 @@
 
       <edit-table
         ref="onlineTableField"
-        size="default"
+        size="small"
         rowKey="dbFieldName"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="false"
+        :scroll="{x: true}"
         v-show="current == 1">
 
       </edit-table>
@@ -205,26 +206,33 @@ export default {
         {
           dataIndex: 'dbFieldName',
           title: '列名',
+          width: 110,
           type: 'text'
         },
         {
           dataIndex: 'dbFieldDesc',
           title: '列描述',
-          type: 'input'
+          width: 120,
+          type: 'input',
+          rule: {required: true, message: '请填写列描述'}
         },
         {
           dataIndex: 'dbFieldType',
           title: '字段类型',
+          width: 100,
           type: 'text'
         },
         {
           dataIndex: 'entityFieldName',
           title: '属性名称',
-          type: 'input'
+          width: 120,
+          type: 'input',
+          rule: {required: true, message: '请填写属性名称'}
         },
         {
           dataIndex: 'entityFieldType',
           title: '属性类型',
+          width: 120,
           type: 'select',
           options: [
             {
@@ -255,20 +263,102 @@ export default {
               text: 'LocalDateTime',
               value: 'LocalDateTime'
             }
-          ]
+          ],
+          rule: {required: true, message: '请选择属性类型'}
         },
         {
           dataIndex: 'dbFieldLength',
+          width: 50,
           title: '字段长度'
         },
         {
           dataIndex: 'primaryKey',
           title: '主键',
+          width: 40,
+          disabled: true,
           type: 'checkbox'
         },
         {
           dataIndex: 'nullable',
           title: '非空',
+          width: 40,
+          disabled: true,
+          type: 'checkbox'
+        },
+        {
+          dataIndex: 'enableList',
+          title: '列表',
+          width: 40,
+          type: 'checkbox'
+        },
+        {
+          dataIndex: 'enableForm',
+          title: '表单',
+          width: 40,
+          type: 'checkbox'
+        },
+        {
+          dataIndex: 'enableQuery',
+          title: '查询',
+          width: 40,
+          type: 'checkbox'
+        },
+        {
+          dataIndex: 'enableSort',
+          title: '排序',
+          width: 40,
+          type: 'checkbox'
+        },
+        {
+          dataIndex: 'queryType',
+          title: '查询方式',
+          type: 'select',
+          width: 100,
+          options: [
+            {
+              text: '=',
+              value: '='
+            }
+          ]
+        },
+        {
+          dataIndex: 'formType',
+          title: '控件类型',
+          type: 'select',
+          width: 140,
+          options: [
+            {
+              text: '输入框',
+              value: 'input'
+            }
+          ]
+        },
+        {
+          dataIndex: 'formRequired',
+          title: '必填',
+          width: 40,
+          type: 'checkbox'
+        },
+        {
+          dataIndex: 'formValidator',
+          title: '校验',
+          type: 'multiple',
+          width: 180,
+          options: [
+            {
+              text: '手机号',
+              value: 'phoneValid'
+            }
+          ]
+        },
+        {
+          dataIndex: 'formDictCode',
+          title: '字典code',
+          type: 'input'
+        },
+        {
+          dataIndex: 'singleLine',
+          title: '单独行',
           type: 'checkbox'
         }
       ],
@@ -305,7 +395,7 @@ export default {
       }
     },
     handleSubmit(){
-
+      this.$refs.onlineTableField.validate()
     }
   }
 }
