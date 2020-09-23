@@ -1,6 +1,7 @@
 package cn.hub.jackeroo.online.entity;
 
 import cn.hub.jackeroo.persistence.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -61,7 +62,7 @@ public class OnlineTableField extends BaseEntity<OnlineTableField> {
     /**
      * 是否可空
      */
-    private Integer nullable;
+    private Integer enableNull;
 
     /**
      * 实体类字段名
@@ -127,5 +128,11 @@ public class OnlineTableField extends BaseEntity<OnlineTableField> {
      * 是否占整行
      */
     private Integer singleLine;
+
+    /**
+     * 是否可编辑
+     */
+    @TableField(exist = false)
+    private Boolean enable;
 
 }

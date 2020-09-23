@@ -46,7 +46,7 @@
                 t.COLUMN_NAME AS "dbFieldName",
                 (CASE WHEN t.DATA_LENGTH IS NULL THEN t.DATA_PRECISION ELSE t.DATA_LENGTH END) as dbFieldLength,
                 t.DATA_SCALE as dbFieldDecimal,
-                (CASE WHEN t.NULLABLE = 'Y' THEN '1' ELSE '0' END) AS "nullable",
+                (CASE WHEN t.NULLABLE = 'Y' THEN '0' ELSE '1' END) AS "enable_null",
                 (t.COLUMN_ID) AS sort,
                 c.COMMENTS AS dbFieldDesc,
                 t.DATA_TYPE AS dbFieldType
@@ -61,7 +61,7 @@
         <if test="dbName == 'mssql'">
             SELECT
                 t.COLUMN_NAME AS dbFieldName,
-                (CASE WHEN t.IS_NULLABLE = 'YES' THEN '1' ELSE '0' END) AS "nullable",
+                (CASE WHEN t.IS_NULLABLE = 'YES' THEN '0' ELSE '1' END) AS "enable_null",
                 (t.ORDINAL_POSITION) AS sort,
                 isnull(g.[value], '') AS dbFieldDesc,
                 t.DATA_TYPE as dbFieldType,
@@ -81,7 +81,7 @@
         <if test="dbName == 'mysql'">
             SELECT
               t.COLUMN_NAME AS dbFieldName,
-              (CASE WHEN t.IS_NULLABLE = 'YES' THEN 1 ELSE 0 END) AS nullable,
+              (CASE WHEN t.IS_NULLABLE = 'YES' THEN 0 ELSE 1 END) AS enable_null,
               (t.ORDINAL_POSITION) AS sort,
               t.COLUMN_COMMENT AS dbFieldDesc,
               (CASE WHEN t.CHARACTER_MAXIMUM_LENGTH > 0 THEN t.CHARACTER_MAXIMUM_LENGTH ELSE t.NUMERIC_PRECISION END) AS dbFieldLength,

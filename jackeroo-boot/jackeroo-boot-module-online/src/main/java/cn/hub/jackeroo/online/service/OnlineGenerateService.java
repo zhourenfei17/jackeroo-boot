@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.online.service;
 
+import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.online.entity.OnlineTable;
 import cn.hub.jackeroo.online.entity.OnlineTableField;
 import cn.hub.jackeroo.online.mapper.OnlineDataBaseMapper;
@@ -49,7 +50,7 @@ public class OnlineGenerateService {
 
     public Map findTableDetailInfo(String tableName){
         Map<String, Object> map = new HashMap<>();
-        map.put("columns", findTableColumnList(tableName));
+        map.put("columns", buildTableField(findTableColumnList(tableName)));
 
         OnlineTable query = new OnlineTable();
         query.setTableName(tableName);
@@ -64,5 +65,72 @@ public class OnlineGenerateService {
         }
 
         return map;
+    }
+
+    private List<OnlineTableField> buildTableField(List<OnlineTableField> list){
+        int sort = 0;
+        for (OnlineTableField field : list) {
+            field.setDbFieldName(field.getDbFieldName().toLowerCase());
+            field.setEntityFieldName(StringUtils.toCamelCase(field.getDbFieldName()));
+            field.setEntityFieldType(Mysql.getJavaType(field.getDbFieldType()));
+            // id列不编辑
+            if(field.getDbFieldName().equalsIgnoreCase("id")){
+                field.setEnable(false);
+            }else{
+                field.setEnable(true);
+            }
+            // 列表和表单字段
+            if(existPublicColumn(field)){
+                field.setEnableList(Constant.BOOLEAN_NO);
+                field.setEnableForm(Constant.BOOLEAN_NO);
+            }else{
+                field.setEnableList(Constant.BOOLEAN_YES);
+                field.setEnableForm(Constant.BOOLEAN_YES);
+            }
+            // 必填
+            field.setFormRequired(field.getEnableNull());
+            field.setSort(++sort);
+        }
+        return list;
+    }
+
+    private boolean existPublicColumn(OnlineTableField field){
+        return field.getDbFieldName().equalsIgnoreCase("create_by") ||
+                field.getDbFieldName().equalsIgnoreCase("create_time") ||
+                field.getDbFieldName().equalsIgnoreCase("update_by") ||
+                field.getDbFieldName().equalsIgnoreCase("update_time") ||
+                field.getDbFieldName().equalsIgnoreCase("del_flag");
+    }
+
+    private enum Mysql{
+        VARCHAR("String"),
+        CHAR("Char"),
+        BLOB("byte[]"),
+        TEXT("String"),
+        INTEGER("Long"),
+        TINYINT("Integer"),
+        SMALLINT("Integer"),
+        MEDIUMINT("Integer"),
+        BIGINT("Long"),
+        FLOAT("Float"),
+        DOUBLE("Double"),
+        DECIMAL("BigDecimal"),
+        DATE("LocalDate"),
+        DATETIME("LocalDateTime");
+
+        private String javaType;
+
+        Mysql(String javaType) {
+            this.javaType = javaType;
+        }
+
+        public static String getJavaType(String mysqlType){
+            for (Mysql mysql : Mysql.values()) {
+                if(mysql.name().equalsIgnoreCase(mysqlType)){
+                    return mysql.javaType;
+                }
+            }
+            return "String";
+        }
     }
 }
