@@ -18,26 +18,26 @@
     </a-steps>
 
     <div class="generate-content">
-      <a-form-model ref="onlineTable" :model="form" :rules="rules" v-bind="layout" v-show="current == 0">
+      <a-form-model ref="onlineTable" :model="formTable" :rules="tableRules" v-bind="layout" v-show="current == 0">
         <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
             <a-form-model-item label="表名" prop="tableName">
-              <a-input v-model="form.tableName" placeholder="请输入表名" disabled></a-input>
+              <a-input v-model="formTable.tableName" placeholder="请输入表名" disabled></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="表说明" prop="comment">
-              <a-input v-model="form.comment" placeholder="请输入表说明" :disabled="flag.view"></a-input>
+              <a-input v-model="formTable.comment" placeholder="请输入表说明" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="实体类名称" prop="className">
-              <a-input v-model="form.className" placeholder="请输入实体类名称" :disabled="flag.view"></a-input>
+              <a-input v-model="formTable.className" placeholder="请输入实体类名称" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="主键策略" prop="idStrategy">
-              <a-select v-model="form.idStrategy" placeholder="请选择主键策略">
+              <a-select v-model="formTable.idStrategy" placeholder="请选择主键策略">
                 <a-select-option value="ASSIGN_ID">生成ID(雪花算法)</a-select-option>
                 <a-select-option value="AUTO">自增</a-select-option>
                 <a-select-option value="ASSIGN_UUID">生成UUID</a-select-option>
@@ -48,7 +48,7 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="删除策略" prop="delStrategy">
-              <a-radio-group v-model="form.delStrategy">
+              <a-radio-group v-model="formTable.delStrategy">
                 <a-radio :value="0">物理删除</a-radio>
                 <a-radio :value="1">逻辑删除</a-radio>
               </a-radio-group>
@@ -69,38 +69,38 @@
 
       </edit-table>
 
-      <a-form-model ref="onlineScheme" :model="form" :rules="rules" v-bind="layout" v-show="current == 2">
+      <a-form-model ref="onlineScheme" :model="formScheme" :rules="schemeRules" v-bind="layout" v-show="current == 2">
         <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
             <a-form-model-item label="生成模板" prop="template">
-              <a-select v-model="form.template" placeholder="请选择生成模板">
-                
+              <a-select v-model="formScheme.template" placeholder="请选择生成模板">
+                <a-select-option value="standard">标准模板</a-select-option>
               </a-select>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="生成作者" prop="author">
-              <a-input v-model="form.author" placeholder="请输入生成作者" :disabled="flag.view"></a-input>
+              <a-input v-model="formScheme.author" placeholder="请输入生成作者" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
-            <a-form-model-item label="生成包路径" prop="packageName">
-              <a-input v-model="form.packageName" placeholder="请输入生成包路径" :disabled="flag.view"></a-input>
+            <a-form-model-item label="生成包名" prop="packageName">
+              <a-input v-model="formScheme.packageName" placeholder="请输入生成包路径" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="生成模块名" prop="moduleName">
-              <a-input v-model="form.moduleName" placeholder="请输入生成模块名" :disabled="flag.view"></a-input>
+              <a-input v-model="formScheme.moduleName" placeholder="请输入生成模块名" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="生成功能名" prop="funName">
-              <a-input v-model="form.funName" placeholder="请输入生成功能名" :disabled="flag.view"></a-input>
+              <a-input v-model="formScheme.funName" placeholder="请输入生成功能名" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="表单风格" prop="formStyle">
-              <a-select v-model="form.formStyle" placeholder="请选择表单风格">
+              <a-select v-model="formScheme.formStyle" placeholder="请选择表单风格">
                 <a-select-option :value="1">单列</a-select-option>
                 <a-select-option :value="2">两列</a-select-option>
                 <a-select-option :value="3">三列</a-select-option>
@@ -110,7 +110,7 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="是否显示复选框" prop="showCheckbox">
-              <a-radio-group v-model="form.showCheckbox">
+              <a-radio-group v-model="formScheme.showCheckbox">
                 <a-radio :value="0">否</a-radio>
                 <a-radio :value="1">是</a-radio>
               </a-radio-group>
@@ -118,20 +118,20 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="代码生成路径" prop="outputDir">
-              <a-input v-model="form.outputDir" placeholder="请输入代码生成路径" :disabled="flag.view"></a-input>
+              <a-input v-model="formScheme.outputDir" placeholder="请输入代码生成路径" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="是否分页" prop="enablePagination">
-              <a-radio-group v-model="form.enablePagination">
+              <a-radio-group v-model="formScheme.enablePagination">
                 <a-radio :value="0">否</a-radio>
                 <a-radio :value="1">是</a-radio>
               </a-radio-group>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
-            <a-form-model-item label="是否生成文档" prop="enableSwagger">
-              <a-radio-group v-model="form.enableSwagger">
+            <a-form-model-item label="是否生成API文档" prop="enableSwagger">
+              <a-radio-group v-model="formScheme.enableSwagger">
                 <a-radio :value="0">否</a-radio>
                 <a-radio :value="1">是</a-radio>
               </a-radio-group>
@@ -139,7 +139,7 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="服务器端校验" prop="enableServerValid">
-              <a-radio-group v-model="form.enableServerValid">
+              <a-radio-group v-model="formScheme.enableServerValid">
                 <a-radio :value="0">否</a-radio>
                 <a-radio :value="1">是</a-radio>
               </a-radio-group>
@@ -163,7 +163,7 @@
 
 <script>
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
-import { getAction } from '@/api/manage'
+import { getAction, postAction } from '@/api/manage'
 import {EditTable} from '@/components'
 
 export default {
@@ -177,14 +177,28 @@ export default {
       width: '80vw',
       fullscreen: true,
       current: 0,
-      form:{
+      formTable: {
+        id: null,
         tableName: '',
         comment: '',
         className: '',
         idStrategy: null,
         delStrategy: null
       },
-      rules:{
+      formScheme: {
+        id: null,
+        packageName: '',
+        moduleName: '',
+        showCheckbox: null,
+        formStyle: null,
+        author: '',
+        outputDir: '',
+        template: null,
+        enablePagination: null,
+        enableSwagger: null,
+        enableServerValid: null
+      },
+      tableRules:{
         tableName: [
           {required: true, message: '请输入表名'},
         ],
@@ -201,6 +215,39 @@ export default {
           {required: true, message: '请删除策略'}, 
         ]
       },
+      schemeRules: {
+        template: [
+          {required: true, message: '请选择生成模板'}
+        ],
+        author: [
+          {required: true, message: '请填写生成作者'},
+          {max: 50, message: '长度需要在0到50之间'}
+        ],
+        packageName: [
+          {required: true, message: '请填写生成包名'},
+          {max: 100, message: '长度需要在0到100之间'}
+        ],
+        moduleName: [
+          {required: true, message: '请填写生成模块名'},
+          {max: 30, message: '长度需要在0到30之间'}
+        ],
+        outputDir: [
+          {required: true, message: '请填写代码生成路径'},
+          {max: 30, message: '长度需要在0到30之间'}
+        ],
+        showCheckbox: [
+          {required: true, message: '请选择是否显示复选框'}
+        ],
+        enablePagination: [
+          {required: true, message: '请选择是否分页'}
+        ],
+        enableSwagger: [
+          {required: true, message: '请选择是否生成API文档'}
+        ],
+        enableServerValid: [
+          {required: true, message: '请选择是否开启服务器端校验'}
+        ]
+      },
       dataSource: [],
       columns: [
         {
@@ -214,7 +261,7 @@ export default {
           title: '列描述',
           width: 120,
           type: 'input',
-          rule: {required: true, message: '请填写列描述'}
+          rule: [{required: true, message: '请填写列描述'},{max: 50, message: '长度需要在0到50之间'}]
         },
         {
           dataIndex: 'dbFieldType',
@@ -227,7 +274,7 @@ export default {
           title: '属性名称',
           width: 120,
           type: 'input',
-          rule: {required: true, message: '请填写属性名称'}
+          rule: [{required: true, message: '请填写属性名称'},{max: 50, message: '长度需要在0到50之间'}]
         },
         {
           dataIndex: 'entityFieldType',
@@ -264,12 +311,13 @@ export default {
               value: 'LocalDateTime'
             }
           ],
-          rule: {required: true, message: '请选择属性类型'}
+          rule: [{required: true, message: '请选择属性类型'}]
         },
         {
           dataIndex: 'dbFieldLength',
           width: 50,
-          title: '字段长度'
+          title: '字段长度',
+          type: 'text'
         },
         {
           dataIndex: 'primaryKey',
@@ -319,7 +367,8 @@ export default {
               text: '=',
               value: '='
             }
-          ]
+          ],
+          rule: [{required: true, message: '请选择查询方式'}]
         },
         {
           dataIndex: 'formType',
@@ -331,7 +380,8 @@ export default {
               text: '输入框',
               value: 'input'
             }
-          ]
+          ],
+          rule: [{required: true, message: '请选择控件类型'}]
         },
         {
           dataIndex: 'formRequired',
@@ -354,7 +404,8 @@ export default {
         {
           dataIndex: 'formDictCode',
           title: '字典code',
-          type: 'input'
+          type: 'input',
+          rule: [{max: 50, message: '长度需要在0到50之间'}]
         },
         {
           dataIndex: 'singleLine',
@@ -376,7 +427,8 @@ export default {
 
       getAction(this.url.detail, {tableName: tableName}).then(res => {
         if(!res.code){
-          this.form = res.data.table
+          this.copyProperties(res.data.table, this.formTable)
+          this.copyProperties(res.data.scheme, this.formScheme)
           this.dataSource = res.data.columns
         }
       })
@@ -395,7 +447,38 @@ export default {
       }
     },
     handleSubmit(){
-      this.$refs.onlineTableField.validate()
+      this.$refs.onlineTable.validate((success) => {
+        if(success){
+          this.$refs.onlineScheme.validate(success2 => {
+            if(success2){
+              const data = this.$refs.onlineTableField.getData().then((data) => {
+                if(data){
+                  const formData = {}
+                  formData.onlineTable = this.formTable
+                  formData.onlineScheme = this.formScheme
+                  formData.onlineTableField = data
+
+                  console.log('formData', formData)
+
+                  postAction('/online/generate/save', formData).then(result => {
+                    if(!result.code){
+                      this.$message.success('保存成功')
+                    }else{
+                      this.$message.error('保存失败')
+                    }
+                  })
+                }else{
+                  this.current = 1
+                }
+              })
+            }else{
+              this.current = 2
+            }
+          })
+        }else{
+          this.current = 0
+        }
+      })
     }
   }
 }

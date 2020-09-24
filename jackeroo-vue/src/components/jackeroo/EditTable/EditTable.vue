@@ -1,60 +1,59 @@
 <template>
-  <a-table :dataSource="dataSource" :columns="columnsCopy"
-    v-bind="$attrs">
-    <template v-for="col in columnsSlot" :slot="col.dataIndex" slot-scope="text, record, index">
-      <div :key="col.dataIndex">
-        <a-form-model :ref="col.dataIndex + index" :rules="col.rule || {}">
-          <a-form-model-item>
-            <a-input 
-              v-if="col.type == 'input'" 
-              :value="text" 
-              @change="e => handleChange(e.target.value, record, col.dataIndex)" 
-              :disabled="col.disabled || !record.enable || false"
-              :size="size">
-            </a-input>
+  <a-form-model ref="formTable" :model="formData">
+    <a-table :dataSource="dataSource" :columns="columnsCopy" class="jackeroo-edit-table"
+      v-bind="$attrs">
+      <template v-for="col in columnsSlot" :slot="col.dataIndex" slot-scope="text, record, index" >
+          
+        <a-form-model-item 
+          :prop="col.dataIndex + '_' + index" 
+          :rules="(col.disabled || !record.enable || false) ? null : (rules[col.dataIndex] || null)" 
+          :key="col.dataIndex + '_' + index">
+          <a-input 
+            v-if="col.type == 'input'" 
+            v-model="formData[col.dataIndex + '_' + index]"
+            :disabled="col.disabled || !record.enable || false"
+            :size="size">
+          </a-input>
 
-            <a-select 
-              v-else-if="col.type == 'select'" 
-              :value="text" 
-              @change="(v) => handleChange(v, record, col.dataIndex)" 
-              allowClear
-              style="width: 100%;" 
-              :disabled="col.disabled || !record.enable || false"
-              :size="size">
-              <a-select-option v-for="opt in col.options" :key="opt.value" :value="opt.value">{{opt.text}}</a-select-option>
-            </a-select>
+          <a-select 
+            v-else-if="col.type == 'select'" 
+            v-model="formData[col.dataIndex + '_' + index]"
+            allowClear
+            style="width: 100%;" 
+            :disabled="col.disabled || !record.enable || false"
+            :size="size">
+            <a-select-option v-for="opt in col.options" :key="opt.value" :value="opt.value">{{opt.text}}</a-select-option>
+          </a-select>
 
-            <a-select 
-              v-else-if="col.type == 'multiple'" 
-              mode="multiple"
-              :value="text ? text.split(',') : []" 
-              @change="(v) => handleChange(v.join(','), record, col.dataIndex)" 
-              style="width: 100%;" 
-              :disabled="col.disabled || !record.enable || false"
-              :size="size">
-              <a-select-option v-for="opt in col.options" :key="opt.value" :value="opt.value">{{opt.text}}</a-select-option>
-            </a-select>
+          <a-select 
+            v-else-if="col.type == 'multiple'" 
+            mode="multiple"
+            v-model="formData[col.dataIndex + '_' + index]"
+            style="width: 100%;" 
+            :disabled="col.disabled || !record.enable || false"
+            :size="size">
+            <a-select-option v-for="opt in col.options" :key="opt.value" :value="opt.value">{{opt.text}}</a-select-option>
+          </a-select>
 
-            <a-checkbox 
-              v-else-if="col.type == 'checkbox'" 
-              :checked="text == 1" 
-              @change="(e) => handleChange(e.target.checked ? 1 : 0, record, col.dataIndex)"
-              :disabled="col.disabled || !record.enable || false">
+          <a-checkbox-group 
+            v-else-if="col.type == 'checkbox'" 
+            v-model="formData[col.dataIndex + '_' + index]"
+            :disabled="col.disabled || !record.enable || false">
+            <a-checkbox :value="1"></a-checkbox>
+          </a-checkbox-group>
 
-            </a-checkbox>
+          <template v-else-if="col.type != 'slot'">
+            {{text}}
+          </template>
+        </a-form-model-item>
+          
+      </template>
 
-            <template v-else-if="col.type != 'slot'">
-              {{text}}
-            </template>
-          </a-form-model-item>
-        </a-form-model>
-      </div>
-    </template>
-
-    <template v-for="slotName of scopedSlotKeys" :slot="slotName">
-      <slot :name="slotName"></slot>
-    </template>
-  </a-table>
+      <template v-for="slotName of scopedSlotKeys" :slot="slotName">
+        <slot :name="slotName"></slot>
+      </template>
+    </a-table>
+  </a-form-model>
 </template>
 
 <script>
@@ -83,13 +82,21 @@ export default {
   },
   data(){
     return {
-      size: 'default'
+      size: 'default',
+      formData: {}
+    }
+  },
+  watch: {
+    dataSource(newVal){
+      this.buildFormTalbe(newVal)
+    }
+  },
+  mounted(){
+    if(this.dataSource && this.dataSource.length > 0){
+      this.buildFormTalbe(this.dataSource)
     }
   },
   computed: {
-    _attrs(){
-      return this.$attrs
-    },
     columnsCopy(){
       const data = [...this.columns]
       for(var item of data){
@@ -104,34 +111,82 @@ export default {
     },
     scopedSlotKeys(){
       return Object.keys(this.$scopedSlots)
+    },
+    rules(){
+      const rules = {}
+      for(const col of this.columns){
+        if(col.rule){
+          rules[col.dataIndex] = col.rule
+        }
+      }
+      return rules
     }
   },
   methods: {
+    buildFormTalbe(newVal){
+      const formData = {}
+      for(let i = 0; i < newVal.length; i++){
+        for(let prop in newVal[i]){
+          for(const col of this.columns){
+            if(prop == col.dataIndex){
+              if(col.type == 'checkbox' || col.type == 'multiple'){
+                formData[prop + '_' + i] = newVal[i][prop] ? [newVal[i][prop]] : []
+              }else{
+                formData[prop + '_' + i] = newVal[i][prop]
+              }
+            }
+          }
+        }
+      }
+      this.formData = formData
+    },
     handleChange(value, record, colName){
       record[colName] = value
-      // const target = this.dataSource.filter(item => key === item[this.rowKey])[0]
-      // if(target){
-        // target[colName] = value
-        //this.dataSource = newData
-        // this.validRowOne(target, value, colName)
-
-        //this.$emit('update', newData)
-      // }
     },
-    validate(){
-      const refs = this.$refs
-      console.log('refs', refs)
-
-      this.$refs.dbFieldName0.validate((success) => {
-        console.log('success')
+    filterColumn(columnName){
+      const column = this.columns.filter(item => item.dataIndex == columnName)
+      return column[0] || null
+    },
+    async validate(){
+      var success = await this.$refs.formTable.validate()
+      console.log('success', success)
+      return success
+    },
+    async getData(){
+      var success = await this.$refs.formTable.validate().catch((e) => {
+        return false
       })
-      /* for(let ref in refs){
-        console.log(ref)
-        this.$refs[ref].validate((success) => {
-          console.log(success)
-        })
-      } */
+      if(success != undefined && success){
+        const data = [...this.dataSource]
+        for(const prop in this.formData){
+          let index = prop.lastIndexOf('_')
+          let i = prop.substring(index + 1)
+          let p = prop.substring(0, index)
+
+          const col = this.filterColumn(p)
+          if(col){
+            if(col.type == 'checkbox'){
+              data[i][p] = this.formData[prop][0]
+            }else if(col.type == 'multiple'){
+              data[i][p] = this.formData[prop].join(',')
+            }else{
+              data[i][p] = this.formData[prop]
+            }
+          }
+        }
+        return data
+      }else{
+        return null
+      }
     }
   }
 }
 </script>
+
+<style lang="less" scoped>
+.jackeroo-edit-table{
+  .ant-form-item{
+    margin-bottom: 0;
+  }
+}
+</style>
