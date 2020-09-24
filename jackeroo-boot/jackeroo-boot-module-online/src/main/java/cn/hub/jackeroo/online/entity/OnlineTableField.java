@@ -97,12 +97,12 @@ public class OnlineTableField extends BaseEntity<OnlineTableField> {
     /**
      * 查询方式
      */
-    private Integer queryType;
+    private String queryType;
 
     /**
      * 表单控件类型
      */
-    private Integer formType;
+    private String formType;
 
     /**
      * 表单是否必填

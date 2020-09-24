@@ -1,15 +1,19 @@
 package cn.hub.jackeroo.online.service;
 
 import cn.hub.jackeroo.constant.Constant;
+import cn.hub.jackeroo.online.entity.OnlineScheme;
 import cn.hub.jackeroo.online.entity.OnlineTable;
 import cn.hub.jackeroo.online.entity.OnlineTableField;
 import cn.hub.jackeroo.online.mapper.OnlineDataBaseMapper;
+import cn.hub.jackeroo.online.param.GenerateTableDetail;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -25,6 +29,12 @@ public class OnlineGenerateService {
 
     @Resource
     private OnlineDataBaseMapper dataBaseMapper;
+    @Autowired
+    private OnlineTableService tableService;
+    @Autowired
+    private OnlineSchemeService schemeService;
+    @Autowired
+    private OnlineTableFieldService tableFieldService;
 
     /**
      * 获取数据库业务表列表-带分页
@@ -62,6 +72,16 @@ public class OnlineGenerateService {
             table.setDelStrategy(0);
 
             map.put("table", table);
+
+            OnlineScheme scheme = new OnlineScheme();
+            scheme.setPackageName("cn.hub.jackeroo");
+            scheme.setShowCheckbox(Constant.BOOLEAN_YES);
+            scheme.setFormStyle(2);
+            scheme.setTemplate("standard");
+            scheme.setEnablePagination(Constant.BOOLEAN_YES);
+            scheme.setEnableSwagger(Constant.BOOLEAN_YES);
+            scheme.setEnableServerValid(Constant.BOOLEAN_YES);
+            map.put("scheme", scheme);
         }
 
         return map;
@@ -90,6 +110,8 @@ public class OnlineGenerateService {
             // 必填
             field.setFormRequired(field.getEnableNull());
             field.setSort(++sort);
+            field.setQueryType("=");
+            field.setFormType("input");
         }
         return list;
     }
@@ -132,5 +154,18 @@ public class OnlineGenerateService {
             }
             return "String";
         }
+    }
+
+    @Transactional
+    public void save(GenerateTableDetail detail){
+        tableService.save(detail.getOnlineTable());
+
+        detail.getOnlineScheme().setTableId(detail.getOnlineTable().getId());
+        schemeService.save(detail.getOnlineScheme());
+
+        for (OnlineTableField field : detail.getOnlineTableField()) {
+            field.setTableId(detail.getOnlineTable().getId());
+        }
+        tableFieldService.saveBatch(detail.getOnlineTableField());
     }
 }
