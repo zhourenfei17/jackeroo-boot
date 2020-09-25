@@ -49,8 +49,8 @@
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
-              <a @click="handleView(record)">详情</a>
               <a @click="handleEdit(record)">编辑</a>
+              <a @click="handleGenerate(record)">生成代码</a>
               <action-menu-list>
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
@@ -60,7 +60,8 @@
       </s-table>
     </data-card>
 
-    <select-table-modal ref="selectTableModal"></select-table-modal>
+    <select-table-modal ref="selectTableModal" @ok="handleSelectOk"></select-table-modal>
+    <generate-table-column ref="generateTableColumn" @ok="handleGenerateOk"></generate-table-column>
   </div>
 </template>
 
@@ -69,6 +70,7 @@ import { STable, JTag, DataCard, SearchCard } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
 import SelectTableModal from './modal/SelectTableModal'
+import GenerateTableColumn from './modal/GenerateTableColumn'
 
 export default {
   name: 'OnlineTableList',
@@ -77,7 +79,8 @@ export default {
     JTag,
     DataCard,
     SearchCard,
-    SelectTableModal
+    SelectTableModal,
+    GenerateTableColumn
   },
   mixins:[JackerooListMixins],
   data () {
@@ -121,6 +124,20 @@ export default {
     handleAdd(){
       this.$refs.selectTableModal.visible = true
       this.$refs.selectTableModal.add()
+    },
+    handleSelectOk(table){
+      this.$refs.generateTableColumn.add(table)
+    },
+    handleGenerateOk(){
+      this.refreshData()
+    },
+    handleEdit(record){
+      this.$refs.generateTableColumn.visible = true
+        this.$refs.generateTableColumn.edit(record.id)
+    },
+    // 生成代码
+    handleGenerate(record){
+
     }
   }
 }

@@ -41,8 +41,6 @@
     >
       
     </s-table>
-
-    <generate-table-column ref="generateTableColumn"></generate-table-column>
   </j-modal>
 </template>
 
@@ -51,13 +49,11 @@ import { STable, SearchCard } from '@/components'
 import { getAction, postAction, httpAction } from '@/api/manage'
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
-import GenerateTableColumn from './GenerateTableColumn'
 
 export default {
   components: {
     STable,
-    SearchCard,
-    GenerateTableColumn
+    SearchCard
   },
   mixins: [JackerooFromMixins, JackerooListMixins],
   data(){
@@ -108,7 +104,9 @@ export default {
         this.$message.warning('请选择数据库表')
         return
       }
-      this.$refs.generateTableColumn.add(this.selectedRowKeys[0])
+      // this.$refs.generateTableColumn.add(this.selectedRowKeys[0])
+      this.$emit('ok', this.selectedRowKeys[0])
+      this.selectedRowKeys = []
       this.cancel()
     },
   }

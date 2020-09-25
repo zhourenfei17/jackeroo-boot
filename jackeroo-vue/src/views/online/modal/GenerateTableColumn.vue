@@ -11,12 +11,14 @@
     @cancel="cancel"
     class="generate-modal"
   >
+    
     <a-steps :current="current" @change="handleStepChange" size="small">
       <a-step title="基本信息"></a-step>
       <a-step title="字段信息"></a-step>
       <a-step title="生成信息"></a-step>
     </a-steps>
-
+    
+    
     <div class="generate-content">
       <a-form-model ref="onlineTable" :model="formTable" :rules="tableRules" v-bind="layout" v-show="current == 0">
         <a-row :gutter="formGutter">
@@ -315,7 +317,7 @@ export default {
         },
         {
           dataIndex: 'dbFieldLength',
-          width: 50,
+          width: 70,
           title: '字段长度',
           type: 'text'
         },
@@ -414,7 +416,8 @@ export default {
         }
       ],
       url: {
-        detail: '/online/generate/findTableDetailInfo'
+        detail: '/online/generate/findTableDetailInfo',
+        get: '/online/table/'
       },
       tableName: ''
     }
@@ -422,14 +425,22 @@ export default {
   methods: {
     add(tableName){
       this.tableName = tableName
-      this.loading = false
       this.visible = true
 
-      getAction(this.url.detail, {tableName: tableName}).then(res => {
-        if(!res.code){
-          this.copyProperties(res.data.table, this.formTable)
-          this.copyProperties(res.data.scheme, this.formScheme)
-          this.dataSource = res.data.columns
+      getAction(this.url.detail, {tableName: tableName}).then(result => {
+        if(!result.code){
+          this.copyProperties(result.data.table, this.formTable)
+          this.copyProperties(result.data.scheme, this.formScheme)
+          this.dataSource = result.data.columns
+        }
+      })
+    },
+    edit(tableId){
+      getAction(this.url.get + tableId).then(result => {
+        if(!result.code){
+          this.copyProperties(result.data.table, this.formTable)
+          this.copyProperties(result.data.scheme, this.formScheme)
+          this.dataSource = result.data.columns
         }
       })
     },
@@ -479,7 +490,11 @@ export default {
           this.current = 0
         }
       })
-    }
+    },
+    cancel(){
+      this.visible = false
+      this.current = 0
+    },
   }
 }
 </script>
