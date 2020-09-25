@@ -77,7 +77,7 @@ public class PathUtil {
 	 * @version 1.0 2015-1-15 上午11:03:54
 	 */
 	public static String getContextFilePath(String realPathFile) {
-		String url = "";
+		String url;
 		String osName = getSystemOs();
 		if (osName.toLowerCase().contains("windows")) {
 			url = StringUtils.remove(realPathFile, WINDOWS);
@@ -94,7 +94,7 @@ public class PathUtil {
 	 * @version 1.0 2015-1-15 上午11:04:11
 	 */
 	public static String getFileSavePath(String filePath) {
-		String url = "";
+		String url;
 		String osName = getSystemOs();
 		if (osName.toLowerCase().contains("windows")) {
 			url = WINDOWS + filePath;

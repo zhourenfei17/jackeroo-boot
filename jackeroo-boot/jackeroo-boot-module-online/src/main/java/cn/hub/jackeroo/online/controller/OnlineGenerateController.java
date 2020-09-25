@@ -1,15 +1,12 @@
 package cn.hub.jackeroo.online.controller;
 
-import cn.hub.jackeroo.online.entity.OnlineScheme;
 import cn.hub.jackeroo.online.entity.OnlineTable;
-import cn.hub.jackeroo.online.entity.OnlineTableField;
 import cn.hub.jackeroo.online.param.GenerateTableDetail;
 import cn.hub.jackeroo.online.service.OnlineGenerateService;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,11 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 代码生成controller
@@ -84,6 +77,12 @@ public class OnlineGenerateController extends BaseController {
     @ApiOperation("保存代码生成信息")
     public Result save(@RequestBody GenerateTableDetail detail){
         service.save(detail);
+        return ok();
+    }
+
+    @GetMapping("generateCode")
+    public Result generateCode(){
+        service.generateCode();
         return ok();
     }
 }

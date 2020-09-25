@@ -6,10 +6,14 @@ import cn.hub.jackeroo.online.entity.OnlineTable;
 import cn.hub.jackeroo.online.entity.OnlineTableField;
 import cn.hub.jackeroo.online.mapper.OnlineDataBaseMapper;
 import cn.hub.jackeroo.online.param.GenerateTableDetail;
+import cn.hub.jackeroo.online.utils.GenUtils;
+import cn.hub.jackeroo.online.utils.GenerateUtils;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,7 @@ import java.util.Map;
  * @author alex
  * @date 2020/09/18
  */
+@Slf4j
 @Service
 public class OnlineGenerateService {
 
@@ -94,10 +99,8 @@ public class OnlineGenerateService {
             field.setEntityFieldName(StringUtils.toCamelCase(field.getDbFieldName()));
             field.setEntityFieldType(Mysql.getJavaType(field.getDbFieldType()));
             // id列不编辑
-            if(field.getDbFieldName().equalsIgnoreCase("id")){
+            if(field.getPrimaryKey() == Constant.BOOLEAN_YES){
                 field.setEnable(false);
-            }else{
-                field.setEnable(true);
             }
             // 列表和表单字段
             if(existPublicColumn(field)){
@@ -167,5 +170,10 @@ public class OnlineGenerateService {
             field.setTableId(detail.getOnlineTable().getId());
         }
         tableFieldService.saveBatch(detail.getOnlineTableField());
+    }
+
+
+    public void generateCode(){
+
     }
 }

@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,4 +41,16 @@ public class OnlineTableController extends BaseController {
     public Result<IPage<OnlineTable>> list(OnlineTable onlineTable, @Validated PageParam pageParam){
         return ok(service.findPage(onlineTable, pageParam));
     }
+
+    /**
+     * 获取业务表生成代码详细信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("获取业务表生成代码详细信息")
+    public Result get(@PathVariable String id){
+        return ok(service.get(id));
+    }
+
 }
