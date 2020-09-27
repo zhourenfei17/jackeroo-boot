@@ -1,4 +1,4 @@
-package cn.hub.jackeroo.online.utils;
+package cn.hub.jackeroo.online.config;
 
 import cn.hub.jackeroo.utils.factory.YamlPropertySourceFactory;
 import lombok.Data;

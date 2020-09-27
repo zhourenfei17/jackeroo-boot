@@ -1,25 +1,32 @@
 package cn.hub.jackeroo.online.service;
 
 import cn.hub.jackeroo.constant.Constant;
+import cn.hub.jackeroo.online.config.GenerateConfig;
 import cn.hub.jackeroo.online.entity.OnlineScheme;
 import cn.hub.jackeroo.online.entity.OnlineTable;
 import cn.hub.jackeroo.online.entity.OnlineTableField;
 import cn.hub.jackeroo.online.mapper.OnlineDataBaseMapper;
 import cn.hub.jackeroo.online.param.GenerateTableDetail;
-import cn.hub.jackeroo.online.utils.GenUtils;
-import cn.hub.jackeroo.online.utils.GenerateUtils;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,8 +179,32 @@ public class OnlineGenerateService {
         tableFieldService.saveBatch(detail.getOnlineTableField());
     }
 
+    @Autowired
+    private FreeMarkerConfigurer freeMarkerConfigurer;
+    @Autowired
+    private GenerateConfig generateConfig;
 
     public void generateCode(){
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        try {
+            org.springframework.core.io.Resource[] resources = resolver.getResources(generateConfig.getTemplateRootPath() + "standard/*.*");
 
+            for (org.springframework.core.io.Resource resource : resources) {
+                File file = resource.getFile();
+
+                // Configuration configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
+                // configuration.setDirectoryForTemplateLoading(file);
+                // freeMarkerConfigurer.setTemplateLoaderPath("classpath:/template/standard/");
+                Template template = freeMarkerConfigurer.getConfiguration().getTemplate("standard/" + file.getName());
+
+                StringWriter out = new StringWriter();
+                template.process(null, out);
+
+                String content = out.toString();
+                log.info("======content = 【{}】", content);
+            }
+        } catch (IOException | TemplateException e) {
+            e.printStackTrace();
+        }
     }
 }
