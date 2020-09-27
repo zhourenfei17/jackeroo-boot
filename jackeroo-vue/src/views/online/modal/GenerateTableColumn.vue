@@ -462,7 +462,7 @@ export default {
         if(success){
           this.$refs.onlineScheme.validate(success2 => {
             if(success2){
-              const data = this.$refs.onlineTableField.getData().then((data) => {
+              const data = this.$refs.onlineTableField.getValues((data) => {
                 if(data){
                   const formData = {}
                   formData.onlineTable = this.formTable

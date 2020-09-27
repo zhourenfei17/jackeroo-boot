@@ -149,10 +149,14 @@ export default {
     },
     async validate(){
       var success = await this.$refs.formTable.validate()
-      console.log('success', success)
       return success
     },
-    async getData(){
+    /**
+     * 获取EditTable所有的行数据；
+     * callback为回掉函数，并传入一个参数: 所有行数据，callback: Function(data)；
+     * 如果不传callback，则返回一个promise函数
+     */
+    async getValues(callback){
       var success = await this.$refs.formTable.validate().catch((e) => {
         return false
       })
@@ -174,9 +178,17 @@ export default {
             }
           }
         }
-        return data
+        if (callback && typeof callback === 'function') {
+          callback(data)
+        }else{
+          return data
+        }
       }else{
-        return null
+        if (callback && typeof callback === 'function') {
+          callback(null)
+        }else{
+          return null
+        }
       }
     }
   }
