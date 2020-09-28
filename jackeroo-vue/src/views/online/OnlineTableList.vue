@@ -116,7 +116,8 @@ export default {
       ],
       url: {
         list: '/online/table/list',
-        delete: '/online/table/delete'
+        delete: '/online/table/delete',
+        generateCode: '/online/generate/generateCode'
       },
     }
   },
@@ -137,7 +138,20 @@ export default {
     },
     // 生成代码
     handleGenerate(record){
-
+      const that = this
+      this.$confirm({
+        content: '确认生成代码？',
+        onOk() {
+          getAction(that.url.generateCode, {id: record.id}).then(result => {
+            if(!result.code){
+              that.$message.success('生成代码成功')
+            }else{
+              that.$message.error("生成代码失败")
+            }
+            this.destroy()
+          })
+        }
+      })
     }
   }
 }
