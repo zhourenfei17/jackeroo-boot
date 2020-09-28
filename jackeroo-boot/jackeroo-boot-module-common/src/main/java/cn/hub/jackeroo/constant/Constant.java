@@ -43,4 +43,8 @@ public interface Constant {
      * 分隔符-斜杠
      */
     String SPLIT_SLASH = "/";
+    /**
+     * 分隔符-点
+     */
+    String SPLIT_DOT = ".";
 }

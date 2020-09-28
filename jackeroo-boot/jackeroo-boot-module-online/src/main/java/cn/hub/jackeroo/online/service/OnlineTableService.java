@@ -4,14 +4,12 @@ import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.online.entity.OnlineScheme;
 import cn.hub.jackeroo.online.entity.OnlineTable;
 import cn.hub.jackeroo.online.entity.OnlineTableField;
-import cn.hub.jackeroo.online.mapper.OnlineSchemeMapper;
-import cn.hub.jackeroo.online.mapper.OnlineTableFieldMapper;
 import cn.hub.jackeroo.online.mapper.OnlineTableMapper;
 import cn.hub.jackeroo.vo.PageParam;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,10 +25,10 @@ import java.util.Map;
 public class OnlineTableService extends ServiceImpl<OnlineTableMapper, OnlineTable> {
     @Resource
     private OnlineTableMapper mapper;
-    @Resource
-    private OnlineSchemeMapper schemeMapper;
-    @Resource
-    private OnlineTableFieldMapper tableFieldMapper;
+    @Autowired
+    private OnlineSchemeService schemeService;
+    @Autowired
+    private OnlineTableFieldService tableFieldService;
 
     public IPage<OnlineTable> findPage(OnlineTable onlineTable, PageParam pageParam){
         Page<OnlineTable> page = onlineTable.initPage(pageParam);
@@ -47,14 +45,10 @@ public class OnlineTableService extends ServiceImpl<OnlineTableMapper, OnlineTab
         Map<String, Object> result = new HashMap<>();
         result.put("table", table);
 
-        LambdaUpdateWrapper<OnlineScheme> schemeQuery = new LambdaUpdateWrapper<>();
-        schemeQuery.eq(OnlineScheme::getTableId, tableId);
-        OnlineScheme scheme = schemeMapper.selectOne(schemeQuery);
+        OnlineScheme scheme = schemeService.getByTableId(tableId);
         result.put("scheme", scheme);
 
-        LambdaUpdateWrapper<OnlineTableField> fieldQuery = new LambdaUpdateWrapper<>();
-        fieldQuery.eq(OnlineTableField::getTableId, tableId);
-        List<OnlineTableField> tableFieldList = tableFieldMapper.selectList(fieldQuery);
+        List<OnlineTableField> tableFieldList = tableFieldService.findByTableId(tableId);
         for (OnlineTableField field : tableFieldList) {
             if(field.getPrimaryKey() != null && field.getPrimaryKey() == Constant.BOOLEAN_YES){
                 field.setEnable(false);

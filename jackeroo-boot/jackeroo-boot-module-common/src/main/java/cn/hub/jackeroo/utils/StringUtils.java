@@ -106,4 +106,16 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return sb.toString();
     }
+
+    /**
+     * 首字母大写转换
+     * @param s
+     * @return
+     */
+    public static String toUpperFirstLetter(String s){
+        if(StringUtils.isBlank(s)){
+            return s;
+        }
+        return s.substring(0, 1).toUpperCase() + s.substring(1);
+    }
 }

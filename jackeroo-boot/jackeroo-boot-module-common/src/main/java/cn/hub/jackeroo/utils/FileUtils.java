@@ -625,4 +625,21 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		return p;
 	}
 
+    /**
+     * 创建文件，如果目录不存在，则同时创建目录
+     * @param file
+     */
+	public static void createFileAndFolder(File file){
+	    if(file.exists()){
+	        return;
+        }
+	    if(!file.getParentFile().exists()){
+	        file.getParentFile().mkdirs();
+        }
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            log.debug("创建文件失败", e);
+        }
+    }
 }

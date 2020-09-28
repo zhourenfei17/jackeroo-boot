@@ -5,6 +5,7 @@ import cn.hub.jackeroo.online.param.GenerateTableDetail;
 import cn.hub.jackeroo.online.service.OnlineGenerateService;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
+import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -80,9 +81,14 @@ public class OnlineGenerateController extends BaseController {
         return ok();
     }
 
+    /**
+     * 生成代码
+     * @return
+     */
     @GetMapping("generateCode")
-    public Result generateCode(){
-        service.generateCode();
+    @ApiOperation("生成代码")
+    public Result generateCode(Id id){
+        service.generateCode(id.getId());
         return ok();
     }
 }

@@ -1,17 +1,20 @@
 package cn.hub.jackeroo.online.service;
 
 import cn.hub.jackeroo.constant.Constant;
+import cn.hub.jackeroo.exception.JackerooException;
+import cn.hub.jackeroo.online.bo.GenTemplateBO;
 import cn.hub.jackeroo.online.config.GenerateConfig;
 import cn.hub.jackeroo.online.entity.OnlineScheme;
 import cn.hub.jackeroo.online.entity.OnlineTable;
 import cn.hub.jackeroo.online.entity.OnlineTableField;
 import cn.hub.jackeroo.online.mapper.OnlineDataBaseMapper;
 import cn.hub.jackeroo.online.param.GenerateTableDetail;
+import cn.hub.jackeroo.online.utils.GenerateUtils;
+import cn.hub.jackeroo.utils.FileUtils;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +27,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.annotation.Resource;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +54,10 @@ public class OnlineGenerateService {
     private OnlineSchemeService schemeService;
     @Autowired
     private OnlineTableFieldService tableFieldService;
+    @Autowired
+    private FreeMarkerConfigurer freeMarkerConfigurer;
+    @Autowired
+    private GenerateConfig generateConfig;
 
     /**
      * 获取数据库业务表列表-带分页
@@ -179,32 +190,69 @@ public class OnlineGenerateService {
         tableFieldService.saveBatch(detail.getOnlineTableField());
     }
 
-    @Autowired
-    private FreeMarkerConfigurer freeMarkerConfigurer;
-    @Autowired
-    private GenerateConfig generateConfig;
+    /**
+     * 通过业务表id生成代码
+     * @param tableId
+     */
+    public void generateCode(String tableId){
+        OnlineTable table = tableService.getById(tableId);
+        if(table == null){
+            throw new JackerooException("业务表信息不存在，生成代码失败");
+        }
+        OnlineScheme scheme = schemeService.getByTableId(tableId);
+        List<OnlineTableField> fieldList = tableFieldService.findByTableId(tableId);
 
-    public void generateCode(){
-        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        generateCode(table, scheme, fieldList);
+    }
+
+    /**
+     * 生成代码
+     * @param table
+     * @param scheme
+     * @param fieldList
+     */
+    private void generateCode(OnlineTable table, OnlineScheme scheme, List<OnlineTableField> fieldList){
+
+        List<GenTemplateBO> templateList = GenerateUtils.getTemplateList(generateConfig.getTemplateRootPath() + scheme.getTemplate() + "/*.*", freeMarkerConfigurer, scheme.getTemplate());
+
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("table", table);
+        dataMap.put("scheme", scheme);
+        dataMap.put("columnList", fieldList);
+        dataMap.put("entityName", table.getClassName());
+
+        String outRootPath = FileUtils.path(scheme.getOutputDir()
+                + File.separator + generateConfig.getSourceRootPackage().replace(Constant.SPLIT_DOT, Constant.SPLIT_SLASH)
+                + File.separator + scheme.getPackageName().replace(Constant.SPLIT_DOT, Constant.SPLIT_SLASH)
+                + File.separator + scheme.getModuleName());
+        FileUtils.createDirectory(outRootPath);
+
+        for (GenTemplateBO templateBO : templateList) {
+            GenerateUtils.generateFile(dataMap, templateBO, outRootPath);
+        }
+
+        /*ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
-            org.springframework.core.io.Resource[] resources = resolver.getResources(generateConfig.getTemplateRootPath() + "standard/*.*");
+            org.springframework.core.io.Resource[] resources = resolver.getResources();
 
             for (org.springframework.core.io.Resource resource : resources) {
                 File file = resource.getFile();
-
-                // Configuration configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
-                // configuration.setDirectoryForTemplateLoading(file);
-                // freeMarkerConfigurer.setTemplateLoaderPath("classpath:/template/standard/");
                 Template template = freeMarkerConfigurer.getConfiguration().getTemplate("standard/" + file.getName());
 
-                StringWriter out = new StringWriter();
-                template.process(null, out);
+                String outRootPath = FileUtils.path(scheme.getOutputDir()
+                        + File.separator + generateConfig.getSourceRootPackage()
+                        + File.separator + scheme.getPackageName()
+                        + File.separator + scheme.getModuleName());
+                FileUtils.createDirectory(outRootPath);
+                try(
+                    Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))
+                ){
+                    template.process(new HashMap(), out);
+                }
 
-                String content = out.toString();
-                log.info("======content = 【{}】", content);
             }
         } catch (IOException | TemplateException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
