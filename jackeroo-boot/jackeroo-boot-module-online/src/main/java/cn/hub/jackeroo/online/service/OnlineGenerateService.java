@@ -10,6 +10,7 @@ import cn.hub.jackeroo.online.entity.OnlineTableField;
 import cn.hub.jackeroo.online.mapper.OnlineDataBaseMapper;
 import cn.hub.jackeroo.online.param.GenerateTableDetail;
 import cn.hub.jackeroo.online.utils.GenerateUtils;
+import cn.hub.jackeroo.utils.DateUtils;
 import cn.hub.jackeroo.utils.FileUtils;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
@@ -220,6 +221,15 @@ public class OnlineGenerateService {
         dataMap.put("scheme", scheme);
         dataMap.put("columnList", fieldList);
         dataMap.put("entityName", table.getClassName());
+        dataMap.put("createDate", DateUtils.getDate("yyyy-MM-dd"));
+
+        boolean hasQuery = false;
+        for (OnlineTableField field : fieldList) {
+            if(field.getEnableQuery() == Constant.BOOLEAN_YES){
+                hasQuery = true;
+            }
+        }
+        dataMap.put("hasQuery", hasQuery);
 
         String outRootPath = FileUtils.path(scheme.getOutputDir()
                 + File.separator + generateConfig.getSourceRootPackage().replace(Constant.SPLIT_DOT, Constant.SPLIT_SLASH)
