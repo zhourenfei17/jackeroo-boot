@@ -12,10 +12,17 @@ import java.io.File;
  */
 @Data
 public class GenTemplateBO {
-    private String templateName;
+    /**
+     * 文件名
+     */
+    private String fileName;
+    /**
+     * 文件路径，完整包路径：${sourceRootPackage} + ${moduleName} + filePath
+     */
+    private String filePath;
     private Template template;
 
-    public String getOutputPath(String entityName){
+    /*public String getOutputPath(String entityName){
         if(StringUtils.isBlank(this.templateName)){
             return null;
         }
@@ -27,5 +34,5 @@ public class GenTemplateBO {
         }else{
             return this.templateName + File.separator + entityName + StringUtils.toUpperFirstLetter(this.templateName) + ".java";
         }
-    }
+    }*/
 }

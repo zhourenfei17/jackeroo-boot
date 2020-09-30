@@ -213,8 +213,7 @@ public class OnlineGenerateService {
      * @param fieldList
      */
     private void generateCode(OnlineTable table, OnlineScheme scheme, List<OnlineTableField> fieldList){
-
-        List<GenTemplateBO> templateList = GenerateUtils.getTemplateList(generateConfig.getTemplateRootPath() + scheme.getTemplate() + "/*.*", freeMarkerConfigurer, scheme.getTemplate());
+        List<GenTemplateBO> templateList = GenerateUtils.getTemplateList(generateConfig.getTemplateRootPath() + scheme.getTemplate() , freeMarkerConfigurer, scheme.getTemplate());
 
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("table", table);
@@ -237,32 +236,10 @@ public class OnlineGenerateService {
                 + File.separator + scheme.getModuleName());
         FileUtils.createDirectory(outRootPath);
 
+        log.debug("======================================= 生成代码中... =======================================");
         for (GenTemplateBO templateBO : templateList) {
             GenerateUtils.generateFile(dataMap, templateBO, outRootPath);
         }
-
-        /*ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        try {
-            org.springframework.core.io.Resource[] resources = resolver.getResources();
-
-            for (org.springframework.core.io.Resource resource : resources) {
-                File file = resource.getFile();
-                Template template = freeMarkerConfigurer.getConfiguration().getTemplate("standard/" + file.getName());
-
-                String outRootPath = FileUtils.path(scheme.getOutputDir()
-                        + File.separator + generateConfig.getSourceRootPackage()
-                        + File.separator + scheme.getPackageName()
-                        + File.separator + scheme.getModuleName());
-                FileUtils.createDirectory(outRootPath);
-                try(
-                    Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))
-                ){
-                    template.process(new HashMap(), out);
-                }
-
-            }
-        } catch (IOException | TemplateException e) {
-            e.printStackTrace();
-        }*/
+        log.debug("======================================= 生成代码结束 =======================================");
     }
 }
