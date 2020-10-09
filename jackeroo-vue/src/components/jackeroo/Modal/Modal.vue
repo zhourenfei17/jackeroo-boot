@@ -72,6 +72,16 @@
       maskClosable: {
         tpye: Boolean,
         default: false
+      },
+      // 非全屏下，modal的body高度是否自适应
+      autoHeight: {
+        type: Boolean,
+        default: true
+      },
+      // 非全屏下，指定modal的body的最大高度，autoHeight=false时有效，暂未实现
+      maxHeight: {
+        type: String,
+        default: '50vh'
       }
     },
     data() {
@@ -95,15 +105,16 @@
       modalClass() {
         return {
           'j-modal-box': true,
-          'fullscreen': this.innerFullscreen,
+          'fullscreen': this.innerFullscreen && this.visible,
           'no-title': this.isNoTitle,
           'no-footer': this.isNoFooter,
+          'j-max-height': !this.innerFullscreen && !this.autoHeight
         }
       },
       modalStyle() {
         let style = {}
         // 如果全屏就将top设为 0
-        if (this.innerFullscreen) {
+        if (this.innerFullscreen && this.visible) {
           style['top'] = '0'
         }
         return style
@@ -169,6 +180,15 @@
 
 <style lang="less">
   .j-modal-box {
+
+    &.j-max-height {
+      & .ant-modal-content{
+        & .ant-modal-body {
+          max-height: 50vh;
+          overflow-y: auto;
+        }
+      }
+    }
 
     &.fullscreen {
       top: 0;

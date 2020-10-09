@@ -62,6 +62,7 @@
 
     <select-table-modal ref="selectTableModal" @ok="handleSelectOk"></select-table-modal>
     <generate-table-column ref="generateTableColumn" @ok="handleGenerateOk"></generate-table-column>
+    <generate-file-select ref="generateFileSelect"></generate-file-select>
   </div>
 </template>
 
@@ -71,6 +72,7 @@ import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
 import SelectTableModal from './modal/SelectTableModal'
 import GenerateTableColumn from './modal/GenerateTableColumn'
+import GenerateFileSelect from './modal/GenerateFileSelect'
 
 export default {
   name: 'OnlineTableList',
@@ -80,7 +82,8 @@ export default {
     DataCard,
     SearchCard,
     SelectTableModal,
-    GenerateTableColumn
+    GenerateTableColumn,
+    GenerateFileSelect
   },
   mixins:[JackerooListMixins],
   data () {
@@ -138,7 +141,7 @@ export default {
     },
     // 生成代码
     handleGenerate(record){
-      const that = this
+      /* const that = this
       this.$confirm({
         content: '确认生成代码？',
         onOk() {
@@ -151,7 +154,8 @@ export default {
             this.destroy()
           })
         }
-      })
+      }) */
+      this.$refs.generateFileSelect.show(record.id)
     }
   }
 }

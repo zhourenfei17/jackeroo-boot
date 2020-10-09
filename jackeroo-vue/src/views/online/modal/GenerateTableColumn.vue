@@ -120,7 +120,8 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="代码生成路径" prop="outputDir">
-              <a-input v-model="formScheme.outputDir" placeholder="请输入代码生成路径" :disabled="flag.view"></a-input>
+              <!-- <a-input v-model="formScheme.outputDir" placeholder="请输入代码生成路径" :disabled="flag.view"></a-input> -->
+              <file-selector v-model="formScheme.outputDir" placeholder="请输入代码生成路径" :disabled="flag.view"></file-selector>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -166,11 +167,12 @@
 <script>
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 import { getAction, postAction } from '@/api/manage'
-import {EditTable} from '@/components'
+import {EditTable, FileSelector} from '@/components'
 
 export default {
   components:{
-    EditTable
+    EditTable,
+    FileSelector
   },
   mixins: [JackerooFromMixins],
   data(){
