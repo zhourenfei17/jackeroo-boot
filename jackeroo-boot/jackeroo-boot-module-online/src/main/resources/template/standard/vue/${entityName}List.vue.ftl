@@ -65,9 +65,9 @@
       </s-table>
     </data-card>
 
-    <module-form-modal ref="formModal" @ok="handleOk"></module-form-modal>
+    <${componentName}-form-modal ref="formModal" @ok="handleOk"></${componentName}-form-modal>
   </div>
-</template>
+</template>-
 
 <script>
 import { STable, DataCard, SearchCard } from '@/components'

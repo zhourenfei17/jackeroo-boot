@@ -14,6 +14,7 @@ import cn.hub.jackeroo.utils.DateUtils;
 import cn.hub.jackeroo.utils.FileUtils;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import freemarker.template.Template;
@@ -35,9 +36,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author alex
@@ -195,7 +198,7 @@ public class OnlineGenerateService {
      * 通过业务表id生成代码
      * @param tableId
      */
-    public void generateCode(String tableId){
+    public void generateCode(String tableId, String outputDir){
         OnlineTable table = tableService.getById(tableId);
         if(table == null){
             throw new JackerooException("业务表信息不存在，生成代码失败");
@@ -203,7 +206,7 @@ public class OnlineGenerateService {
         OnlineScheme scheme = schemeService.getByTableId(tableId);
         List<OnlineTableField> fieldList = tableFieldService.findByTableId(tableId);
 
-        generateCode(table, scheme, fieldList);
+        generateCode(table, scheme, fieldList, outputDir);
     }
 
     /**
@@ -211,8 +214,9 @@ public class OnlineGenerateService {
      * @param table
      * @param scheme
      * @param fieldList
+     * @param outputDir 输出目录
      */
-    private void generateCode(OnlineTable table, OnlineScheme scheme, List<OnlineTableField> fieldList){
+    private void generateCode(OnlineTable table, OnlineScheme scheme, List<OnlineTableField> fieldList, String outputDir){
         List<GenTemplateBO> templateList = GenerateUtils.getTemplateList(generateConfig.getTemplateRootPath() + scheme.getTemplate() , freeMarkerConfigurer, scheme.getTemplate());
 
         Map<String, Object> dataMap = new HashMap<>();
@@ -220,6 +224,7 @@ public class OnlineGenerateService {
         dataMap.put("scheme", scheme);
         dataMap.put("columnList", fieldList);
         dataMap.put("entityName", table.getClassName());
+        dataMap.put("componentName", StringUtils.toUnderAndJoinSeparator(table.getClassName(), Constant.SPLIT_MIDDLE_LINE));
         dataMap.put("createDate", DateUtils.getDate("yyyy-MM-dd"));
 
         boolean hasQuery = false;
@@ -230,7 +235,7 @@ public class OnlineGenerateService {
         }
         dataMap.put("hasQuery", hasQuery);
 
-        String outRootPath = FileUtils.path(scheme.getOutputDir()
+        String outRootPath = FileUtils.path(outputDir
                 + File.separator + generateConfig.getSourceRootPackage().replace(Constant.SPLIT_DOT, Constant.SPLIT_SLASH)
                 + File.separator + scheme.getPackageName().replace(Constant.SPLIT_DOT, Constant.SPLIT_SLASH)
                 + File.separator + scheme.getModuleName());
@@ -241,5 +246,43 @@ public class OnlineGenerateService {
             GenerateUtils.generateFile(dataMap, templateBO, outRootPath);
         }
         log.debug("======================================= 生成代码结束 =======================================");
+    }
+
+    /**
+     * 获取文件列表
+     * @param path
+     * @return
+     */
+    public List<JSONObject> getFileList(String path){
+        File[] files;
+        if(path == null){
+            files = File.listRoots();
+        }else{
+            File parentFile = new File(path);
+            if(!parentFile.exists()){
+                return null;
+            }
+            files = parentFile.listFiles();
+        }
+
+        List<JSONObject> list = new ArrayList<>();
+        for (File file : files) {
+            // 排除隐藏文件
+            if(file.isHidden()){
+                continue;
+            }
+            JSONObject json = new JSONObject();
+            json.put("key", file.getAbsolutePath());
+            json.put("title", Objects.equals("/", file.getAbsolutePath()) ? "/" : file.getName());
+            if(file.isDirectory()){
+                json.put("isLeaf", false);
+            }else{
+                json.put("isLeaf", true);
+            }
+
+            list.add(json);
+        }
+
+        return list;
     }
 }

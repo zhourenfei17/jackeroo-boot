@@ -1,5 +1,8 @@
 package cn.hub.jackeroo.utils;
 
+import cn.hub.jackeroo.constant.Constant;
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.util.Random;
 
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
@@ -63,35 +66,46 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 	 *         toUnderScoreCase("helloWorld") = "hello_world"
 	 */
 	public static String toUnderScoreCase(String s) {
-		if (s == null) {
-			return null;
-		}
-
-		StringBuilder sb = new StringBuilder();
-		boolean upperCase = false;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-
-			boolean nextUpperCase = true;
-
-			if (i < (s.length() - 1)) {
-				nextUpperCase = Character.isUpperCase(s.charAt(i + 1));
-			}
-
-			if ((i > 0) && Character.isUpperCase(c)) {
-				if (!upperCase || !nextUpperCase) {
-					sb.append(SEPARATOR);
-				}
-				upperCase = true;
-			} else {
-				upperCase = false;
-			}
-
-			sb.append(Character.toLowerCase(c));
-		}
-
-		return sb.toString();
+		return toUnderAndJoinSeparator(s, Constant.SPLIT_UNDER_LINE);
 	}
+
+    /**
+     * 驼峰命名法工具
+     * toUnderAndJoinSeparator("helloWorld", "-") = "hello-world"
+     * @param s
+     * @param Separator
+     * @return
+     */
+	public static String toUnderAndJoinSeparator(String s, String Separator){
+        if (s == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        boolean upperCase = false;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            boolean nextUpperCase = true;
+
+            if (i < (s.length() - 1)) {
+                nextUpperCase = Character.isUpperCase(s.charAt(i + 1));
+            }
+
+            if ((i > 0) && Character.isUpperCase(c)) {
+                if (!upperCase || !nextUpperCase) {
+                    sb.append(Separator);
+                }
+                upperCase = true;
+            } else {
+                upperCase = false;
+            }
+
+            sb.append(Character.toLowerCase(c));
+        }
+
+        return sb.toString();
+    }
 
     /**
      * 随机数

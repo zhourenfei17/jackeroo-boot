@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -87,8 +88,29 @@ public class OnlineGenerateController extends BaseController {
      */
     @GetMapping("generateCode")
     @ApiOperation("生成代码")
-    public Result generateCode(Id id){
-        service.generateCode(id.getId());
+    public Result generateCode(@Validated Id id, @RequestParam String outputDir){
+        service.generateCode(id.getId(), outputDir);
         return ok();
+    }
+
+    /**
+     * 根目录文件列表
+     * @return
+     */
+    @GetMapping("rootFiles")
+    @ApiOperation("根目录文件列表")
+    public Result rootFiles(){
+        return ok(service.getFileList(null));
+    }
+
+    /**
+     * 指定目录下文件列表
+     * @param path
+     * @return
+     */
+    @GetMapping("listFiles")
+    @ApiOperation("指定目录下文件列表")
+    public Result listFiles(@RequestParam String path){
+        return ok(service.getFileList(path));
     }
 }

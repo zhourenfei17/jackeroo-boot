@@ -47,4 +47,12 @@ public interface Constant {
      * 分隔符-点
      */
     String SPLIT_DOT = ".";
+    /**
+     * 分隔符-下划线
+     */
+    String SPLIT_UNDER_LINE = "_";
+    /**
+     * 分隔符-中横线
+     */
+    String SPLIT_MIDDLE_LINE = "-";
 }
