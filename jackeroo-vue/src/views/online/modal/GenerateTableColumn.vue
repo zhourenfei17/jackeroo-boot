@@ -91,8 +91,8 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
-            <a-form-model-item label="生成模块名" prop="moduleName">
-              <a-input v-model="formScheme.moduleName" placeholder="请输入生成模块名" :disabled="flag.view"></a-input>
+            <a-form-model-item label="所属模块" prop="moduleId">
+              <j-select v-model="formScheme.moduleId" placeholder="请选择所属模块" :url="url.findModuleList"></j-select>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -118,12 +118,11 @@
               </a-radio-group>
             </a-form-model-item>
           </a-col>
-          <a-col :span="rowSpan">
+          <!-- <a-col :span="rowSpan">
             <a-form-model-item label="代码生成路径" prop="outputDir">
-              <!-- <a-input v-model="formScheme.outputDir" placeholder="请输入代码生成路径" :disabled="flag.view"></a-input> -->
               <file-selector v-model="formScheme.outputDir" placeholder="请输入代码生成路径" :disabled="flag.view"></file-selector>
             </a-form-model-item>
-          </a-col>
+          </a-col> -->
           <a-col :span="rowSpan">
             <a-form-model-item label="是否分页" prop="enablePagination">
               <a-radio-group v-model="formScheme.enablePagination">
@@ -159,7 +158,8 @@
       </span>
       
       <a-button @click="cancel">取消</a-button>
-      <a-button type="primary" @click="handleSubmit">保存</a-button>
+      <a-button type="primary" @click="handleSubmit(false)">保存</a-button>
+      <a-button type="primary" @click="handleSubmit(true)">保存并生成代码</a-button>
     </template>
   </j-modal>
 </template>
@@ -168,11 +168,13 @@
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 import { getAction, postAction } from '@/api/manage'
 import {EditTable, FileSelector} from '@/components'
+import JSelect from '@/components/jackeroo/JSelect'
 
 export default {
   components:{
     EditTable,
-    FileSelector
+    FileSelector,
+    JSelect
   },
   mixins: [JackerooFromMixins],
   data(){
@@ -192,7 +194,7 @@ export default {
       formScheme: {
         id: null,
         packageName: '',
-        moduleName: '',
+        moduleId: null,
         showCheckbox: null,
         formStyle: null,
         author: '',
@@ -231,9 +233,8 @@ export default {
           {required: true, message: '请填写生成包名'},
           {max: 100, message: '长度需要在0到100之间'}
         ],
-        moduleName: [
-          {required: true, message: '请填写生成模块名'},
-          {max: 30, message: '长度需要在0到30之间'}
+        moduleId: [
+          {required: true, message: '请选择所属模块'}
         ],
         outputDir: [
           {required: true, message: '请填写代码生成路径'},
@@ -419,7 +420,9 @@ export default {
       ],
       url: {
         detail: '/online/generate/findTableDetailInfo',
-        get: '/online/table/'
+        findModuleList: '/system/module/allList',
+        get: '/online/table/',
+        save: '/online/generate/save',
       },
       tableName: ''
     }
@@ -459,7 +462,7 @@ export default {
         this.current++
       }
     },
-    handleSubmit(){
+    handleSubmit(generate = false){
       this.$refs.onlineTable.validate((success) => {
         if(success){
           this.$refs.onlineScheme.validate(success2 => {
@@ -476,6 +479,11 @@ export default {
                   postAction('/online/generate/save', formData).then(result => {
                     if(!result.code){
                       this.$message.success('保存成功')
+                      if(generate){
+                        this.$emit('generate', result.data)
+                      }
+                      this.$emit('ok')
+                      this.cancel()
                     }else{
                       this.$message.error('保存失败')
                     }

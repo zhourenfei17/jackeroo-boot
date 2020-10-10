@@ -19,6 +19,11 @@
               <file-selector v-model="form.outputDir" placeholder="请选择代码生成路径" :disabled="flag.view"></file-selector>
             </a-form-model-item>
           </a-col>
+          <a-col :span="rowSpan">
+            <a-form-model-item label="是否覆盖" prop="override">
+              <a-switch v-model="form.override" checkedChildren="是" unCheckedChildren="否" defaultChecked></a-switch>
+            </a-form-model-item>
+          </a-col>
         </a-row>
       </a-form-model>
     </j-spin>
@@ -40,7 +45,8 @@ export default {
       title: '生成代码',
       width: '40vw',
       form: {
-        outputDir: ''
+        outputDir: '',
+        override: true
       },
       id: null,
       rules: {
@@ -66,7 +72,11 @@ export default {
           const formData = this.form
 
           this.$loading.show()
-          getAction(this.url.generateCode, {id: this.id, outputDir: formData.outputDir}).then(result => {
+          getAction(this.url.generateCode, {
+            id: this.id, 
+            outputDir: formData.outputDir, 
+            override: formData.override ? 1 : 0
+          }).then(result => {
             if(!result.code){
               this.$message.success('生成代码成功')
               this.cancel()
@@ -78,6 +88,17 @@ export default {
           })
         }
       })
+    },
+    cancel(){
+      this.visible = false
+      this.flag.add = false
+      this.flag.edit = false
+      this.flag.view = false
+
+      if(this.$refs.formModel){
+        this.$refs.formModel.clearValidate()
+      }
+      this.loading = true
     },
   }
 }

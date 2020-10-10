@@ -50,7 +50,7 @@
           <template>
             <action-list>
               <a @click="handleEdit(record)">编辑</a>
-              <a @click="handleGenerate(record)">生成代码</a>
+              <a @click="handleGenerate(record.id)">生成代码</a>
               <action-menu-list>
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
@@ -61,7 +61,7 @@
     </data-card>
 
     <select-table-modal ref="selectTableModal" @ok="handleSelectOk"></select-table-modal>
-    <generate-table-column ref="generateTableColumn" @ok="handleGenerateOk"></generate-table-column>
+    <generate-table-column ref="generateTableColumn" @ok="handleGenerateOk" @generate="handleGenerate"></generate-table-column>
     <generate-file-select ref="generateFileSelect"></generate-file-select>
   </div>
 </template>
@@ -140,22 +140,8 @@ export default {
         this.$refs.generateTableColumn.edit(record.id)
     },
     // 生成代码
-    handleGenerate(record){
-      /* const that = this
-      this.$confirm({
-        content: '确认生成代码？',
-        onOk() {
-          getAction(that.url.generateCode, {id: record.id}).then(result => {
-            if(!result.code){
-              that.$message.success('生成代码成功')
-            }else{
-              that.$message.error("生成代码失败")
-            }
-            this.destroy()
-          })
-        }
-      }) */
-      this.$refs.generateFileSelect.show(record.id)
+    handleGenerate(id){
+      this.$refs.generateFileSelect.show(id)
     }
   }
 }

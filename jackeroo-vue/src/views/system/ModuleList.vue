@@ -90,11 +90,11 @@ export default {
           }
         },
         {
-          title: '权限名称',
+          title: '模块名称',
           dataIndex: 'name'
         },
         {
-          title: '权限代码',
+          title: '模块代码',
           dataIndex: 'code',
         },
         {

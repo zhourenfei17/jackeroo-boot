@@ -152,14 +152,12 @@
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
-import JSelect from '@/components/jackeroo/JSelect'
 import {IconSelector, JDrawer} from '@/components'
 import {TreeSelect} from 'ant-design-vue'
 import MenuAuthListModal from './MenuAuthListModal'
 
 export default {
   components: {
-    JSelect,
     IconSelector,
     JDrawer,
     TreeSelect,

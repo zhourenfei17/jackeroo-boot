@@ -1,6 +1,6 @@
 <template>
   <a-form-model ref="formTable" :model="formData">
-    <a-table :dataSource="dataSource" :columns="columnsCopy" class="jackeroo-edit-table"
+    <a-table :dataSource="dataSource" :columns="columnsCopy" :rowKey="rowKey" class="jackeroo-edit-table"
       v-bind="$attrs">
       <template v-for="col in columnsSlot" :slot="col.dataIndex" slot-scope="text, record, index" >
           
