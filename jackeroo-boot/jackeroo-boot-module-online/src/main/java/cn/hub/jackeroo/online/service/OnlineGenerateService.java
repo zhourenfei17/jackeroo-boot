@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.online.service;
 
+import cn.hub.jackeroo.api.ISystemApi;
 import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.online.bo.GenTemplateBO;
@@ -17,25 +18,15 @@ import cn.hub.jackeroo.vo.PageParam;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.annotation.Resource;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +53,8 @@ public class OnlineGenerateService {
     private FreeMarkerConfigurer freeMarkerConfigurer;
     @Autowired
     private GenerateConfig generateConfig;
+    @Autowired
+    private ISystemApi systemApi;
 
     /**
      * 获取数据库业务表列表-带分页
@@ -182,23 +175,25 @@ public class OnlineGenerateService {
     }
 
     @Transactional
-    public void save(GenerateTableDetail detail){
-        tableService.save(detail.getOnlineTable());
+    public Long save(GenerateTableDetail detail){
+        tableService.saveOrUpdate(detail.getOnlineTable());
 
         detail.getOnlineScheme().setTableId(detail.getOnlineTable().getId());
-        schemeService.save(detail.getOnlineScheme());
+        schemeService.saveOrUpdate(detail.getOnlineScheme());
 
         for (OnlineTableField field : detail.getOnlineTableField()) {
             field.setTableId(detail.getOnlineTable().getId());
         }
-        tableFieldService.saveBatch(detail.getOnlineTableField());
+        tableFieldService.saveOrUpdateBatch(detail.getOnlineTableField());
+
+        return detail.getOnlineTable().getId();
     }
 
     /**
      * 通过业务表id生成代码
      * @param tableId
      */
-    public void generateCode(String tableId, String outputDir){
+    public void generateCode(String tableId, String outputDir, Integer override){
         OnlineTable table = tableService.getById(tableId);
         if(table == null){
             throw new JackerooException("业务表信息不存在，生成代码失败");
@@ -206,7 +201,7 @@ public class OnlineGenerateService {
         OnlineScheme scheme = schemeService.getByTableId(tableId);
         List<OnlineTableField> fieldList = tableFieldService.findByTableId(tableId);
 
-        generateCode(table, scheme, fieldList, outputDir);
+        generateCode(table, scheme, fieldList, outputDir, override);
     }
 
     /**
@@ -216,13 +211,19 @@ public class OnlineGenerateService {
      * @param fieldList
      * @param outputDir 输出目录
      */
-    private void generateCode(OnlineTable table, OnlineScheme scheme, List<OnlineTableField> fieldList, String outputDir){
+    private void generateCode(OnlineTable table, OnlineScheme scheme, List<OnlineTableField> fieldList, String outputDir, Integer override){
         List<GenTemplateBO> templateList = GenerateUtils.getTemplateList(generateConfig.getTemplateRootPath() + scheme.getTemplate() , freeMarkerConfigurer, scheme.getTemplate());
+
+        JSONObject module = systemApi.getModuleById(scheme.getModuleId());
+        if(module == null){
+            throw new JackerooException("所属模块信息不存在，生成代码失败！");
+        }
 
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("table", table);
         dataMap.put("scheme", scheme);
         dataMap.put("columnList", fieldList);
+        dataMap.put("module", module);
         dataMap.put("entityName", table.getClassName());
         dataMap.put("componentName", StringUtils.toUnderAndJoinSeparator(table.getClassName(), Constant.SPLIT_MIDDLE_LINE));
         dataMap.put("createDate", DateUtils.getDate("yyyy-MM-dd"));
@@ -238,12 +239,12 @@ public class OnlineGenerateService {
         String outRootPath = FileUtils.path(outputDir
                 + File.separator + generateConfig.getSourceRootPackage().replace(Constant.SPLIT_DOT, Constant.SPLIT_SLASH)
                 + File.separator + scheme.getPackageName().replace(Constant.SPLIT_DOT, Constant.SPLIT_SLASH)
-                + File.separator + scheme.getModuleName());
+                + File.separator + module.getString("code"));
         FileUtils.createDirectory(outRootPath);
 
         log.debug("======================================= 生成代码中... =======================================");
         for (GenTemplateBO templateBO : templateList) {
-            GenerateUtils.generateFile(dataMap, templateBO, outRootPath);
+            GenerateUtils.generateFile(dataMap, templateBO, outRootPath, override);
         }
         log.debug("======================================= 生成代码结束 =======================================");
     }

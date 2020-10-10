@@ -1,4 +1,4 @@
-package ${scheme.packageName}.${scheme.moduleName}.entity;
+package ${scheme.packageName}.${module.code}.entity;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;

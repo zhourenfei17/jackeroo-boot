@@ -1,6 +1,6 @@
-package ${scheme.packageName}.${scheme.moduleName}.mapper;
+package ${scheme.packageName}.${module.code}.mapper;
 
-import ${scheme.packageName}.${scheme.moduleName}.entity.${table.className};
+import ${scheme.packageName}.${module.code}.entity.${table.className};
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;

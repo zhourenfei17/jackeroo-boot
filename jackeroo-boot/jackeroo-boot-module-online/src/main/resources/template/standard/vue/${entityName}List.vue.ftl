@@ -111,8 +111,8 @@ export default {
         }
       ],
       url: {
-        list: '/${scheme.moduleName}/${table.className}/list',
-        delete: '/${scheme.moduleName}/${table.className}/delete'
+        list: '/${module.code}/${table.className}/list',
+        delete: '/${module.code}/${table.className}/delete'
       },
     }
   },

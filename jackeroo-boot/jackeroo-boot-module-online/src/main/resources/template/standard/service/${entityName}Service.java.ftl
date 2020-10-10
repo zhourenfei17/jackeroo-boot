@@ -1,8 +1,8 @@
-package ${scheme.packageName}.${scheme.moduleName}.service;
+package ${scheme.packageName}.${module.code}.service;
 
 import ${scheme.packageName}.constant.Constant;
-import ${scheme.packageName}.${scheme.moduleName}.entity.${table.className};
-import ${scheme.packageName}.${scheme.moduleName}.mapper.${table.className}Mapper;
+import ${scheme.packageName}.${module.code}.entity.${table.className};
+import ${scheme.packageName}.${module.code}.mapper.${table.className}Mapper;
 import ${scheme.packageName}.vo.PageParam;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="${scheme.packageName}.${scheme.moduleName}.mapper.${table.className}Mapper">
+<mapper namespace="${scheme.packageName}.${module.code}.mapper.${table.className}Mapper">
 
     <!-- 通用查询结果列 -->
     <sql id="baseColumns">
@@ -13,7 +13,7 @@
         </#list>
     </sql>
 
-    <select id="findList" resultType="${scheme.packageName}.${scheme.moduleName}.entity.${table.className}">
+    <select id="findList" resultType="${scheme.packageName}.${module.code}.entity.${table.className}">
         select
             <include refid="baseColumns"/>
         from ${table.tableName} a

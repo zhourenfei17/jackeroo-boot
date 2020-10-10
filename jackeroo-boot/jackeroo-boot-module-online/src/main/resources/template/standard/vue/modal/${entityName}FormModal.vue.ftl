@@ -63,9 +63,9 @@ export default {
         </#list>
       },
       url: {
-        getById: '/${scheme.moduleName}/module/',
-        add: '/${scheme.moduleName}/module/add',
-        update: '/${scheme.moduleName}/module/update'
+        getById: '/${module.code}/module/',
+        add: '/${module.code}/module/add',
+        update: '/${module.code}/module/update'
       }
     }
   },

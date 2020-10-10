@@ -78,8 +78,7 @@ public class OnlineGenerateController extends BaseController {
     @PostMapping("save")
     @ApiOperation("保存代码生成信息")
     public Result save(@RequestBody GenerateTableDetail detail){
-        service.save(detail);
-        return ok();
+        return ok(service.save(detail));
     }
 
     /**
@@ -88,8 +87,8 @@ public class OnlineGenerateController extends BaseController {
      */
     @GetMapping("generateCode")
     @ApiOperation("生成代码")
-    public Result generateCode(@Validated Id id, @RequestParam String outputDir){
-        service.generateCode(id.getId(), outputDir);
+    public Result generateCode(@Validated Id id, @RequestParam String outputDir, @RequestParam Integer override){
+        service.generateCode(id.getId(), outputDir, override);
         return ok();
     }
 

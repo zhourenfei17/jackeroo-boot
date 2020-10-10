@@ -1,8 +1,8 @@
-package ${scheme.packageName}.${scheme.moduleName}.controller;
+package ${scheme.packageName}.${module.code}.controller;
 
 import ${scheme.packageName}.persistence.BaseController;
-import ${scheme.packageName}.${scheme.moduleName}.entity.${table.className};
-import ${scheme.packageName}.${scheme.moduleName}.service.${table.className}Service;
+import ${scheme.packageName}.${module.code}.entity.${table.className};
+import ${scheme.packageName}.${module.code}.service.${table.className}Service;
 import ${scheme.packageName}.utils.annotation.ApiModule;
 import ${scheme.packageName}.utils.validator.annotation.ValidatedUnique;
 import ${scheme.packageName}.utils.validator.groups.Insert;
@@ -33,10 +33,10 @@ import org.springframework.web.bind.annotation.RestController;
 * @author ${scheme.author}
 * @since ${createDate}
 */
-@ApiModule(moduleName = "系统管理")
+@ApiModule(moduleName = "${module.name}")
 @Api(tags = "${table.comment}")
 @RestController
-@RequestMapping("/${scheme.moduleName}/module")
+@RequestMapping("/${module.code}/module")
 public class ${table.className}Controller extends BaseController {
 
     @Autowired

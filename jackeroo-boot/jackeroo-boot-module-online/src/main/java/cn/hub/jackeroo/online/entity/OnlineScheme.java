@@ -50,9 +50,9 @@ public class OnlineScheme extends BaseEntity<OnlineScheme> {
     /**
      * 生成模块名
      */
-    @NotBlank
-    @Length(max = 30)
-    private String moduleName;
+    @NotNull
+    @Length(max = 20)
+    private Long moduleId;
 
     /**
      * 显示复选框

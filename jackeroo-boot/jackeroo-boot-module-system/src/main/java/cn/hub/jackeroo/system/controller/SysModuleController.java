@@ -56,6 +56,16 @@ public class SysModuleController extends BaseController {
     }
 
     /**
+     * 获取所有系统模块列表
+     * @return
+     */
+    @GetMapping("allList")
+    @ApiOperation("获取所有系统模块列表")
+    public Result allList(){
+        return ok(service.findAll());
+    }
+
+    /**
      * 获取模块信息详情
      * @param id
      * @return

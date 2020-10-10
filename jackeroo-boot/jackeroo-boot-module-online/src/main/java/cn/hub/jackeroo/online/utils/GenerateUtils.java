@@ -144,11 +144,15 @@ public class GenerateUtils {
      * @param genTemplate
      * @param outRootPath
      */
-    public static void generateFile(Map<String, Object> dataMap, GenTemplateBO genTemplate, String outRootPath){
+    public static void generateFile(Map<String, Object> dataMap, GenTemplateBO genTemplate, String outRootPath, Integer override){
         //替换文件名变量
         genTemplate.setFileName(genTemplate.getFileName().replace("${entityName}", (String)dataMap.get("entityName")));
 
         File outputFile = new File(outRootPath + genTemplate.getFilePath() + File.separator + genTemplate.getFileName());
+        if(outputFile.exists() && Constant.BOOLEAN_NO == override){
+            log.debug("文件路径【{}】已存在，未覆盖重新生成代码", outputFile.getPath());
+            return;
+        }
         FileUtils.createFileAndFolder(outputFile);
         try (
             Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)))

@@ -4,12 +4,14 @@ import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.system.entity.SysModule;
 import cn.hub.jackeroo.system.mapper.SysModuleMapper;
 import cn.hub.jackeroo.vo.PageParam;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -37,5 +39,16 @@ public class SysModuleService extends ServiceImpl<SysModuleMapper, SysModule> {
         page.setRecords(mapper.findList(module));
 
         return page;
+    }
+
+    /**
+     * 获取所有数据列表
+     * @return
+     */
+    public List<SysModule> findAll(){
+        LambdaUpdateWrapper<SysModule> query = new LambdaUpdateWrapper<>();
+        query.orderByAsc(SysModule::getSort);
+
+        return mapper.selectList(query);
     }
 }
