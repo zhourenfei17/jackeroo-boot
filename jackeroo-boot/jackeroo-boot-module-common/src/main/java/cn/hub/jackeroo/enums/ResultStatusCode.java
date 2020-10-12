@@ -21,6 +21,7 @@ public enum ResultStatusCode {
     SYSTEM_ERR(500, "服务器运行异常"),
     UNAUTHO_ERROR(10001, "您没有该权限"),
     UPLOAD_ERROR(10002, "上传文件异常"),
+    CAPTCHA_ERROR(10003, "验证码错误"),
     BUSSINESS_ERROR(50000, "业务异常"),
     NOT_EXIST_USER_OR_ERROR_PWD(50101, "该用户不存在或密码错误"),
     LOGINED_IN(50102, "该用户已登录"),

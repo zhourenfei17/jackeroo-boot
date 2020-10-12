@@ -72,6 +72,9 @@ public class LogFilter {
 	}
 
 	private void printMap(String prefix, Map map) {
+	    if(map == null){
+	        return;
+        }
 		StringBuilder buf = new StringBuilder();
 		for (Object o : map.entrySet()) {
 			Map.Entry entry = (Map.Entry) o;

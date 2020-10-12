@@ -64,6 +64,8 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/static/**", "anon");
 		// 登录方法
 		filterChainDefinitionMap.put("/auth/login", "anon");
+		// 获取登录验证码
+		filterChainDefinitionMap.put("/auth/generateImg/**", "anon");
 
         // swagger相关直接放行
         filterChainDefinitionMap.put("/", "anon");
