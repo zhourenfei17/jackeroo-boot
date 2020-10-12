@@ -41,6 +41,30 @@
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
+
+          <a-form-item>
+            <a-row>
+              <a-col :span="16">
+                <a-input 
+                  size="large" 
+                  type="text" 
+                  placeholder="请输入验证码"
+                  v-decorator="[
+                    'captcha',
+                    {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}
+                  ]"
+                  >
+                    <a-icon slot="prefix" type="smile" :style="{ color: 'rgba(0,0,0,.25)' }" />
+                  </a-input>
+              </a-col>
+              <a-col :span="8" style="text-align:right;">
+                <img v-if="validImg" :src="validImg" @click="generateRandomImage" 
+                  title="点击更换图片"
+                  style="height: 35px;width: 105px;cursor: pointer;">
+                <a-button v-else loading>加载中...</a-button>
+              </a-col>
+            </a-row>
+          </a-form-item>
         </a-tab-pane>
       </a-tabs>
 
@@ -96,7 +120,12 @@ export default {
         loginType: 0,
         smsSendBtn: false
       },
-      errorMsg: '账号或密码错误'
+      loginKey: null,
+      validImg: null,
+      errorMsg: '账号或密码错误',
+      url: {
+        generateImg: '/auth/generateImg/'
+      }
     }
   },
   created () {
@@ -108,6 +137,7 @@ export default {
         this.requiredTwoStepCaptcha = false
       }) */
     // this.requiredTwoStepCaptcha = true
+    this.generateRandomImage()
   },
   methods: {
     ...mapActions(['Login']),
@@ -121,6 +151,16 @@ export default {
         state.loginType = 1
       }
       callback()
+    },
+    generateRandomImage(){
+      this.loginKey = new Date().getTime()
+      getAction(this.url.generateImg + this.loginKey).then(result => {
+        if(!result.code){
+          this.validImg = result.data
+        }else{
+          this.$message.error(result.msg)
+        }
+      })
     },
     handleTabClick (key) {
       this.customActiveKey = key
@@ -136,17 +176,18 @@ export default {
 
       state.loginBtn = true
 
-      const validateFieldsKey = customActiveKey === 'tab1' ? ['account', 'pwd'] : ['mobile', 'captcha']
+      const validateFieldsKey = customActiveKey === 'tab1' ? ['account', 'pwd', 'captcha'] : ['mobile', 'captcha']
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           const loginParams = { ...values }
           //delete loginParams.username
           //loginParams[!state.loginType ? 'email' : 'username'] = values.username
           loginParams.pwd = md5(values.pwd)
+          loginParams.key = this.loginKey
 
           Login(loginParams)
             .then((res) => {
-              if(res.code == 0){
+              if(!res.code){
                 this.loginSuccess(res)
               }else{
                 this.$message.error(res.msg)
@@ -229,6 +270,7 @@ export default {
       this.isLoginError = false
     },
     requestFailed (err) {
+      this.generateRandomImage()
       this.errorMsg = err.msg || '请求出现错误，请稍后再试'
       this.isLoginError = true
       this.$notification['error']({

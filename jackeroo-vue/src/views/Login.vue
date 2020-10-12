@@ -26,7 +26,7 @@
               placeholder="请输入账号"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: '请输入账号' }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: '请输入账号' }], validateTrigger: 'blur'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -46,6 +46,20 @@
             >
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
+          </a-form-item>
+
+          <a-form-item>
+            <a-input 
+              size="large" 
+              type="text" 
+              placeholder="请输入验证码"
+              v-decorator="[
+                'code',
+                {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}
+              ]"
+              >
+                <a-icon slot="prefix" type="smile" :style="{ color: 'rgba(0,0,0,.25)' }" />
+              </a-input>
           </a-form-item>
 
           <a-form-item style="margin-top:24px">
