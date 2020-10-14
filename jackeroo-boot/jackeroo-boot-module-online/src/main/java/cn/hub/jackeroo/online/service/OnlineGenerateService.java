@@ -225,6 +225,7 @@ public class OnlineGenerateService {
         dataMap.put("columnList", fieldList);
         dataMap.put("module", module);
         dataMap.put("entityName", table.getClassName());
+        dataMap.put("varName", StringUtils.toCamelCase(table.getClassName()));
         dataMap.put("componentName", StringUtils.toUnderAndJoinSeparator(table.getClassName(), Constant.SPLIT_MIDDLE_LINE));
         dataMap.put("createDate", DateUtils.getDate("yyyy-MM-dd"));
 

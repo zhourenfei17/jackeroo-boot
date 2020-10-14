@@ -15,5 +15,5 @@ import java.util.List;
 */
 public interface ${table.className}Mapper extends BaseMapper<${table.className}> {
 
-    List<${table.className}> findList(${table.className} entity);
+    List<${table.className}> findList(${table.className} ${varName});
 }

@@ -5,6 +5,7 @@ import cn.hub.jackeroo.online.mapper.OnlineTableFieldMapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,9 +23,22 @@ public class OnlineTableFieldService extends ServiceImpl<OnlineTableFieldMapper,
      * @return
      */
     public List<OnlineTableField> findByTableId(Serializable tableId){
+        return super.list(buildTableIdQuery(tableId));
+    }
+
+    private LambdaUpdateWrapper<OnlineTableField> buildTableIdQuery(Serializable tableId){
         LambdaUpdateWrapper<OnlineTableField> query = new LambdaUpdateWrapper<>();
         query.eq(OnlineTableField::getTableId, tableId);
 
-        return super.list(query);
+        return query;
+    }
+
+    /**
+     * 通过tableId删除
+     * @param tableId
+     */
+    @Transactional
+    public void deleteByTableId(Serializable tableId){
+        super.remove(buildTableIdQuery(tableId));
     }
 }

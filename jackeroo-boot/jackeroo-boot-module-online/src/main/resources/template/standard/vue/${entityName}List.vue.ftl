@@ -3,18 +3,19 @@
     <#if hasQuery>
     <search-card :enter="refreshData">
         <#list columnList as column>
+            <#if column.enableQuery == 1>
       <a-col :md="6" :sm="12">
         <a-form-item label="${column.dbFieldDesc}">
-            <#if column.formType == "input">
+                <#if column.formType == "input">
           <a-input v-model="queryParam.${column.entityFieldName}" placeholder="请输入${column.dbFieldDesc}"/>
-            <#elseif column.formType == "select">
+                <#elseif column.formType == "select">
           <a-select v-model="queryParam.${column.entityFieldName}" placeholder="请选择${column.dbFieldDesc}"/>
-            <#elseif column.formType == "input">
-            <#elseif column.formType == "input">
-            </#if>
-
+                <#elseif column.formType == "input">
+                <#elseif column.formType == "input">
+                </#if>
         </a-form-item>
       </a-col>
+            </#if>
         </#list>
 
         <template slot="operate">
@@ -101,7 +102,7 @@ export default {
                 <#if column.enableSort == 1>
           sort: true
                 </#if>
-        }
+        },
             </#if>
         </#list>
         {
@@ -111,8 +112,8 @@ export default {
         }
       ],
       url: {
-        list: '/${module.code}/${table.className}/list',
-        delete: '/${module.code}/${table.className}/delete'
+        list: '/${module.code}/${varName}/list',
+        delete: '/${module.code}/${varName}/delete'
       },
     }
   },

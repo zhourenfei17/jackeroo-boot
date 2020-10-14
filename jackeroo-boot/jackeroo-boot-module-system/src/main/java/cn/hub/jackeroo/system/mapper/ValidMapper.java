@@ -23,6 +23,9 @@ public interface ValidMapper {
                 if(StringUtils.isNotBlank(uniqueVo.getDataId())){
                     WHERE("id != #{dataId}");
                 }
+                if(StringUtils.isNotBlank(uniqueVo.getCondition())){
+                    WHERE("${condition}");
+                }
             }}.toString();
         }
     }

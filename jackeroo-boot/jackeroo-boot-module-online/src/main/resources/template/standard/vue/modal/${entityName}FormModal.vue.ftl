@@ -53,7 +53,7 @@ export default {
             <#if column.enableForm == 1>
         ${column.entityFieldName}: [
               <#if column.formRequired == 1>
-          {required: true, message: '请输入${column.entityFieldName}'},
+          {required: true, message: '请输入${column.dbFieldDesc}'},
               </#if>
               <#if column.formType == 'input'>
           {max: ${column.dbFieldLength}, message: '长度需要在0到${column.dbFieldLength}之间'},
@@ -63,9 +63,9 @@ export default {
         </#list>
       },
       url: {
-        getById: '/${module.code}/module/',
-        add: '/${module.code}/module/add',
-        update: '/${module.code}/module/update'
+        getById: '/${module.code}/${varName}/',
+        add: '/${module.code}/${varName}/add',
+        update: '/${module.code}/${varName}/update'
       }
     }
   },

@@ -11,8 +11,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,5 +59,18 @@ public class OnlineTableService extends ServiceImpl<OnlineTableMapper, OnlineTab
         result.put("columns", tableFieldList);
 
         return result;
+    }
+
+    /**
+     * 删除业务表配置信息
+     * @param tableId
+     */
+    @Transactional
+    public void delete(Serializable tableId){
+        tableFieldService.deleteByTableId(tableId);
+
+        schemeService.deleteByTableId(tableId);
+
+        super.removeById(tableId);
     }
 }

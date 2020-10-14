@@ -30,5 +30,8 @@ public class UniqueVo {
      * 数据id
      */
     private String dataId;
-
+    /**
+     * 自定义条件
+     */
+    private String condition;
 }

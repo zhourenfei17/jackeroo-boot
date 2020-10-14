@@ -1,6 +1,5 @@
 package ${scheme.packageName}.${module.code}.service;
 
-import ${scheme.packageName}.constant.Constant;
 import ${scheme.packageName}.${module.code}.entity.${table.className};
 import ${scheme.packageName}.${module.code}.mapper.${table.className}Mapper;
 import ${scheme.packageName}.vo.PageParam;
@@ -26,13 +25,13 @@ public class ${table.className}Service extends ServiceImpl<${table.className}Map
 
     /**
     * 查询数据列表-带分页
-    * @param entity
+    * @param ${varName}
     * @param pageParam
     * @return
     */
-    public IPage<${table.className}> findPage(${table.className} entity, PageParam pageParam){
-        Page<${table.className}> page = entity.initPage(pageParam);
-        page.setRecords(mapper.findList(entity));
+    public IPage<${table.className}> findPage(${table.className} ${varName}, PageParam pageParam){
+        Page<${table.className}> page = ${varName}.initPage(pageParam);
+        page.setRecords(mapper.findList(${varName}));
 
         return page;
     }

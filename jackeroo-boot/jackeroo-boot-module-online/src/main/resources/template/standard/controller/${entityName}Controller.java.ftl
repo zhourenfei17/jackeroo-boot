@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 @ApiModule(moduleName = "${module.name}")
 @Api(tags = "${table.comment}")
 @RestController
-@RequestMapping("/${module.code}/module")
+@RequestMapping("/${module.code}/${varName}")
 public class ${table.className}Controller extends BaseController {
 
     @Autowired
@@ -44,14 +44,14 @@ public class ${table.className}Controller extends BaseController {
 
     /**
     * ${table.comment}列表
-    * @param entity
+    * @param ${varName}
     * @param pageParam
     * @return
     */
     @GetMapping("list")
     @ApiOperation("${table.comment}列表")
-    public Result<IPage<${table.className}>> list(${table.className} entity, @Validated PageParam pageParam){
-        return ok(service.findPage(entity, pageParam));
+    public Result<IPage<${table.className}>> list(${table.className} ${varName}, @Validated PageParam pageParam){
+        return ok(service.findPage(${varName}, pageParam));
     }
 
     /**
@@ -67,27 +67,27 @@ public class ${table.className}Controller extends BaseController {
 
     /**
     * 添加${table.comment}
-    * @param entity
+    * @param ${varName}
     * @return
     */
     @PostMapping("add")
     @ApiOperation("添加${table.comment}")
     @ValidatedUnique(clazz = ${table.className}.class)
-    public Result add(@Validated(Insert.class) @RequestBody ${table.className} entity){
-        service.save(entity);
+    public Result add(@Validated(Insert.class) @RequestBody ${table.className} ${varName}){
+        service.save(${varName});
         return ok();
     }
 
     /**
     * 编辑${table.comment}
-    * @param entity
+    * @param ${varName}
     * @return
     */
     @PutMapping("update")
     @ApiOperation("编辑${table.comment}")
     @ValidatedUnique(clazz = ${table.className}.class)
-    public Result update(@Validated(Update.class) @RequestBody ${table.className} entity){
-        service.updateById(entity);
+    public Result update(@Validated(Update.class) @RequestBody ${table.className} ${varName}){
+        service.updateById(${varName});
         return ok();
     }
 
