@@ -45,7 +45,10 @@ export const ValidatorMixins = {
         columnName: rule.columnName ? rule.columnName : rule.field, //接口会进行去驼峰处理
         dataValue: value,
         dataId : rule.dataId ? rule.dataId : this.form.id
-      };
+      }
+      if(rule.condition){
+        params.condition = rule.condition
+      }
       validtedUnique(params).then((res) => {
         if(res.code == 0){
           if (res.data) {

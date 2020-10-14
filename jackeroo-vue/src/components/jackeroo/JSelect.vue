@@ -5,9 +5,9 @@
         请选择
       </span>
     </a-select-option>
-    <a-select-option v-for="(item,index) in list" :key="index" :value="item.value">
+    <a-select-option v-for="(item,index) in data" :key="index" :value="item[valueField]">
       <span style="display: inline-block;width: 100%" :title="item.text">
-        {{ item.text}}
+        {{ item[textField]}}
       </span>
     </a-select-option>
   </a-select>
@@ -23,6 +23,13 @@ export default {
       type: String,
       required: false,
       default: ''
+    },
+    list: {
+      type: Array,
+      required: false,
+      default: () => {
+        return []
+      }
     },
     valueField: {
       type: String,
@@ -41,7 +48,7 @@ export default {
   },
   data(){
     return {
-      list: []
+      data: []
     }
   },
   computed: {
@@ -54,22 +61,18 @@ export default {
     },
   },
   created(){
+    // 如果url存在，则通过url读取数据；如果list存在，则直接使用
     if(this.url){
       this.loadUrl()
+    }else if(this.list && this.list.length > 0){
+      this.data = this.list
     }
   },
   methods: {
     loadUrl(){
       getAction(this.url, {}).then(res => {
         if(res.code == 0){
-          const list = []
-          for(var row of res.data){
-            list.push({
-              value: row[this.valueField],
-              text: row[this.textField]
-            })
-          }
-          this.list = list
+          this.data = res.data
         }
       })
     },

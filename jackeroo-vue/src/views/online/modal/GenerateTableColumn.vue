@@ -56,6 +56,13 @@
               </a-radio-group>
             </a-form-model-item>
           </a-col>
+          <a-col :span="rowSpan" v-if="formTable.delStrategy">
+            <a-form-model-item label="逻辑删字段" prop="logicField">
+              <j-select v-model="formTable.logicField" :list="dataSource" valueField="entityFieldName" textField="entityFieldName" placeholder="请选择逻辑删字段">
+
+              </j-select>
+            </a-form-model-item>
+          </a-col>
         </a-row>
       </a-form-model>
 
@@ -118,11 +125,6 @@
               </a-radio-group>
             </a-form-model-item>
           </a-col>
-          <!-- <a-col :span="rowSpan">
-            <a-form-model-item label="代码生成路径" prop="outputDir">
-              <file-selector v-model="formScheme.outputDir" placeholder="请输入代码生成路径" :disabled="flag.view"></file-selector>
-            </a-form-model-item>
-          </a-col> -->
           <a-col :span="rowSpan">
             <a-form-model-item label="是否分页" prop="enablePagination">
               <a-radio-group v-model="formScheme.enablePagination">
@@ -189,7 +191,8 @@ export default {
         comment: '',
         className: '',
         idStrategy: null,
-        delStrategy: null
+        delStrategy: null,
+        logicField: ''
       },
       formScheme: {
         id: null,
@@ -219,6 +222,9 @@ export default {
         ],
         delStrategy: [
           {required: true, message: '请删除策略'}, 
+        ],
+        logicField: [
+          {required: true, message: '请选择逻辑删字段'}
         ]
       },
       schemeRules: {
