@@ -3,6 +3,7 @@
       :title="title"
       :width="width"
       :visible.sync="visible"
+      :disabled="flag.view"
       @ok="handleSubmit"
       @close="cancel"
     >

@@ -6,6 +6,7 @@
     :maskClosable="maskClosable"
     :class="getClass(modalClass)"
     :style="getStyle(modalStyle)"
+    :okButtonProps="{props: {disabled: disabled}}"
     v-bind="_attrs"
     v-on="$listeners"
     @ok="handleOk"
@@ -82,6 +83,10 @@
       maxHeight: {
         type: String,
         default: '50vh'
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
     data() {

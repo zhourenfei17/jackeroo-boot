@@ -61,6 +61,7 @@
     </data-card>
 
     <dict-form-modal ref="formModal" @ok="handleOk"></dict-form-modal>
+    <dict-item-list-modal ref="dictItemListModal"></dict-item-list-modal>
   </div>
 </template>-
 
@@ -69,6 +70,7 @@ import { STable, DataCard, SearchCard } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { getAction, deleteAction } from '@/api/manage'
 import DictFormModal from './modal/DictFormModal'
+import DictItemListModal from './modal/DictItemListModal'
 
 export default {
   name: 'RoleList',
@@ -76,7 +78,8 @@ export default {
     STable,
     DataCard,
     SearchCard,
-    DictFormModal
+    DictFormModal,
+    DictItemListModal
   },
   mixins:[JackerooListMixins],
   data () {
@@ -114,7 +117,7 @@ export default {
   },
   methods: {
     handleDictItem(record){
-
+      this.$refs.dictItemListModal.load(record.dictCode)
     }
   }
 }

@@ -35,6 +35,17 @@ export const ValidatorMixins = {
       }
     },
     // 唯一性校验
+    /**
+     * rule 参数详解 
+     *    tableName： (String)          指定数据库表名，默认读取form页面的tableName属性
+     *    columnName: (String)          指定数据库表中的字段列/实体类中的字段，默认为rules中的propertyName
+     *    dataId:     (String|Number)   当编辑状态时，需要排除当前数据的id，默认为form页面的form.id
+     *    condition:  (String)          指定额外的唯一性条件，需要符合sql语法，例如： type=1 and del_flag=0
+     *    param:      (Object)          当condition中包含非固定参数时使用，例如：condition='type=1 and status = #{status}',param={status: 1}
+     * @param {*} rule 
+     * @param {*} value 
+     * @param {*} callback 
+     */
     validUnique(rule, value, callback){
       if(!value){
         callback()
@@ -48,6 +59,9 @@ export const ValidatorMixins = {
       }
       if(rule.condition){
         params.condition = rule.condition
+        if(rule.param){
+          params.param = JSON.stringify(rule.param)
+        }
       }
       validtedUnique(params).then((res) => {
         if(res.code == 0){

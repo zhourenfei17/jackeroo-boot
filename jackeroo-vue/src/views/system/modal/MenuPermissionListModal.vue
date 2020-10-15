@@ -11,7 +11,7 @@
 
     <s-table
         ref="table"
-        size="default"
+        :size="tableSize"
         rowKey="id"
         :columns="columns"
         :data="loadData"

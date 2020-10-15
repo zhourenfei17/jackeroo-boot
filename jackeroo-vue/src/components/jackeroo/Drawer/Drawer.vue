@@ -11,7 +11,7 @@
       <a-button style="marginRight: 8px;" @click="cancel">
         {{cancelText}}
       </a-button>
-      <a-button type="primary" @click="ok">
+      <a-button type="primary" @click="ok" :disabled="disabled">
         {{okText}}
       </a-button>
     </div>
@@ -34,6 +34,10 @@ export default {
     visible: Boolean,
     // 点击遮罩层是否允许关闭
     maskClosable: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
       type: Boolean,
       default: false
     }
