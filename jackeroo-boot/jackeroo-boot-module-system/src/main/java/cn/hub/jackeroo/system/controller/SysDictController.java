@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -53,7 +54,23 @@ public class SysDictController extends BaseController {
     @GetMapping("list")
     @ApiOperation("数据字典列表")
     public Result<IPage<SysDict>> list(SysDict entity, @Validated PageParam pageParam){
+        entity.setType(SysDict.TYPE_DICT);
         return ok(service.findPage(entity, pageParam));
+    }
+
+    /**
+     * 字典项列表
+     * @param pageParam
+     * @param dictCode
+     * @return
+     */
+    @GetMapping("itemList")
+    @ApiOperation("字典项列表")
+    public Result<IPage<SysDict>> itemList(@Validated PageParam pageParam, @RequestParam String dictCode){
+        SysDict sysDict = new SysDict();
+        sysDict.setType(SysDict.TYPE_DICT_ITEM);
+        sysDict.setDictCode(dictCode);
+        return ok(service.findPage(sysDict, pageParam));
     }
 
     /**
@@ -74,7 +91,7 @@ public class SysDictController extends BaseController {
     */
     @PostMapping("add")
     @ApiOperation("添加数据字典")
-    @ValidatedUnique(clazz = SysDict.class)
+    @ValidatedUnique(clazz = SysDict.class, condition = "type=0", groups = Second.class)
     public Result add(@Validated({Insert.class, First.class}) @RequestBody SysDict entity){
         service.saveDict(entity);
         return ok();
@@ -87,7 +104,7 @@ public class SysDictController extends BaseController {
      */
     @PostMapping("addDictItem")
     @ApiOperation("添加数据字典项")
-    @ValidatedUnique(clazz = SysDict.class)
+    @ValidatedUnique(clazz = SysDict.class, condition = "type=1 and dict_code = #{dictCode}", groups = First.class)
     public Result addDictItem(@Validated({Insert.class, Second.class}) @RequestBody SysDict entity){
         service.saveDictItem(entity);
         return ok();

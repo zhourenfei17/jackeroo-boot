@@ -30,4 +30,10 @@ public @interface ValidatedUnique {
      * @return
      */
     Class<?> groups() default Null.class;
+
+    /**
+     * 额外的唯一性条件
+     * @return
+     */
+    String condition() default "";
 }

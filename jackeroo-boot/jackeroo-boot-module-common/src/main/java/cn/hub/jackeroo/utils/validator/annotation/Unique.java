@@ -16,8 +16,10 @@ import static java.lang.annotation.ElementType.METHOD;
 @Target({METHOD, FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Unique {
-    String value() default "";
-
+    /**
+     * 字段名称，用于提示
+     * @return
+     */
     String name();
 
     String message() default "不能重复";

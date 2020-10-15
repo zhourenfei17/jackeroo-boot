@@ -29,6 +29,9 @@
             <if test="dictName != null and dictName != ''">
                 and a.dict_name =  #{dictName}
             </if>
+            <if test="type != null">
+                and a.type = #{type}
+            </if>
         </where>
         <choose>
             <when test="orderBy != null and orderBy != ''">

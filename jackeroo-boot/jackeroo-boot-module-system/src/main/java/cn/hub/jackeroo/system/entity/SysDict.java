@@ -1,6 +1,7 @@
 package cn.hub.jackeroo.system.entity;
 
 import cn.hub.jackeroo.persistence.BaseEntity;
+import cn.hub.jackeroo.utils.validator.annotation.Unique;
 import cn.hub.jackeroo.utils.validator.groups.First;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Second;
@@ -49,6 +50,7 @@ public class SysDict extends BaseEntity<SysDict> {
      */
     @Length(max = 50, groups = Second.class)
     @NotBlank(groups = Second.class)
+    @Unique(name = "字典项值", groups = First.class)
     private String value;
 
     /**
@@ -63,6 +65,7 @@ public class SysDict extends BaseEntity<SysDict> {
      */
     @NotBlank
     @Length(max = 30)
+    @Unique(name = "字典编码", groups = Second.class)
     private String dictCode;
 
     /**

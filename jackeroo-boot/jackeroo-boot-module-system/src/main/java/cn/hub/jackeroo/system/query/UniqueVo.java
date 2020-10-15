@@ -34,4 +34,8 @@ public class UniqueVo {
      * 自定义条件
      */
     private String condition;
+    /**
+     * 自定义条件中的参数，json字符串
+     */
+    private String param;
 }
