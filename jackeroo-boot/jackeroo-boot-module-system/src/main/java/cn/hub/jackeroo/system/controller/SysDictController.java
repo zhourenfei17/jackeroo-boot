@@ -1,8 +1,10 @@
 package cn.hub.jackeroo.system.controller;
 
+import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysDict;
 import cn.hub.jackeroo.system.service.SysDictService;
+import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.First;
@@ -27,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
 * <p>
@@ -55,6 +59,10 @@ public class SysDictController extends BaseController {
     @ApiOperation("数据字典列表")
     public Result<IPage<SysDict>> list(SysDict entity, @Validated PageParam pageParam){
         entity.setType(SysDict.TYPE_DICT);
+        if(StringUtils.isEmpty(pageParam.getSortField())){
+            pageParam.setSortField("createTime");
+            pageParam.setSortOrder(Constant.SORT_DESC);
+        }
         return ok(service.findPage(entity, pageParam));
     }
 
@@ -71,6 +79,27 @@ public class SysDictController extends BaseController {
         sysDict.setType(SysDict.TYPE_DICT_ITEM);
         sysDict.setDictCode(dictCode);
         return ok(service.findPage(sysDict, pageParam));
+    }
+
+    /**
+     * 通过字典code获取所有字典项列表
+     * @param dictCode
+     * @return
+     */
+    @GetMapping("getDictItemList")
+    @ApiOperation("通过字典code获取所有字典项列表")
+    public Result<List<SysDict>> getDictItemList(@RequestParam String dictCode){
+        return ok(service.findDictItemByDictCode(dictCode));
+    }
+
+    /**
+     * 获取当前最大排序号
+     * @return
+     */
+    @GetMapping("getMaxSort")
+    @ApiOperation("获取当前最大排序号")
+    public Result getMaxSort(@RequestParam String dictCode){
+        return ok(service.getMaxSort(dictCode));
     }
 
     /**

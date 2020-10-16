@@ -3,6 +3,7 @@ package cn.hub.jackeroo.system.service;
 import cn.hub.jackeroo.system.entity.SysDict;
 import cn.hub.jackeroo.system.mapper.SysDictMapper;
 import cn.hub.jackeroo.vo.PageParam;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
 * <p>
@@ -38,6 +40,20 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
     }
 
     /**
+     * 通过字典code获取字典项列表
+     * @param dictCode
+     * @return
+     */
+    public List<SysDict> findDictItemByDictCode(String dictCode){
+        LambdaQueryWrapper<SysDict> query = new LambdaQueryWrapper<>();
+        query.orderByAsc(SysDict::getSort);
+        query.eq(SysDict::getType, SysDict.TYPE_DICT_ITEM);
+        query.eq(SysDict::getDictCode, dictCode);
+
+        return super.list(query);
+    }
+
+    /**
      * 保存字典信息
      * @param entity
      */
@@ -55,5 +71,25 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
     public void saveDictItem(SysDict entity){
         entity.setType(SysDict.TYPE_DICT_ITEM);
         super.save(entity);
+    }
+
+    /**
+     * 获取当前排序号
+     * @param dictCode
+     * @return
+     */
+    public int getMaxSort(String dictCode){
+        LambdaQueryWrapper<SysDict> query = new LambdaQueryWrapper<>();
+        query.eq(SysDict::getDictCode, dictCode);
+        query.eq(SysDict::getType, SysDict.TYPE_DICT_ITEM);
+        query.orderByDesc(SysDict::getSort);
+        query.last("limit 1");
+
+        SysDict dict = super.getOne(query);
+        if(dict == null){
+            return 10;
+        }else{
+            return dict.getSort() - (dict.getSort() % 10) + 10;
+        }
     }
 }

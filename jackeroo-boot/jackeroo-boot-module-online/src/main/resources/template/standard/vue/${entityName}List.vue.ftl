@@ -28,7 +28,7 @@
         :reload="refreshData"
         :tableSize.sync="tableSize"
         :columns.sync="columns"
-        tableAlign="left">
+        :tableAlign="tableAlign">
 
       <template slot="toolbar">
         <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>

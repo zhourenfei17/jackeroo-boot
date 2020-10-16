@@ -85,8 +85,9 @@ public class SysDict extends BaseEntity<SysDict> {
     /**
      * 排序
      */
-    @Length(max = 10)
-    private String sort;
+    @Min(0)
+    @Max(99999)
+    private Integer sort;
 
     /**
      * 备注

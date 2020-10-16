@@ -36,6 +36,14 @@ public interface Constant {
      */
     int BOOLEAN_NO = 0;
     /**
+     * 排序-正序
+     */
+    String SORT_ASC = "ascend";
+    /**
+     * 排序-倒序
+     */
+    String SORT_DESC = "descend";
+    /**
      * 分隔符-逗号
      */
     String SPLIT_COMMA = ",";
