@@ -62,7 +62,8 @@ export default {
       url: {
         getById: '/system/dict/',
         add: '/system/dict/addDictItem',
-        update: '/system/dict/updateDictItem'
+        update: '/system/dict/updateDictItem',
+        getMaxSort: '/system/dict/getMaxSort'
       }
     }
   },
@@ -91,6 +92,11 @@ export default {
     add(dictCode){
       this.form.id = null
       this.form.dictCode = dictCode
+      getAction(this.url.getMaxSort, {dictCode: dictCode}).then(result => {
+        if(!result.code){
+          this.form.sort = result.data
+        }
+      })
       this.loading = false
     },
     edit(id){

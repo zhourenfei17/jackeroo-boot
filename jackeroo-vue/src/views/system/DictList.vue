@@ -1,14 +1,14 @@
 <template>
   <div>
-        <search-card :enter="refreshData">
-      <a-col :md="6" :sm="12">
-        <a-form-item label="字典编码">
-          <a-input v-model="queryParam.dictCode" placeholder="请输入字典编码"/>
+      <search-card :enter="refreshData">
+        <a-col :md="6" :sm="12">
+        <a-form-item label="字典名称">
+          <a-input v-model="queryParam.dictName" placeholder="请输入字典名称"/>
         </a-form-item>
       </a-col>
       <a-col :md="6" :sm="12">
-        <a-form-item label="字典名称">
-          <a-input v-model="queryParam.dictName" placeholder="请输入字典名称"/>
+        <a-form-item label="字典编码">
+          <a-input v-model="queryParam.dictCode" placeholder="请输入字典编码"/>
         </a-form-item>
       </a-col>
 
@@ -21,7 +21,7 @@
         :reload="refreshData"
         :tableSize.sync="tableSize"
         :columns.sync="columns"
-        tableAlign="left">
+        :tableAlign="tableAlign">
 
       <template slot="toolbar">
         <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
@@ -50,7 +50,7 @@
             <action-list>
               <a @click="handleView(record)">详情</a>
               <a @click="handleEdit(record)">编辑</a>
-              <a @click="handleDictItem(record)">字典项</a>
+              <a @click="handleDictItem(record)">字典项配置</a>
               <action-menu-list>
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
@@ -92,12 +92,12 @@ export default {
           }
         },
         {
-          title: '字典编码',
-          dataIndex: 'dictCode',
-        },
-        {
           title: '字典名称',
           dataIndex: 'dictName',
+        },
+        {
+          title: '字典编码',
+          dataIndex: 'dictCode',
         },
         {
           title: '备注',
@@ -106,6 +106,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'action',
+          width: 260,
           scopedSlots: { customRender: 'action' }
         }
       ],

@@ -5,34 +5,41 @@
       :visible="visible"
       @close="cancel">
     
-    <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-    </div>
+    <data-card
+        :reload="refreshData"
+        :tableSize.sync="tableSize"
+        :columns.sync="columns"
+        :icon="['refresh', 'lineHeight', 'align', 'columnSet']"
+        :tableAlign="tableAlign"
+        style="margin-top:-24px;">
+      <template slot="toolbar">
+        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+      </template>
 
-    <s-table
-        ref="table"
-        :size="tableSize"
-        rowKey="id"
-        :columns="columns"
-        :data="loadData"
-        :alert="tableAlert"
-        :rowSelection="rowSelection"
-        lazy
-        showPagination="auto"
-      >
+      <s-table
+          ref="table"
+          :size="tableSize"
+          rowKey="id"
+          :columns="columns"
+          :data="loadData"
+          bordered
+          lazy
+          :showPagination="showPagination"
+        >
 
-      <span slot="action" slot-scope="text, record">
-        <template>
-          <action-list>
-            <a @click="handleView(record)">详情</a>
-            <a @click="handleEdit(record)">编辑</a>
-            <action-menu-list>
-              <a @click="handleDelete(record)">删除</a>
-            </action-menu-list>
-          </action-list>
-        </template>
-      </span>
-    </s-table>
+        <span slot="action" slot-scope="text, record">
+          <template>
+            <action-list>
+              <a @click="handleView(record)">详情</a>
+              <a @click="handleEdit(record)">编辑</a>
+              <action-menu-list>
+                <a @click="handleDelete(record)">删除</a>
+              </action-menu-list>
+            </action-list>
+          </template>
+        </span>
+      </s-table>
+    </data-card>
 
     <dict-item-form-modal ref="formModal" @ok="handleOk"></dict-item-form-modal>
   </a-drawer>
@@ -41,12 +48,13 @@
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
-import { STable} from '@/components'
+import { STable, DataCard} from '@/components'
 import DictItemFormModal from './DictItemFormModal'
 
 export default {
   components: {
     STable,
+    DataCard,
     DictItemFormModal
   },
   mixins: [JackerooListMixins],
@@ -72,6 +80,12 @@ export default {
           dataIndex: 'value',
         },
         {
+          title: '排序号',
+          dataIndex: 'sort',
+          sorter: true,
+          defaultSortOrder: 'ascend'
+        },
+        {
           title: '操作',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
@@ -79,8 +93,7 @@ export default {
       ],
       url: {
         list: '/system/dict/itemList',
-        add: '/system/menu/add',
-        update: '/system/menu/update',
+        delete: '/system/dict/delete'
       },
     }
   },

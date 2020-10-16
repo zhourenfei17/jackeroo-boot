@@ -78,7 +78,7 @@
 import { getAction, postAction, httpAction } from '@/api/manage'
 import md5 from 'md5'
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
-import JSelect from '@/components/jackeroo/JSelect'
+import {JSelect} from '@/components'
 
 export default {
   components: {

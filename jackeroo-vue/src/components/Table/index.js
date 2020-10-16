@@ -93,7 +93,7 @@ export default {
   computed: {
     // 是否支持跨页选择，默认为false
     multiPageSelect(){
-      return (typeof this.alert.multiPageSelect === 'boolean' && this.alert.multiPageSelect) ? this.alert.multiPageSelect : false
+      return (this.alert && typeof this.alert.multiPageSelect === 'boolean' && this.alert.multiPageSelect) ? this.alert.multiPageSelect : false
     }
   },
   watch: {

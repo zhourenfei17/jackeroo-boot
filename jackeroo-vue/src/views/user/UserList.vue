@@ -48,7 +48,7 @@
         :reload="refreshData" 
         :tableSize.sync="tableSize" 
         :columns.sync="columns"
-        tableAlign="left">
+        :tableAlign="tableAlign">
 
       <template slot="toolbar">
         <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
@@ -104,11 +104,10 @@
 </template>
 
 <script>
-import { STable, Ellipsis, DataCard, SearchCard } from '@/components'
+import { STable, Ellipsis, DataCard, SearchCard, JSelect } from '@/components'
 import UserFormModal from './modal/UserFormModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
-import JSelect from '@/components/jackeroo/JSelect'
 
 const statusMap = {
   0: {

@@ -7,28 +7,34 @@
       @ok="handleConfirm"
       @close="cancel">
     
-    <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+    <data-card
+        :icon="false"
+        style="margin-top:-24px;">
 
-      <a-button icon="retweet" @click="handleChangePermissionGorup">选择权限分组</a-button>
-    </div>
+      <template slot="toolbar">
+        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
 
-    <a-table
-      size="default"
-      rowKey="value"
-      :columns="columns"
-      :data-source="dataSource"
-      :loading="loading"
-      :pagination="false"
-    >
-
-      <template slot="action" slot-scope="text, record">
-        <action-list v-if="!record.id">
-          <a @click="handleEdit(record)">编辑</a>
-          <a @click="handleDelete(record)">删除</a>
-        </action-list>
+        <a-button icon="retweet" @click="handleChangePermissionGorup" style="margin-left:8px;">选择权限分组</a-button>
       </template>
-    </a-table>
+
+      <a-table
+        :size="tableSize"
+        rowKey="value"
+        :columns="columns"
+        :data-source="dataSource"
+        :loading="loading"
+        bordered
+        :pagination="false"
+      >
+
+        <template slot="action" slot-scope="text, record">
+          <action-list v-if="!record.id">
+            <a @click="handleEdit(record)">编辑</a>
+            <a @click="handleDelete(record)">删除</a>
+          </action-list>
+        </template>
+      </a-table>
+    </data-card>
 
     <menu-auth-form-modal ref="formModal" @add="handleAddPermission" @edit="handleEditPermission"></menu-auth-form-modal>
     <change-permission-group-modal ref="changePermissionGroupModal" @ok="selectedPermission"></change-permission-group-modal>
@@ -38,7 +44,7 @@
 <script>
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { getAction } from '@/api/manage'
-import { JDrawer} from '@/components'
+import { JDrawer,DataCard } from '@/components'
 import MenuAuthFormModal from './MenuAuthFormModal'
 import ChangePermissionGroupModal from './ChangePermissionGroupModal'
 
@@ -46,6 +52,7 @@ export default {
   name: 'TableList',
   components: {
     JDrawer,
+    DataCard,
     MenuAuthFormModal,
     ChangePermissionGroupModal
   },

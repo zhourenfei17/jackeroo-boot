@@ -5,30 +5,38 @@
       :visible="visible"
       @close="cancel">
     
-    <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-    </div>
+    <data-card
+        :reload="refreshData"
+        :tableSize.sync="tableSize"
+        :columns.sync="columns"
+        :icon="['refresh', 'lineHeight', 'align', 'columnSet']"
+        :tableAlign="tableAlign"
+        style="margin-top:-24px;">
 
-    <s-table
-      ref="table"
-      size="default"
-      rowKey="id"
-      :columns="columns"
-      :data="loadData"
-      :alert="tableAlert"
-      :rowSelection="rowSelection"
-      :lazy="true"
-      showPagination="auto"
-      @update="syncDataSource"
-    >
-
-      <template slot="action" slot-scope="text, record">
-        <action-list>
-          <a @click="handleEdit(record)">编辑</a>
-          <a @click="handleDelete(record)">删除</a>
-        </action-list>
+      <template slot="toolbar">
+        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
       </template>
-    </s-table>
+
+      <s-table
+        ref="table"
+        size="default"
+        rowKey="id"
+        :columns="columns"
+        :data="loadData"
+        :lazy="true"
+        bordered
+        showPagination="auto"
+        @update="syncDataSource"
+      >
+
+        <template slot="action" slot-scope="text, record">
+          <action-list>
+            <a @click="handleEdit(record)">编辑</a>
+            <a @click="handleDelete(record)">删除</a>
+          </action-list>
+        </template>
+      </s-table>
+    </data-card>
 
     <permission-form-modal ref="formModal" @ok="handleOk"></permission-form-modal>
   </a-drawer>
@@ -37,7 +45,7 @@
 <script>
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { getAction } from '@/api/manage'
-import { JDrawer, STable} from '@/components'
+import { JDrawer, STable, DataCard} from '@/components'
 import PermissionFormModal from './PermissionFormModal'
 
 export default {
@@ -45,6 +53,7 @@ export default {
   components: {
     JDrawer,
     STable,
+    DataCard,
     PermissionFormModal,
   },
   mixins:[JackerooListMixins],

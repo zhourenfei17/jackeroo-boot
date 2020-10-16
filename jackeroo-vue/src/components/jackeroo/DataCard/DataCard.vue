@@ -1,13 +1,13 @@
 <template>
-  <a-card :bordered="false" :title="title" id="searchCard" :headStyle="headStyle" :bodyStyle="bodyStyle" :class="{screenFull: isFullscreen}">
+  <a-card :bordered="false" :title="title" id="dataCard" :headStyle="headStyle" :bodyStyle="bodyStyle" :class="{screenFull: isFullscreen}">
     <div slot="extra">
       <slot name="toolbar" v-if="existToolbar"></slot>
-      <a-divider type="vertical" v-if="existToolbar"></a-divider>
-      <div class="icons-list">
-        <a-tooltip title="刷新" :placement="placement" v-if="icon.indexOf('refresh') > -1">
+      <a-divider type="vertical" v-if="existToolbar && iconList"></a-divider>
+      <div class="icons-list" v-if="iconList">
+        <a-tooltip title="刷新" :placement="placement" v-if="iconList.indexOf('refresh') > -1">
           <a-icon type="redo" @click="reload"></a-icon>
         </a-tooltip>
-        <a-tooltip title="树展开操作" :placement="placement" v-if="icon.indexOf('treeExpand') > -1 && expandedRowKeys">
+        <a-tooltip title="树展开操作" :placement="placement" v-if="iconList.indexOf('treeExpand') > -1 && expandedRowKeys">
           <a-dropdown :trigger="['click']">
             <a-icon type="menu-unfold"></a-icon>
 
@@ -17,7 +17,7 @@
             </a-menu>
           </a-dropdown>
         </a-tooltip>
-        <a-tooltip title="行高" :placement="placement" v-if="icon.indexOf('lineHeight') > -1">
+        <a-tooltip title="行高" :placement="placement" v-if="iconList.indexOf('lineHeight') > -1">
           <a-dropdown :trigger="['click']">
             <a-icon type="column-height"></a-icon>
             <a-menu slot="overlay" style="width: 80px;" :selectedKeys="[tableSize]" @click="changeTableSize">
@@ -27,7 +27,7 @@
             </a-menu>
           </a-dropdown>
         </a-tooltip>
-        <a-tooltip title="对齐方式" :placement="placement" v-if="icon.indexOf('align') > -1">
+        <a-tooltip title="对齐方式" :placement="placement" v-if="iconList.indexOf('align') > -1">
           <a-dropdown :trigger="['click']">
             <a-icon type="align-center"></a-icon>
             <a-menu slot="overlay" style="width: 80px;" :selectedKeys="[align]" @click="changeTableAlign">
@@ -37,7 +37,7 @@
             </a-menu>
           </a-dropdown>
         </a-tooltip>
-        <a-tooltip title="列设置" :placement="placement" v-if="icon.indexOf('columnSet') > -1 && columns">
+        <a-tooltip title="列设置" :placement="placement" v-if="iconList.indexOf('columnSet') > -1 && columns">
           <a-dropdown :trigger="['click']" v-model="visibleColumn">
             <a-icon type="setting"></a-icon>
 
@@ -56,10 +56,10 @@
             </a-menu>
           </a-dropdown>
         </a-tooltip>
-        <a-tooltip title="全屏" v-if="!isFullscreen && icon.indexOf('fullscreen') > -1" :placement="placement">
+        <a-tooltip title="全屏" v-if="!isFullscreen && iconList.indexOf('fullscreen') > -1" :placement="placement">
           <a-icon type="fullscreen" @click="fullscreen"></a-icon>
         </a-tooltip>
-        <a-tooltip title="退出全屏" v-if="isFullscreen && icon.indexOf('fullscreen') > -1" :placement="placement">
+        <a-tooltip title="退出全屏" v-if="isFullscreen && iconList.indexOf('fullscreen') > -1" :placement="placement">
           <a-icon type="fullscreen-exit" @click="fullscreen"></a-icon>
         </a-tooltip>
       </div>
@@ -106,7 +106,7 @@ export default {
     },
     // toolbar中的icon列表
     icon: {
-      tpye: Array,
+      tpye: [Array, Boolean],
       default: () => {
         return ['refresh', 'lineHeight', 'align', 'columnSet', 'fullscreen']
       }
@@ -161,7 +161,9 @@ export default {
       this.align = this.tableAlign
       if(this.columns){
         for(const col of this.columnsCopy){
-          col.align = this.tableAlign
+          if(!col.align){
+            col.align = this.tableAlign
+          }
         }
         this.$emit('update:columns', this.columnsCopy)
       }
@@ -169,7 +171,7 @@ export default {
   },
   watch:{
     isFullscreen(val){
-      screenfull.toggle(document.getElementById('searchCard'))
+      screenfull.toggle(document.getElementById('dataCard'))
       // screenfull.toggle(this.$parent.$el)
     },
     columnKeys(val){
@@ -192,6 +194,17 @@ export default {
         return false
       }
     },
+    iconList(){
+      if(typeof this.icon === 'boolean' && this.icon){
+        if(this.icon){
+          return ['refresh', 'lineHeight', 'align', 'columnSet', 'fullscreen']
+        }else{
+          return null
+        }
+      }else{
+        return this.icon
+      }
+    }
   },
   methods: {
     // 列设置选择

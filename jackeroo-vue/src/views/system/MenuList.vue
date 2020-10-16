@@ -18,7 +18,7 @@
       :columns.sync="columns" 
       :expandedRowKeys.sync="expandedRowKeys"
       :dataSource="dataSource"
-      :icon="['refresh', 'lineHeight', 'treeExpand', 'align', 'columnSet', 'fullscreen']">
+      :icon="['refresh', 'lineHeight', 'treeExpand', 'columnSet', 'fullscreen']">
 
       <template slot="toolbar">
         <a-button type="primary" icon="plus" @click="handleAdd">新建菜单</a-button>

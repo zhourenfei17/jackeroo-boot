@@ -28,6 +28,8 @@ export const JackerooListMixins = {
       },
       // 表大小
       tableSize: 'default',
+      // 列默认对齐方式
+      tableAlign: 'left',
       // 分页，支持['auto', true, false]
       showPagination: 'auto',
       // 加载数据方法 必须为 Promise 对象

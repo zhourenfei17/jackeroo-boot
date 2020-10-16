@@ -15,18 +15,13 @@
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
         <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
-            <a-form-model-item label="字典编码" prop="dictCode">
-              <a-input v-model="form.dictCode" placeholder="请输入字典编码" :disabled="flag.view"></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
             <a-form-model-item label="字典名称" prop="dictName">
               <a-input v-model="form.dictName" placeholder="请输入字典名称" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
-            <a-form-model-item label="排序" prop="sort">
-              <a-input v-model="form.sort" placeholder="请输入排序" :disabled="flag.view"></a-input>
+            <a-form-model-item label="字典编码" prop="dictCode">
+              <a-input v-model="form.dictCode" placeholder="请输入字典编码" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -55,7 +50,6 @@ export default {
         id: null,
         dictCode: null,
         dictName: null,
-        sort: null,
         remark: null,
       },
       rules: {
@@ -67,9 +61,6 @@ export default {
         dictName: [
           {required: true, message: '请输入字典名称'},
           {max: 30, message: '长度需要在0到30之间'},
-        ],
-        sort: [
-          {max: 10, message: '长度需要在0到10之间'},
         ],
         remark: [
           {max: 100, message: '长度需要在0到100之间'},

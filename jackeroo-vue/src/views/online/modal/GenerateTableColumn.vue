@@ -12,146 +12,142 @@
     class="generate-modal"
   >
     
-    <a-steps :current="current" @change="handleStepChange" size="small">
-      <a-step title="基本信息"></a-step>
-      <a-step title="字段信息"></a-step>
-      <a-step title="生成信息"></a-step>
-    </a-steps>
-    
-    
-    <div class="generate-content">
-      <a-form-model ref="onlineTable" :model="formTable" :rules="tableRules" v-bind="layout" v-show="current == 0">
-        <a-row :gutter="formGutter">
-          <a-col :span="rowSpan">
-            <a-form-model-item label="表名" prop="tableName">
-              <a-input v-model="formTable.tableName" placeholder="请输入表名" disabled></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="表说明" prop="comment">
-              <a-input v-model="formTable.comment" placeholder="请输入表说明" :disabled="flag.view"></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="实体类名称" prop="className">
-              <a-input v-model="formTable.className" placeholder="请输入实体类名称" :disabled="flag.view"></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="主键策略" prop="idStrategy">
-              <a-select v-model="formTable.idStrategy" placeholder="请选择主键策略">
-                <a-select-option value="ASSIGN_ID">生成ID(雪花算法)</a-select-option>
-                <a-select-option value="AUTO">自增</a-select-option>
-                <a-select-option value="ASSIGN_UUID">生成UUID</a-select-option>
-                <a-select-option value="NONE">未设置主键类型</a-select-option>
-                <a-select-option value="INPUT">用户输入</a-select-option>
-              </a-select>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="删除策略" prop="delStrategy">
-              <a-radio-group v-model="formTable.delStrategy">
-                <a-radio :value="0">物理删除</a-radio>
-                <a-radio :value="1">逻辑删除</a-radio>
-              </a-radio-group>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan" v-if="formTable.delStrategy">
-            <a-form-model-item label="逻辑删字段" prop="logicField">
-              <j-select v-model="formTable.logicField" :list="dataSource" valueField="entityFieldName" textField="entityFieldName" placeholder="请选择逻辑删字段">
 
-              </j-select>
-            </a-form-model-item>
-          </a-col>
-        </a-row>
-      </a-form-model>
+    <j-spin :spinning="loading">
+      <a-steps :current="current" @change="handleStepChange" size="small">
+        <a-step title="基本信息"></a-step>
+        <a-step title="字段信息"></a-step>
+        <a-step title="生成信息"></a-step>
+      </a-steps>
+      
+      <div class="generate-content">
+        <a-form-model ref="onlineTable" :model="formTable" :rules="tableRules" v-bind="layout" v-show="current == 0">
+          <a-row :gutter="formGutter">
+            <a-col :span="rowSpan">
+              <a-form-model-item label="表名" prop="tableName">
+                <a-input v-model="formTable.tableName" placeholder="请输入表名" disabled></a-input>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="表说明" prop="comment">
+                <a-input v-model="formTable.comment" placeholder="请输入表说明" :disabled="flag.view"></a-input>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="实体类名称" prop="className">
+                <a-input v-model="formTable.className" placeholder="请输入实体类名称" :disabled="flag.view"></a-input>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="主键策略" prop="idStrategy">
+                <j-dict-select v-model="formTable.idStrategy" placeholder="请选择主键策略" dictCode="ID_STRATEGY"></j-dict-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="删除策略" prop="delStrategy">
+                <a-radio-group v-model="formTable.delStrategy">
+                  <a-radio :value="0">物理删除</a-radio>
+                  <a-radio :value="1">逻辑删除</a-radio>
+                </a-radio-group>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan" v-if="formTable.delStrategy">
+              <a-form-model-item label="逻辑删字段" prop="logicField">
+                <j-select v-model="formTable.logicField" :list="dataSource" valueField="entityFieldName" textField="entityFieldName" placeholder="请选择逻辑删字段">
 
-      <edit-table
-        ref="onlineTableField"
-        size="small"
-        rowKey="dbFieldName"
-        :columns="columns"
-        :dataSource="dataSource"
-        :pagination="false"
-        :scroll="{x: true}"
-        v-show="current == 1">
+                </j-select>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+        </a-form-model>
 
-      </edit-table>
+        <edit-table
+          ref="onlineTableField"
+          size="small"
+          rowKey="dbFieldName"
+          :columns="columns"
+          :dataSource="dataSource"
+          :pagination="false"
+          :scroll="{x: true}"
+          v-show="current == 1">
 
-      <a-form-model ref="onlineScheme" :model="formScheme" :rules="schemeRules" v-bind="layout" v-show="current == 2">
-        <a-row :gutter="formGutter">
-          <a-col :span="rowSpan">
-            <a-form-model-item label="生成模板" prop="template">
-              <a-select v-model="formScheme.template" placeholder="请选择生成模板">
-                <a-select-option value="standard">标准模板</a-select-option>
-              </a-select>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="生成作者" prop="author">
-              <a-input v-model="formScheme.author" placeholder="请输入生成作者" :disabled="flag.view"></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="生成包名" prop="packageName">
-              <a-input v-model="formScheme.packageName" placeholder="请输入生成包路径" :disabled="flag.view"></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="所属模块" prop="moduleId">
-              <j-select v-model="formScheme.moduleId" placeholder="请选择所属模块" :url="url.findModuleList"></j-select>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="生成功能名" prop="funName">
-              <a-input v-model="formScheme.funName" placeholder="请输入生成功能名" :disabled="flag.view"></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="表单风格" prop="formStyle">
-              <a-select v-model="formScheme.formStyle" placeholder="请选择表单风格">
-                <a-select-option :value="1">单列</a-select-option>
-                <a-select-option :value="2">两列</a-select-option>
-                <a-select-option :value="3">三列</a-select-option>
-                <a-select-option :value="4">四列</a-select-option>
-              </a-select>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="是否显示复选框" prop="showCheckbox">
-              <a-radio-group v-model="formScheme.showCheckbox">
-                <a-radio :value="0">否</a-radio>
-                <a-radio :value="1">是</a-radio>
-              </a-radio-group>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="是否分页" prop="enablePagination">
-              <a-radio-group v-model="formScheme.enablePagination">
-                <a-radio :value="0">否</a-radio>
-                <a-radio :value="1">是</a-radio>
-              </a-radio-group>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="是否生成API文档" prop="enableSwagger">
-              <a-radio-group v-model="formScheme.enableSwagger">
-                <a-radio :value="0">否</a-radio>
-                <a-radio :value="1">是</a-radio>
-              </a-radio-group>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="rowSpan">
-            <a-form-model-item label="服务器端校验" prop="enableServerValid">
-              <a-radio-group v-model="formScheme.enableServerValid">
-                <a-radio :value="0">否</a-radio>
-                <a-radio :value="1">是</a-radio>
-              </a-radio-group>
-            </a-form-model-item>
-          </a-col>
-        </a-row>
-      </a-form-model>
-    </div>
+        </edit-table>
+
+        <a-form-model ref="onlineScheme" :model="formScheme" :rules="schemeRules" v-bind="layout" v-show="current == 2">
+          <a-row :gutter="formGutter">
+            <a-col :span="rowSpan">
+              <a-form-model-item label="生成模板" prop="template">
+                <a-select v-model="formScheme.template" placeholder="请选择生成模板">
+                  <a-select-option value="standard">标准模板</a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="生成作者" prop="author">
+                <a-input v-model="formScheme.author" placeholder="请输入生成作者" :disabled="flag.view"></a-input>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="生成包名" prop="packageName">
+                <a-input v-model="formScheme.packageName" placeholder="请输入生成包路径" :disabled="flag.view"></a-input>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="所属模块" prop="moduleId">
+                <j-select v-model="formScheme.moduleId" placeholder="请选择所属模块" :url="url.findModuleList"></j-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="生成功能名" prop="funName">
+                <a-input v-model="formScheme.funName" placeholder="请输入生成功能名" :disabled="flag.view"></a-input>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="表单风格" prop="formStyle">
+                <a-select v-model="formScheme.formStyle" placeholder="请选择表单风格">
+                  <a-select-option :value="1">单列</a-select-option>
+                  <a-select-option :value="2">两列</a-select-option>
+                  <a-select-option :value="3">三列</a-select-option>
+                  <a-select-option :value="4">四列</a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="是否显示复选框" prop="showCheckbox">
+                <a-radio-group v-model="formScheme.showCheckbox">
+                  <a-radio :value="0">否</a-radio>
+                  <a-radio :value="1">是</a-radio>
+                </a-radio-group>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="是否分页" prop="enablePagination">
+                <a-radio-group v-model="formScheme.enablePagination">
+                  <a-radio :value="0">否</a-radio>
+                  <a-radio :value="1">是</a-radio>
+                </a-radio-group>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="是否生成API文档" prop="enableSwagger">
+                <a-radio-group v-model="formScheme.enableSwagger">
+                  <a-radio :value="0">否</a-radio>
+                  <a-radio :value="1">是</a-radio>
+                </a-radio-group>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="rowSpan">
+              <a-form-model-item label="服务器端校验" prop="enableServerValid">
+                <a-radio-group v-model="formScheme.enableServerValid">
+                  <a-radio :value="0">否</a-radio>
+                  <a-radio :value="1">是</a-radio>
+                </a-radio-group>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+        </a-form-model>
+      </div>
+    </j-spin>
 
     <template slot="footer">
       <span style="padding-right:50px;">
@@ -169,14 +165,15 @@
 <script>
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 import { getAction, postAction } from '@/api/manage'
-import {EditTable, FileSelector} from '@/components'
-import JSelect from '@/components/jackeroo/JSelect'
+import {EditTable, FileSelector, JSelect, JDictSelect, JSpin} from '@/components'
 
 export default {
   components:{
     EditTable,
     FileSelector,
-    JSelect
+    JSelect,
+    JDictSelect,
+    JSpin
   },
   mixins: [JackerooFromMixins],
   data(){
@@ -444,6 +441,8 @@ export default {
           this.copyProperties(result.data.scheme, this.formScheme)
           this.dataSource = result.data.columns
         }
+      }).finally(() => {
+        this.loading = false
       })
     },
     edit(tableId){
@@ -453,6 +452,8 @@ export default {
           this.copyProperties(result.data.scheme, this.formScheme)
           this.dataSource = result.data.columns
         }
+      }).finally(() => {
+        this.loading = false
       })
     },
     handleStepChange(current){
@@ -510,6 +511,16 @@ export default {
     cancel(){
       this.visible = false
       this.current = 0
+      
+      this.$refs.onlineTable.resetFields()
+      this.$refs.onlineTable.clearValidate()
+
+      this.$refs.onlineScheme.resetFields()
+      this.$refs.onlineScheme.clearValidate()
+
+      this.dataSource = []
+
+      this.loading = true
     },
   }
 }

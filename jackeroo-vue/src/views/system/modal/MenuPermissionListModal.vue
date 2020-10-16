@@ -5,38 +5,46 @@
       :visible="visible"
       @close="cancel">
     
-    <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-    </div>
+    <data-card
+        :reload="refreshData"
+        :tableSize.sync="tableSize"
+        :columns.sync="columns"
+        :icon="['refresh', 'lineHeight', 'align', 'columnSet']"
+        :tableAlign="tableAlign"
+        style="margin-top:-24px;">
 
-    <s-table
-        ref="table"
-        :size="tableSize"
-        rowKey="id"
-        :columns="columns"
-        :data="loadData"
-        :alert="tableAlert"
-        :rowSelection="rowSelection"
-        :lazy="true"
-        showPagination="auto"
-      >
-
-      <template slot="checked" slot-scope="text">
-        <j-tag :type="text == 0 ? 'warning' : 'info'" :text="text == 0 ? '否' : '是'"></j-tag>
+      <template slot="toolbar">
+        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
       </template>
 
-      <span slot="action" slot-scope="text, record">
-        <template>
-          <action-list>
-            <a @click="handleView(record)">详情</a>
-            <a @click="handleEdit(record)">编辑</a>
-            <action-menu-list>
-              <a @click="handleDelete(record)">删除</a>
-            </action-menu-list>
-          </action-list>
+      <s-table
+          ref="table"
+          :size="tableSize"
+          rowKey="id"
+          :columns="columns"
+          :data="loadData"
+          :lazy="true"
+          bordered
+          showPagination="auto"
+        >
+
+        <template slot="checked" slot-scope="text">
+          <j-tag :type="text == 0 ? 'warning' : 'info'" :text="text == 0 ? '否' : '是'"></j-tag>
         </template>
-      </span>
-    </s-table>
+
+        <span slot="action" slot-scope="text, record">
+          <template>
+            <action-list>
+              <a @click="handleView(record)">详情</a>
+              <a @click="handleEdit(record)">编辑</a>
+              <action-menu-list>
+                <a @click="handleDelete(record)">删除</a>
+              </action-menu-list>
+            </action-list>
+          </template>
+        </span>
+      </s-table>
+    </data-card>
 
     <menu-permission-config-form-modal ref="formModal" @ok="handleOk"></menu-permission-config-form-modal>
   </a-drawer>
@@ -45,7 +53,7 @@
 <script>
 import { STable, JTag } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
-import { JDrawer} from '@/components'
+import { JDrawer, DataCard} from '@/components'
 import MenuPermissionConfigFormModal from './MenuPermissionConfigFormModal'
 
 export default {
@@ -54,6 +62,7 @@ export default {
     JDrawer,
     MenuPermissionConfigFormModal,
     STable,
+    DataCard,
     JTag
   },
   mixins:[JackerooListMixins],

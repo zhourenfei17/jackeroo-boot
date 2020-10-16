@@ -36,6 +36,8 @@ import DataCard from '@/components/jackeroo/DataCard'
 import SearchCard from '@/components/jackeroo/SearchCard'
 import EditTable from '@/components/jackeroo/EditTable'
 import FileSelector from '@/components/jackeroo/Selector/FileSelector'
+import JSelect from '@/components/jackeroo/Selector/Select'
+import JDictSelect from '@/components/jackeroo/Selector/DictSelector'
 
 export {
   AvatarList,
@@ -71,5 +73,7 @@ export {
   DataCard,
   SearchCard,
   EditTable,
-  FileSelector
+  FileSelector,
+  JSelect,
+  JDictSelect
 }

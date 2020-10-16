@@ -24,7 +24,7 @@
 
 <script>
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
-import JSelect from '@/components/jackeroo/JSelect'
+import {JSelect} from '@/components'
 
 export default {
   mixins: [JackerooFromMixins],
