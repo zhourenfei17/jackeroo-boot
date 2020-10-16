@@ -19,11 +19,13 @@ import {getAction} from '@/api/manage'
 export default {
   name: 'JSelect',
   props: {
+    // 请求地址，与list二选一
     url: {
       type: String,
       required: false,
       default: ''
     },
+    // 数据列表，与url二选一
     list: {
       type: Array,
       required: false,
@@ -40,6 +42,10 @@ export default {
       type: String,
       required: false,
       default: 'name'
+    },
+    // 请求url所携带的参数，仅在传递url的时候生效
+    param: {
+      type: Object
     },
     value:{
       type: [String, Number],
@@ -70,7 +76,7 @@ export default {
   },
   methods: {
     loadUrl(){
-      getAction(this.url, {}).then(res => {
+      getAction(this.url, this.param || {}).then(res => {
         if(res.code == 0){
           this.data = res.data
         }
