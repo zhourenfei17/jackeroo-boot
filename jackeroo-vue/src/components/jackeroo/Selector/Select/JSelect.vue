@@ -1,5 +1,6 @@
 <template>
-  <a-select :value="getValueSting" v-bind="_attrs" @change="onChange" :getPopupContainer = "(target) => target.parentNode">
+  <a-select v-if="type == 'select'" :value="multiple ? arraryValue : value" v-bind="$attrs" :mode="multiple ? 'multiple' : 'default'"
+    @change="handleSelectChange" :getPopupContainer = "(target) => target.parentNode">
     <a-select-option :value="undefined" class="unselect" style="color:#ccc;">
       <span style="display: inline-block;width: 100%;color: rgb(197, 197, 197);">
         请选择
@@ -11,6 +12,15 @@
       </span>
     </a-select-option>
   </a-select>
+  <a-radio-group :value="value" v-else-if="type == 'radio'" v-bind="$attrs" @change="handleRadioChange">
+    <a-radio v-for="(item, index) in data" :key="index" :value="item[valueField]">{{item[textField]}}</a-radio>
+  </a-radio-group>
+  <a-radio-group :value="value" v-else-if="type == 'radioBtn'" v-bind="$attrs" @change="handleRadioChange">
+    <a-radio-button v-for="(item, index) in data" :key="index" :value="item[valueField]">{{item[textField]}}</a-radio-button>
+  </a-radio-group>
+  <a-checkbox-group :value="arraryValue" v-else-if="type == 'checkbox'" v-bind="$attrs" @change="handleCheckboxChange">
+    <a-checkbox v-for="(item, index) in data" :key="index" :value="item[valueField]">{{item[textField]}}</a-checkbox>
+  </a-checkbox-group>
 </template>
 
 <script>
@@ -33,6 +43,21 @@ export default {
         return []
       }
     },
+    // 组件类型，支持['select', 'radio', 'checkbox', 'radioBtn']
+    type: {
+      type: String,
+      default: 'select'
+    },
+    // 是否多选，仅type=='select'下有效
+    multiple: {
+      type: Boolean,
+      default: false
+    },
+    // 多选的情况下，返回的结果是否为一个数组，默认返回String，多个结果之间用,隔开
+    multipleArray: {
+      type: Boolean,
+      default: false
+    },
     valueField: {
       type: String,
       required: false,
@@ -48,23 +73,32 @@ export default {
       type: Object
     },
     value:{
-      type: [String, Number],
+      type: [String, Number, Array],
       required: false
     },
   },
   data(){
     return {
-      data: []
+      data: [],
+      arraryValue: []
     }
   },
-  computed: {
-    _attrs() {
-      let attrs = { ...this.$attrs }
-      return attrs
-    },
-    getValueSting(){
-      return this.value != null ? this.value.toString() : undefined;
-    },
+  watch: {
+    value(newVal){
+      if(this.multipleArray){
+        if(this.type == 'checkbox'){
+          this.arraryValue = [...this.value]
+        }else if(this.type == 'select' && this.multiple){
+          this.arraryValue = [...this.value]
+        }
+      }else{
+        if(this.type == 'checkbox'){
+          this.arraryValue = this.value.split(',')
+        }else if(this.type == 'select' && this.multiple){
+          this.arraryValue = this.value.split(',')
+        }
+      }
+    }
   },
   created(){
     // 如果url存在，则通过url读取数据；如果list存在，则直接使用
@@ -82,8 +116,26 @@ export default {
         }
       })
     },
-    onChange(value){
-      this.$emit('input', value)
+    handleSelectChange(value){
+      if(this.multiple){
+        if(this.multipleArray){
+          this.$emit('input', value)
+        }else{
+          this.$emit('input', value.join(','))
+        }
+      }else{
+        this.$emit('input', value)
+      }
+    },
+    handleRadioChange(e){
+      this.$emit('input', e.target.value)
+    },
+    handleCheckboxChange(checkedValue){
+      if(this.multipleArray){
+        this.$emit('input', checkedValue)
+      }else{
+        this.$emit('input', checkedValue.join(','))
+      }
     }
   }
 }
