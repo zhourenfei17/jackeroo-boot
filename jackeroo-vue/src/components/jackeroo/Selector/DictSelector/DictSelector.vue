@@ -23,7 +23,7 @@ export default {
       required: true
     },
     value:{
-      type: [String, Number],
+      type: [String, Number, Array],
       required: false
     },
     // select的allowClear属性，改变默认值

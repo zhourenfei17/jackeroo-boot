@@ -112,7 +112,7 @@ export default {
       ],
       url: {
         list: '/system/dict/list',
-        delete: '/system/dict/delete'
+        delete: '/system/dict/deleteDict'
       },
     }
   },

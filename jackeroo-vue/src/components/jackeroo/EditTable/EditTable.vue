@@ -1,5 +1,5 @@
 <template>
-  <a-form-model ref="formTable" :model="formData">
+  <a-form-model ref="formTable" :model="formData" v-if="toggle">
     <a-table :dataSource="dataSource" :columns="columnsCopy" :rowKey="rowKey" class="jackeroo-edit-table"
       v-bind="$attrs">
       <template v-for="col in columnsSlot" :slot="col.dataIndex" slot-scope="text, record, index" >
@@ -15,8 +15,21 @@
             :size="size">
           </a-input>
 
+          <j-dict-select 
+            v-else-if="col.type == 'select' && col.dictCode" 
+            v-model="formData[col.dataIndex + '_' + index]"
+            :list="dictData[col.dictCode]"
+            allowClear
+            valueField="value" 
+            textField="label"
+            style="width: 100%;"
+            :disabled="col.disabled || !record.enable || false" 
+            :size="size">
+
+          </j-dict-select>
+
           <a-select 
-            v-else-if="col.type == 'select'" 
+            v-else-if="col.type == 'select' && col.options" 
             v-model="formData[col.dataIndex + '_' + index]"
             allowClear
             style="width: 100%;" 
@@ -25,8 +38,22 @@
             <a-select-option v-for="opt in col.options" :key="opt.value" :value="opt.value">{{opt.text}}</a-select-option>
           </a-select>
 
+          <j-dict-select 
+            v-else-if="col.type == 'multiple' && col.dictCode" 
+            v-model="formData[col.dataIndex + '_' + index]"
+            :list="dictData[col.dictCode]"
+            allowClear
+            valueField="value" 
+            textField="label"
+            multiple
+            style="width: 100%;"
+            :disabled="col.disabled || !record.enable || false" 
+            :size="size">
+
+          </j-dict-select>
+
           <a-select 
-            v-else-if="col.type == 'multiple'" 
+            v-else-if="col.type == 'multiple' && col.options" 
             mode="multiple"
             v-model="formData[col.dataIndex + '_' + index]"
             style="width: 100%;" 
@@ -57,8 +84,14 @@
 </template>
 
 <script>
+import JDictSelect from '@/components/jackeroo/Selector/Select'
+import {getAction} from '@/api/manage'
+
 export default {
   name: 'EditTable',
+  components: {
+    JDictSelect
+  },
   props:{
     // 列信息
     columns: {
@@ -83,18 +116,25 @@ export default {
   data(){
     return {
       size: 'default',
-      formData: {}
+      formData: {},
+      toggle: false,
+      // 用于存储select中包含dictCode的数据，避免多次请求dictCode接口，提高效率
+      dictData:{},
     }
   },
   watch: {
     dataSource(newVal){
       this.buildFormTalbe(newVal)
+    },
+    columns(newVal){
+      this.loadColumnDictCode(newVal)
     }
   },
-  mounted(){
+  beforeMount(){
     if(this.dataSource && this.dataSource.length > 0){
       this.buildFormTalbe(this.dataSource)
     }
+    this.loadColumnDictCode(this.columns)
   },
   computed: {
     columnsCopy(){
@@ -123,6 +163,21 @@ export default {
     }
   },
   methods: {
+    // 加载列中包含dictCode的数据
+    loadColumnDictCode(columns){
+      for(const col of columns){
+        if((col.type == 'select' || col.type =='multiple') && col.dictCode){
+          getAction('/system/dict/getDictItemList', {dictCode: col.dictCode}).then(result => {
+            if(!result.code){
+              this.dictData[col.dictCode] = result.data
+            }
+          })
+        }
+      }
+      this.$nextTick(() => {
+        this.toggle = true
+      })
+    },
     buildFormTalbe(newVal){
       const formData = {}
       for(let i = 0; i < newVal.length; i++){

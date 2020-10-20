@@ -40,15 +40,12 @@
             </a-col>
             <a-col :span="rowSpan">
               <a-form-model-item label="主键策略" prop="idStrategy">
-                <j-dict-select v-model="formTable.idStrategy" placeholder="请选择主键策略" dictCode="ID_STRATEGY"></j-dict-select>
+                <j-dict-select v-model="formTable.idStrategy" placeholder="请选择主键策略" dictCode="GEN_ID_STRATEGY"></j-dict-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="rowSpan">
               <a-form-model-item label="删除策略" prop="delStrategy">
-                <a-radio-group v-model="formTable.delStrategy">
-                  <a-radio :value="0">物理删除</a-radio>
-                  <a-radio :value="1">逻辑删除</a-radio>
-                </a-radio-group>
+                <j-dict-select v-model="formTable.delStrategy" dictCode="GEN_DEL_STRATEGY" type="radio"></j-dict-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="rowSpan" v-if="formTable.delStrategy">
@@ -104,44 +101,27 @@
             </a-col>
             <a-col :span="rowSpan">
               <a-form-model-item label="表单风格" prop="formStyle">
-                <a-select v-model="formScheme.formStyle" placeholder="请选择表单风格">
-                  <a-select-option :value="1">单列</a-select-option>
-                  <a-select-option :value="2">两列</a-select-option>
-                  <a-select-option :value="3">三列</a-select-option>
-                  <a-select-option :value="4">四列</a-select-option>
-                </a-select>
+                <j-dict-select v-model="formScheme.formStyle" placeholder="请选择表单风格" dictCode="GEN_FORM_STYLE"></j-dict-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="rowSpan">
               <a-form-model-item label="是否显示复选框" prop="showCheckbox">
-                <a-radio-group v-model="formScheme.showCheckbox">
-                  <a-radio :value="0">否</a-radio>
-                  <a-radio :value="1">是</a-radio>
-                </a-radio-group>
+                <j-dict-select v-model="formScheme.showCheckbox" dictCode="YES_NO" type="radio"></j-dict-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="rowSpan">
               <a-form-model-item label="是否分页" prop="enablePagination">
-                <a-radio-group v-model="formScheme.enablePagination">
-                  <a-radio :value="0">否</a-radio>
-                  <a-radio :value="1">是</a-radio>
-                </a-radio-group>
+                <j-dict-select v-model="formScheme.enablePagination" dictCode="YES_NO" type="radio"></j-dict-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="rowSpan">
               <a-form-model-item label="是否生成API文档" prop="enableSwagger">
-                <a-radio-group v-model="formScheme.enableSwagger">
-                  <a-radio :value="0">否</a-radio>
-                  <a-radio :value="1">是</a-radio>
-                </a-radio-group>
+                <j-dict-select v-model="formScheme.enableSwagger" dictCode="YES_NO" type="radio"></j-dict-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="rowSpan">
               <a-form-model-item label="服务器端校验" prop="enableServerValid">
-                <a-radio-group v-model="formScheme.enableServerValid">
-                  <a-radio :value="0">否</a-radio>
-                  <a-radio :value="1">是</a-radio>
-                </a-radio-group>
+                <j-dict-select v-model="formScheme.enableServerValid" dictCode="YES_NO" type="radio"></j-dict-select>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -370,12 +350,7 @@ export default {
           title: '查询方式',
           type: 'select',
           width: 100,
-          options: [
-            {
-              text: '=',
-              value: '='
-            }
-          ],
+          dictCode: 'GEN_QUERY_TYPE',
           rule: [{required: true, message: '请选择查询方式'}]
         },
         {
@@ -383,12 +358,7 @@ export default {
           title: '控件类型',
           type: 'select',
           width: 140,
-          options: [
-            {
-              text: '输入框',
-              value: 'input'
-            }
-          ],
+          dictCode: 'GEN_COMPONENT_TYPE',
           rule: [{required: true, message: '请选择控件类型'}]
         },
         {

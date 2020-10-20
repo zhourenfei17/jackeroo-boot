@@ -93,7 +93,7 @@ export default {
       ],
       url: {
         list: '/system/dict/itemList',
-        delete: '/system/dict/delete'
+        delete: '/system/dict/deleteDictItem'
       },
     }
   },
