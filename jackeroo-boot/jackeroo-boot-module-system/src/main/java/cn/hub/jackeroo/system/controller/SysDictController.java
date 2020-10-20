@@ -148,7 +148,7 @@ public class SysDictController extends BaseController {
     @ApiOperation("编辑数据字典")
     @ValidatedUnique(clazz = SysDict.class)
     public Result update(@Validated({Update.class, First.class}) @RequestBody SysDict entity){
-        service.updateById(entity);
+        service.updateDict(entity);
         return ok();
     }
 
@@ -166,14 +166,26 @@ public class SysDictController extends BaseController {
     }
 
     /**
-    * 删除数据字典
+     * 删除字典信息
+     * @param id
+     * @return
+     */
+    @DeleteMapping("deleteDict")
+    @ApiOperation("删除字典信息")
+    public Result deleteDict(@Validated Id id){
+        service.delete(id.getId(), SysDict.TYPE_DICT);
+        return ok();
+    }
+
+    /**
+    * 删除字典项信息
     * @param id
     * @return
     */
-    @DeleteMapping("delete")
-    @ApiOperation("删除数据字典")
-    public Result delete(@Validated Id id){
-        service.removeById(id.getId());
+    @DeleteMapping("deleteDictItem")
+    @ApiOperation("删除字典项信息")
+    public Result deleteDictItem(@Validated Id id){
+        service.delete(id.getId(), SysDict.TYPE_DICT_ITEM);
         return ok();
     }
 }

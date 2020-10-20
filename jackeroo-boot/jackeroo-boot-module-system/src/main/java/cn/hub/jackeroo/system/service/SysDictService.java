@@ -4,6 +4,7 @@ import cn.hub.jackeroo.system.entity.SysDict;
 import cn.hub.jackeroo.system.mapper.SysDictMapper;
 import cn.hub.jackeroo.vo.PageParam;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -74,6 +75,26 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
     }
 
     /**
+     * 修改数据字典信息
+     * @param dict
+     */
+    @Transactional
+    public void updateDict(SysDict dict){
+        SysDict oldDict = super.getById(dict.getId());
+        // 如果字典code发生变化，同步修改字典项的code
+        if(!dict.getDictCode().equals(oldDict.getDictCode())){
+            LambdaUpdateWrapper<SysDict> update = new LambdaUpdateWrapper<>();
+            update.eq(SysDict::getDictCode, oldDict.getDictCode());
+            update.eq(SysDict::getType, SysDict.TYPE_DICT_ITEM);
+            update.set(SysDict::getDictCode, dict.getDictCode());
+
+            super.update(update);
+        }
+
+        super.updateById(dict);
+    }
+
+    /**
      * 获取当前排序号
      * @param dictCode
      * @return
@@ -90,6 +111,30 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
             return 10;
         }else{
             return dict.getSort() - (dict.getSort() % 10) + 10;
+        }
+    }
+
+    /**
+     * 删除字典信息或字典项
+     * @param id
+     * @param type
+     */
+    @Transactional
+    public void delete(String id, int type){
+        LambdaUpdateWrapper<SysDict> query = new LambdaUpdateWrapper<>();
+        if(type == SysDict.TYPE_DICT){
+            SysDict dict = super.getById(id);
+            if(dict == null){
+                return;
+            }
+            // 除了要删除字典信息，还要同时删除字典项
+            query.eq(SysDict::getDictCode, dict.getDictCode());
+            super.remove(query);
+        }else{
+            query.eq(SysDict::getId, id);
+            query.eq(SysDict::getType, type);
+
+            super.remove(query);
         }
     }
 }
