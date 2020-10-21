@@ -69,6 +69,13 @@
             <a-checkbox :value="1"></a-checkbox>
           </a-checkbox-group>
 
+          <j-dict-code-select
+            v-else-if="col.type == 'dictCodeSelector'" 
+            v-model="formData[col.dataIndex + '_' + index]"
+            :disabled="col.disabled || !record.enable || false">
+
+          </j-dict-code-select>
+
           <template v-else-if="col.type != 'slot'">
             {{text}}
           </template>
@@ -85,12 +92,14 @@
 
 <script>
 import JDictSelect from '@/components/jackeroo/Selector/Select'
+import JDictCodeSelect from '@/components/jackeroo/Selector/DictCodeSelector/DictCodeSelect';
 import {getAction} from '@/api/manage'
 
 export default {
   name: 'EditTable',
   components: {
-    JDictSelect
+    JDictSelect,
+    JDictCodeSelect
   },
   props:{
     // 列信息

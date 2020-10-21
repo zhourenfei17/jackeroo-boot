@@ -269,36 +269,7 @@ export default {
           title: '属性类型',
           width: 120,
           type: 'select',
-          options: [
-            {
-              text: 'String',
-              value: 'String'
-            },
-            {
-              text: 'Integer',
-              value: 'Integer'
-            },
-            {
-              text: 'Long',
-              value: 'Long'
-            },
-            {
-              text: 'Double',
-              value: 'Double'
-            },
-            {
-              text: 'Float',
-              value: 'Float'
-            },
-            {
-              text: 'BigDecimal',
-              value: 'BigDecimal'
-            },
-            {
-              text: 'LocalDateTime',
-              value: 'LocalDateTime'
-            }
-          ],
+          dictCode: 'GEN_JAVA_TYPE',
           rule: [{required: true, message: '请选择属性类型'}]
         },
         {
@@ -382,7 +353,7 @@ export default {
         {
           dataIndex: 'formDictCode',
           title: '字典code',
-          type: 'input',
+          type: 'dictCodeSelector',
           rule: [{max: 50, message: '长度需要在0到50之间'}]
         },
         {
