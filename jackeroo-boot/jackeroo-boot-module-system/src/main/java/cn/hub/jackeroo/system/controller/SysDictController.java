@@ -67,6 +67,17 @@ public class SysDictController extends BaseController {
     }
 
     /**
+     * 根据字典code获取字典详情
+     * @param dictCode
+     * @return
+     */
+    @GetMapping("getByDictCode")
+    @ApiOperation("根据字典code获取字典详情")
+    public Result<SysDict> getByDictCode(@RequestParam String dictCode){
+        return ok(service.getByDictCode(dictCode));
+    }
+
+    /**
      * 字典项列表
      * @param pageParam
      * @param dictCode

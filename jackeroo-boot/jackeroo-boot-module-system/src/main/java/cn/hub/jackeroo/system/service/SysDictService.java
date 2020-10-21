@@ -41,6 +41,19 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
     }
 
     /**
+     * 通过字典code获取字典信息详情
+     * @param dictCode
+     * @return
+     */
+    public SysDict getByDictCode(String dictCode){
+        LambdaUpdateWrapper<SysDict> query = new LambdaUpdateWrapper<>();
+        query.eq(SysDict::getDictCode, dictCode);
+        query.eq(SysDict::getType, SysDict.TYPE_DICT);
+
+        return super.getOne(query, false);
+    }
+
+    /**
      * 通过字典code获取字典项列表
      * @param dictCode
      * @return
