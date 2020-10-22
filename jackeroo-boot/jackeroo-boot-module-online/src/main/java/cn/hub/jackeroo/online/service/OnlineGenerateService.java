@@ -128,8 +128,30 @@ public class OnlineGenerateService {
             // 必填
             field.setFormRequired(field.getEnableNull());
             field.setSort(++sort);
-            field.setQueryType("=");
-            field.setFormType("input");
+
+            if(Mysql.TEXT.name().equalsIgnoreCase(field.getDbFieldType())){
+                field.setFormType("textarea");
+            }else if(Mysql.VARCHAR.javaType.equals(field.getEntityFieldType())){
+                field.setFormType("input");
+            }else if(Mysql.TINYINT.name().equalsIgnoreCase(field.getDbFieldType())){
+                field.setFormType("select");
+            }else if(Mysql.INT.javaType.equals(field.getEntityFieldType())){
+                field.setFormType("input");
+            }else if(Mysql.DATE.javaType.equals(field.getEntityFieldType())){
+                field.setFormType("date");
+            }else if(Mysql.DATETIME.javaType.equals(field.getEntityFieldType())){
+                field.setFormType("datetime");
+            }else{
+                field.setFormType("input");
+            }
+
+            if(field.getFormType().equals("input") && field.getEntityFieldType().equals("String")){
+                field.setQueryType("Like");
+            }else if(field.getFormType().equals("date") || field.getFormType().equals("datetime")){
+                field.setQueryType("Between");
+            }else{
+                field.setQueryType("=");
+            }
         }
         return list;
     }
@@ -147,7 +169,7 @@ public class OnlineGenerateService {
         CHAR("Char"),
         BLOB("byte[]"),
         TEXT("String"),
-        INTEGER("Long"),
+        INT("Integer"),
         TINYINT("Integer"),
         SMALLINT("Integer"),
         MEDIUMINT("Integer"),
