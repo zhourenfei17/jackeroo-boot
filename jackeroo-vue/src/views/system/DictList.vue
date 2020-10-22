@@ -1,7 +1,7 @@
 <template>
   <div>
-      <search-card :enter="refreshData">
-        <a-col :md="6" :sm="12">
+    <search-card :enter="refreshData">
+      <a-col :md="6" :sm="12">
         <a-form-item label="字典名称">
           <a-input v-model="queryParam.dictName" placeholder="请输入字典名称"/>
         </a-form-item>
@@ -12,10 +12,10 @@
         </a-form-item>
       </a-col>
 
-        <template slot="operate">
-            <a-button type="primary" @click="refreshData(true)">查询</a-button>
-            <a-button style="margin-left: 8px" @click="reset">重置</a-button>
-        </template>
+      <template slot="operate">
+          <a-button type="primary" @click="refreshData(true)">查询</a-button>
+          <a-button style="margin-left: 8px" @click="reset">重置</a-button>
+      </template>
     </search-card>
     <data-card
         :reload="refreshData"

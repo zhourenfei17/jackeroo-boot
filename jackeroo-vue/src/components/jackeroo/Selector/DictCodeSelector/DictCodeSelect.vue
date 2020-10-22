@@ -47,9 +47,15 @@ export default {
       this.$refs.dictCodeSelectModal.show()
     },
     handleDictCodeSelectOk(row){
-      this.text = row.dictName
-      this.dictCode = row.dictCode
-      this.$emit('input', row.dictCode)
+      if(row){
+        this.text = row.dictName
+        this.dictCode = row.dictCode
+        this.$emit('input', row.dictCode)
+      }else{
+        this.text = ''
+        this.dictCode = null
+        this.$emit('input', null)
+      }
     }
   }
 }

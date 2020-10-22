@@ -65,7 +65,7 @@
           :columns="columns"
           :dataSource="dataSource"
           :pagination="false"
-          :scroll="{x: true}"
+          :scroll="{x: 1800}"
           v-show="current == 1">
 
         </edit-table>
@@ -242,12 +242,14 @@ export default {
           dataIndex: 'dbFieldName',
           title: '列名',
           width: 110,
+          fixed: 'left',
           type: 'text'
         },
         {
           dataIndex: 'dbFieldDesc',
           title: '列描述',
           width: 120,
+          fixed: 'left',
           type: 'input',
           rule: [{required: true, message: '请填写列描述'},{max: 50, message: '长度需要在0到50之间'}]
         },
@@ -274,7 +276,7 @@ export default {
         },
         {
           dataIndex: 'dbFieldLength',
-          width: 70,
+          width: 80,
           title: '字段长度',
           type: 'text'
         },
@@ -328,7 +330,7 @@ export default {
           dataIndex: 'formType',
           title: '控件类型',
           type: 'select',
-          width: 140,
+          width: 150,
           dictCode: 'GEN_COMPONENT_TYPE',
           rule: [{required: true, message: '请选择控件类型'}]
         },
@@ -342,17 +344,13 @@ export default {
           dataIndex: 'formValidator',
           title: '校验',
           type: 'multiple',
-          width: 180,
-          options: [
-            {
-              text: '手机号',
-              value: 'phoneValid'
-            }
-          ]
+          width: 200,
+          dictCode: 'GEN_VALIDATOR'
         },
         {
           dataIndex: 'formDictCode',
           title: '字典code',
+          width: 180,
           type: 'dictCodeSelector',
           rule: [{max: 50, message: '长度需要在0到50之间'}]
         },
