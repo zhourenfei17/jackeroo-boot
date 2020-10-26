@@ -4,6 +4,7 @@ import cn.hub.jackeroo.api.ISystemApi;
 import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.online.bo.GenTemplateBO;
+import cn.hub.jackeroo.online.config.Config;
 import cn.hub.jackeroo.online.config.GenerateConfig;
 import cn.hub.jackeroo.online.entity.OnlineScheme;
 import cn.hub.jackeroo.online.entity.OnlineTable;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +56,8 @@ public class OnlineGenerateService {
     @Autowired
     private GenerateConfig generateConfig;
     @Autowired
+    private Config config;
+    @Autowired
     private ISystemApi systemApi;
 
     /**
@@ -78,6 +82,11 @@ public class OnlineGenerateService {
         return dataBaseMapper.findTableColumnList(tableName, "mysql");
     }
 
+    /**
+     * 获取数据表相信信息
+     * @param tableName
+     * @return
+     */
     public Map findTableDetailInfo(String tableName){
         Map<String, Object> map = new HashMap<>();
         map.put("columns", buildTableField(findTableColumnList(tableName)));
@@ -112,7 +121,7 @@ public class OnlineGenerateService {
         for (OnlineTableField field : list) {
             field.setDbFieldName(field.getDbFieldName().toLowerCase());
             field.setEntityFieldName(StringUtils.toCamelCase(field.getDbFieldName()));
-            field.setEntityFieldType(Mysql.getJavaType(field.getDbFieldType()));
+            field.setEntityFieldType(getJavaTypeFromMysql(field.getDbFieldType()));
             // id列不编辑
             if(field.getPrimaryKey() == Constant.BOOLEAN_YES){
                 field.setEnable(false);
@@ -129,17 +138,13 @@ public class OnlineGenerateService {
             field.setFormRequired(field.getEnableNull());
             field.setSort(++sort);
 
-            if(Mysql.TEXT.name().equalsIgnoreCase(field.getDbFieldType())){
+            if("text".equalsIgnoreCase(field.getDbFieldType())){
                 field.setFormType("textarea");
-            }else if(Mysql.VARCHAR.javaType.equals(field.getEntityFieldType())){
-                field.setFormType("input");
-            }else if(Mysql.TINYINT.name().equalsIgnoreCase(field.getDbFieldType())){
+            }else if("tinyint".equalsIgnoreCase(field.getDbFieldType())){
                 field.setFormType("select");
-            }else if(Mysql.INT.javaType.equals(field.getEntityFieldType())){
-                field.setFormType("input");
-            }else if(Mysql.DATE.javaType.equals(field.getEntityFieldType())){
+            }else if("LocalDate".equals(field.getEntityFieldType())){
                 field.setFormType("date");
-            }else if(Mysql.DATETIME.javaType.equals(field.getEntityFieldType())){
+            }else if("LocalDateTime".equals(field.getEntityFieldType())){
                 field.setFormType("datetime");
             }else{
                 field.setFormType("input");
@@ -156,6 +161,14 @@ public class OnlineGenerateService {
         return list;
     }
 
+    private String getJavaTypeFromMysql(String mysqlType){
+        String javaType = config.getMysqlToJavaMapping().get(mysqlType);
+        if(javaType == null){
+            return "String";
+        }
+        return javaType;
+    }
+
     private boolean existPublicColumn(OnlineTableField field){
         return field.getDbFieldName().equalsIgnoreCase("create_by") ||
                 field.getDbFieldName().equalsIgnoreCase("create_time") ||
@@ -164,37 +177,6 @@ public class OnlineGenerateService {
                 field.getDbFieldName().equalsIgnoreCase("del_flag");
     }
 
-    private enum Mysql{
-        VARCHAR("String"),
-        CHAR("Char"),
-        BLOB("byte[]"),
-        TEXT("String"),
-        INT("Integer"),
-        TINYINT("Integer"),
-        SMALLINT("Integer"),
-        MEDIUMINT("Integer"),
-        BIGINT("Long"),
-        FLOAT("Float"),
-        DOUBLE("Double"),
-        DECIMAL("BigDecimal"),
-        DATE("LocalDate"),
-        DATETIME("LocalDateTime");
-
-        private String javaType;
-
-        Mysql(String javaType) {
-            this.javaType = javaType;
-        }
-
-        public static String getJavaType(String mysqlType){
-            for (Mysql mysql : Mysql.values()) {
-                if(mysql.name().equalsIgnoreCase(mysqlType)){
-                    return mysql.javaType;
-                }
-            }
-            return "String";
-        }
-    }
 
     @Transactional
     public Long save(GenerateTableDetail detail){
@@ -215,7 +197,7 @@ public class OnlineGenerateService {
      * 通过业务表id生成代码
      * @param tableId
      */
-    public void generateCode(String tableId, String outputDir, Integer override){
+    public void generateCode(String tableId, String outputDir, Integer override, List<String> templateType){
         OnlineTable table = tableService.getById(tableId);
         if(table == null){
             throw new JackerooException("业务表信息不存在，生成代码失败");
@@ -223,7 +205,7 @@ public class OnlineGenerateService {
         OnlineScheme scheme = schemeService.getByTableId(tableId);
         List<OnlineTableField> fieldList = tableFieldService.findByTableId(tableId);
 
-        generateCode(table, scheme, fieldList, outputDir, override);
+        generateCode(table, scheme, fieldList, outputDir, override, templateType);
     }
 
     /**
@@ -233,7 +215,7 @@ public class OnlineGenerateService {
      * @param fieldList
      * @param outputDir 输出目录
      */
-    private void generateCode(OnlineTable table, OnlineScheme scheme, List<OnlineTableField> fieldList, String outputDir, Integer override){
+    private void generateCode(OnlineTable table, OnlineScheme scheme, List<OnlineTableField> fieldList, String outputDir, Integer override, List<String> templateType){
         List<GenTemplateBO> templateList = GenerateUtils.getTemplateList(generateConfig.getTemplateRootPath() + scheme.getTemplate() , freeMarkerConfigurer, scheme.getTemplate());
 
         JSONObject module = systemApi.getModuleById(scheme.getModuleId());
@@ -267,7 +249,9 @@ public class OnlineGenerateService {
 
         log.debug("======================================= 生成代码中... =======================================");
         for (GenTemplateBO templateBO : templateList) {
-            GenerateUtils.generateFile(dataMap, templateBO, outRootPath, override);
+            if(templateType.contains(templateBO.getTemplateType())){
+                GenerateUtils.generateFile(dataMap, templateBO, outRootPath, override);
+            }
         }
         log.debug("======================================= 生成代码结束 =======================================");
     }

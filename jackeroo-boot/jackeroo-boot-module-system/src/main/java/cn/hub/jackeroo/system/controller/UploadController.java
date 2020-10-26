@@ -1,25 +1,7 @@
 package cn.hub.jackeroo.system.controller;
 
-import cn.hub.jackeroo.utils.DateUtils;
-import cn.hub.jackeroo.vo.FileVo;
-import cn.hub.jackeroo.utils.PathUtil;
-import cn.hub.jackeroo.vo.Json;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
 
 @RequestMapping("/upload")
 @Controller

@@ -1,10 +1,7 @@
 package cn.hub.jackeroo.online.bo;
 
-import cn.hub.jackeroo.utils.StringUtils;
 import freemarker.template.Template;
 import lombok.Data;
-
-import java.io.File;
 
 /**
  * @author alex
@@ -20,19 +17,12 @@ public class GenTemplateBO {
      * 文件路径，完整包路径：${sourceRootPackage} + ${moduleName} + filePath
      */
     private String filePath;
+    /**
+     * 模板文件类型，(controller、service、mapper、entity、vue)
+     */
+    private String templateType;
+    /**
+     * 模板文件对象
+     */
     private Template template;
-
-    /*public String getOutputPath(String entityName){
-        if(StringUtils.isBlank(this.templateName)){
-            return null;
-        }
-        if(this.templateName.equals("xml")){
-            return "mapper/xml/" + entityName + "Mapper.xml";
-
-        }else if(this.templateName.equals("vue")){
-            return "vue/" + entityName + ".vue";
-        }else{
-            return this.templateName + File.separator + entityName + StringUtils.toUpperFirstLetter(this.templateName) + ".java";
-        }
-    }*/
 }

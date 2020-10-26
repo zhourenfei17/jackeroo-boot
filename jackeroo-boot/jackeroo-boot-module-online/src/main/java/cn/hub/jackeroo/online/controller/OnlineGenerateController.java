@@ -1,6 +1,7 @@
 package cn.hub.jackeroo.online.controller;
 
 import cn.hub.jackeroo.online.entity.OnlineTable;
+import cn.hub.jackeroo.online.param.GenerateCodeParam;
 import cn.hub.jackeroo.online.param.GenerateTableDetail;
 import cn.hub.jackeroo.online.service.OnlineGenerateService;
 import cn.hub.jackeroo.persistence.BaseController;
@@ -85,10 +86,10 @@ public class OnlineGenerateController extends BaseController {
      * 生成代码
      * @return
      */
-    @GetMapping("generateCode")
+    @PostMapping("generateCode")
     @ApiOperation("生成代码")
-    public Result generateCode(@Validated Id id, @RequestParam String outputDir, @RequestParam Integer override){
-        service.generateCode(id.getId(), outputDir, override);
+    public Result generateCode(@Validated @RequestBody GenerateCodeParam param){
+        service.generateCode(param.getId(), param.getOutputDir(), param.getOverride(), param.getTemplateType());
         return ok();
     }
 

@@ -47,7 +47,7 @@ public class GenerateUtils {
                 if(resource.getFile().isDirectory()){
                     getTemplateInResources(templateRootPath, new StringBuilder().append(File.separator).append(fileName), resolver, freeMarkerConfigurer, templateCode, list);
                 }else{
-                    list.add(loadTemplate(fileName, "", freeMarkerConfigurer, templateCode));
+                    list.add(loadTemplate(fileName, "", freeMarkerConfigurer, templateCode, getTemplateFileType("")));
                 }
             }
         } catch (IOException e) {
@@ -76,12 +76,33 @@ public class GenerateUtils {
                     appendPath.append(File.separator).append(fileName);
                     getTemplateInResources(rootPath, appendPath, resolver, freeMarkerConfigurer, templateCode, list);
                 }else{
-                    list.add(loadTemplate(fileName, appendPath.toString(), freeMarkerConfigurer, templateCode));
+                    list.add(loadTemplate(fileName, appendPath.toString(), freeMarkerConfigurer, templateCode, getTemplateFileType(appendPath.toString())));
                 }
             }
         } catch (IOException e) {
             log.error("rootPath={},appendPath={}", rootPath, appendPath);
             log.error("读取配置文件失败", e);
+        }
+    }
+
+    /**
+     * 获取模板文件类型
+     * @param filePath
+     * @return
+     */
+    private static String getTemplateFileType(String filePath){
+        if(filePath.contains("controller")){
+            return "controller";
+        }else if(filePath.contains("service")){
+            return "service";
+        }else if(filePath.contains("mapper")){
+            return "mapper";
+        }else if(filePath.contains("entity")){
+            return "entity";
+        }else if(filePath.contains("vue")){
+            return "vue";
+        }else{
+            return "";
         }
     }
 
@@ -94,7 +115,7 @@ public class GenerateUtils {
      * @return
      * @throws IOException
      */
-    private static GenTemplateBO loadTemplate(String fileName, String filePath, FreeMarkerConfigurer freeMarkerConfigurer, String templateCode) throws IOException {
+    private static GenTemplateBO loadTemplate(String fileName, String filePath, FreeMarkerConfigurer freeMarkerConfigurer, String templateCode, String templateType) throws IOException {
         String generateFileName = fileName.substring(0, fileName.lastIndexOf(Constant.SPLIT_DOT));
 
         Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templateCode + filePath + File.separator +fileName);
@@ -103,6 +124,7 @@ public class GenerateUtils {
         genTemplateBO.setTemplate(template);
         genTemplateBO.setFileName(generateFileName);
         genTemplateBO.setFilePath(filePath);
+        genTemplateBO.setTemplateType(templateType);
 
         return genTemplateBO;
     }
@@ -127,7 +149,7 @@ public class GenerateUtils {
             Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)))
         ){
             genTemplate.getTemplate().process(dataMap, out);
-            log.debug("生成文件成功！文件路径【{}】", outputFile.getPath() + outputFile.getName());
+            log.debug("生成文件成功！文件路径【{}】", outputFile.getPath());
         } catch (FileNotFoundException e) {
             log.error("输出文件不存在", e);
         } catch (IOException e) {
