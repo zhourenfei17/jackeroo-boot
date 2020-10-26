@@ -24,6 +24,11 @@
               <a-switch v-model="form.override" checkedChildren="是" unCheckedChildren="否" defaultChecked></a-switch>
             </a-form-model-item>
           </a-col>
+          <a-col :span="rowSpan">
+            <a-form-model-item label="需要生成的代码" prop="templateType">
+              <j-dict-select v-model="form.templateType" dictCode="GEN_TEMPLATE_FILE_TYPE" type="checkbox" ></j-dict-select>
+            </a-form-model-item>
+          </a-col>
         </a-row>
       </a-form-model>
     </j-spin>
@@ -31,14 +36,15 @@
 </template>
 
 <script>
-import { getAction } from '@/api/manage'
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
-import {FileSelector} from '@/components'
+import { postAction } from '@/api/manage'
+import { JackerooFromMixins } from '@/mixins/JackerooFormMixins'
+import { FileSelector, JDictSelect } from '@/components'
 
 export default {
   mixins: [JackerooFromMixins],
   components:{
-    FileSelector
+    FileSelector,
+    JDictSelect
   },
   data(){
     return {
@@ -46,13 +52,17 @@ export default {
       width: '40vw',
       form: {
         outputDir: '',
-        override: true
+        override: true,
+        templateType: ['controller', 'service', 'mapper', 'entity', 'vue']
       },
       id: null,
       rules: {
         outputDir: [
           {required: true, message: '请填写代码生成路径'},
           {max: 30, message: '长度需要在0到30之间'}
+        ],
+        templateType: [
+          {required: true, message: '请选择需要生成的代码'}
         ]
       },
       url: {
@@ -72,10 +82,11 @@ export default {
           const formData = this.form
 
           this.$loading.show()
-          getAction(this.url.generateCode, {
+          postAction(this.url.generateCode, {
             id: this.id, 
             outputDir: formData.outputDir, 
-            override: formData.override ? 1 : 0
+            override: formData.override ? 1 : 0,
+            templateType: formData.templateType
           }).then(result => {
             if(!result.code){
               this.$message.success('生成代码成功')

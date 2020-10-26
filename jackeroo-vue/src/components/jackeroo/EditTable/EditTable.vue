@@ -45,7 +45,7 @@
             allowClear
             valueField="value" 
             textField="label"
-            multiple
+            multi
             style="width: 100%;"
             :disabled="col.disabled || !record.enable || false" 
             :size="size">
