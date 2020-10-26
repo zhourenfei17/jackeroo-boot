@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hub.jackeroo.online.mapper.OnlineDefaultConfigMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="baseColumns">
+        a.id as "id",
+        a.sort_column as "sortColumn",
+        a.sort_type as "sortType",
+        a.id_strategy as "idStrategy",
+        a.logic_column as "logicColumn",
+        a.package_name as "packageName",
+        a.form_style as "formStyle",
+        a.show_checkbox as "showCheckbox",
+        a.enable_pagination as "enablePagination",
+        a.enable_swagger as "enableSwagger",
+        a.enable_server_valid as "enableServerValid",
+        a.column_config as "columnConfig"
+    </sql>
+
+</mapper>

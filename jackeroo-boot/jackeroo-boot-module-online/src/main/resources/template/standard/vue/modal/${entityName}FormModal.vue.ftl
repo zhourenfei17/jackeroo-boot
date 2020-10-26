@@ -13,9 +13,8 @@
     >
     <j-spin :spinning="loading">
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
-        <a-row :gutter="formGutter">
-        <#list columnList as column>
-            <#if column.enableForm == 1>
+        <a-row :gutter="formGutter"><#list columnList as column>
+            <#if column.enableForm == 1 && column.primaryKey == 0>
           <a-col :span="rowSpan">
             <a-form-model-item label="${column.dbFieldDesc}" prop="${column.entityFieldName}">
                 <#if column.formType == "input">
@@ -51,7 +50,7 @@ export default {
       },
       rules: {
         <#list columnList as column>
-            <#if column.enableForm == 1>
+            <#if column.enableForm == 1 && column.primaryKey == 0>
         ${column.entityFieldName}: [
               <#if column.formRequired == 1>
           {required: true, message: '请输入${column.dbFieldDesc}'},

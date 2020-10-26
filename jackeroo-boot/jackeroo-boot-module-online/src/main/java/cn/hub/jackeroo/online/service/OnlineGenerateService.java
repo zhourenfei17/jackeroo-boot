@@ -79,7 +79,14 @@ public class OnlineGenerateService {
      * @return
      */
     public List<OnlineTableField> findTableColumnList(String tableName){
-        return dataBaseMapper.findTableColumnList(tableName, "mysql");
+        List<OnlineTableField> list = dataBaseMapper.findTableColumnList(tableName, "mysql");
+        for (OnlineTableField field : list) {
+            if("text".equals(field.getDbFieldType())){
+                field.setDbFieldLength(null);
+            }
+        }
+
+        return list;
     }
 
     /**

@@ -60,7 +60,7 @@ public class ${table.className} extends BaseEntity<${table.className}> {
     @NotNull
             </#if>
         </#if>
-        <#if column.entityFieldType == "String">
+        <#if column.entityFieldType == "String" && column.dbFieldLength??>
     @Length(max = ${column.dbFieldLength})
         </#if>
         <#if column.entityFieldType == "Integer" && column.dbFieldLength = 3>
