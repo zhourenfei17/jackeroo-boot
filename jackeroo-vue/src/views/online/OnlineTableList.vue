@@ -13,8 +13,8 @@
       </a-col>
 
       <template slot="operate">
-        <a-button type="primary" @click="refreshData(true)">查询</a-button>
-        <a-button style="margin-left: 8px" @click="reset">重置</a-button>
+        <a-button type="primary" icon="search" @click="refreshData(true)">查询</a-button>
+        <a-button style="margin-left: 8px" icon="reload" @click="reset">重置</a-button>
       </template>
     </search-card>
 
@@ -25,6 +25,7 @@
         tableAlign="left">
 
       <template slot="toolbar">
+        <a-button @click="handleOpenDefaultConfigModal" icon="setting" style="margin-right:8px;">默认配置</a-button>
         <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
@@ -63,6 +64,7 @@
     <select-table-modal ref="selectTableModal" @ok="handleSelectOk"></select-table-modal>
     <generate-table-column ref="generateTableColumn" @ok="handleGenerateOk" @generate="handleGenerate"></generate-table-column>
     <generate-file-select ref="generateFileSelect"></generate-file-select>
+    <default-config-modal ref="defaultConfigModal"></default-config-modal>
   </div>
 </template>
 
@@ -73,6 +75,7 @@ import { putAction, getAction, deleteAction } from '@/api/manage'
 import SelectTableModal from './modal/SelectTableModal'
 import GenerateTableColumn from './modal/GenerateTableColumn'
 import GenerateFileSelect from './modal/GenerateFileSelect'
+import DefaultConfigModal from './modal/DefaultConfigModal'
 
 export default {
   name: 'OnlineTableList',
@@ -83,7 +86,8 @@ export default {
     SearchCard,
     SelectTableModal,
     GenerateTableColumn,
-    GenerateFileSelect
+    GenerateFileSelect,
+    DefaultConfigModal
   },
   mixins:[JackerooListMixins],
   data () {
@@ -138,6 +142,10 @@ export default {
     handleEdit(record){
       this.$refs.generateTableColumn.visible = true
         this.$refs.generateTableColumn.edit(record.id)
+    },
+    handleOpenDefaultConfigModal(){
+      this.$refs.defaultConfigModal.visible = true
+      this.$refs.defaultConfigModal.add()
     },
     // 生成代码
     handleGenerate(id){

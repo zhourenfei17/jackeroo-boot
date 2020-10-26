@@ -7,8 +7,8 @@
         </a-form-item>
       </a-col>
       <template slot="operate">
-        <a-button type="primary" @click="loadDataSource()">查询</a-button>
-        <a-button style="margin-left: 8px" @click="reset">重置</a-button>
+        <a-button type="primary" icon="search" @click="loadDataSource()">查询</a-button>
+        <a-button style="margin-left: 8px" icon="reload" @click="reset">重置</a-button>
       </template>
     </search-card>
     

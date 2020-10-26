@@ -22,13 +22,8 @@ export const JackerooFromMixins = {
       },
       // 表单栅格间距
       formGutter: 24,
-      // 表单展示列数
-      colNums: {
-        // 普通情况
-        normal: 1,
-        // 全屏情况
-        fullscreen: 2
-      },
+      // 表单列数，取值1-4
+      formCol: 1,
     }
   },
   computed: {
@@ -50,11 +45,31 @@ export const JackerooFromMixins = {
         return ''
       }
     },
+    // 非全屏占列数
+    realFormCol(){
+      if(typeof this.formCol != 'number'){
+        return 1
+      }else if(this.formCol < 1){
+        return 1
+      }else if(this.formCol > 4){
+        return 4
+      }else{
+        return this.formCol
+      }
+    },
+    // 全屏占列数
+    fullscreenCol(){
+      if(this.realFormCol < 3){
+        return this.realFormCol * 2
+      }else{
+        return 4
+      }
+    },
     rowSpan(){
       if(!this.fullscreen){
-        return 24 / this.colNums.normal
+        return 24 / this.realFormCol
       }else{
-        return 24 / this.colNums.fullscreen
+        return 24 / this.fullscreenCol
       }
     }
   },

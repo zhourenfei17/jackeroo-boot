@@ -239,6 +239,14 @@ export default {
       dataSource: [],
       columns: [
         {
+          title: '#',
+          fixed: 'left',
+          width: 60,
+          customRender: (text, record, index) => {
+            return index + 1
+          }
+        },
+        {
           dataIndex: 'dbFieldName',
           title: '列名',
           width: 110,
