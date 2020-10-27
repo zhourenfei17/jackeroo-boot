@@ -110,16 +110,16 @@ export default {
       default: () => {
         return ['refresh', 'lineHeight', 'align', 'columnSet', 'fullscreen']
       }
+    },
+    marginTop: {
+      type: [String, Number],
+      default: 20
     }
   },
   data(){
     return {
       isFullscreen: false,
       placement: 'top',
-      headStyle:{
-        marginTop: '20px',
-        borderBottom: '0px'
-      },
       bodyStyle:{
         padding: '0px'
       },
@@ -186,6 +186,12 @@ export default {
     }
   },
   computed: {
+    headStyle() {
+      return {
+        marginTop: typeof this.marginTop == 'number' ? this.marginTop + 'px' : this.marginTop,
+        borderBottom: '0px'
+      }
+    },
     existToolbar(){
       let toolbarSlot = this.$slots['toolbar']
       if(toolbarSlot && toolbarSlot != undefined){

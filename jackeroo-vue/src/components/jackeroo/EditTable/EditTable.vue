@@ -6,12 +6,12 @@
           
         <a-form-model-item 
           :prop="col.dataIndex + '_' + index" 
-          :rules="(col.disabled || !record.enable || false) ? null : (rules[col.dataIndex] || null)" 
+          :rules="(col.disabled || record.disabled || false) ? null : (rules[col.dataIndex] || null)" 
           :key="col.dataIndex + '_' + index">
           <a-input 
             v-if="col.type == 'input'" 
             v-model="formData[col.dataIndex + '_' + index]"
-            :disabled="col.disabled || !record.enable || false"
+            :disabled="col.disabled || record.disabled || false"
             :size="size">
           </a-input>
 
@@ -23,7 +23,7 @@
             valueField="value" 
             textField="label"
             style="width: 100%;"
-            :disabled="col.disabled || !record.enable || false" 
+            :disabled="col.disabled || record.disabled || false" 
             :size="size">
 
           </j-dict-select>
@@ -33,7 +33,7 @@
             v-model="formData[col.dataIndex + '_' + index]"
             allowClear
             style="width: 100%;" 
-            :disabled="col.disabled || !record.enable || false"
+            :disabled="col.disabled || record.disabled || false"
             :size="size">
             <a-select-option v-for="opt in col.options" :key="opt.value" :value="opt.value">{{opt.text}}</a-select-option>
           </a-select>
@@ -47,7 +47,7 @@
             textField="label"
             multi
             style="width: 100%;"
-            :disabled="col.disabled || !record.enable || false" 
+            :disabled="col.disabled || record.disabled || false" 
             :size="size">
 
           </j-dict-select>
@@ -57,7 +57,7 @@
             mode="multiple"
             v-model="formData[col.dataIndex + '_' + index]"
             style="width: 100%;" 
-            :disabled="col.disabled || !record.enable || false"
+            :disabled="col.disabled || record.disabled || false"
             :size="size">
             <a-select-option v-for="opt in col.options" :key="opt.value" :value="opt.value">{{opt.text}}</a-select-option>
           </a-select>
@@ -65,14 +65,14 @@
           <a-checkbox-group 
             v-else-if="col.type == 'checkbox'" 
             v-model="formData[col.dataIndex + '_' + index]"
-            :disabled="col.disabled || !record.enable || false">
+            :disabled="col.disabled || record.disabled || false">
             <a-checkbox :value="1"></a-checkbox>
           </a-checkbox-group>
 
           <j-dict-code-select
             v-else-if="col.type == 'dictCodeSelector'" 
             v-model="formData[col.dataIndex + '_' + index]"
-            :disabled="col.disabled || !record.enable || false">
+            :disabled="col.disabled || record.disabled || false">
 
           </j-dict-code-select>
 
@@ -173,14 +173,19 @@ export default {
   },
   methods: {
     // 加载列中包含dictCode的数据
-    loadColumnDictCode(columns){
+    async loadColumnDictCode(columns){
       for(const col of columns){
         if((col.type == 'select' || col.type =='multiple') && col.dictCode){
-          getAction('/system/dict/getDictItemList', {dictCode: col.dictCode}).then(result => {
+          /* getAction('/system/dict/getDictItemList', {dictCode: col.dictCode}).then(result => {
             if(!result.code){
               this.dictData[col.dictCode] = result.data
             }
-          })
+          }) */
+
+          const result = await getAction('/system/dict/getDictItemList', {dictCode: col.dictCode})
+          if(!result.code){
+            this.dictData[col.dictCode] = result.data
+          }
         }
       }
       this.$nextTick(() => {
@@ -211,9 +216,14 @@ export default {
       const column = this.columns.filter(item => item.dataIndex == columnName)
       return column[0] || null
     },
-    async validate(){
+    // 验证table中的表单
+    async validate(callback){
       var success = await this.$refs.formTable.validate()
-      return success
+      if(callback && typeof callback === 'function'){
+        callback(success)
+      }else{
+        return success
+      }
     },
     /**
      * 获取EditTable所有的行数据；
@@ -225,23 +235,7 @@ export default {
         return false
       })
       if(success != undefined && success){
-        const data = [...this.dataSource]
-        for(const prop in this.formData){
-          let index = prop.lastIndexOf('_')
-          let i = prop.substring(index + 1)
-          let p = prop.substring(0, index)
-
-          const col = this.filterColumn(p)
-          if(col){
-            if(col.type == 'checkbox'){
-              data[i][p] = this.formData[prop][0]
-            }else if(col.type == 'multiple'){
-              data[i][p] = this.formData[prop].join(',')
-            }else{
-              data[i][p] = this.formData[prop]
-            }
-          }
-        }
+        const data = this.getData()
         if (callback && typeof callback === 'function') {
           callback(data)
         }else{
@@ -254,6 +248,31 @@ export default {
           return null
         }
       }
+    },
+    // 清除表单验证
+    clearValidate(){
+      this.$refs.formTable.clearValidate()
+    },
+    // 跳过表单校验，并获取数据
+    getData(){
+      const data = [...this.dataSource]
+      for(const prop in this.formData){
+        let index = prop.lastIndexOf('_')
+        let i = prop.substring(index + 1)
+        let p = prop.substring(0, index)
+
+        const col = this.filterColumn(p)
+        if(col){
+          if(col.type == 'checkbox'){
+            data[i][p] = this.formData[prop][0]
+          }else if(col.type == 'multiple'){
+            data[i][p] = this.formData[prop].join(',')
+          }else{
+            data[i][p] = this.formData[prop]
+          }
+        }
+      }
+      return data
     }
   }
 }

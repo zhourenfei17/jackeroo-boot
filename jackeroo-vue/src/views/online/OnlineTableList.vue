@@ -145,7 +145,7 @@ export default {
     },
     handleOpenDefaultConfigModal(){
       this.$refs.defaultConfigModal.visible = true
-      this.$refs.defaultConfigModal.add()
+      this.$refs.defaultConfigModal.edit()
     },
     // 生成代码
     handleGenerate(id){

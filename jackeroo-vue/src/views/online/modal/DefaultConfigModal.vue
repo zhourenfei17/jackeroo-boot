@@ -7,11 +7,15 @@
     :fullscreen.sync="fullscreen"
     :switchFullscreen="showFullscreenBtn"
     :confirmLoading="loading"
+    :autoHeight="false"
+    :bodyStyle="{backgroundColor: '##f0f2f5'}"
     @ok="handleSubmit"
     @cancel="cancel"
     >
     <j-spin :spinning="loading">
-      <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
+      <a-alert message="默认配置项在新建并选择数据库表后生效" type="info" style="margin-bottom:8px;"></a-alert>
+
+      <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout" style="backgroundColor: #fff;">
         <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
             <a-form-model-item label="排序字段" prop="sortColumn">
@@ -66,8 +70,11 @@
         </a-row>
       </a-form-model>
 
-      <data-card :icon="false">
+      <a-alert message="系统公共数据库列配置，如果数据库表包含以下列字段，则该列字段默认采用以下配置" type="info" style="margin-top:8px;"></a-alert>
+
+      <data-card :icon="false" :marginTop="8">
         <template slot="toolbar">
+          <a-button icon="delete" @click="handleDelteColumn" style="margin-right: 8px;" v-show="selectedRowKeys.length > 0">删除列</a-button>
           <a-button type="primary" icon="plus" @click="handleAddColumn">添加列</a-button>
         </template>
 
@@ -77,6 +84,7 @@
           rowKey="id"
           :columns="columns"
           :dataSource="dataSource"
+          :rowSelection="rowSelection"
           :pagination="false">
 
         </edit-table>
@@ -104,6 +112,10 @@ export default {
       width: '60vw',
       // 表单列数
       formCol: 2,
+      layout: {
+        labelCol: {span: 8},
+        wrapperCol: {span: 14}
+      },
       form: {
         id: null,
         sortColumn: null,
@@ -115,45 +127,12 @@ export default {
         showCheckbox: null,
         enablePagination: null,
         enableSwagger: null,
-        enableServerValid: null,
-        columnConfig: null
-      },
-      rules: {
-        id: [
-          {required: true, message: '请输入id'},
-          {max: 19, message: '长度需要在0到19之间'},
-        ],
-        sortColumn: [
-          {max: 30, message: '长度需要在0到30之间'},
-        ],
-        sortType: [
-          {max: 5, message: '长度需要在0到5之间'},
-        ],
-        idStrategy: [
-          {max: 20, message: '长度需要在0到20之间'},
-        ],
-        logicColumn: [
-          {max: 20, message: '长度需要在0到20之间'},
-        ],
-        packageName: [
-          {max: 50, message: '长度需要在0到50之间'},
-        ],
-        formStyle: [
-        ],
-        showCheckbox: [
-        ],
-        enablePagination: [
-        ],
-        enableSwagger: [
-        ],
-        enableServerValid: [
-        ],
-        columnConfig: [
-        ]
+        enableServerValid: null
       },
       columns:[
         {
           title: '#',
+          width: 50,
           customRender: (text, record, index) => {
             return index + 1
           }
@@ -162,7 +141,8 @@ export default {
           title: '列名',
           dataIndex: 'dbFieldName',
           width: 160,
-          type: 'input'
+          type: 'input',
+          rule: [{required: true, message: '请输入列名'}]
         },
         {
           dataIndex: 'enableList',
@@ -204,46 +184,121 @@ export default {
         },
       ],
       dataSource: [],
+      // 选中行的key
+      selectedRowKeys: [],
+      // 选中行的数据
+      selectedRows: [],
       url: {
-        getById: '/online/onlinedefaultconfig/',
-        add: '/online/onlinedefaultconfig/add',
-        update: '/online/onlinedefaultconfig/update'
+        getConfig: '/online/default/config/getConfig',
+        save: '/online/default/config/save'
+      }
+    }
+  },
+  computed: {
+    rowSelection() {
+      return {
+        selectedRowKeys: this.selectedRowKeys,
+        onChange: this.onSelectChange
+      }
+    },
+    rules() {
+      return {
+        sortColumn: [
+          {max: 30, message: '长度需要在0到30之间'},
+        ],
+        sortType: [
+          {required: this.form.sortColumn, message: '请选择排序方式'}
+        ],
+        idStrategy: [
+          
+        ],
+        logicColumn: [
+          {max: 20, message: '长度需要在0到20之间'},
+        ],
+        packageName: [
+          {max: 50, message: '长度需要在0到50之间'},
+        ],
+        formStyle: [
+        ],
+        showCheckbox: [
+        ],
+        enablePagination: [
+        ],
+        enableSwagger: [
+        ],
+        enableServerValid: [
+        ]
       }
     }
   },
   methods: {
-    add(){
-      this.form.id = null
-      this.loading = false
-    },
-    edit(id){
-      getAction(this.url.getById + id).then(result => {
-        this.copyProperties(result.data, this.form)
+    edit(){
+      getAction(this.url.getConfig).then(result => {
+        if(!result.code){
+          if(result.data){
+            this.copyProperties(result.data, this.form)
+            if(result.data.columnConfig){
+              this.dataSource = JSON.parse(result.data.columnConfig)
+            }
+          }
+        }
       }).finally(() => {
         this.loading = false
       })
     },
+    getRandomNum(){
+      let num = ''
+      for(let i = 0; i < 3; i++){
+        num += Math.floor(Math.random() * 10)
+      }
+      return num
+    },
     handleAddColumn(){
-      this.dataSource.push({id: new Date().getTime()})
+      this.$refs.editTable.clearValidate()
+      const data = this.$refs.editTable.getData()
+      data.push({id: new Date().getTime() + this.getRandomNum()})
+      this.dataSource = data
+    },
+    handleDelteColumn(){
+      /* this.$refs.editTable.getValues((data) => {
+        this.dataSource = data.filter(item => this.selectedRowKeys.indexOf(item.id) == -1)
+      }) */
+      this.$refs.editTable.clearValidate()
+      const data = this.$refs.editTable.getData()
+      this.dataSource = data.filter(item => this.selectedRowKeys.indexOf(item.id) == -1)
+
+      this.selectedRowKeys = []
+      this.selectedRows = []
     },
     handleSubmit(){
       this.$refs.formModel.validate((success) => {
         if(success){
-          const formData = this.form
-          console.log('formData', formData)
+          const formData = {...this.form}
 
-          this.$loading.show()
-          httpAction(this.requestUrl, formData, this.requestMethod).then(result => {
-            if(!result.code){
-              this.$message.success('保存成功！')
-              this.cancel()
-              this.$emit('ok')
+          this.$refs.editTable.getValues(data => {
+            if(data){
+              formData.columnConfig = JSON.stringify(data)
+              console.log('formData', formData)
+
+              this.$loading.show()
+              httpAction(this.url.save, formData, 'post').then(result => {
+                if(!result.code){
+                  this.$message.success('保存成功！')
+                  this.cancel()
+                  this.$emit('ok')
+                }
+              }).finally(() => {
+                this.$loading.hide()
+              })
             }
-          }).finally(() => {
-            this.$loading.hide()
           })
         }
       })
+    },
+    // 选中行事件
+    onSelectChange (selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
     },
   }
 }

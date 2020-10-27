@@ -189,7 +189,7 @@
     &.j-max-height {
       & .ant-modal-content{
         & .ant-modal-body {
-          max-height: 50vh;
+          max-height: 60vh;
           overflow-y: auto;
         }
       }
