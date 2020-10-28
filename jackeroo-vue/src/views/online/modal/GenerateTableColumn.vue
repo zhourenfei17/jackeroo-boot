@@ -424,8 +424,8 @@ export default {
               const data = this.$refs.onlineTableField.getValues((data) => {
                 if(data){
                   const formData = {}
-                  formData.onlineTable = this.formTable
-                  formData.onlineScheme = this.formScheme
+                  formData.onlineTable = {...this.formTable}
+                  formData.onlineScheme = {...this.formScheme}
                   formData.onlineTableField = data
 
                   console.log('formData', formData)

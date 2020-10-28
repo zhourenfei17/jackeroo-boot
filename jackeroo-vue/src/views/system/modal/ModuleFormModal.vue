@@ -93,7 +93,7 @@ export default {
     handleSubmit(){
       this.$refs.formModel.validate((success) => {
         if(success){
-          const formData = this.form
+          const formData = {...this.form}
           console.log('formData', formData)
 
           this.$loading.show()

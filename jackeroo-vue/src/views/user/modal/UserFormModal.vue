@@ -156,7 +156,7 @@ export default {
     handleSubmit(){
       this.$refs.formModel.validate((success) => {
         if(success){
-          const formData = this.form
+          const formData = {...this.form}
           if(!this.md5Flag && this.flag.add){
             formData.password = md5(formData.password)
             formData.passwordAgain = md5(formData.passwordAgain)
