@@ -7,6 +7,8 @@
     :fullscreen.sync="fullscreen"
     :switchFullscreen="showFullscreenBtn"
     :confirmLoading="loading"
+    :autoHeight="false"
+    maxHeight="60vh"
     okText="下一步"
     @ok="handleSubmit"
     @cancel="cancel"
@@ -90,6 +92,7 @@ export default {
   methods: {
     add(){
       this.loading = false
+      this.selectedRowKeys = []
     },
     onSelectChange (selectedRowKeys, selectedRows) {
       /* if(selectedRowKeys.length > 1){
@@ -97,7 +100,7 @@ export default {
         selectedRows.shift()
       } */
       this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
+      // this.selectedRows = selectedRows
     },
     handleSubmit(){
       if(this.selectedRowKeys.length != 1){

@@ -7,6 +7,7 @@
     :class="getClass(modalClass)"
     :style="getStyle(modalStyle)"
     :okButtonProps="{props: {disabled: disabled}}"
+    :bodyStyle="bodyStyle"
     v-bind="_attrs"
     v-on="$listeners"
     @ok="handleOk"
@@ -79,7 +80,7 @@
         type: Boolean,
         default: true
       },
-      // 非全屏下，指定modal的body的最大高度，autoHeight=false时有效，暂未实现
+      // 非全屏下，指定modal的body的最大高度，autoHeight=false时有效
       maxHeight: {
         type: String,
         default: '50vh'
@@ -105,7 +106,17 @@
         if (this.innerFullscreen) {
           attrs['width'] = '100%'
         }
+        if(attrs.bodyStyle){
+          attrs.bodyStyle = undefined
+        }
         return attrs
+      },
+      bodyStyle() {
+        let bodyStyle = this.$attrs.bodyStyle || {}
+        if(!this.autoHeight){
+          bodyStyle.maxHeight = this.maxHeight
+        }
+        return bodyStyle
       },
       modalClass() {
         return {
