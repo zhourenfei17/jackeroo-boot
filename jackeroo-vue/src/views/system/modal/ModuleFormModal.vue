@@ -73,7 +73,7 @@ export default {
       },
       url: {
         getById: '/system/module/',
-        add: '/system/module/add',
+        save: '/system/module/save',
         update: '/system/module/update'
       }
     }

@@ -29,7 +29,7 @@ export const JackerooFromMixins = {
   computed: {
     requestUrl(){
       if(this.flag.add){
-        return this.url.add
+        return this.url.save
       }else if(this.flag.edit){
         return this.url.update
       }else{

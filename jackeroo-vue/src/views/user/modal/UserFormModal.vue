@@ -136,7 +136,7 @@ export default {
       },
       url: {
         getById: '/system/user/',
-        add: '/system/user/add',
+        save: '/system/user/save',
         update: '/system/user/update'
       }
     }

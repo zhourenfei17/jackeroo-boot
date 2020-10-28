@@ -125,38 +125,38 @@ public class SysDictController extends BaseController {
     }
 
     /**
-    * 添加数据字典
+    * 保存数据字典
     * @param entity
     * @return
     */
-    @PostMapping("add")
-    @ApiOperation("添加数据字典")
+    @PostMapping("save")
+    @ApiOperation("保存数据字典")
     @ValidatedUnique(clazz = SysDict.class, condition = "type=0", groups = Second.class)
-    public Result add(@Validated({Insert.class, First.class}) @RequestBody SysDict entity){
+    public Result save(@Validated({Insert.class, First.class}) @RequestBody SysDict entity){
         service.saveDict(entity);
         return ok();
     }
 
     /**
-     * 添加数据字典项
+     * 保存数据字典项
      * @param entity
      * @return
      */
-    @PostMapping("addDictItem")
-    @ApiOperation("添加数据字典项")
+    @PostMapping("saveDictItem")
+    @ApiOperation("保存数据字典项")
     @ValidatedUnique(clazz = SysDict.class, condition = "type=1 and dict_code = #{dictCode}", groups = First.class)
-    public Result addDictItem(@Validated({Insert.class, Second.class}) @RequestBody SysDict entity){
+    public Result saveDictItem(@Validated({Insert.class, Second.class}) @RequestBody SysDict entity){
         service.saveDictItem(entity);
         return ok();
     }
 
     /**
-    * 编辑数据字典
+    * 更新数据字典
     * @param entity
     * @return
     */
     @PutMapping("update")
-    @ApiOperation("编辑数据字典")
+    @ApiOperation("更新数据字典")
     @ValidatedUnique(clazz = SysDict.class)
     public Result update(@Validated({Update.class, First.class}) @RequestBody SysDict entity){
         service.updateDict(entity);
@@ -164,12 +164,12 @@ public class SysDictController extends BaseController {
     }
 
     /**
-     * 编辑数据字典项
+     * 更新数据字典项
      * @param entity
      * @return
      */
     @PutMapping("updateDictItem")
-    @ApiOperation("编辑数据字典项")
+    @ApiOperation("更新数据字典项")
     @ValidatedUnique(clazz = SysDict.class)
     public Result updateDictItem(@Validated({Update.class, Second.class}) @RequestBody SysDict entity){
         service.updateById(entity);

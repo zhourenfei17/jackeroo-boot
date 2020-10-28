@@ -84,7 +84,7 @@ export default {
       },
       url: {
         getById: '/system/menu/permission/group/',
-        add: '/system/menu/permission/group/add',
+        save: '/system/menu/permission/group/save',
         update: '/system/menu/permission/group/update'
       }
     }

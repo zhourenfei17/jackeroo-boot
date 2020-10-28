@@ -64,7 +64,7 @@ export default {
       },
       url: {
         getById: '/${module.code}/${varName}/',
-        add: '/${module.code}/${varName}/add',
+        save: '/${module.code}/${varName}/save',
         update: '/${module.code}/${varName}/update'
       }
     }

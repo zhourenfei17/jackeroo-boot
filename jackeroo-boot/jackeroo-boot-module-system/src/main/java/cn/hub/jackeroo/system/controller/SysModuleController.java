@@ -77,25 +77,25 @@ public class SysModuleController extends BaseController {
     }
 
     /**
-     * 添加模块
+     * 保存模块
      * @param module
      * @return
      */
-    @PostMapping("add")
-    @ApiOperation("添加模块")
+    @PostMapping("save")
+    @ApiOperation("保存模块")
     @ValidatedUnique(clazz = SysModule.class)
-    public Result add(@Validated(Insert.class) @RequestBody SysModule module){
+    public Result save(@Validated(Insert.class) @RequestBody SysModule module){
         service.save(module);
         return ok();
     }
 
     /**
-     * 编辑模块
+     * 更新模块
      * @param module
      * @return
      */
     @PutMapping("update")
-    @ApiOperation("编辑模块")
+    @ApiOperation("更新模块")
     @ValidatedUnique(clazz = SysModule.class)
     public Result update(@Validated(Update.class) @RequestBody SysModule module){
         service.updateById(module);

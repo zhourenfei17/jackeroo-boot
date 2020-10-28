@@ -83,7 +83,7 @@ export default {
       },
       url: {
         getById: '/system/menu/permission/config/',
-        add: '/system/menu/permission/config/add',
+        save: '/system/menu/permission/config/save',
         update: '/system/menu/permission/config/update'
       }
     }

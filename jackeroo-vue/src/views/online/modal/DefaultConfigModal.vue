@@ -8,7 +8,7 @@
     :switchFullscreen="showFullscreenBtn"
     :confirmLoading="loading"
     :autoHeight="false"
-    :bodyStyle="{backgroundColor: '##f0f2f5'}"
+    :bodyStyle="{backgroundColor: '#f0f2f5'}"
     @ok="handleSubmit"
     @cancel="cancel"
     >

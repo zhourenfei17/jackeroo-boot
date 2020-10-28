@@ -67,7 +67,7 @@ export default {
       },
       url: {
         getById: '/system/role/',
-        add: '/system/role/add',
+        save: '/system/role/save',
         update: '/system/role/update'
       }
     }

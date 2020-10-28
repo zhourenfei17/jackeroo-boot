@@ -100,26 +100,26 @@ public class RoleController extends BaseController {
     }
 
     /**
-     * 添加角色
+     * 保存角色
      * @param role
      * @return
      */
-    @PostMapping("add")
-    @ApiOperation(value = "添加角色", response = Result.class)
+    @PostMapping("save")
+    @ApiOperation(value = "保存角色", response = Result.class)
     @ValidatedUnique(clazz = SysRole.class)
-    public Result add(@Validated(Insert.class) @RequestBody SysRole role){
+    public Result save(@Validated(Insert.class) @RequestBody SysRole role){
         // validService.validEntityUniqueField(role);
         roleService.save(role);
         return ok();
     }
 
     /**
-     * 编辑角色
+     * 更新角色
      * @param role
      * @return
      */
     @PutMapping("update")
-    @ApiOperation(value = "编辑角色", response = Result.class)
+    @ApiOperation(value = "更新角色", response = Result.class)
     @ValidatedUnique(clazz = SysRole.class)
     public Result update(@Validated(Update.class) @RequestBody SysRole role){
         // validService.validEntityUniqueField(role);

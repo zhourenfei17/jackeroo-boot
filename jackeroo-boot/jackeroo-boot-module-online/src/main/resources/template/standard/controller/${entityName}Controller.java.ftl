@@ -66,25 +66,25 @@ public class ${table.className}Controller extends BaseController {
     }
 
     /**
-    * 添加${table.comment}
+    * 保存${table.comment}
     * @param ${varName}
     * @return
     */
-    @PostMapping("add")
-    @ApiOperation("添加${table.comment}")
+    @PostMapping("save")
+    @ApiOperation("保存${table.comment}")
     @ValidatedUnique(clazz = ${table.className}.class)
-    public Result add(@Validated(Insert.class) @RequestBody ${table.className} ${varName}){
+    public Result save(@Validated(Insert.class) @RequestBody ${table.className} ${varName}){
         service.save(${varName});
         return ok();
     }
 
     /**
-    * 编辑${table.comment}
+    * 更新${table.comment}
     * @param ${varName}
     * @return
     */
     @PutMapping("update")
-    @ApiOperation("编辑${table.comment}")
+    @ApiOperation("更新${table.comment}")
     @ValidatedUnique(clazz = ${table.className}.class)
     public Result update(@Validated(Update.class) @RequestBody ${table.className} ${varName}){
         service.updateById(${varName});

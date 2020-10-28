@@ -16,7 +16,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -69,25 +68,25 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 添加用户
+     * 保存用户
      * @param user
      * @return
      */
-    @PostMapping("add")
-    @ApiOperation(value = "添加用户", notes = "添加用户信息")
+    @PostMapping("save")
+    @ApiOperation(value = "保存用户", notes = "保存用户信息")
     @ValidatedUnique(clazz = SysUser.class)
-    public Result add(@Validated(Insert.class) @RequestBody SysUser user){
+    public Result save(@Validated(Insert.class) @RequestBody SysUser user){
         userService.insertUser(user);
         return ok();
     }
 
     /**
-     * 编辑用户
+     * 更新用户
      * @param user
      * @return
      */
     @PutMapping("update")
-    @ApiOperation(value = "编辑用户", notes = "编辑用户信息")
+    @ApiOperation(value = "更新用户", notes = "更新用户信息")
     @ValidatedUnique(clazz = SysUser.class, groups = Update.class)
     public Result update(@Validated(Update.class) @RequestBody SysUser user){
         // SysUser sysUser = new SysUser();

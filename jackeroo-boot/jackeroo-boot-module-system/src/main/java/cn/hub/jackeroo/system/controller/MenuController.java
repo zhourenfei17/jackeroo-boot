@@ -96,24 +96,24 @@ public class MenuController extends BaseController {
     }
 
     /**
-     * 添加菜单
+     * 保存菜单
      * @param menu
      * @return
      */
-    @PostMapping("add")
-    @ApiOperation(value = "添加菜单")
-    public Result add(@Validated(Insert.class) @RequestBody SysMenu menu){
+    @PostMapping("save")
+    @ApiOperation(value = "保存菜单")
+    public Result save(@Validated(Insert.class) @RequestBody SysMenu menu){
         menuService.save(menu);
         return ok();
     }
 
     /**
-     * 编辑菜单
+     * 更新菜单
      * @param menu
      * @return
      */
     @PutMapping("update")
-    @ApiOperation(value = "编辑菜单")
+    @ApiOperation(value = "更新菜单")
     public Result update(@Validated(Update.class) @RequestBody SysMenu menu){
         menuService.update(menu);
         return ok();

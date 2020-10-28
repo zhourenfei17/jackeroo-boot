@@ -68,7 +68,7 @@ export default {
       },
       url: {
         getById: '/system/dict/',
-        add: '/system/dict/add',
+        save: '/system/dict/save',
         update: '/system/dict/update'
       }
     }

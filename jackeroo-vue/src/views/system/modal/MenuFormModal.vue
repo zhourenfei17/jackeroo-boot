@@ -220,7 +220,7 @@ export default {
       },
       url: {
         getById: '/system/menu/',
-        add: '/system/menu/add',
+        save: '/system/menu/save',
         update: '/system/menu/update',
         getTreeSelect: '/system/menu/getTreeSelect',
         findDefaultGroupPermission: '/system/menu/permission/config/findDefaultPermissionConfig'

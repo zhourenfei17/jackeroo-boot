@@ -61,7 +61,7 @@ export default {
       },
       url: {
         getById: '/system/dict/',
-        add: '/system/dict/addDictItem',
+        save: '/system/dict/saveDictItem',
         update: '/system/dict/updateDictItem',
         getMaxSort: '/system/dict/getMaxSort'
       }

@@ -77,25 +77,25 @@ public class SysMenuPermissionGroupController extends BaseController {
     }
 
     /**
-     * 添加菜单权限配置组别
+     * 保存菜单权限配置组别
      * @param sysMenuPermissionGroup
      * @return
      */
-    @PostMapping("add")
-    @ApiOperation(value = "添加菜单权限配置组别", response = Result.class)
+    @PostMapping("save")
+    @ApiOperation(value = "保存菜单权限配置组别", response = Result.class)
     @ValidatedUnique(clazz = SysMenuPermissionGroup.class)
-    public Result add(@Validated(Insert.class) @RequestBody SysMenuPermissionGroup sysMenuPermissionGroup){
+    public Result save(@Validated(Insert.class) @RequestBody SysMenuPermissionGroup sysMenuPermissionGroup){
         permissionGroupService.save(sysMenuPermissionGroup);
         return ok();
     }
 
     /**
-     * 编辑菜单权限配置组别
+     * 更新菜单权限配置组别
      * @param sysMenuPermissionGroup
      * @return
      */
     @PutMapping("update")
-    @ApiOperation(value = "编辑菜单权限配置组别", response = Result.class)
+    @ApiOperation(value = "更新菜单权限配置组别", response = Result.class)
     @ValidatedUnique(clazz = SysMenuPermissionGroup.class)
     public Result update(@Validated(Update.class) @RequestBody SysMenuPermissionGroup sysMenuPermissionGroup){
         permissionGroupService.updateById(sysMenuPermissionGroup);
