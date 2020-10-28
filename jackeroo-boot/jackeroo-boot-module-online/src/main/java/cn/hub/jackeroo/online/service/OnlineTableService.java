@@ -53,7 +53,7 @@ public class OnlineTableService extends ServiceImpl<OnlineTableMapper, OnlineTab
         List<OnlineTableField> tableFieldList = tableFieldService.findByTableId(tableId);
         for (OnlineTableField field : tableFieldList) {
             if(field.getPrimaryKey() != null && field.getPrimaryKey() == Constant.BOOLEAN_YES){
-                field.setEnable(false);
+                field.setDisabled(true);
             }
         }
         result.put("columns", tableFieldList);

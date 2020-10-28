@@ -110,4 +110,12 @@ public class OnlineTable extends BaseEntity<OnlineTable> {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
+    /**
+     * 删除策略--物理删除
+     */
+    public static final int DEL_STRATEGY_DATABASE = 0;
+    /**
+     * 删除策略--逻辑删除
+     */
+    public static final int DEL_STRATEGY_LOGIC = 1;
 }

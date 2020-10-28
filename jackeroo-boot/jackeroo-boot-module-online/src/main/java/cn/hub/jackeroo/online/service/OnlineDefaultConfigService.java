@@ -30,7 +30,7 @@ public class OnlineDefaultConfigService extends ServiceImpl<OnlineDefaultConfigM
     public OnlineDefaultConfig getConfig(){
         List<OnlineDefaultConfig> list = super.list();
         if(CollectionUtils.isEmpty(list)){
-            return null;
+            return new OnlineDefaultConfig();
         }else{
             if(list.size() > 1){
                 throw new JackerooException("默认配置数据异常，请检查！");
@@ -42,7 +42,7 @@ public class OnlineDefaultConfigService extends ServiceImpl<OnlineDefaultConfigM
     @Override
     public boolean saveOrUpdate(OnlineDefaultConfig onlineDefaultConfig) {
         OnlineDefaultConfig config = getConfig();
-        if(config == null){
+        if(config.getId() == null){
             return super.save(onlineDefaultConfig);
         }else{
             onlineDefaultConfig.setId(config.getId());

@@ -6,6 +6,7 @@ import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.online.bo.GenTemplateBO;
 import cn.hub.jackeroo.online.config.Config;
 import cn.hub.jackeroo.online.config.GenerateConfig;
+import cn.hub.jackeroo.online.entity.OnlineDefaultConfig;
 import cn.hub.jackeroo.online.entity.OnlineScheme;
 import cn.hub.jackeroo.online.entity.OnlineTable;
 import cn.hub.jackeroo.online.entity.OnlineTableField;
@@ -16,6 +17,7 @@ import cn.hub.jackeroo.utils.DateUtils;
 import cn.hub.jackeroo.utils.FileUtils;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,7 +30,6 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +60,8 @@ public class OnlineGenerateService {
     private Config config;
     @Autowired
     private ISystemApi systemApi;
+    @Autowired
+    private OnlineDefaultConfigService defaultConfigService;
 
     /**
      * 获取数据库业务表列表-带分页
@@ -95,8 +98,13 @@ public class OnlineGenerateService {
      * @return
      */
     public Map findTableDetailInfo(String tableName){
+        final OnlineDefaultConfig defaultConfig = defaultConfigService.getConfig();
+
         Map<String, Object> map = new HashMap<>();
-        map.put("columns", buildTableField(findTableColumnList(tableName)));
+
+        // 构建数据库列对象
+        List<OnlineTableField> columnList = buildTableField(findTableColumnList(tableName), defaultConfig);
+        map.put("columns", columnList);
 
         OnlineTable query = new OnlineTable();
         query.setTableName(tableName);
@@ -104,26 +112,35 @@ public class OnlineGenerateService {
         if(CollectionUtils.isNotEmpty(tableList)){
             OnlineTable table = tableList.get(0);
             table.setClassName(StringUtils.toCapitalizeCamelCase(tableName));
-            table.setIdStrategy("ASSIGN_ID");
-            table.setDelStrategy(0);
+            table.setIdStrategy(defaultConfig.getIdStrategy());
+            // 如果当前数据库列对象中存在配置项的默认逻辑删字段，则删除策略为逻辑删
+            if(columnList.stream().filter(item -> item.getDbFieldName().equals(defaultConfig.getLogicColumn()) || item.getEntityFieldName().equals(defaultConfig.getLogicColumn())).count() > 0){
+                table.setDelStrategy(OnlineTable.DEL_STRATEGY_LOGIC);
+            }else{
+                table.setDelStrategy(OnlineTable.DEL_STRATEGY_DATABASE);
+            }
 
             map.put("table", table);
 
             OnlineScheme scheme = new OnlineScheme();
-            scheme.setPackageName("cn.hub.jackeroo");
-            scheme.setShowCheckbox(Constant.BOOLEAN_YES);
-            scheme.setFormStyle(2);
+            scheme.setPackageName(defaultConfig.getPackageName());
+            scheme.setShowCheckbox(defaultConfig.getShowCheckbox());
+            scheme.setFormStyle(defaultConfig.getFormStyle());
             scheme.setTemplate("standard");
-            scheme.setEnablePagination(Constant.BOOLEAN_YES);
-            scheme.setEnableSwagger(Constant.BOOLEAN_YES);
-            scheme.setEnableServerValid(Constant.BOOLEAN_YES);
+            scheme.setEnablePagination(defaultConfig.getEnablePagination());
+            scheme.setEnableSwagger(defaultConfig.getEnableSwagger());
+            scheme.setEnableServerValid(defaultConfig.getEnableServerValid());
             map.put("scheme", scheme);
         }
 
         return map;
     }
 
-    private List<OnlineTableField> buildTableField(List<OnlineTableField> list){
+    private List<OnlineTableField> buildTableField(List<OnlineTableField> list, OnlineDefaultConfig defaultConfig){
+        List<OnlineTableField> configColumns = JSONArray.parseArray(defaultConfig.getColumnConfig(), OnlineTableField.class);
+        if(configColumns == null){
+            configColumns = new ArrayList<>();
+        }
         int sort = 0;
         for (OnlineTableField field : list) {
             field.setDbFieldName(field.getDbFieldName().toLowerCase());
@@ -131,38 +148,44 @@ public class OnlineGenerateService {
             field.setEntityFieldType(getJavaTypeFromMysql(field.getDbFieldType()));
             // id列不编辑
             if(field.getPrimaryKey() == Constant.BOOLEAN_YES){
-                field.setEnable(false);
-            }
-            // 列表和表单字段
-            if(existPublicColumn(field)){
-                field.setEnableList(Constant.BOOLEAN_NO);
-                field.setEnableForm(Constant.BOOLEAN_NO);
-            }else{
-                field.setEnableList(Constant.BOOLEAN_YES);
-                field.setEnableForm(Constant.BOOLEAN_YES);
+                field.setDisabled(true);
             }
             // 必填
             field.setFormRequired(field.getEnableNull());
             field.setSort(++sort);
 
-            if("text".equalsIgnoreCase(field.getDbFieldType())){
-                field.setFormType("textarea");
-            }else if("tinyint".equalsIgnoreCase(field.getDbFieldType())){
-                field.setFormType("select");
-            }else if("LocalDate".equals(field.getEntityFieldType())){
-                field.setFormType("date");
-            }else if("LocalDateTime".equals(field.getEntityFieldType())){
-                field.setFormType("datetime");
+            // 如果是公共列，则按照配置的来，否则按默认的
+            OnlineTableField configColumn = configColumns.stream().filter(item -> field.getDbFieldName().equals(item.getDbFieldName()) || field.getEntityFieldName().equals(item.getDbFieldName())).findFirst().orElse(null);
+            if(configColumn != null){
+                field.setEnableList(configColumn.getEnableList());
+                field.setEnableForm(configColumn.getEnableForm());
+                field.setEnableQuery(configColumn.getEnableQuery());
+                field.setEnableSort(configColumn.getEnableSort());
+                field.setQueryType(configColumn.getQueryType());
+                field.setFormType(configColumn.getFormType());
             }else{
-                field.setFormType("input");
-            }
+                field.setEnableList(Constant.BOOLEAN_YES);
+                field.setEnableForm(Constant.BOOLEAN_YES);
 
-            if(field.getFormType().equals("input") && field.getEntityFieldType().equals("String")){
-                field.setQueryType("Like");
-            }else if(field.getFormType().equals("date") || field.getFormType().equals("datetime")){
-                field.setQueryType("Between");
-            }else{
-                field.setQueryType("=");
+                if("text".equalsIgnoreCase(field.getDbFieldType())){
+                    field.setFormType("textarea");
+                }else if("tinyint".equalsIgnoreCase(field.getDbFieldType())){
+                    field.setFormType("select");
+                }else if("LocalDate".equals(field.getEntityFieldType())){
+                    field.setFormType("date");
+                }else if("LocalDateTime".equals(field.getEntityFieldType())){
+                    field.setFormType("datetime");
+                }else{
+                    field.setFormType("input");
+                }
+
+                if(field.getFormType().equals("input") && field.getEntityFieldType().equals("String")){
+                    field.setQueryType("Like");
+                }else if(field.getFormType().equals("date") || field.getFormType().equals("datetime")){
+                    field.setQueryType("Between");
+                }else{
+                    field.setQueryType("=");
+                }
             }
         }
         return list;

@@ -182,6 +182,6 @@ public class OnlineTableField extends BaseEntity<OnlineTableField> {
      * 是否可编辑
      */
     @TableField(exist = false)
-    private Boolean enable = true;
+    private Boolean disabled = false;
 
 }
