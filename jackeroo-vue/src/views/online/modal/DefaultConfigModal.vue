@@ -20,7 +20,11 @@
         <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
             <a-form-model-item label="排序字段" prop="sortColumn">
-              <a-input v-model="form.sortColumn" placeholder="请输入排序字段"></a-input>
+              <a-input v-model="form.sortColumn" placeholder="请输入排序字段" style="width:90%"></a-input>
+
+              <a-tooltip title="支持【数据库字段】或者【java实体类字段】">
+                <a-icon type="question-circle" style="margin-left:10px;"></a-icon>
+              </a-tooltip>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -30,12 +34,19 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="主键策略" prop="idStrategy">
-              <j-dict-select v-model="form.idStrategy" dictCode="GEN_ID_STRATEGY" placeholder="请选择主键策略"></j-dict-select>
+              <j-dict-select v-model="form.idStrategy" dictCode="GEN_ID_STRATEGY" placeholder="请选择主键策略" style="width:90%"></j-dict-select>
+              <a-tooltip title="请参考MyBatis-Plus的IdType可选值的解释">
+                <a-icon type="question-circle" style="margin-left:10px;"></a-icon>
+              </a-tooltip>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="逻辑删字段" prop="logicColumn">
-              <a-input v-model="form.logicColumn" placeholder="请输入逻辑删字段"></a-input>
+              <a-input v-model="form.logicColumn" placeholder="请输入逻辑删字段" style="width: 90%;"></a-input>
+
+              <a-tooltip title="如果新建选择的数据库表包含该字段，则默认删除策略为逻辑删，支持【数据库字段】或者【java实体类字段】">
+                <a-icon type="question-circle" style="margin-left:10px;"></a-icon>
+              </a-tooltip>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -88,6 +99,9 @@
           :rowSelection="rowSelection"
           :pagination="false">
 
+          <span slot="dbFieldNameSlot">
+            列名 <a-tooltip title="支持【数据库字段】或者【java实体类字段】"><a-icon type="question-circle"></a-icon></a-tooltip>
+          </span>
         </edit-table>
       </data-card>
     </j-spin>
@@ -139,11 +153,11 @@ export default {
           }
         },
         {
-          title: '列名',
           dataIndex: 'dbFieldName',
           width: 160,
           type: 'input',
-          rule: [{required: true, message: '请输入列名'}]
+          slots: {title: 'dbFieldNameSlot'},
+          rule: [{required: true, message: '请输入列名'}, {max: 30, message: '长度需要在0到30之间'}]
         },
         {
           dataIndex: 'enableList',
@@ -168,6 +182,19 @@ export default {
           title: '排序',
           width: 60,
           type: 'checkbox'
+        },
+        {
+          dataIndex: 'locker',
+          title: '乐观锁',
+          width: 60,
+          type: 'checkbox'
+        },
+        {
+          dataIndex: 'fillStrategy',
+          title: '填充策略',
+          width: 140,
+          type: 'select',
+          dictCode: 'GEN_FILL_STRATEGY'
         },
         {
           dataIndex: 'queryType',
