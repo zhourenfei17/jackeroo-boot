@@ -9,124 +9,63 @@
     :confirmLoading="loading"
     @ok="handleSubmit"
     @cancel="cancel"
-    class="generate-modal"
   >
-    
-
     <j-spin :spinning="loading">
-      <a-steps :current="current" @change="handleStepChange" size="small">
-        <a-step title="基本信息"></a-step>
-        <a-step title="字段信息"></a-step>
-        <a-step title="生成信息"></a-step>
-      </a-steps>
-      
+
       <div class="generate-content">
-        <a-form-model ref="onlineTable" :model="formTable" :rules="tableRules" v-bind="layout" v-show="current == 0">
-          <a-row :gutter="formGutter">
-            <a-col :span="rowSpan">
-              <a-form-model-item label="表名" prop="tableName">
-                <a-input v-model="formTable.tableName" placeholder="请输入表名" disabled></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="表说明" prop="comment">
-                <a-input v-model="formTable.comment" placeholder="请输入表说明" :disabled="flag.view"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="实体类名称" prop="className">
-                <a-input v-model="formTable.className" placeholder="请输入实体类名称" :disabled="flag.view"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="主键策略" prop="idStrategy">
-                <j-dict-select v-model="formTable.idStrategy" placeholder="请选择主键策略" dictCode="GEN_ID_STRATEGY"></j-dict-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="删除策略" prop="delStrategy">
-                <j-dict-select v-model="formTable.delStrategy" dictCode="GEN_DEL_STRATEGY" type="radio"></j-dict-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan" v-if="formTable.delStrategy">
-              <a-form-model-item label="逻辑删字段" prop="logicField">
-                <j-select v-model="formTable.logicField" :list="dataSource" valueField="entityFieldName" textField="entityFieldName" placeholder="请选择逻辑删字段">
+        <a-tabs :animated="{inkBar: true, tabPane: false}" :activeKey="current" @change="handleStepChange">
+          <a-tab-pane :key="0" style="background-color: #fff;padding-top:20px;">
+            <span slot="tab">
+              <a-icon type="global"></a-icon>
+              1.基本信息
+            </span>
 
-                </j-select>
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </a-form-model>
+            <table-form 
+              ref="onlineTable"
+              :dataSource="dataSource"
+              :layout="layout"
+              :rowSpan="rowSpan"
+              :formTable="formTable"
+              :formGutter="formGutter"
+              >
+            </table-form>
+          </a-tab-pane>
+          <a-tab-pane :key="1" forceRender style="background-color: #fff">
+            <span slot="tab">
+              <a-icon type="table"></a-icon>
+              2.字段信息
+            </span>
 
-        <edit-table
-          ref="onlineTableField"
-          size="small"
-          rowKey="dbFieldName"
-          :columns="columns"
-          :dataSource="dataSource"
-          :pagination="false"
-          :scroll="{x: 1800}"
-          v-show="current == 1">
+            <edit-table
+              ref="onlineTableField"
+              size="small"
+              rowKey="dbFieldName"
+              tableLayout="auto"
+              :columns="columns"
+              :dataSource="dataSource"
+              :pagination="false"
+              :scroll="{x: 1800}"
+              >
+            </edit-table>
+          </a-tab-pane>
+          <a-tab-pane :key="2" forceRender style="background-color: #fff;padding-top:20px;">
+            <span slot="tab">
+              <a-icon type="code"></a-icon>
+              3.生成信息
+            </span>
 
-        </edit-table>
-
-        <a-form-model ref="onlineScheme" :model="formScheme" :rules="schemeRules" v-bind="layout" v-show="current == 2">
-          <a-row :gutter="formGutter">
-            <a-col :span="rowSpan">
-              <a-form-model-item label="生成模板" prop="template">
-                <a-select v-model="formScheme.template" placeholder="请选择生成模板">
-                  <a-select-option value="standard">标准模板</a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="生成作者" prop="author">
-                <a-input v-model="formScheme.author" placeholder="请输入生成作者" :disabled="flag.view"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="生成包名" prop="packageName">
-                <a-input v-model="formScheme.packageName" placeholder="请输入生成包路径" :disabled="flag.view"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="所属模块" prop="moduleId">
-                <j-select v-model="formScheme.moduleId" placeholder="请选择所属模块" :url="url.findModuleList"></j-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="生成功能名" prop="funName">
-                <a-input v-model="formScheme.funName" placeholder="请输入生成功能名" :disabled="flag.view"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="表单风格" prop="formStyle">
-                <j-dict-select v-model="formScheme.formStyle" placeholder="请选择表单风格" dictCode="GEN_FORM_STYLE"></j-dict-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="是否显示复选框" prop="showCheckbox">
-                <j-dict-select v-model="formScheme.showCheckbox" dictCode="YES_NO" type="radio"></j-dict-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="是否分页" prop="enablePagination">
-                <j-dict-select v-model="formScheme.enablePagination" dictCode="YES_NO" type="radio"></j-dict-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="是否生成API文档" prop="enableSwagger">
-                <j-dict-select v-model="formScheme.enableSwagger" dictCode="YES_NO" type="radio"></j-dict-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="rowSpan">
-              <a-form-model-item label="服务器端校验" prop="enableServerValid">
-                <j-dict-select v-model="formScheme.enableServerValid" dictCode="YES_NO" type="radio"></j-dict-select>
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </a-form-model>
+            <scheme-form
+              ref="onlineScheme"
+              :layout="layout"
+              :rowSpan="rowSpan"
+              :formScheme="formScheme"
+              :formGutter="formGutter"
+              >
+            </scheme-form>
+          </a-tab-pane>
+        </a-tabs>
       </div>
+        
     </j-spin>
 
     <template slot="footer">
@@ -145,15 +84,16 @@
 <script>
 import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
 import { getAction, postAction } from '@/api/manage'
-import {EditTable, FileSelector, JSelect, JDictSelect, JSpin} from '@/components'
+import {EditTable, JSpin} from '@/components'
+import TableForm from './form/TableForm'
+import SchemeForm from './form/SchemeForm'
 
 export default {
   components:{
     EditTable,
-    FileSelector,
-    JSelect,
-    JDictSelect,
-    JSpin
+    JSpin,
+    TableForm,
+    SchemeForm
   },
   mixins: [JackerooFromMixins],
   data(){
@@ -169,7 +109,9 @@ export default {
         className: '',
         idStrategy: null,
         delStrategy: null,
-        logicField: ''
+        logicField: '',
+        sortColumn: '',
+        sortType: undefined
       },
       formScheme: {
         id: null,
@@ -178,63 +120,10 @@ export default {
         showCheckbox: null,
         formStyle: null,
         author: '',
-        outputDir: '',
         template: null,
         enablePagination: null,
         enableSwagger: null,
         enableServerValid: null
-      },
-      tableRules:{
-        tableName: [
-          {required: true, message: '请输入表名'},
-        ],
-        comment: [
-          {required: true, message: '请输入表说明'}, 
-        ],
-        className: [
-          {required: true, message: '请输入实体类名称'}, 
-        ],
-        idStrategy: [
-          {required: true, message: '请选择主键策略'}, 
-        ],
-        delStrategy: [
-          {required: true, message: '请删除策略'}, 
-        ],
-        logicField: [
-          {required: true, message: '请选择逻辑删字段'}
-        ]
-      },
-      schemeRules: {
-        template: [
-          {required: true, message: '请选择生成模板'}
-        ],
-        author: [
-          {required: true, message: '请填写生成作者'},
-          {max: 50, message: '长度需要在0到50之间'}
-        ],
-        packageName: [
-          {required: true, message: '请填写生成包名'},
-          {max: 100, message: '长度需要在0到100之间'}
-        ],
-        moduleId: [
-          {required: true, message: '请选择所属模块'}
-        ],
-        outputDir: [
-          {required: true, message: '请填写代码生成路径'},
-          {max: 30, message: '长度需要在0到30之间'}
-        ],
-        showCheckbox: [
-          {required: true, message: '请选择是否显示复选框'}
-        ],
-        enablePagination: [
-          {required: true, message: '请选择是否分页'}
-        ],
-        enableSwagger: [
-          {required: true, message: '请选择是否生成API文档'}
-        ],
-        enableServerValid: [
-          {required: true, message: '请选择是否开启服务器端校验'}
-        ]
       },
       dataSource: [],
       columns: [
@@ -251,7 +140,9 @@ export default {
           title: '列名',
           width: 110,
           fixed: 'left',
-          type: 'text'
+          type: 'text',
+          ellipsis: true,
+          length: 20
         },
         {
           dataIndex: 'dbFieldDesc',
@@ -370,7 +261,6 @@ export default {
       ],
       url: {
         detail: '/online/generate/findTableDetailInfo',
-        findModuleList: '/system/module/allList',
         get: '/online/table/',
         save: '/online/generate/save',
       },
@@ -430,7 +320,7 @@ export default {
 
                   console.log('formData', formData)
 
-                  postAction('/online/generate/save', formData).then(result => {
+                  postAction(this.url.save, formData).then(result => {
                     if(!result.code){
                       this.$message.success('保存成功')
                       if(generate){
@@ -475,9 +365,8 @@ export default {
 
 <style lang="less" scoped>
 .generate-content{
-  background-color: #ffffff;
-  padding: 20px;
-  margin: 40px 0;
+  background-color: #f0f2f5;
+  padding: 10px;
 }
 </style>
 

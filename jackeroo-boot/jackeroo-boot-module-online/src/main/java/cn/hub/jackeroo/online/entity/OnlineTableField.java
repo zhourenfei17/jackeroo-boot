@@ -134,6 +134,19 @@ public class OnlineTableField extends BaseEntity<OnlineTableField> {
     private Integer enableSort;
 
     /**
+     * 乐观锁
+     */
+    @Min(0)
+    @Max(1)
+    private Integer locker;
+
+    /**
+     * 填充策略
+     */
+    @Length(max = 20)
+    private String fillStrategy;
+
+    /**
      * 查询方式
      */
     @NotBlank

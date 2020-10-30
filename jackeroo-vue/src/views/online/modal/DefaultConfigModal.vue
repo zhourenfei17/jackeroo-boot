@@ -5,7 +5,7 @@
     :width="width"
     :visible="visible"
     :fullscreen.sync="fullscreen"
-    :switchFullscreen="showFullscreenBtn"
+    :switchFullscreen="false"
     :confirmLoading="loading"
     :autoHeight="false"
     maxHeight="70vh"
@@ -82,7 +82,7 @@
         </a-row>
       </a-form-model>
 
-      <a-alert message="系统公共数据库列配置，如果数据库表包含以下列字段，则该列字段默认采用以下配置" type="info" style="margin-top:8px;"></a-alert>
+      <a-alert message="公共字段配置，如果数据库表包含以下列字段，则该列字段默认采用以下配置" type="info" style="margin-top:8px;"></a-alert>
 
       <data-card :icon="false" :marginTop="8">
         <template slot="toolbar">
@@ -101,6 +101,14 @@
 
           <span slot="dbFieldNameSlot">
             列名 <a-tooltip title="支持【数据库字段】或者【java实体类字段】"><a-icon type="question-circle"></a-icon></a-tooltip>
+          </span>
+
+          <span slot="lockerSlot">
+            乐观锁 <a-tooltip title="仅公共字段可配置该项"><a-icon type="exclamation-circle" style="color: red;"></a-icon></a-tooltip>
+          </span>
+
+          <span slot="fillStrategySlot">
+            填充策略 <a-tooltip title="仅公共字段可配置该项，请参考MyBatis-Plus自动填充功能"><a-icon type="exclamation-circle" style="color: red;"></a-icon></a-tooltip>
           </span>
         </edit-table>
       </data-card>
@@ -124,7 +132,7 @@ export default {
     return {
       title: '默认配置项',
       tableName: 'online_default_config',
-      width: '60vw',
+      width: '1000px',
       // 表单列数
       formCol: 2,
       layout: {
@@ -147,14 +155,14 @@ export default {
       columns:[
         {
           title: '#',
-          width: 50,
+          width: 40,
           customRender: (text, record, index) => {
             return index + 1
           }
         },
         {
           dataIndex: 'dbFieldName',
-          width: 160,
+          width: 150,
           type: 'input',
           slots: {title: 'dbFieldNameSlot'},
           rule: [{required: true, message: '请输入列名'}, {max: 30, message: '长度需要在0到30之间'}]
@@ -162,36 +170,36 @@ export default {
         {
           dataIndex: 'enableList',
           title: '列表',
-          width: 60,
+          width: 50,
           type: 'checkbox'
         },
         {
           dataIndex: 'enableForm',
           title: '表单',
-          width: 60,
+          width: 50,
           type: 'checkbox'
         },
         {
           dataIndex: 'enableQuery',
           title: '查询',
-          width: 60,
+          width: 50,
           type: 'checkbox'
         },
         {
           dataIndex: 'enableSort',
           title: '排序',
-          width: 60,
+          width: 50,
           type: 'checkbox'
         },
         {
           dataIndex: 'locker',
-          title: '乐观锁',
-          width: 60,
+          slots: {title: 'lockerSlot'},
+          width: 80,
           type: 'checkbox'
         },
         {
           dataIndex: 'fillStrategy',
-          title: '填充策略',
+          slots: {title: 'fillStrategySlot'},
           width: 140,
           type: 'select',
           dictCode: 'GEN_FILL_STRATEGY'

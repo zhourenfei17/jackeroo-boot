@@ -77,7 +77,8 @@
           </j-dict-code-select>
 
           <template v-else-if="col.type != 'slot'">
-            {{text}}
+            <ellipsis v-if="col.length" tooltip :length="col.length">{{text}}</ellipsis>
+            <span v-else>{{text}}</span>
           </template>
         </a-form-model-item>
           
@@ -94,12 +95,14 @@
 import JDictSelect from '@/components/jackeroo/Selector/Select'
 import JDictCodeSelect from '@/components/jackeroo/Selector/DictCodeSelector/DictCodeSelect';
 import {getAction} from '@/api/manage'
+import {Ellipsis} from '@/components';
 
 export default {
   name: 'EditTable',
   components: {
     JDictSelect,
-    JDictCodeSelect
+    JDictCodeSelect,
+    Ellipsis
   },
   props:{
     // 列信息

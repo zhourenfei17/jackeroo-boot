@@ -119,6 +119,15 @@ public class OnlineGenerateService {
             }else{
                 table.setDelStrategy(OnlineTable.DEL_STRATEGY_DATABASE);
             }
+            // 默认排序字段
+            OnlineTableField sortField = columnList.stream()
+                    .filter(item -> item.getDbFieldName().equals(defaultConfig.getSortColumn()) || item.getEntityFieldName().equals(defaultConfig.getSortColumn()))
+                    .findFirst()
+                    .orElse(null);
+            if(sortField != null){
+                table.setSortColumn(sortField.getDbFieldName());
+                table.setSortType(defaultConfig.getSortType());
+            }
 
             map.put("table", table);
 
@@ -163,6 +172,8 @@ public class OnlineGenerateService {
                 field.setEnableSort(configColumn.getEnableSort());
                 field.setQueryType(configColumn.getQueryType());
                 field.setFormType(configColumn.getFormType());
+                field.setLocker(configColumn.getLocker());
+                field.setFillStrategy(configColumn.getFillStrategy());
             }else{
                 field.setEnableList(Constant.BOOLEAN_YES);
                 field.setEnableForm(Constant.BOOLEAN_YES);

@@ -81,6 +81,18 @@ public class OnlineTable extends BaseEntity<OnlineTable> {
     private String logicField;
 
     /**
+     * 默认排序字段
+     */
+    @Length(max = 50)
+    private String sortColumn;
+
+    /**
+     * 排序方式
+     */
+    @Length(max = 5)
+    private String sortType;
+
+    /**
      * 创建人
      */
     @Null
