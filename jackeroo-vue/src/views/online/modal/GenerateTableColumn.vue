@@ -63,6 +63,12 @@
               >
             </scheme-form>
           </a-tab-pane>
+
+          <a-tooltip slot="tabBarExtraContent" v-show="current == 1" title="调整字段的排序，将影响列表和表单的显示顺序">
+            <a-button icon="drag" type="primary">
+              调整顺序
+            </a-button>
+          </a-tooltip>
         </a-tabs>
       </div>
         
