@@ -38,6 +38,7 @@ import EditTable from '@/components/jackeroo/EditTable'
 import FileSelector from '@/components/jackeroo/Selector/FileSelector'
 import JSelect from '@/components/jackeroo/Selector/Select'
 import JDictSelect from '@/components/jackeroo/Selector/DictSelector'
+import DragTable from '@/components/jackeroo/DragTable'
 
 export {
   AvatarList,
@@ -75,5 +76,6 @@ export {
   EditTable,
   FileSelector,
   JSelect,
-  JDictSelect
+  JDictSelect,
+  DragTable
 }

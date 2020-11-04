@@ -65,7 +65,7 @@
           </a-tab-pane>
 
           <a-tooltip slot="tabBarExtraContent" v-show="current == 1" title="调整字段的排序，将影响列表和表单的显示顺序">
-            <a-button icon="drag" type="primary">
+            <a-button icon="drag" type="primary" @click="handleSortColumn">
               调整顺序
             </a-button>
           </a-tooltip>
@@ -73,6 +73,8 @@
       </div>
         
     </j-spin>
+
+    <draggle-table-column ref="draggleTableColumn" @ok="handleSortColumnOk"></draggle-table-column>
 
     <template slot="footer">
       <span style="padding-right:50px;">
@@ -93,13 +95,15 @@ import { getAction, postAction } from '@/api/manage'
 import {EditTable, JSpin} from '@/components'
 import TableForm from './form/TableForm'
 import SchemeForm from './form/SchemeForm'
+import DraggleTableColumn from './DraggleTableColumn'
 
 export default {
   components:{
     EditTable,
     JSpin,
     TableForm,
-    SchemeForm
+    SchemeForm,
+    DraggleTableColumn
   },
   mixins: [JackerooFromMixins],
   data(){
@@ -153,7 +157,7 @@ export default {
         {
           dataIndex: 'dbFieldDesc',
           title: '列描述',
-          width: 120,
+          width: 150,
           fixed: 'left',
           type: 'input',
           rule: [{required: true, message: '请填写列描述'},{max: 50, message: '长度需要在0到50之间'}]
@@ -350,6 +354,21 @@ export default {
           this.current = 0
         }
       })
+    },
+    syncDataSource(){
+      this.$refs.onlineTableField.clearValidate()
+      const data = this.$refs.onlineTableField.getData()
+      this.dataSource = data
+    },
+    handleSortColumn(){
+      this.syncDataSource()
+      this.$refs.draggleTableColumn.edit(this.dataSource)
+    },
+    handleSortColumnOk(data){
+      for(let i = 0; i < data.length; i++){
+        data.sort = i + 1
+      }
+      this.dataSource = data
     },
     cancel(){
       this.visible = false
