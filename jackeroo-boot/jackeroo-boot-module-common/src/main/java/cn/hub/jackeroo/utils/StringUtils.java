@@ -132,4 +132,15 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
+    /**
+     * 首字母小写
+     * @param s
+     * @return
+     */
+    public static String toUnderFirstLetter(String s){
+        if(StringUtils.isBlank(s)){
+            return s;
+        }
+        return s.substring(0, 1).toLowerCase() + s.substring(1);
+    }
 }

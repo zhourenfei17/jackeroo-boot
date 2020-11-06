@@ -210,15 +210,6 @@ public class OnlineGenerateService {
         return javaType;
     }
 
-    private boolean existPublicColumn(OnlineTableField field){
-        return field.getDbFieldName().equalsIgnoreCase("create_by") ||
-                field.getDbFieldName().equalsIgnoreCase("create_time") ||
-                field.getDbFieldName().equalsIgnoreCase("update_by") ||
-                field.getDbFieldName().equalsIgnoreCase("update_time") ||
-                field.getDbFieldName().equalsIgnoreCase("del_flag");
-    }
-
-
     @Transactional
     public Long save(GenerateTableDetail detail){
         tableService.saveOrUpdate(detail.getOnlineTable());
@@ -270,17 +261,18 @@ public class OnlineGenerateService {
         dataMap.put("columnList", fieldList);
         dataMap.put("module", module);
         dataMap.put("entityName", table.getClassName());
-        dataMap.put("varName", StringUtils.toCamelCase(table.getClassName()));
+        dataMap.put("varName", StringUtils.toUnderFirstLetter(table.getClassName()));
+        dataMap.put("pathName", StringUtils.toUnderAndJoinSeparator(table.getClassName(), "/"));
         dataMap.put("componentName", StringUtils.toUnderAndJoinSeparator(table.getClassName(), Constant.SPLIT_MIDDLE_LINE));
         dataMap.put("createDate", DateUtils.getDate("yyyy-MM-dd"));
 
-        boolean hasQuery = false;
-        for (OnlineTableField field : fieldList) {
-            if(field.getEnableQuery() == Constant.BOOLEAN_YES){
-                hasQuery = true;
-            }
+        analysisColumnField(fieldList, dataMap);
+
+        if(table.getDelStrategy() == OnlineTable.DEL_STRATEGY_LOGIC){
+            dataMap.put("existLogic", true);
+        }else{
+            dataMap.put("existLogic", false);
         }
-        dataMap.put("hasQuery", hasQuery);
 
         String outRootPath = FileUtils.path(outputDir
                 + File.separator + generateConfig.getSourceRootPackage().replace(Constant.SPLIT_DOT, Constant.SPLIT_SLASH)
@@ -295,6 +287,76 @@ public class OnlineGenerateService {
             }
         }
         log.debug("======================================= 生成代码结束 =======================================");
+    }
+
+    private void analysisColumnField(List<OnlineTableField> fieldList, Map<String, Object> dataMap){
+        boolean existLength = false, existPrimaryKey = false, existUnique = false, existLocalDateTime = false, existLocalDate = false,
+                existBigDecimal = false, existFieldFill = false, existRange = false, existNotEmpty = false, existLocker = false,
+                existQuery = false, existCodeNum = false, existEmail = false, existUrl = false, existDigits = false;
+
+        for (OnlineTableField field : fieldList) {
+            if("String".equals(field.getEntityFieldType())){
+                existLength = true;
+                if(field.getFormRequired() == Constant.BOOLEAN_YES){
+                    existNotEmpty = true;
+                }
+            }else if("LocalDateTime".equals(field.getEntityFieldType())){
+                existLocalDateTime = true;
+            }else if("LocalDate".equals(field.getEntityFieldType())){
+                existLocalDate = true;
+            }else if("BigDecimal".equals(field.getEntityFieldType())){
+                existBigDecimal = true;
+                existDigits = true;
+            }else if("Double".equals(field.getEntityFieldType()) || "Float".equals(field.getEntityFieldType())){
+                existDigits = true;
+            }else if("Integer".equals(field.getEntityFieldType()) && field.getDbFieldLength() == 3){
+                existRange = true;
+            }
+            if(field.getPrimaryKey() == Constant.BOOLEAN_YES){
+                existPrimaryKey = true;
+            }
+
+            if(StringUtils.isNotBlank(field.getFormValidator())){
+                if(field.getFormValidator().contains("validUnique")){
+                    existUnique = true;
+                }else if(field.getFormValidator().contains("validMobile") ||
+                    field.getFormValidator().contains("validPhone") ||
+                    field.getFormValidator().contains("validIdNumber") ||
+                    field.getFormValidator().contains("validPostCode")){
+                    existCodeNum = true;
+                }else if(field.getFormValidator().contains("validEmail")){
+                    existEmail = true;
+                }else if(field.getFormValidator().contains("validWebsite")){
+                    existUrl = true;
+                }
+            }
+
+            if(StringUtils.isNotEmpty(field.getFillStrategy())){
+                existFieldFill = true;
+            }
+            if(field.getLocker() == Constant.BOOLEAN_YES){
+                existLocker = true;
+            }
+            if(field.getEnableQuery() == Constant.BOOLEAN_YES){
+                existQuery = true;
+            }
+        }
+
+        dataMap.put("existLength", existLength);
+        dataMap.put("existPrimaryKey", existPrimaryKey);
+        dataMap.put("existUnique", existUnique);
+        dataMap.put("existLocalDateTime", existLocalDateTime);
+        dataMap.put("existLocalDate", existLocalDate);
+        dataMap.put("existBigDecimal", existBigDecimal);
+        dataMap.put("existFieldFill", existFieldFill);
+        dataMap.put("existRange", existRange);
+        dataMap.put("existNotEmpty", existNotEmpty);
+        dataMap.put("existLocker", existLocker);
+        dataMap.put("existQuery", existQuery);
+        dataMap.put("existCodeNum", existCodeNum);
+        dataMap.put("existEmail", existEmail);
+        dataMap.put("existUrl", existUrl);
+        dataMap.put("existDigits", existDigits);
     }
 
     /**

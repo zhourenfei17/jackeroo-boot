@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <#if hasQuery>
+  <div><#if existQuery>
     <search-card :enter="refreshData">
         <#list columnList as column>
             <#if column.enableQuery == 1>
@@ -22,13 +21,12 @@
             <a-button type="primary" @click="refreshData(true)">查询</a-button>
             <a-button style="margin-left: 8px" @click="reset">重置</a-button>
         </template>
-    </search-card>
-    </#if>
+    </search-card></#if>
     <data-card
-        :reload="refreshData"
-        :tableSize.sync="tableSize"
-        :columns.sync="columns"
-        :tableAlign="tableAlign">
+      :reload="refreshData"
+      :tableSize.sync="tableSize"
+      :columns.sync="columns"
+      :tableAlign="tableAlign">
 
       <template slot="toolbar">
         <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
@@ -112,8 +110,8 @@ export default {
         }
       ],
       url: {
-        list: '/${module.code}/${varName}/list',
-        delete: '/${module.code}/${varName}/delete'
+        list: '/${module.code}/${pathName}/list',
+        delete: '/${module.code}/${pathName}/delete'
       },
     }
   },
