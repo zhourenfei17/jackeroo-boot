@@ -37,7 +37,7 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          if(response.code == 0){
+          if(!response.code){
             storage.set(ACCESS_TOKEN, response.data, 7 * 24 * 60 * 60 * 1000)
             commit('SET_TOKEN', response.data)
             resolve(response)

@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       firstLoad: true,
-      loadingImg: require('../../../assets/loading_car.gif'),
+      loadingImg: require('../../../../assets/loading_car.gif'),
       spinClassName: '',
       loading: true
     }

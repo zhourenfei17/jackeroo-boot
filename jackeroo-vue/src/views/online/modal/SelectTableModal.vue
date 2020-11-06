@@ -49,7 +49,7 @@
 <script>
 import { STable, SearchCard } from '@/components'
 import { getAction, postAction, httpAction } from '@/api/manage'
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 
 export default {
@@ -57,7 +57,7 @@ export default {
     STable,
     SearchCard
   },
-  mixins: [JackerooFromMixins, JackerooListMixins],
+  mixins: [JackerooFormMixins, JackerooListMixins],
   data(){
     return {
       title: '选择数据库业务表',

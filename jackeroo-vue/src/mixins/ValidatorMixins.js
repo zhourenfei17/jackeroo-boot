@@ -34,6 +34,33 @@ export const ValidatorMixins = {
         callback('请输入正确的邮政编码')
       }
     },
+    // 验证网址
+    validUrl(rule, value, callback){
+      let reg = "^((https|http|ftp|rtsp|mms)?://)"
+        + "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?" //ftp的user@
+        + "(([0-9]{1,3}\.){3}[0-9]{1,3}" // IP形式的URL- 199.194.52.184
+        + "|" // 允许IP和DOMAIN（域名）
+        + "([0-9a-z_!~*'()-]+\.)*" // 域名- www.
+        + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\." // 二级域名
+        + "[a-z]{2,6})" // first level domain- .com or .museum
+        + "(:[0-9]{1,4})?" // 端口- :80
+        + "((/?)|" // a slash isn't required if there is no file name
+        + "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$"
+      
+      if(value && new RegExp(reg).test(value)){
+        callback()
+      }else{
+        callback('请输入正确的网址')
+      }
+    },
+    // 验证邮箱
+    validEmail(rule, value, callback){
+      if(value && /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/.test(value)){
+        callback()
+      }else{
+        callback('请填写正确的邮箱地址')
+      }
+    },
     // 唯一性校验
     /**
      * rule 参数详解 
@@ -64,7 +91,7 @@ export const ValidatorMixins = {
         }
       }
       validtedUnique(params).then((res) => {
-        if(res.code == 0){
+        if(!res.code){
           if (res.data) {
             callback()
           } else {

@@ -39,11 +39,11 @@
 </template>
 
 <script>
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import { getAction, httpAction } from '@/api/manage'
 
 export default {
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   data(){
     return {
       title: '权限信息',

@@ -141,7 +141,7 @@ export default {
         onOk: () => {
           this.$loading.show()
           putAction(this.url.setDefault, {id: record.id}).then(res => {
-            if(res.code == 0){
+            if(!res.code){
               this.$message.success('操作成功')
               this.refreshData()
             }
@@ -159,7 +159,7 @@ export default {
         onOk: () => {
           this.$loading.show()
           putAction(this.url.disable, {id: record.id}).then(res => {
-            if(res.code == 0){
+            if(!res.code){
               this.$message.success('操作成功')
               this.refreshData()
             }
@@ -177,7 +177,7 @@ export default {
         onOk: () => {
           this.$loading.show()
           putAction(this.url.enable, {id: record.id}).then(res => {
-            if(res.code == 0){
+            if(!res.code){
               this.$message.success('操作成功')
               this.refreshData()
             }

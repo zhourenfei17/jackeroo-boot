@@ -52,7 +52,7 @@ export const JackerooListMixins = {
         }
         return getAction(this.url.list, requestParameters)
           .then(res => {
-            if(res.code == 0){
+            if(!res.code){
               return res.data
             }else{
               return undefined

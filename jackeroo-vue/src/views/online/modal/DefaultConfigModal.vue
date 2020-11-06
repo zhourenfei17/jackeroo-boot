@@ -118,11 +118,11 @@
 
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import { JDictSelect, EditTable, DataCard } from '@/components'
 
 export default {
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   components: {
     JDictSelect,
     EditTable,

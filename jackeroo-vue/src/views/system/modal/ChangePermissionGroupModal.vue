@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import {JSelect} from '@/components'
 
 export default {
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   components:{
     JSelect
   },

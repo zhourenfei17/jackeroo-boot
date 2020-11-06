@@ -51,11 +51,11 @@
 </template>
 
 <script>
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import { getAction, httpAction } from '@/api/manage'
 
 export default {
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   data(){
     return {
       title: '权限信息',
@@ -109,7 +109,7 @@ export default {
 
           this.$loading.show()
           httpAction(this.requestUrl, formData, this.requestMethod).then(result => {
-            if(result.code === 0){
+            if(!result.code){
               this.$message.success('保存成功！')
               this.cancel()
               this.$emit('ok')

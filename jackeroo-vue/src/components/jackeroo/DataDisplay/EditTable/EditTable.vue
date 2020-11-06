@@ -92,8 +92,8 @@
 </template>
 
 <script>
-import JDictSelect from '@/components/jackeroo/Selector/Select'
-import JDictCodeSelect from '@/components/jackeroo/Selector/DictCodeSelector/DictCodeSelect';
+import JDictSelect from '@/components/jackeroo/Form/Selector/Select'
+import JDictCodeSelect from '@/components/jackeroo/Form/Selector/DictCodeSelector/DictCodeSelect'
 import {getAction} from '@/api/manage'
 import {Ellipsis} from '@/components';
 

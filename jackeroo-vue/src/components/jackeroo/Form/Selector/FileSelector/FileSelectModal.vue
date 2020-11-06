@@ -24,10 +24,10 @@
 
 <script>
 import { getAction } from '@/api/manage'
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 
 export default {
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   props:{
     // 仅可以选择目录
     onlyDirectory: {

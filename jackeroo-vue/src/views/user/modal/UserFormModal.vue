@@ -77,14 +77,14 @@
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
 import md5 from 'md5'
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import {JSelect} from '@/components'
 
 export default {
   components: {
     JSelect
   },
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   data(){
     return {
       title: '用户信息',
@@ -123,7 +123,7 @@ export default {
           }, trigger: 'blur'}
         ],
         roleId: [
-          {required: true, message: '请 选择角色'}
+          {required: true, message: '请选择角色'}
         ],
         gender: [],
         phone: [
@@ -170,7 +170,7 @@ export default {
 
           this.$loading.show()
           httpAction(this.requestUrl, formData, this.requestMethod).then(result => {
-            if(result.code === 0){
+            if(!result.code){
               this.$message.success('保存成功！')
               this.md5Flag = false
               this.cancel()

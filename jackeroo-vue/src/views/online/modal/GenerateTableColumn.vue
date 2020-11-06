@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import { getAction, postAction } from '@/api/manage'
 import {EditTable, JSpin} from '@/components'
 import TableForm from './form/TableForm'
@@ -105,7 +105,7 @@ export default {
     SchemeForm,
     DraggleTableColumn
   },
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   data(){
     return {
       title: '生成代码',

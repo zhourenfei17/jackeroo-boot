@@ -1,7 +1,7 @@
 import {ValidatorMixins} from './ValidatorMixins'
 import { httpAction } from '@/api/manage'
 
-export const JackerooFromMixins = {
+export const JackerooFormMixins = {
   mixins: [ValidatorMixins],
   data(){
     return {

@@ -152,7 +152,7 @@ export default {
   methods: {
     loadUrl(){
       getAction(this.url, this.param || {}).then(res => {
-        if(res.code == 0){
+        if(!res.code){
           this.data = res.data
 
           if(res.data.length > 0){

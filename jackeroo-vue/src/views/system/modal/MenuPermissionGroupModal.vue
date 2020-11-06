@@ -56,10 +56,10 @@
 
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 
 export default {
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   data(){
     return {
       title: '用户信息',
@@ -109,7 +109,7 @@ export default {
 
           this.$loading.show()
           httpAction(this.requestUrl, formData, this.requestMethod).then(result => {
-            if(result.code === 0){
+            if(!result.code){
               this.$message.success('保存成功！')
               this.cancel()
               this.$emit('ok')

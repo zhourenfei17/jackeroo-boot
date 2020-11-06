@@ -33,7 +33,7 @@
 
 <script>
 import {JDrawer, JSpin, DragTable} from '@/components'
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 
 export default {
   components: {
@@ -41,7 +41,7 @@ export default {
     JSpin,
     DragTable
   },
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   data() {
     return {
       title: '数据列排序',

@@ -142,7 +142,7 @@ export default {
     loadDataSource(){
       this.dataSource = []
       getAction(this.url.list, this.queryParam).then(res => {
-        if(res.code == 0){
+        if(!res.code){
           this.dataSource = res.data
         }
       })
@@ -180,7 +180,7 @@ export default {
         onOk: () => {
           this.$loading.show()
           deleteAction(this.url.delete, {id: record.id}).then(res => {
-            if(res.code === 0){
+            if(!res.code){
               this.$message.success('操作成功')
               this.loadDataSource()
             }

@@ -130,7 +130,7 @@ export default {
         onOk: () => {
           this.$loading.show()
           deleteAction(this.url.delete, {id: record.id}).then(res => {
-            if(res.code === 0){
+            if(!res.code){
               this.$message.success('操作成功')
               this.refreshData()
             }

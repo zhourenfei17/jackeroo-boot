@@ -42,10 +42,10 @@
 
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 
 export default {
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   data(){
     return {
       title: '字典项信息',

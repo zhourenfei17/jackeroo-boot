@@ -37,11 +37,11 @@
 
 <script>
 import { postAction } from '@/api/manage'
-import { JackerooFromMixins } from '@/mixins/JackerooFormMixins'
+import { JackerooFormMixins } from '@/mixins/JackerooFormMixins'
 import { FileSelector, JDictSelect } from '@/components'
 
 export default {
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   components:{
     FileSelector,
     JDictSelect

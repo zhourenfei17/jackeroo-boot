@@ -152,7 +152,7 @@
 
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import {IconSelector, JDrawer} from '@/components'
 import {TreeSelect} from 'ant-design-vue'
 import MenuAuthListModal from './MenuAuthListModal'
@@ -164,7 +164,7 @@ export default {
     TreeSelect,
     MenuAuthListModal
   },
-  mixins: [JackerooFromMixins],
+  mixins: [JackerooFormMixins],
   data(){
     return {
       title: '菜单信息',
@@ -324,7 +324,7 @@ export default {
 
           this.$loading.show()
           httpAction(this.requestUrl, formData, this.requestMethod).then(result => {
-            if(result.code === 0){
+            if(!result.code){
               this.$message.success('保存成功！')
               this.cancel()
               this.loadTreeData()
@@ -362,7 +362,7 @@ export default {
     },
     loadTreeData(){
       getAction(this.url.getTreeSelect).then(res => {
-        if(res.code == 0){
+        if(!res.code){
           const treeData = []
           treeData.push(res.data)
           this.treeData = treeData

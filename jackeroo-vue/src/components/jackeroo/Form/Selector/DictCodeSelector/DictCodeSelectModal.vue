@@ -53,13 +53,13 @@
 </template>
 
 <script>
-import {JackerooFromMixins} from '@/mixins/JackerooFormMixins'
+import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { STable, SearchCard } from '@/components'
 
 export default {
   name: 'JDictCodeSelectModal',
-  mixins: [JackerooFromMixins, JackerooListMixins],
+  mixins: [JackerooFormMixins, JackerooListMixins],
   components: {
     STable,
     SearchCard
