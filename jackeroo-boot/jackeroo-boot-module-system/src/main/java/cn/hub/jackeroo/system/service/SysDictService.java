@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.system.service;
 
+import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.system.entity.SysDict;
 import cn.hub.jackeroo.system.mapper.SysDictMapper;
 import cn.hub.jackeroo.vo.PageParam;
@@ -94,6 +95,9 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
     @Transactional
     public void updateDict(SysDict dict){
         SysDict oldDict = super.getById(dict.getId());
+        if(oldDict.getCategory() == SysDict.CATEGORY_SYSTEM){
+            throw new JackerooException("系统字典不可修改");
+        }
         // 如果字典code发生变化，同步修改字典项的code
         if(!dict.getDictCode().equals(oldDict.getDictCode())){
             LambdaUpdateWrapper<SysDict> update = new LambdaUpdateWrapper<>();
@@ -102,6 +106,20 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
             update.set(SysDict::getDictCode, dict.getDictCode());
 
             super.update(update);
+        }
+
+        super.updateById(dict);
+    }
+
+    /**
+     * 修改字典项
+     * @param dict
+     */
+    @Transactional
+    public void updateDictItem(SysDict dict){
+        SysDict oldDict = super.getById(dict.getId());
+        if(oldDict.getCategory() == SysDict.CATEGORY_SYSTEM){
+            throw new JackerooException("系统字典不可修改");
         }
 
         super.updateById(dict);
@@ -130,22 +148,24 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
     /**
      * 删除字典信息或字典项
      * @param id
-     * @param type
      */
     @Transactional
-    public void delete(String id, int type){
+    public void delete(String id){
+        SysDict dict = super.getById(id);
+        if(dict == null){
+            return;
+        }
+        if(dict.getCategory() == SysDict.CATEGORY_SYSTEM){
+            throw new JackerooException("系统字典无法删除");
+        }
         LambdaUpdateWrapper<SysDict> query = new LambdaUpdateWrapper<>();
-        if(type == SysDict.TYPE_DICT){
-            SysDict dict = super.getById(id);
-            if(dict == null){
-                return;
-            }
+        if(dict.getType() == SysDict.TYPE_DICT){
             // 除了要删除字典信息，还要同时删除字典项
             query.eq(SysDict::getDictCode, dict.getDictCode());
             super.remove(query);
         }else{
             query.eq(SysDict::getId, id);
-            query.eq(SysDict::getType, type);
+            query.eq(SysDict::getType, dict.getType());
 
             super.remove(query);
         }

@@ -66,6 +66,16 @@ public class SysModuleController extends BaseController {
     }
 
     /**
+     * 获取当前排序号
+     * @return
+     */
+    @GetMapping("getMaxSort")
+    @ApiOperation("获取当前排序号")
+    public Result<Integer> getMaxSort(){
+        return ok(service.getMaxSort());
+    }
+
+    /**
      * 获取模块信息详情
      * @param id
      * @return

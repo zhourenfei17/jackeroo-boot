@@ -14,6 +14,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -83,6 +84,13 @@ public class SysDict extends BaseEntity<SysDict> {
     private Integer type;
 
     /**
+     * 分类，0：系统字典，1：自定义
+     */
+    @NotNull
+    @Range(max = 1)
+    private Integer category;
+
+    /**
      * 排序
      */
     @Min(0)
@@ -124,4 +132,6 @@ public class SysDict extends BaseEntity<SysDict> {
 
     public static final int TYPE_DICT = 0;
     public static final int TYPE_DICT_ITEM = 1;
+
+    public static final int CATEGORY_SYSTEM = 0;
 }

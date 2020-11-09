@@ -10,6 +10,7 @@
         a.dict_code as "dictCode",
         a.dict_name as "dictName",
         a.type as "type",
+        a.category as "category",
         a.sort as "sort",
         a.remark as "remark",
         a.create_by as "createBy",
