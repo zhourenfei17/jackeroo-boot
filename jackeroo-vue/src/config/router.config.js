@@ -271,13 +271,13 @@ export const asyncRouterMap = [
           {
             path: '/system/user',
             name: 'UserList',
-            component: () => import('@/views/user/UserList'),
+            component: () => import('@/views/system/UserList'),
             meta: { title: '用户管理', permission: [ 'exception' ] }
           },
           {
             path: '/system/role',
             name: 'RoleList',
-            component: () => import('@/views/user/RoleList'),
+            component: () => import('@/views/system/RoleList'),
             meta: { title: '角色管理', permission: [ 'exception' ] }
           },
           {
