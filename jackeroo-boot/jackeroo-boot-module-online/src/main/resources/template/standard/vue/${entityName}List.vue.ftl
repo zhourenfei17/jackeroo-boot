@@ -22,6 +22,7 @@
             <a-button style="margin-left: 8px" @click="reset">重置</a-button>
         </template>
     </search-card></#if>
+
     <data-card
       :reload="refreshData"
       :tableSize.sync="tableSize"
@@ -50,17 +51,15 @@
         :rowSelection="rowSelection"
         :showPagination="showPagination"
         >
-        <span slot="action" slot-scope="text, record">
-          <template>
-            <action-list>
-              <a @click="handleView(record)">详情</a>
-              <a @click="handleEdit(record)">编辑</a>
-              <action-menu-list>
-                <a @click="handleDelete(record)">删除</a>
-              </action-menu-list>
-            </action-list>
-          </template>
-        </span>
+        <template slot="action" slot-scope="text, record">
+          <action-list>
+            <a @click="handleView(record)">详情</a>
+            <a @click="handleEdit(record)">编辑</a>
+            <action-menu-list>
+              <a @click="handleDelete(record)">删除</a>
+            </action-menu-list>
+          </action-list>
+        </template>
       </s-table>
     </data-card>
 
@@ -69,9 +68,12 @@
 </template>-
 
 <script>
+<#if existQuery>
 import { STable, DataCard, SearchCard } from '@/components'
+<#else>
+import { STable, DataCard } from '@/components'
+</#if>
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
-import { getAction, deleteAction } from '@/api/manage'
 import ${table.className}FormModal from './modal/${table.className}FormModal'
 
 export default {
@@ -79,7 +81,9 @@ export default {
   components: {
     STable,
     DataCard,
+  <#if existQuery>
     SearchCard,
+  </#if>
     ${table.className}FormModal
   },
   mixins:[JackerooListMixins],
@@ -98,7 +102,10 @@ export default {
           title: '${column.dbFieldDesc}',
           dataIndex: '${column.entityFieldName}',
                 <#if column.enableSort == 1>
-          sort: true
+          sort: true,
+                    <#if column.dbFieldName == table.sortColumn>
+          defaultSortOrder: '${(table.sortType == "asc")?string('ascend', 'descend')}'
+                    </#if>
                 </#if>
         },
             </#if>

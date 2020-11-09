@@ -24,14 +24,14 @@
                     </#if>
                 <#elseif column.formType == 'textarea'>
               <a-textarea v-model="form.${column.entityFieldName}" placeholder="请输入${column.dbFieldDesc}" :disabled="flag.view" :autosize="{minRows: 2, maxRows: 6}" allowClear></a-textarea>
-                <#elseif column.formType == 'select || multiple_select || radio || checkbox'>
+                <#elseif column.formType == 'select' || column.formType == 'multiple_select' || column.formType == 'radio' || column.formType == 'checkbox'>
                     <#if column.formDictCode?? && column.formDictCode != ''>
               <j-dict-select
                 v-model="form.${column.entityFieldName}"
                 <#if column.formType != 'radio' && column.formType != 'checkbox'>placeholder="请选择${column.dbFieldDesc}"</#if>
-                dictCode="${column.formDictCode}"
-                <#if column.formType == 'radio' || column.formType == 'checkbox'>type="${column.formType}"</#if>
-                <#if column.formType == 'multiple_select'>multi</#if>
+                dictCode="${column.formDictCode}"<#if column.formType == 'radio' || column.formType == 'checkbox'>
+                type="${column.formType}"</#if><#if column.formType == 'multiple_select'>
+                multi</#if>
                 >
               </j-dict-select>
                     <#elseif column.formType =='select' || column.formType =='multiple_select'>
@@ -40,8 +40,8 @@
                 placeholder="请选择${column.dbFieldDesc}"
                 url=""
                 textField=""
-                valueField=""
-                <#if column.formType == 'multiple_select'>multi</#if>
+                valueField=""<#if column.formType == 'multiple_select'>
+                multi</#if>
                 >
               </j-select>
                     </#if>
@@ -64,12 +64,12 @@ export default {
   data(){
     return {
       title: '${table.comment}',
-      <#if existUnqiue>tableName: '${table.tableName}',</#if>
+      <#if existUnique>tableName: '${table.tableName}',</#if>
       width: '60vw',
       form: {
             <#list columnList as column>
             <#if column.enableForm == 1 || column.primaryKey == 1>
-        ${column.entityFieldName}: null<#if column_index < (columnList?size - 1)>,</#if>
+        ${column.entityFieldName}: undefined<#if column_index < (columnList?size - 1)>,</#if>
             </#if>
             </#list>
       },

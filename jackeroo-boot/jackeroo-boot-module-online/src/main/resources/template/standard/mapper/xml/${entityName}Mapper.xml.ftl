@@ -37,7 +37,9 @@
                 order by ${'$'}{orderBy}
             </when>
             <otherwise>
-                order by a.create_time desc
+                <#if table.sortColumn?? && table.sortColumn != "">
+                order by a.${table.sortColumn} ${table.sortType}
+                </#if>
             </otherwise>
         </choose>
     </select>

@@ -36,6 +36,9 @@
             <if test="type != null">
                 and a.type = #{type}
             </if>
+            <if test="category != null">
+                and a.category = #{category}
+            </if>
         </where>
         <choose>
             <when test="orderBy != null and orderBy != ''">
