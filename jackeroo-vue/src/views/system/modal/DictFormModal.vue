@@ -25,6 +25,11 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
+            <a-form-model-item label="字典类别" prop="category">
+              <j-select v-model="form.category" :list="dictData.category" type="radio" :disabled="flag.view"></j-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="rowSpan">
             <a-form-model-item label="备注" prop="remark">
               <a-input v-model="form.remark" placeholder="请输入备注" :disabled="flag.view"></a-input>
             </a-form-model-item>
@@ -38,19 +43,24 @@
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
 import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
+import {JSelect} from '@/components'
 
 export default {
   mixins: [JackerooFormMixins],
+  components: {
+    JSelect
+  },
   data(){
     return {
       title: '数据字典',
       tableName: 'sys_dict',
       width: '40vw',
       form: {
-        id: null,
-        dictCode: null,
-        dictName: null,
-        remark: null,
+        id: undefined,
+        dictCode: undefined,
+        dictName: undefined,
+        category: undefined,
+        remark: undefined,
       },
       rules: {
         dictCode: [
@@ -62,9 +72,24 @@ export default {
           {required: true, message: '请输入字典名称'},
           {max: 30, message: '长度需要在0到30之间'},
         ],
+        category: [
+          {required: true, message: '请选择字典类别'}
+        ],
         remark: [
           {max: 100, message: '长度需要在0到100之间'},
         ],
+      },
+      dictData: {
+        category: [
+          {
+            id: 0,
+            name: '系统字典'
+          },
+          {
+            id: 1,
+            name: '自定义'
+          }
+        ]
       },
       url: {
         getById: '/system/dict/',

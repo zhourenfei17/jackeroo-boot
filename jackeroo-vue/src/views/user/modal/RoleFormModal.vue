@@ -47,10 +47,10 @@ export default {
       tableName: 'sys_role',
       width: '40vw',
       form: {
-        id: null,
-        roleName: '',
-        roleCode: '',
-        remark: ''
+        id: undefined,
+        roleName: undefined,
+        roleCode: undefined,
+        remark: undefined
       },
       rules: {
         roleName: [

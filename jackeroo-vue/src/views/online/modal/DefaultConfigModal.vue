@@ -140,17 +140,17 @@ export default {
         wrapperCol: {span: 14}
       },
       form: {
-        id: null,
-        sortColumn: null,
-        sortType: null,
+        id: undefined,
+        sortColumn: undefined,
+        sortType: undefined,
         idStrategy: undefined,
-        logicColumn: null,
-        packageName: null,
+        logicColumn: undefined,
+        packageName: undefined,
         formStyle: undefined,
-        showCheckbox: null,
-        enablePagination: null,
-        enableSwagger: null,
-        enableServerValid: null
+        showCheckbox: undefined,
+        enablePagination: undefined,
+        enableSwagger: undefined,
+        enableServerValid: undefined
       },
       columns:[
         {

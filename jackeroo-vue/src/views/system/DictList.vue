@@ -45,13 +45,16 @@
         :rowSelection="rowSelection"
         :showPagination="showPagination"
         >
+        <template slot="categorySlot" slot-scope="text">
+          <j-tag :type="text == 0 ? 'error' : 'info'" :text="text == 0 ? '系统字典' : '自定义'"></j-tag>
+        </template>
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
               <a @click="handleView(record)">详情</a>
-              <a @click="handleEdit(record)">编辑</a>
+              <a @click="handleEdit(record)" v-if="record.category != 0">编辑</a>
               <a @click="handleDictItem(record)">字典项配置</a>
-              <action-menu-list>
+              <action-menu-list v-if="record.category != 0">
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
             </action-list>
@@ -66,7 +69,7 @@
 </template>-
 
 <script>
-import { STable, DataCard, SearchCard } from '@/components'
+import { STable, DataCard, SearchCard, JTag } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { getAction, deleteAction } from '@/api/manage'
 import DictFormModal from './modal/DictFormModal'
@@ -79,7 +82,8 @@ export default {
     DataCard,
     SearchCard,
     DictFormModal,
-    DictItemListModal
+    DictItemListModal,
+    JTag
   },
   mixins:[JackerooListMixins],
   data () {
@@ -100,6 +104,11 @@ export default {
           dataIndex: 'dictCode',
         },
         {
+          title: '字典类别',
+          dataIndex: 'category',
+          scopedSlots: {customRender: 'categorySlot'}
+        },
+        {
           title: '备注',
           dataIndex: 'remark',
         },
@@ -118,7 +127,7 @@ export default {
   },
   methods: {
     handleDictItem(record){
-      this.$refs.dictItemListModal.load(record.dictCode)
+      this.$refs.dictItemListModal.load(record.dictCode, record.category)
     }
   }
 }

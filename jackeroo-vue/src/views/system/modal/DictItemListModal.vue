@@ -31,8 +31,8 @@
           <template>
             <action-list>
               <a @click="handleView(record)">详情</a>
-              <a @click="handleEdit(record)">编辑</a>
-              <action-menu-list>
+              <a @click="handleEdit(record)" v-if="record.category != 0">编辑</a>
+              <action-menu-list v-if="record.category != 0">
                 <a @click="handleDelete(record)">删除</a>
               </action-menu-list>
             </action-list>
@@ -95,11 +95,13 @@ export default {
         list: '/system/dict/itemList',
         delete: '/system/dict/deleteDictItem'
       },
+      category: undefined
     }
   },
   methods: {
-    load(dictCode){
+    load(dictCode, category){
       this.queryParam.dictCode = dictCode
+      this.category = category
       this.visible = true
       this.$nextTick(() => {
         this.refreshData()
@@ -112,7 +114,7 @@ export default {
     handleAdd () {
       this.$refs.formModal.visible = true
       this.$refs.formModal.flag.add = true
-      this.$refs.formModal.add(this.queryParam.dictCode)
+      this.$refs.formModal.add(this.queryParam.dictCode, this.category)
     }
   }
 }

@@ -51,7 +51,7 @@ export default {
       title: '生成代码',
       width: '40vw',
       form: {
-        outputDir: '',
+        outputDir: undefined,
         override: true,
         templateType: ['controller', 'service', 'mapper', 'entity', 'vue']
       },

@@ -61,12 +61,12 @@ export default {
       title: '权限信息',
       width: '40vw',
       form: {
-        id: null,
-        label: '',
-        value: '',
+        id: undefined,
+        label: undefined,
+        value: undefined,
         checked: 1,
-        sort: null,
-        groupId: null
+        sort: undefined,
+        groupId: undefined
       },
       rules: {
         label: [

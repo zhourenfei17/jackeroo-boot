@@ -52,12 +52,13 @@ export default {
       tableName: 'sys_dict',
       width: '40vw',
       form: {
-        id: null,
-        label: null,
-        value: null,
-        sort: null,
-        remark: null,
-        dictCode: null
+        id: undefined,
+        label: undefined,
+        value: undefined,
+        sort: undefined,
+        remark: undefined,
+        dictCode: undefined,
+        category: undefined
       },
       url: {
         getById: '/system/dict/',
@@ -89,9 +90,10 @@ export default {
     }
   },
   methods: {
-    add(dictCode){
+    add(dictCode, category){
       this.form.id = null
       this.form.dictCode = dictCode
+      this.form.category = category
       getAction(this.url.getMaxSort, {dictCode: dictCode}).then(result => {
         if(!result.code){
           this.form.sort = result.data

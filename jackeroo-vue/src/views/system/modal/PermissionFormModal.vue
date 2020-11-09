@@ -49,11 +49,11 @@ export default {
       title: '权限信息',
       width: '40vw',
       form: {
-        id: null,
-        name: '',
-        permission: '',
-        sort: null,
-        parentId: null,
+        id: undefined,
+        name: undefined,
+        permission: undefined,
+        sort: undefined,
+        parentId: undefined,
         type: 1
       },
       rules: {

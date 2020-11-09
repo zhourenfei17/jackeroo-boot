@@ -52,11 +52,11 @@ export default {
       tableName: 'sys_module',
       width: '40vw',
       form: {
-        id: null,
-        name: '',
-        code: '',
-        sort: null,
-        remark: ''
+        id: undefined,
+        name: undefined,
+        code: undefined,
+        sort: undefined,
+        remark: undefined
       },
       rules: {
         name: [
@@ -74,14 +74,21 @@ export default {
       url: {
         getById: '/system/module/',
         save: '/system/module/save',
-        update: '/system/module/update'
+        update: '/system/module/update',
+        getMaxSort: '/system/module/getMaxSort'
       }
     }
   },
   methods: {
     add(){
       this.form.id = null
-      this.loading = false
+      getAction(this.url.getMaxSort).then(result => {
+        if(!result.code){
+          this.form.sort = result.data
+        }
+      }).finally(() => {
+        this.loading = false
+      })
     },
     edit(id){
       getAction(this.url.getById + id).then(result => {

@@ -66,8 +66,8 @@ export default {
       tableName: 'sys_menu_permission_group',
       width: '40vw',
       form: {
-        id: null,
-        groupName: '',
+        id: undefined,
+        groupName: undefined,
         isDefault: 0,
         disabled: 0
       },

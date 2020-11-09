@@ -13,6 +13,7 @@
 export default {
   name: 'JTag',
   props: {
+    // success、info、warning、error
     type: {
       type: String,
       default: 'default'
