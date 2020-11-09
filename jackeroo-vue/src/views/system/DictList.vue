@@ -11,6 +11,11 @@
           <a-input v-model="queryParam.dictCode" placeholder="请输入字典编码"/>
         </a-form-item>
       </a-col>
+      <a-col :md="6" :sm="12">
+        <a-form-item label="字典类别">
+          <j-select v-model="queryParam.category" placeholder="请选择字典类别" :list="[{id:0, name: '系统字典'},{id: 1, name: '自定义'}]"></j-select>
+        </a-form-item>
+      </a-col>
 
       <template slot="operate">
           <a-button type="primary" icon="search" @click="refreshData(true)">查询</a-button>
@@ -69,7 +74,7 @@
 </template>-
 
 <script>
-import { STable, DataCard, SearchCard, JTag } from '@/components'
+import { STable, DataCard, SearchCard, JTag, JSelect } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { getAction, deleteAction } from '@/api/manage'
 import DictFormModal from './modal/DictFormModal'
@@ -83,7 +88,8 @@ export default {
     SearchCard,
     DictFormModal,
     DictItemListModal,
-    JTag
+    JTag,
+    JSelect
   },
   mixins:[JackerooListMixins],
   data () {
