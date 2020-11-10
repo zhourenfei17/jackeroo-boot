@@ -5,6 +5,9 @@ import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.query.Account;
 import cn.hub.jackeroo.utils.RandImageUtil;
 import cn.hub.jackeroo.utils.StringUtils;
+import cn.hub.jackeroo.utils.captcha.Captcha;
+import cn.hub.jackeroo.utils.captcha.GifCaptcha;
+import cn.hub.jackeroo.utils.captcha.SpecCaptcha;
 import cn.hub.jackeroo.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -80,7 +84,7 @@ public class LoginController extends BaseController {
 	}
 
     /**
-     * 获取验证码，服务器端生成图片
+     * 获取验证码，服务器端生成图片，png
      * @param key
      * @return
      */
@@ -94,6 +98,27 @@ public class LoginController extends BaseController {
             return ok(base64);
         } catch (IOException e) {
             return error("获取验证码失败");
+        }
+    }
+
+    /**
+     * 获取验证码，服务器端生成图片，gif
+     * @param key
+     * @return
+     */
+    @GetMapping("/generateGif/{key}")
+    public void generateGif(@PathVariable String key, HttpServletResponse response){
+	    try {
+            response.setContentType("image/gif");//设置相应类型,告诉浏览器输出的内容为图片
+            response.setHeader("Pragma", "No-cache");//设置响应头信息，告诉浏览器不要缓存此内容
+            response.setHeader("Cache-Control", "no-cache");
+            response.setDateHeader("Expire", 0);
+            Captcha captcha = new GifCaptcha(105,35,4);
+            captcha.out(response.getOutputStream());
+
+            redisTemplate.opsForValue().set(CAPTCHA_PREFIX + key, captcha.text(), 5, TimeUnit.MINUTES);
+        }catch (IOException e){
+
         }
     }
 }
