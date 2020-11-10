@@ -61,6 +61,15 @@ export function deleteAction(url,parameter) {
     params: parameter
   })
 }
+//获取服务器返回的文件流
+export function getFile(url, parameter) {
+  return axios({
+    url: url,
+    method: method.GET,
+    params: parameter,
+    responseType: 'blob'
+  })
+}
 
 export function getPermissions (parameter) {
   return axios({

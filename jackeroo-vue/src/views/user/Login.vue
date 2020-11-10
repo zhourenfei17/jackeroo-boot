@@ -97,7 +97,7 @@ import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { getSmsCaptcha, get2step, login } from '@/api/login'
-import {getAction, postAction} from '@/api/manage'
+import {getAction, postAction, getFile} from '@/api/manage'
 
 export default {
   components: {
@@ -124,7 +124,8 @@ export default {
       validImg: null,
       errorMsg: '账号或密码错误',
       url: {
-        generateImg: '/auth/generateImg/'
+        generateImg: '/auth/generateImg/',
+        generateGif: '/auth/generateGif/'
       }
     }
   },
@@ -154,12 +155,24 @@ export default {
     },
     generateRandomImage(){
       this.loginKey = new Date().getTime()
+      // 返回gif图片
+      this.generateGif()
+    },
+    // 生成Png静态图片验证码
+    generatePng(){
       getAction(this.url.generateImg + this.loginKey).then(result => {
         if(!result.code){
           this.validImg = result.data
         }else{
           this.$message.error(result.msg)
         }
+      })
+    },
+    // 生成Gif动态图片验证码
+    generateGif(){
+      getFile(this.url.generateGif + this.loginKey).then(result => {
+        const src = window.URL.createObjectURL(result)
+        this.validImg = src
       })
     },
     handleTabClick (key) {
