@@ -10,6 +10,8 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 const request = axios.create({
   // API 请求的默认前缀
   baseURL: '/jackeroo/api',
+  // 服务器响应的数据类型
+  responseType: 'json',
   timeout: 6000 // 请求超时时间
 })
 
