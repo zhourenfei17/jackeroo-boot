@@ -23,6 +23,7 @@ import java.io.Writer;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class SessionControlFilter extends AccessControlFilter {
@@ -35,7 +36,7 @@ public class SessionControlFilter extends AccessControlFilter {
 
 	private SessionManager sessionManager;
 
-	private Cache<String, Deque<Serializable>> cache;
+	private Cache<String, List<Serializable>> cache;
 
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
@@ -64,7 +65,7 @@ public class SessionControlFilter extends AccessControlFilter {
 		Serializable sessionId = session.getId();
 
 		// 读取缓存 没有就存入
-		Deque<Serializable> deque = cache.get(username);
+		List<Serializable> deque = cache.get(username);
 
 		// 如果此用户没有session队列，也就是还没有登录过，缓存中没有
 		// 就new一个空队列，不然deque对象为空，会报空指针
@@ -75,7 +76,7 @@ public class SessionControlFilter extends AccessControlFilter {
 		// 如果队列里没有此sessionId，且用户没有被踢出；放入队列
 		if (!deque.contains(sessionId) && session.getAttribute("kickout") == null) {
 			// 将sessionId存入队列
-			deque.push(sessionId);
+			deque.add(sessionId);
 			// 将用户的sessionId队列缓存
 			cache.put(username, deque);
 		}
@@ -84,11 +85,13 @@ public class SessionControlFilter extends AccessControlFilter {
 		while (deque.size() > maxSession) {
 			Serializable kickoutSessionId = null;
 			if (kickoutAfter) { // 如果踢出后者
-				kickoutSessionId = deque.removeFirst();
+				// kickoutSessionId = deque.removeFirst();
+                kickoutSessionId = deque.remove(0);
 				// 踢出后再更新下缓存队列
 				cache.put(username, deque);
 			} else { // 否则踢出前者
-				kickoutSessionId = deque.removeLast();
+				// kickoutSessionId = deque.removeLast();
+                kickoutSessionId = deque.remove(deque.size() - 1);
 				// 踢出后再更新下缓存队列
 				cache.put(username, deque);
 			}
@@ -180,7 +183,7 @@ public class SessionControlFilter extends AccessControlFilter {
 		this.sessionManager = sessionManager;
 	}
 
-	public Cache<String, Deque<Serializable>> getCache() {
+	public Cache<String, List<Serializable>> getCache() {
 		return cache;
 	}
 

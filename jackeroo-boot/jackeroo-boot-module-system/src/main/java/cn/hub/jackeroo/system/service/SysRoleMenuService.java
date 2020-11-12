@@ -6,7 +6,6 @@ import cn.hub.jackeroo.system.mapper.SysRoleMenuMapper;
 import cn.hub.jackeroo.system.query.RolePermission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.sf.saxon.om.Item;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

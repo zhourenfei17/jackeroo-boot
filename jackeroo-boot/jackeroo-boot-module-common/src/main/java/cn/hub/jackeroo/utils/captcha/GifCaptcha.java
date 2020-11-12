@@ -40,7 +40,7 @@ public class GifCaptcha extends Captcha {
             gifEncoder.setRepeat(0);
             BufferedImage frame;
             char[] rands = alphas();
-            Color fontcolor[] = new Color[len];
+            Color[] fontcolor = new Color[len];
             for (int i = 0; i < len; i++) {
                 fontcolor[i] = new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110));
             }

@@ -10,6 +10,10 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -143,6 +147,8 @@ public class SysUser extends BaseEntity<SysUser> {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间")
+    // @JsonSerialize(using = LocalDateTimeSerializer.class)
+    // @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createTime;
     /**
      * 更新人
@@ -158,6 +164,8 @@ public class SysUser extends BaseEntity<SysUser> {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新时间")
+    // @JsonSerialize(using = LocalDateTimeSerializer.class)
+    // @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime updateTime;
 
     /**
@@ -168,4 +176,9 @@ public class SysUser extends BaseEntity<SysUser> {
     private Long roleId;
     @TableField(exist = false)
     private String roleName;
+    /**
+     * 角色编码
+     */
+    @TableField(exist = false)
+    private String roleCode;
 }

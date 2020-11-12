@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -136,9 +135,7 @@ public class SwaggerConfig implements InitializingBean {
                     }
                     ApiModule clazzApiModule = input.getHandlerMethod().getBeanType().getAnnotation(ApiModule.class);
                     if (clazzApiModule != null) {
-                        if (clazzApiModule.moduleName().equals(groupName)) {
-                            return true;
-                        }
+                        return clazzApiModule.moduleName().equals(groupName);
                     }
                     return false;
                 })//controller路径

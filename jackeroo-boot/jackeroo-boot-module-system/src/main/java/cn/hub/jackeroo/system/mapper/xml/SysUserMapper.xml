@@ -62,9 +62,10 @@
     <select id="findByAccount" resultType="cn.hub.jackeroo.system.entity.SysUser">
         select
           <include refid="baseColumns"></include>
-          ,b.role_id as roleId
+          ,b.role_id as roleId,c.role_code as roleCode
         from sys_user a
         left join sys_user_role b on a.id=b.user_id
+        left join sys_role c on b.role_id=c.id
         <where>
             a.account = #{account}
         </where>

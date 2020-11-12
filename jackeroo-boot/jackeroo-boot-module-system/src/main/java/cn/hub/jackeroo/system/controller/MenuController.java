@@ -81,7 +81,7 @@ public class MenuController extends BaseController {
     public Result getMenuByRole(){
         LoginUser user = UserUtils.getUser();
 
-        return ok(menuService.getMenuByRole(user.getRoleId()));
+        return ok(menuService.getMenuByRole(user.getRoleCode()));
     }
 
     /**

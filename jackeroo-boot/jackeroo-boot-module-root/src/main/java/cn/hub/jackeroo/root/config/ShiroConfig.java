@@ -2,9 +2,12 @@ package cn.hub.jackeroo.root.config;
 
 import cn.hub.jackeroo.root.shiro.AuthcShiroFilter;
 import cn.hub.jackeroo.root.shiro.CredentialsMatcher;
+import cn.hub.jackeroo.root.shiro.JsonSerializer;
 import cn.hub.jackeroo.root.shiro.SessionControlFilter;
 import cn.hub.jackeroo.root.shiro.SessionManager;
 import cn.hub.jackeroo.root.shiro.ShiroRealm;
+import cn.hub.jackeroo.root.shiro.serializer.StringSerializer;
+import cn.hub.jackeroo.root.shiro.serializer.ValueSerializer;
 import cn.hub.jackeroo.utils.UserUtils;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -121,7 +124,16 @@ public class ShiroConfig {
 	public RedisCacheManager cacheManager() {
 		RedisCacheManager redisCacheManager = new RedisCacheManager();
 		redisCacheManager.setRedisManager(redisManager());
-		redisCacheManager.setKeyPrefix(UserUtils.USER_CACHE); // 设置前缀
+		// redisCacheManager.setKeyPrefix(UserUtils.USER_CACHE); // 设置前缀
+        redisCacheManager.setPrincipalIdFieldName("account"); // 指定对象的字段的值为redis的key
+        // redis缓存时间
+        redisCacheManager.setExpire(1800);
+
+        // 自定义序列化方式
+        StringSerializer stringSerializer = new StringSerializer();
+        stringSerializer.setKeyPrefix(UserUtils.USER_CACHE);
+        redisCacheManager.setKeySerializer(stringSerializer);
+        redisCacheManager.setValueSerializer(new ValueSerializer(Object.class));
 		return redisCacheManager;
 	}
 
@@ -132,8 +144,12 @@ public class ShiroConfig {
 	public RedisSessionDAO redisSessionDAO() {
 		RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
 		redisSessionDAO.setRedisManager(redisManager());
+		// 指定超时时间与会话相同
+		redisSessionDAO.setExpire(-2);
 
 		redisSessionDAO.setKeyPrefix(UserUtils.USER_SESSION);
+		// redisSessionDAO.setKeySerializer(new StringSerializer());
+		// redisSessionDAO.setValueSerializer(new JsonSerializer(Object.class));
 		return redisSessionDAO;
 	}
 
@@ -157,14 +173,16 @@ public class ShiroConfig {
 
 	/**
 	 * 配置shiro redisManager 使用的是shiro-redis开源插件
+     * redis独立版本
 	 *
 	 * @return
 	 */
 	public RedisManager redisManager() {
 		RedisManager redisManager = new RedisManager();
-		redisManager.setHost(redisHost);
-		redisManager.setPort(redisPort);
-		redisManager.setTimeout(1800); // 设置过期时间
+		redisManager.setHost(redisHost + ":" + redisPort);
+		// redisManager.setPort(redisPort);
+        // 超时时间
+		redisManager.setTimeout(1800);
 		redisManager.setPassword(redisPassword);
 		redisManager.setDatabase(database);
 		return redisManager;

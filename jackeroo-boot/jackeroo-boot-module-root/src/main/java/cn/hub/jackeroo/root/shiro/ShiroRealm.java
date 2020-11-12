@@ -25,14 +25,8 @@ import org.springframework.context.annotation.Lazy;
 public class ShiroRealm extends AuthorizingRealm {
 
 	@Autowired
-    @Lazy
+    @Lazy   // 必须延时加载，原因是bean实例化的顺序上，shiro的bean必须要先实例化，否则@cacheable注解无效
 	private SysUserService userService;
-
-	@Autowired
-	private SysRoleService roleService;
-
-	@Autowired
-	private SysMenuService menuService;
 
 	/**
 	 * 认证信息.(身份验证) : Authentication 是用来验证用户身份

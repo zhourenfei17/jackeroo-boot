@@ -262,13 +262,13 @@ public class ImportExcel {
 			public int compare(Object[] o1, Object[] o2) {
 				return new Integer(((ExcelField)o1[0]).sort()).compareTo(
 						new Integer(((ExcelField)o2[0]).sort()));
-			};
-		});
+			}
+        });
 		//log.debug("Import column count:"+annotationList.size());
 		// Get excel data
 		List<E> dataList = Lists.newArrayList();
 		for (int i = this.getDataRowNum(); i < this.getLastDataRowNum(); i++) {
-			E e = (E)cls.newInstance();
+			E e = cls.newInstance();
 			int column = 0;
 			Row row = this.getRow(i);
 			StringBuilder sb = new StringBuilder();

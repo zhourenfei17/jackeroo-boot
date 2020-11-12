@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.root.config;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,8 +9,10 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -58,7 +61,7 @@ public class JacksonConfig {
 		objectMapper.registerModule(new SimpleModule().addSerializer(String.class, new JsonSerializer<String>() {
 
 			@Override
-			public void serialize(String value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+			public void serialize(String value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
 				jgen.writeString(StringEscapeUtils.unescapeHtml4(value));
 			}
 		}));
@@ -68,10 +71,16 @@ public class JacksonConfig {
 		simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
 		objectMapper.registerModule(simpleModule);
 		// 取消时间的转化格式,默认是时间戳,可以取消,同时需要设置要表现的时间格式
-		objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+		// objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+		// objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 		// 设置时区
 		objectMapper.setTimeZone(TimeZone.getDefault());// getTimeZone("GMT+8:00")
+
+        //如果java.time包下Json报错,添加如下两行代码
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.registerModule(new JavaTimeModule());
+
+        // objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
 		return objectMapper;
 	}
 }

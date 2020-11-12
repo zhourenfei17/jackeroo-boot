@@ -3,6 +3,7 @@ package cn.hub.jackeroo.system.service;
 import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.system.entity.SysMenu;
+import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.mapper.SysMenuMapper;
 import cn.hub.jackeroo.system.vo.AuthVo;
 import cn.hub.jackeroo.system.vo.Tree;
@@ -38,6 +39,8 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     @Resource
     private SysMenuMapper mapper;
+    @Resource
+    private SysRoleService roleService;
 
     /**
      * 获取叶子菜单权限列表
@@ -103,12 +106,16 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     /**
      * 根据角色获取菜单、权限信息
-     * @param roleId
+     * @param roleCode
      * @return
      */
-    @Cacheable(value = "sys_menu")
-    public List<SysMenu> getMenuByRole(Long roleId){
-        List<SysMenu> menuList = mapper.findMenuByRoleId(roleId);
+    @Cacheable(value = "MENU", key = "#roleCode")
+    public List<SysMenu> getMenuByRole(String roleCode){
+        SysRole role = roleService.getByCode(roleCode);
+        if(role == null){
+            return null;
+        }
+        List<SysMenu> menuList = mapper.findMenuByRoleId(role.getId());
 
         List<SysMenu> rootTreeNode = menuList
                 .stream()

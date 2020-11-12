@@ -50,7 +50,7 @@ public enum ResultStatusCode {
         this.msg = msg;
     }
 
-    private ResultStatusCode(int code, String msg) {
+    ResultStatusCode(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }

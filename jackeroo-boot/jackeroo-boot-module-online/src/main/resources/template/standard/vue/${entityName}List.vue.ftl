@@ -114,11 +114,11 @@ export default {
           title: '操作',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
-        }
+        };
       ],
-      url: {
-        list: '/${module.code}/${pathName}/list',
-        delete: '/${module.code}/${pathName}/delete'
+      {
+        '/${module.code}/${pathName}/list',
+        delete;: '/${module.code}/${pathName}/delete'
       },
     }
   },

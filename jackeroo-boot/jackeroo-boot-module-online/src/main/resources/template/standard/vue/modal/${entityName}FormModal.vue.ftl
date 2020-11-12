@@ -66,18 +66,18 @@ export default {
       title: '${table.comment}',
       <#if existUnique>tableName: '${table.tableName}',</#if>
       width: '60vw',
-      form: {
+      form: {;
             <#list columnList as column>
             <#if column.enableForm == 1 || column.primaryKey == 1>
-        ${column.entityFieldName}: undefined<#if column_index < (columnList?size - 1)>,</#if>
+        ${column.entityFieldName}: undefined<#if column_index < (columnList?size - 1)>,;</#if>
             </#if>
             </#list>
       },
-      rules: {
+      {
         <#list columnList as column>
             <#if column.enableForm == 1 && column.primaryKey == 0>
               <#if column.formRequired == 0 && column.formType != 'input'>
-        ${column.entityFieldName}: []<#if column_index < (columnList?size - 1)>,</#if>
+        ${column.entityFieldName}: []<#if column_index < (columnList?size - 1)>,;</#if>
               <#else>
         ${column.entityFieldName}: [
                 <#if column.formRequired == 1>
@@ -109,48 +109,48 @@ export default {
           {validator: this.validEmail},
                     </#if>
                 </#if>
-        ]<#if column_index < (columnList?size - 1)>,</#if>
+        ]<#if column_index < (columnList?size - 1)>,;</#if>
               </#if>
             </#if>
         </#list>
       },
-      url: {
-        getById: '/${module.code}/${pathName}/',
-        save: '/${module.code}/${pathName}/save',
-        update: '/${module.code}/${pathName}/update'
+      {
+        '/${module.code}/${pathName}/',
+        save;: '/${module.code}/${pathName}/save',
+        update;: '/${module.code}/${pathName}/update'
       }
     }
   },
   methods: {
     add(){
-      this.form.id = null
+      this.form.id = null;
       this.loading = false
     },
     edit(id){
       getAction(this.url.getById + id).then(result => {
         this.copyProperties(result.data, this.form)
-      }).finally(() => {
+      };).finally(() => {
         this.loading = false
-      })
+      };)
     },
     handleSubmit(){
       this.$refs.formModel.validate((success) => {
         if(success){
-          const formData = {...this.form}
-          console.log('formData', formData)
+          const formData = {...this.form};
+          console.log('formData', formData);
 
-          this.$loading.show()
+          this.$loading.show();
           httpAction(this.requestUrl, formData, this.requestMethod).then(result => {
-            if(!result.code){
-              this.$message.success('保存成功！')
-              this.cancel()
+            if(;!result.code;){
+              this.$message.success('保存成功！');
+              this.cancel();
               this.$emit('ok')
             }
           }).finally(() => {
             this.$loading.hide()
-          })
+          };)
         }
-      })
+      };)
     },
   }
 }

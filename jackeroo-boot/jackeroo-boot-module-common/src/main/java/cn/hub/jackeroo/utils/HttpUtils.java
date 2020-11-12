@@ -18,7 +18,7 @@ public class HttpUtils {
 
         try(
             InputStream inputStream = request.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")))
         ){
             String line;
             while ((line = reader.readLine()) != null){

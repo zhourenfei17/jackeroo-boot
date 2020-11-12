@@ -2,15 +2,10 @@ package cn.hub.jackeroo.root.shiro;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.saxon.functions.Serialize;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
-import org.apache.shiro.session.mgt.SimpleSession;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
-import org.crazycake.shiro.RedisSessionDAO;
-import org.crazycake.shiro.SessionInMemory;
-import org.crazycake.shiro.exception.SerializationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.crazycake.shiro.common.SessionInMemory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
