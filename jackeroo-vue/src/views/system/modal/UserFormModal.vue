@@ -46,11 +46,7 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="性别" prop="gender">
-              <a-select v-model="form.gender" placeholder="请选择性别" :disabled="flag.view">
-                <a-select-option value="">请选择</a-select-option>
-                <a-select-option :value="1">男</a-select-option>
-                <a-select-option :value="2">女</a-select-option>
-              </a-select>
+              <j-dict-select v-model="form.gender" :disabled="flag.view" type="radio" dictCode="COMMON.SEX"></j-dict-select>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -78,11 +74,12 @@
 import { getAction, postAction, httpAction } from '@/api/manage'
 import md5 from 'md5'
 import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
-import {JSelect} from '@/components'
+import {JSelect, JDictSelect} from '@/components'
 
 export default {
   components: {
-    JSelect
+    JSelect,
+    JDictSelect
   },
   mixins: [JackerooFormMixins],
   data(){

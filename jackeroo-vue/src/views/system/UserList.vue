@@ -29,11 +29,7 @@
         </a-col>
         <a-col :md="6" :sm="12">
           <a-form-item label="性别">
-            <a-select v-model="queryParam.gender" placeholder="请选择性别" default-value="0">
-              <a-select-option value="" disabled>请选择</a-select-option>
-              <a-select-option value="1">男</a-select-option>
-              <a-select-option value="2">女</a-select-option>
-            </a-select>
+            <j-dict-select v-model="queryParam.gender" placeholder="请选择性别" dictCode="COMMON.SEX"></j-dict-select>
           </a-form-item>
         </a-col>
       </template>
@@ -104,7 +100,7 @@
 </template>
 
 <script>
-import { STable, Ellipsis, DataCard, SearchCard, JSelect } from '@/components'
+import { STable, Ellipsis, DataCard, SearchCard, JDictSelect } from '@/components'
 import UserFormModal from './modal/UserFormModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import { putAction, getAction, deleteAction } from '@/api/manage'
@@ -126,9 +122,9 @@ export default {
     STable,
     Ellipsis,
     UserFormModal,
-    JSelect,
     DataCard,
-    SearchCard
+    SearchCard,
+    JDictSelect
   },
   mixins:[JackerooListMixins],
   data () {
