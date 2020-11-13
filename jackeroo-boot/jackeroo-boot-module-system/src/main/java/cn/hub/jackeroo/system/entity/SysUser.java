@@ -3,6 +3,7 @@ package cn.hub.jackeroo.system.entity;
 import cn.hub.jackeroo.constant.CodeType;
 import cn.hub.jackeroo.persistence.BaseEntity;
 import cn.hub.jackeroo.utils.validator.annotation.CodeNum;
+import cn.hub.jackeroo.utils.validator.annotation.Dict;
 import cn.hub.jackeroo.utils.validator.annotation.Unique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
@@ -10,10 +11,6 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -95,6 +92,7 @@ public class SysUser extends BaseEntity<SysUser> {
     /**
      * 性别
      */
+    @Dict(dictCode = "COMMON.SEX")
     @ApiModelProperty(value = "性别")
     private Integer gender;
 
@@ -147,8 +145,6 @@ public class SysUser extends BaseEntity<SysUser> {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间")
-    // @JsonSerialize(using = LocalDateTimeSerializer.class)
-    // @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createTime;
     /**
      * 更新人
@@ -164,8 +160,6 @@ public class SysUser extends BaseEntity<SysUser> {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新时间")
-    // @JsonSerialize(using = LocalDateTimeSerializer.class)
-    // @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime updateTime;
 
     /**

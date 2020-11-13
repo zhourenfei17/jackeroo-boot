@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * @author alex
  * @date 2020/10/10
  */
-@Service
+@Service("systemApi")
 public class SystemApiImpl implements ISystemApi {
 
     @Autowired
