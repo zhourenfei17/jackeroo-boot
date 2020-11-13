@@ -32,18 +32,16 @@ public class ShiroConfig {
 
 	@Value("${spring.redis.host}")
 	private String redisHost;
-
 	@Value("${spring.redis.port}")
 	private int redisPort;
-
 	@Value("${spring.redis.password}")
 	private String redisPassword;
     @Value("${spring.redis.database}")
 	private int database;
-    //@Autowired
-    //private JackerooRedisManager redisManager;
-    // @Autowired
-    // private JackerooRedisSessionDao redisSessionDao;
+    @Value("${spring.session.timeout}")
+    private int expire;
+    @Value("${spring.session.same-user-count}")
+    private int sameUserCount;
 
 	@Bean
 	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
@@ -56,8 +54,10 @@ public class ShiroConfig {
         filtersMap.put("authc", new AuthcShiroFilter());
 
 		// 限制同一帐号同时在线的个数。
-		filtersMap.put("kickout", kickoutSessionControlFilter());
-		shiroFilterFactoryBean.setFilters(filtersMap);
+        if(sameUserCount > 0){
+            filtersMap.put("kickout", kickoutSessionControlFilter());
+            shiroFilterFactoryBean.setFilters(filtersMap);
+        }
 
 		// 权限控制map.
 		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
@@ -81,8 +81,13 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/**/*.css", "anon");
         filterChainDefinitionMap.put("/**/*.html", "anon");
 
-		// 此处需要添加一个kickout，上面添加的自定义拦截器才能生效
-		filterChainDefinitionMap.put("/**", "authc,kickout");// 表示需要认证才可以访问
+        if(sameUserCount > 0){
+            // 此处需要添加一个kickout，上面添加的自定义拦截器才能生效，authc表示需要认证才能访问
+            filterChainDefinitionMap.put("/**", "authc,kickout");
+        }else{
+            // authc表示需要认证才能访问
+            filterChainDefinitionMap.put("/**", "authc");
+        }
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return shiroFilterFactoryBean;
 	}
@@ -125,9 +130,10 @@ public class ShiroConfig {
 		RedisCacheManager redisCacheManager = new RedisCacheManager();
 		redisCacheManager.setRedisManager(redisManager());
 		// redisCacheManager.setKeyPrefix(UserUtils.USER_CACHE); // 设置前缀
-        redisCacheManager.setPrincipalIdFieldName("account"); // 指定对象的字段的值为redis的key
+        // 指定对象的字段的值为redis的key
+        redisCacheManager.setPrincipalIdFieldName("account");
         // redis缓存时间
-        redisCacheManager.setExpire(1800);
+        redisCacheManager.setExpire(expire);
 
         // 自定义序列化方式
         StringSerializer stringSerializer = new StringSerializer();
@@ -181,8 +187,6 @@ public class ShiroConfig {
 		RedisManager redisManager = new RedisManager();
 		redisManager.setHost(redisHost + ":" + redisPort);
 		// redisManager.setPort(redisPort);
-        // 超时时间
-		redisManager.setTimeout(1800);
 		redisManager.setPassword(redisPassword);
 		redisManager.setDatabase(database);
 		return redisManager;
@@ -199,7 +203,7 @@ public class ShiroConfig {
 		kickoutSessionControlFilter.setCache(cacheManager());
 		kickoutSessionControlFilter.setSessionManager(sessionManager());
 		kickoutSessionControlFilter.setKickoutAfter(false);
-		kickoutSessionControlFilter.setMaxSession(1);
+		kickoutSessionControlFilter.setMaxSession(sameUserCount);
 		kickoutSessionControlFilter.setKickoutUrl("/common/kickout");
 		return kickoutSessionControlFilter;
 	}

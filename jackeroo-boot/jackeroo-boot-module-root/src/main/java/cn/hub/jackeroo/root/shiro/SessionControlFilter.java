@@ -17,10 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.Writer;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -151,41 +149,26 @@ public class SessionControlFilter extends AccessControlFilter {
 		}
 	}
 
-	public String getKickoutUrl() {
-		return kickoutUrl;
-	}
 
 	public void setKickoutUrl(String kickoutUrl) {
 		this.kickoutUrl = kickoutUrl;
 	}
 
-	public boolean isKickoutAfter() {
-		return kickoutAfter;
-	}
 
 	public void setKickoutAfter(boolean kickoutAfter) {
 		this.kickoutAfter = kickoutAfter;
 	}
 
-	public int getMaxSession() {
-		return maxSession;
-	}
 
 	public void setMaxSession(int maxSession) {
 		this.maxSession = maxSession;
 	}
 
-	public SessionManager getSessionManager() {
-		return sessionManager;
-	}
 
 	public void setSessionManager(SessionManager sessionManager) {
 		this.sessionManager = sessionManager;
 	}
 
-	public Cache<String, List<Serializable>> getCache() {
-		return cache;
-	}
 
 	public void setCache(CacheManager cacheManager) {
 		this.cache = cacheManager.getCache("shiro_redis_cache");
