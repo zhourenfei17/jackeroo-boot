@@ -12,6 +12,9 @@ import ${scheme.packageName}.persistence.BaseEntity;
 <#if existCodeNum && scheme.enableServerValid == 1>
 import cn.hub.jackeroo.utils.validator.annotation.CodeNum;
 </#if>
+<#if existDict && scheme.enableServerValid == 1>
+import cn.hub.jackeroo.utils.validator.annotation.Dict;
+</#if>
 <#if existUnique && scheme.enableServerValid == 1>
 import ${scheme.packageName}.utils.validator.annotation.Unique;
 </#if>
@@ -109,6 +112,9 @@ public class ${table.className} extends BaseEntity<${table.className}> {
         </#if>
         <#if column.entityFieldType == "Integer" && column.dbFieldLength = 3>
     @Range(min = 0, max = 128)
+        </#if>
+        <#if column.formDictCode?? && column.formDictCode != "">
+    @Dict(dictCode = "${column.formDictCode}")
         </#if>
         <#if column.formValidator?? && column.formValidator != ''>
             <#if column.formValidator?contains('validMobile')>

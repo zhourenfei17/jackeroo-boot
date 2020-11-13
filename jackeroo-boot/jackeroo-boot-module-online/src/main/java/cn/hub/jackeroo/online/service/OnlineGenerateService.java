@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author alex
@@ -259,6 +260,7 @@ public class OnlineGenerateService {
         dataMap.put("table", table);
         dataMap.put("scheme", scheme);
         dataMap.put("columnList", fieldList);
+        dataMap.put("searchList", fieldList.stream().filter(item -> item.getEnableQuery() == Constant.BOOLEAN_YES).collect(Collectors.toList()));
         dataMap.put("module", module);
         dataMap.put("entityName", table.getClassName());
         dataMap.put("varName", StringUtils.toUnderFirstLetter(table.getClassName()));
@@ -292,7 +294,7 @@ public class OnlineGenerateService {
     private void analysisColumnField(List<OnlineTableField> fieldList, Map<String, Object> dataMap){
         boolean existLength = false, existPrimaryKey = false, existUnique = false, existLocalDateTime = false, existLocalDate = false,
                 existBigDecimal = false, existFieldFill = false, existRange = false, existNotEmpty = false, existLocker = false,
-                existQuery = false, existCodeNum = false, existEmail = false, existUrl = false, existDigits = false;
+                existQuery = false, existCodeNum = false, existEmail = false, existUrl = false, existDigits = false, existDict = false;
 
         for (OnlineTableField field : fieldList) {
             if("String".equals(field.getEntityFieldType())){
@@ -330,6 +332,9 @@ public class OnlineGenerateService {
                     existUrl = true;
                 }
             }
+            if(StringUtils.isNotBlank(field.getFormDictCode())){
+                existDict = true;
+            }
 
             if(StringUtils.isNotEmpty(field.getFillStrategy())){
                 existFieldFill = true;
@@ -357,6 +362,7 @@ public class OnlineGenerateService {
         dataMap.put("existEmail", existEmail);
         dataMap.put("existUrl", existUrl);
         dataMap.put("existDigits", existDigits);
+        dataMap.put("existDict", existDict);
     }
 
     /**

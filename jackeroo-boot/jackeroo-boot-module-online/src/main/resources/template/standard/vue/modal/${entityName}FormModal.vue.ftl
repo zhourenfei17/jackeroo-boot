@@ -11,6 +11,8 @@
     @ok="handleSubmit"
     @cancel="cancel"
     >
+<#assign existJSelect = false />
+<#assign existJDictSelect = false />
     <j-spin :spinning="loading">
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
         <a-row :gutter="formGutter"><#list columnList as column><#if column.enableForm == 1 && column.primaryKey == 0>
@@ -26,6 +28,7 @@
               <a-textarea v-model="form.${column.entityFieldName}" placeholder="请输入${column.dbFieldDesc}" :disabled="flag.view" :autosize="{minRows: 2, maxRows: 6}" allowClear></a-textarea>
                 <#elseif column.formType == 'select' || column.formType == 'multiple_select' || column.formType == 'radio' || column.formType == 'checkbox'>
                     <#if column.formDictCode?? && column.formDictCode != ''>
+                <#assign existJDictSelect = true />
               <j-dict-select
                 v-model="form.${column.entityFieldName}"
                 <#if column.formType != 'radio' && column.formType != 'checkbox'>placeholder="请选择${column.dbFieldDesc}"</#if>
@@ -35,6 +38,7 @@
                 >
               </j-dict-select>
                     <#elseif column.formType =='select' || column.formType =='multiple_select'>
+                <#assign existJSelect = true />
               <j-select
                 v-model="form.${column.entityFieldName}"
                 placeholder="请选择${column.dbFieldDesc}"
@@ -45,7 +49,15 @@
                 >
               </j-select>
                     </#if>
-                <#elseif column.formType == 'date || datetime'>
+                <#elseif column.formType == 'date' || column.formType == 'datetime'>
+              <a-date-picker
+                v-model="form.${column.entityFieldName}"
+                placeholder="请选择${column.dbFieldDesc}"<#if column.formType == 'dateTime'>
+                mode="time"</#if>
+                valueFormat="${(column.formType == 'date')?string('YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss')}"
+                style="width:100%"
+                :disabled="flag.view">
+              </a-date-picker>
                 </#if>
             </a-form-model-item>
           </a-col></#if> </#list>
@@ -58,26 +70,36 @@
 <script>
 import { getAction, httpAction } from '@/api/manage'
 import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
+<#if existJSelect || existJDictSelect>
+import {<#if existJSelect>JSelect</#if><#if existJDictSelect>, JDictSelect</#if>} from '@/components'
+</#if>
 
 export default {
   mixins: [JackerooFormMixins],
+    <#if existJSelect || existJDictSelect>
+  components: {
+    <#if existJSelect>
+    JSelect</#if><#if existJDictSelect>,
+    JDictSelect</#if>
+  },
+    </#if>
   data(){
     return {
       title: '${table.comment}',
       <#if existUnique>tableName: '${table.tableName}',</#if>
       width: '60vw',
-      form: {;
+      form: {
             <#list columnList as column>
             <#if column.enableForm == 1 || column.primaryKey == 1>
-        ${column.entityFieldName}: undefined<#if column_index < (columnList?size - 1)>,;</#if>
+        ${column.entityFieldName}: undefined<#if column_index < (columnList?size - 1)>,</#if>
             </#if>
             </#list>
       },
-      {
+      rules: {
         <#list columnList as column>
             <#if column.enableForm == 1 && column.primaryKey == 0>
               <#if column.formRequired == 0 && column.formType != 'input'>
-        ${column.entityFieldName}: []<#if column_index < (columnList?size - 1)>,;</#if>
+        ${column.entityFieldName}: []<#if column_index < (columnList?size - 1)>,</#if>
               <#else>
         ${column.entityFieldName}: [
                 <#if column.formRequired == 1>
@@ -109,48 +131,48 @@ export default {
           {validator: this.validEmail},
                     </#if>
                 </#if>
-        ]<#if column_index < (columnList?size - 1)>,;</#if>
+        ]<#if column_index < (columnList?size - 1)>,</#if>
               </#if>
             </#if>
         </#list>
       },
-      {
-        '/${module.code}/${pathName}/',
-        save;: '/${module.code}/${pathName}/save',
-        update;: '/${module.code}/${pathName}/update'
+      url: {
+        getById: '/${module.code}/${pathName}/',
+        save: '/${module.code}/${pathName}/save',
+        update: '/${module.code}/${pathName}/update'
       }
     }
   },
   methods: {
     add(){
-      this.form.id = null;
+      this.form.id = null
       this.loading = false
     },
     edit(id){
       getAction(this.url.getById + id).then(result => {
         this.copyProperties(result.data, this.form)
-      };).finally(() => {
+      }).finally(() => {
         this.loading = false
-      };)
+      })
     },
     handleSubmit(){
       this.$refs.formModel.validate((success) => {
         if(success){
-          const formData = {...this.form};
-          console.log('formData', formData);
+          const formData = {...this.form}
+          console.log('formData', formData)
 
-          this.$loading.show();
+          this.$loading.show()
           httpAction(this.requestUrl, formData, this.requestMethod).then(result => {
-            if(;!result.code;){
-              this.$message.success('保存成功！');
-              this.cancel();
+            if(!result.code){
+              this.$message.success('保存成功！')
+              this.cancel()
               this.$emit('ok')
             }
           }).finally(() => {
             this.$loading.hide()
-          };)
+          })
         }
-      };)
+      })
     },
   }
 }

@@ -18,17 +18,32 @@
             <include refid="baseColumns"/>
         from ${table.tableName} a
         <where>
-            <#list columnList as column>
-                <#if column.enableQuery == 1>
-                    <#if column.entityFieldType == "String">
+            <#list searchList as column>
+                <#if column.entityFieldType == "String">
             <if test="${column.entityFieldName} != null and ${column.entityFieldName} != ''">
-                        <#if column.queryType?contains("like")>
-                and a.${column.dbFieldName} ${column.queryType} CONCAT('%', ${'#'}{${column.entityFieldName}}, '%')
-                        <#else>
-                and a.${column.dbFieldName} ${column.queryType}  ${'#'}{${column.entityFieldName}}
-                         </#if>
+                    <#if column.queryType == "Like">
+                and a.${column.dbFieldName} like CONCAT('%', ${'#'}{${column.entityFieldName}}, '%')
+                    <#else>
+                and a.${column.dbFieldName} ${column.queryType} ${'#'}{${column.entityFieldName}}
+                     </#if>
+            </if>
+                <#elseif column.entityFieldType == 'LocalDateTime' || column.entityFieldType == 'LocalDate'>
+                    <#if column.queryType == "Between">
+            <if test="${column.entityFieldName}Begin != null"
+                and a.${column.dbFieldName} &gt;= ${'#'}{${column.entityFieldName}Begin}
+            </if>
+            <if test="${column.entityFieldName}End != null"
+                and a.${column.dbFieldName} &lt;= ${'#'}{${column.entityFieldName}End}
+            </if>
+                    <#else>
+            <if test="${column.entityFieldName} != null"
+                and a.${column.dbFieldName} ${column.queryType} ${'#'}{${column.entityFieldName}}
             </if>
                     </#if>
+                <#else>
+            <if test="${column.entityFieldName} != null">
+                and a.${column.dbFieldName} ${column.queryType} ${'#'}{${column.entityFieldName}}
+            </if>
                 </#if>
             </#list>
         </where>

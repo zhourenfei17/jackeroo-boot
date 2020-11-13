@@ -1,26 +1,141 @@
 <template>
-  <div><#if existQuery>
+  <div><#if existQuery><#assign existJDictSelect = false /><#assign existJSelect = false />
     <search-card :enter="refreshData">
-        <#list columnList as column>
-            <#if column.enableQuery == 1>
-      <a-col :md="6" :sm="12">
+        <#list searchList as column>
+            <#if column_index < 3>
+      <a-col :md="${((column.formType == 'date' || column.formType == 'dateTime') && column.queryType == 'Between')?string('12','6')}" :sm="12">
         <a-form-item label="${column.dbFieldDesc}">
-                <#if column.formType == "input">
-          <a-input v-model="queryParam.${column.entityFieldName}" placeholder="请输入${column.dbFieldDesc}"/>
-                <#elseif column.formType == "select">
-          <a-select v-model="queryParam.${column.entityFieldName}" placeholder="请选择${column.dbFieldDesc}"/>
-                <#elseif column.formType == "input">
-                <#elseif column.formType == "input">
+                <#if column.formType == "input" || column.formType == 'textarea'>
+                    <#if column.entityFieldType == 'Integer' || column.entityFieldType == 'Double' || column.entityFieldType == 'Float' || column.entityFieldType == 'BigDecimal'>
+          <a-input-number v-model="queryParam.${column.entityFieldName}" placeholder="请输入${column.dbFieldDesc}" precision="${column.dbFieldDecimal}"></a-input-number>
+                    <#else>
+          <a-input v-model="queryParam.${column.entityFieldName}" placeholder="请输入${column.dbFieldDesc}"></a-input>
+                    </#if>
+                <#elseif column.formType == 'select' || column.formType == 'multiple_select' || column.formType == 'radio' || column.formType == 'checkbox'>
+                    <#if column.formDictCode?? && column.formDictCode != ''>
+                        <#assign existJDictSelect = true />
+          <j-dict-select
+            v-model="queryParam.${column.entityFieldName}"
+            placeholder="请选择${column.dbFieldDesc}"
+            dictCode="${column.formDictCode}"<#if column.formType == 'multiple_select'>
+            multi</#if>
+            >
+          </j-dict-select>
+                    <#elseif column.formType =='select' || column.formType =='multiple_select'>
+                        <#assign existJSelect = true />
+          <j-select
+            v-model="queryParam.${column.entityFieldName}"
+            placeholder="请选择${column.dbFieldDesc}"
+            url=""
+            textField=""
+            valueField=""<#if column.formType == 'multiple_select'>
+            multi</#if>
+            >
+          </j-select>
+                    </#if>
+                <#elseif column.formType == 'date' || column.formType == 'datetime'>
+                    <#if column.queryType == 'Between'>
+          <a-date-picker
+            v-model="queryParam.${column.entityFieldName}Begin"
+            placeholder="请选择${column.dbFieldDesc}"<#if column.formType == 'dateTime'>
+            mode="time"</#if>
+            valueFormat="${(column.formType == 'date')?string('YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss')}"
+            style="width:45%">
+          </a-date-picker>
+          <a-date-picker
+            v-model="queryParam.${column.entityFieldName}End"
+            placeholder="请选择${column.dbFieldDesc}"<#if column.formType == 'dateTime'>
+            mode="time"</#if>
+            valueFormat="${(column.formType == 'date')?string('YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss')}"
+            style="width:45%;margin-left: 10%;">
+          </a-date-picker>
+                    <#else>
+          <a-date-picker
+            v-model="queryParam.${column.entityFieldName}"
+            placeholder="请选择${column.dbFieldDesc}"<#if column.formType == 'dateTime'>
+            mode="time"</#if>
+            valueFormat="${(column.formType == 'date')?string('YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss')}"
+            style="width:100%">
+          </a-date-picker>
+                    </#if>
                 </#if>
         </a-form-item>
       </a-col>
             </#if>
         </#list>
 
-        <template slot="operate">
-            <a-button type="primary" @click="refreshData(true)">查询</a-button>
-            <a-button style="margin-left: 8px" @click="reset">重置</a-button>
-        </template>
+        <#if searchList?size &gt; 3>
+      <template slot="more">
+            <#list searchList as column>
+                <#if column_index &gt;= 3>
+        <a-col :md="${((column.formType == 'date' || column.formType == 'dateTime') && column.queryType == 'Between')?string('12','6')}" :sm="12">
+          <a-form-item label="${column.dbFieldDesc}">
+            <#if column.formType == "input" || column.formType == 'textarea'>
+                <#if column.entityFieldType == 'Integer' || column.entityFieldType == 'Double' || column.entityFieldType == 'Float' || column.entityFieldType == 'BigDecimal'>
+            <a-input-number v-model="queryParam.${column.entityFieldName}" placeholder="请输入${column.dbFieldDesc}" precision="${column.dbFieldDecimal}"></a-input-number>
+                <#else>
+            <a-input v-model="queryParam.${column.entityFieldName}" placeholder="请输入${column.dbFieldDesc}"></a-input>
+                </#if>
+            <#elseif column.formType == 'select' || column.formType == 'multiple_select' || column.formType == 'radio' || column.formType == 'checkbox'>
+                <#if column.formDictCode?? && column.formDictCode != ''>
+                    <#assign existJDictSelect = true />
+            <j-dict-select
+              v-model="queryParam.${column.entityFieldName}"
+              placeholder="请选择${column.dbFieldDesc}"
+              dictCode="${column.formDictCode}"<#if column.formType == 'multiple_select'>
+              multi</#if>
+              >
+            </j-dict-select>
+                <#elseif column.formType =='select' || column.formType =='multiple_select'>
+                    <#assign existJSelect = true />
+            <j-select
+              v-model="queryParam.${column.entityFieldName}"
+              placeholder="请选择${column.dbFieldDesc}"
+              url=""
+              textField=""
+              valueField=""<#if column.formType == 'multiple_select'>
+              multi</#if>
+              >
+            </j-select>
+                </#if>
+            <#elseif column.formType == 'date' || column.formType == 'datetime'>
+                <#if column.queryType == 'Between'>
+            <a-date-picker
+              v-model="queryParam.${column.entityFieldName}Begin"
+              placeholder="请选择${column.dbFieldDesc}"<#if column.formType == 'dateTime'>
+              mode="time"</#if>
+              valueFormat="${(column.formType == 'date')?string('YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss')}"
+              style="width:45%">
+            </a-date-picker>
+            <a-date-picker
+              v-model="queryParam.${column.entityFieldName}End"
+              placeholder="请选择${column.dbFieldDesc}"<#if column.formType == 'dateTime'>
+              mode="time"</#if>
+              valueFormat="${(column.formType == 'date')?string('YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss')}"
+              style="width:45%;margin-left: 10%;">
+            </a-date-picker>
+                <#else>
+            <a-date-picker
+              v-model="queryParam.${column.entityFieldName}"
+              placeholder="请选择${column.dbFieldDesc}"<#if column.formType == 'dateTime'>
+              mode="time"</#if>
+              valueFormat="${(column.formType == 'date')?string('YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss')}"
+              style="width:100%"
+              :disabled="flag.view">
+            </a-date-picker>
+                </#if>
+            </#if>
+          </a-form-item>
+        </a-col>
+                </#if>
+            </#list>
+      </template>
+        </#if>
+
+      <template slot="operate">
+        <a-button type="primary" @click="refreshData(true)">查询</a-button>
+        <a-button style="margin-left: 8px" @click="reset">重置</a-button>
+      </template>
     </search-card></#if>
 
     <data-card
@@ -68,11 +183,7 @@
 </template>-
 
 <script>
-<#if existQuery>
-import { STable, DataCard, SearchCard } from '@/components'
-<#else>
-import { STable, DataCard } from '@/components'
-</#if>
+import { STable, DataCard<#if existQuery>, SearchCard</#if><#if existJSelect>, JSelect</#if><#if existJDictSelect>, JDictSelect</#if>} from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import ${table.className}FormModal from './modal/${table.className}FormModal'
 
@@ -83,6 +194,12 @@ export default {
     DataCard,
   <#if existQuery>
     SearchCard,
+  </#if>
+  <#if existJSelect>
+    JSelect,
+  </#if>
+  <#if existJDictSelect>
+    JDictSelect,
   </#if>
     ${table.className}FormModal
   },
@@ -114,11 +231,11 @@ export default {
           title: '操作',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
-        };
+        }
       ],
-      {
-        '/${module.code}/${pathName}/list',
-        delete;: '/${module.code}/${pathName}/delete'
+      url: {
+        list: '/${module.code}/${pathName}/list',
+        delete: '/${module.code}/${pathName}/delete'
       },
     }
   },
