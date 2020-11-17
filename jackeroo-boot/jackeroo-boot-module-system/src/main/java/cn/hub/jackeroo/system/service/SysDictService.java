@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.system.service;
 
+import cn.hub.jackeroo.constant.RedisKeyPrefix;
 import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.system.entity.SysDict;
 import cn.hub.jackeroo.system.mapper.SysDictMapper;
@@ -9,6 +10,8 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +62,7 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
      * @param dictCode
      * @return
      */
+    @Cacheable(value = RedisKeyPrefix.CACHE_DICT, key = "#dictCode")
     public List<SysDict> findDictItemByDictCode(String dictCode){
         LambdaQueryWrapper<SysDict> query = new LambdaQueryWrapper<>();
         query.orderByAsc(SysDict::getSort);
@@ -80,18 +84,20 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
 
     /**
      * 保存字典项信息
-     * @param entity
+     * @param dict
      */
+    @CacheEvict(value = RedisKeyPrefix.CACHE_DICT, key = "#dict.dictCode")
     @Transactional
-    public void saveDictItem(SysDict entity){
-        entity.setType(SysDict.TYPE_DICT_ITEM);
-        super.save(entity);
+    public void saveDictItem(SysDict dict){
+        dict.setType(SysDict.TYPE_DICT_ITEM);
+        super.save(dict);
     }
 
     /**
      * 修改数据字典信息
      * @param dict
      */
+    @CacheEvict(value = RedisKeyPrefix.CACHE_DICT, key = "#dict.dictCode")
     @Transactional
     public void updateDict(SysDict dict){
         SysDict oldDict = super.getById(dict.getId());
@@ -115,6 +121,7 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
      * 修改字典项
      * @param dict
      */
+    @CacheEvict(value = RedisKeyPrefix.CACHE_DICT, key = "#dict.dictCode")
     @Transactional
     public void updateDictItem(SysDict dict){
         SysDict oldDict = super.getById(dict.getId());

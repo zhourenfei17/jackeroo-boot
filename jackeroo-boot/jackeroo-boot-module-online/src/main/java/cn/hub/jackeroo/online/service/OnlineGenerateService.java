@@ -294,7 +294,8 @@ public class OnlineGenerateService {
     private void analysisColumnField(List<OnlineTableField> fieldList, Map<String, Object> dataMap){
         boolean existLength = false, existPrimaryKey = false, existUnique = false, existLocalDateTime = false, existLocalDate = false,
                 existBigDecimal = false, existFieldFill = false, existRange = false, existNotEmpty = false, existLocker = false,
-                existQuery = false, existCodeNum = false, existEmail = false, existUrl = false, existDigits = false, existDict = false;
+                existQuery = false, existCodeNum = false, existEmail = false, existUrl = false, existDigits = false, existDict = false,
+                existBetween = false;
 
         for (OnlineTableField field : fieldList) {
             if("String".equals(field.getEntityFieldType())){
@@ -345,6 +346,11 @@ public class OnlineGenerateService {
             if(field.getEnableQuery() == Constant.BOOLEAN_YES){
                 existQuery = true;
             }
+
+            if((field.getFormType().equals("date") || field.getFormType().equals("datetime"))
+                    && field.getQueryType().equals("Between") && field.getEnableQuery() == Constant.BOOLEAN_YES){
+                existBetween = true;
+            }
         }
 
         dataMap.put("existLength", existLength);
@@ -363,6 +369,7 @@ public class OnlineGenerateService {
         dataMap.put("existUrl", existUrl);
         dataMap.put("existDigits", existDigits);
         dataMap.put("existDict", existDict);
+        dataMap.put("existBetween", existBetween);
     }
 
     /**

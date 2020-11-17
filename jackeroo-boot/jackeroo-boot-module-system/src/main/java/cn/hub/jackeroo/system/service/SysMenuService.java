@@ -1,6 +1,7 @@
 package cn.hub.jackeroo.system.service;
 
 import cn.hub.jackeroo.constant.Constant;
+import cn.hub.jackeroo.constant.RedisKeyPrefix;
 import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.system.entity.SysMenu;
 import cn.hub.jackeroo.system.entity.SysRole;
@@ -109,7 +110,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * @param roleCode
      * @return
      */
-    @Cacheable(value = "MENU", key = "#roleCode")
+    @Cacheable(value = RedisKeyPrefix.CACHE_MENU, key = "#roleCode")
     public List<SysMenu> getMenuByRole(String roleCode){
         SysRole role = roleService.getByCode(roleCode);
         if(role == null){

@@ -24,6 +24,9 @@ import ${scheme.packageName}.utils.validator.groups.Update;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 </#if>
+<#if !existFieldFill && existBetween>
+import com.baomidou.mybatisplus.annotation.TableField;
+</#if>
 import com.baomidou.mybatisplus.annotation.TableId;
 <#if existLocker>
 import com.baomidou.mybatisplus.annotation.Version;
@@ -149,4 +152,20 @@ public class ${table.className} extends BaseEntity<${table.className}> {
     private ${column.entityFieldType} ${column.entityFieldName};
 
 </#list>
+<#list searchList as column>
+    <#if (column.formType == 'date' || column.formType == 'dateTime') && column.queryType == 'Between'>
+
+    /**
+     * ${column.dbFieldDesc} - 开始时间
+     */
+    @TableField(exist = false)
+    private String ${column.entityFieldName}Begin;
+
+    /**
+     * ${column.dbFieldDesc} - 结束时间
+     */
+    @TableField(exist = false)
+    private String ${column.entityFieldName}End;
+    </#if>
+</#list>`
 }
