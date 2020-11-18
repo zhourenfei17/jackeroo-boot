@@ -81,7 +81,9 @@ function warningAndSkip(){
 
       setTimeout(() => {
         let pathname = window.location.pathname
-        if(router.currentRoute.fullPath == '/' && pathname != '/'){
+        if(router.currentRoute.fullPath == '/user/login'){
+          router.replace({ path: '/user/login'})
+        }else if(router.currentRoute.fullPath == '/' && pathname != '/'){
           router.replace({ path: '/user/login', query: {redirect : pathname}})
         }else{
           router.replace({ path: '/user/login', query: {redirect : router.currentRoute.fullPath}})
