@@ -39,6 +39,7 @@ import FileSelector from '@/components/jackeroo/Form/Selector/FileSelector'
 import JSelect from '@/components/jackeroo/Form/Selector/Select'
 import JDictSelect from '@/components/jackeroo/Form/Selector/DictSelector'
 import DragTable from '@/components/jackeroo/DataDisplay/DragTable'
+import IconSelectInput from '@/components/jackeroo/Form/Selector/IconSelectorInput'
 
 export {
   AvatarList,
@@ -77,5 +78,6 @@ export {
   FileSelector,
   JSelect,
   JDictSelect,
-  DragTable
+  DragTable,
+  IconSelectInput
 }

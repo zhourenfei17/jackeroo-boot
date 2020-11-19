@@ -52,13 +52,7 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="图标" prop="icon">
-              <a-input placeholder="点击选择图标" v-model="form.icon" :readOnly="true" :disabled="flag.view">
-                <span v-if="!form.icon" slot="addonBefore" style="width:15px;display: inline-block;"></span>
-                <a-icon v-else :type="form.icon" slot="addonBefore"></a-icon>
-                <a-icon type="close-circle" slot="suffix" @click="clearIcon" class="close"></a-icon>
-                <a-icon v-if="flag.view" slot="addonAfter" type="setting"/>
-                <a-icon v-else slot="addonAfter" type="setting" @click="selectIcons"/>
-              </a-input>
+              <icon-select-input placeholder="点击选择图标" v-model="form.icon" :disabled="flag.view"></icon-select-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -141,11 +135,6 @@
       </a-form-model>
     </j-spin>
 
-    <!-- 选择图标 -->
-    <a-modal :visible="iconVisible" title="选择图标" width="50vw" @cancel="handleIconCancel" @ok="handleIconOk">
-      <icon-selector @change="handleIconChange" :value="tempIconValue"></icon-selector>
-    </a-modal>
-
     <menu-auth-list-modal ref="menuAuthListModal" @change="handleChangeAuth"></menu-auth-list-modal>
   </j-drawer>
 </template>
@@ -153,16 +142,16 @@
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
 import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
-import {IconSelector, JDrawer} from '@/components'
+import { JDrawer, IconSelectInput} from '@/components'
 import {TreeSelect} from 'ant-design-vue'
 import MenuAuthListModal from './MenuAuthListModal'
 
 export default {
   components: {
-    IconSelector,
     JDrawer,
     TreeSelect,
-    MenuAuthListModal
+    MenuAuthListModal,
+    IconSelectInput
   },
   mixins: [JackerooFormMixins],
   data(){
@@ -170,7 +159,6 @@ export default {
       title: '菜单信息',
       tableName: 'sys_user',
       width: '40vw',
-      iconVisible: false,
       form: {
         id: undefined,
         parentId: undefined,
@@ -225,7 +213,6 @@ export default {
         getTreeSelect: '/system/menu/getTreeSelect',
         findDefaultGroupPermission: '/system/menu/permission/config/findDefaultPermissionConfig'
       },
-      tempIconValue: '',
       treeData: [],
       groupId: null,
       permissionEdit: false
@@ -347,19 +334,6 @@ export default {
     handleEditAuth(){
       this.$refs.menuAuthListModal.edit(this.permissionList, this.groupId, this.permissionEdit)
     },
-    selectIcons(){
-      this.iconVisible = true
-    },
-    handleIconCancel(){
-      this.iconVisible = false
-    },
-    handleIconOk(){
-      this.form.icon = this.tempIconValue
-      this.iconVisible = false
-    },
-    handleIconChange(icon){
-      this.tempIconValue = icon
-    },
     loadTreeData(){
       getAction(this.url.getTreeSelect).then(res => {
         if(!res.code){
@@ -368,9 +342,6 @@ export default {
           this.treeData = treeData
         }
       })
-    },
-    clearIcon(){
-      this.form.icon = ''
     },
     cancel(){
       this.visible = false
@@ -398,11 +369,5 @@ export default {
 <style lang="less" scoped>
 .tooltip-red{
   color: #ff4545;
-}
-.close{
-  color: #D3D3D3;
-}
-.close:hover{
-  color: #696969;
 }
 </style>
