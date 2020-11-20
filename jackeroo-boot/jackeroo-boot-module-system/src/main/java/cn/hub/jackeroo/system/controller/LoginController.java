@@ -79,7 +79,7 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping("/logout")
 	public Result logout() {
-		SecurityUtils.getSubject().logout();
+		// SecurityUtils.getSubject().logout();
 		return ok();
 	}
 

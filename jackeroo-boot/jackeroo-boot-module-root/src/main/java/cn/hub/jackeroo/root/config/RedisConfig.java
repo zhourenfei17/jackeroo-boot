@@ -90,7 +90,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         // 设置序列化
         RedisSerializer<Object> jackson2JsonRedisSerializer = valueSerializer();
         // 配置redisTemplate
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory);
         RedisSerializer<?> stringSerializer = new StringRedisSerializer();
         redisTemplate.setKeySerializer(stringSerializer);// key序列化
