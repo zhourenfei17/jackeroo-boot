@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -227,6 +228,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         return treeSelectList;
     }
 
+    @CacheEvict(value = RedisKeyPrefix.CACHE_MENU, allEntries = true)
     @Transactional
     @Override
     public boolean save(SysMenu menu) {
@@ -325,6 +327,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * 更新菜单
      * @param menu
      */
+    @CacheEvict(value = RedisKeyPrefix.CACHE_MENU, allEntries = true)
     public void update(SysMenu menu){
         validMenu(menu);
         if(CollectionUtils.isNotEmpty(menu.getAuth())){

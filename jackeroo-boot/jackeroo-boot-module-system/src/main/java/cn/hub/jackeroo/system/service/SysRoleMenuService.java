@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.system.service;
 
+import cn.hub.jackeroo.constant.RedisKeyPrefix;
 import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.entity.SysRoleMenu;
 import cn.hub.jackeroo.system.mapper.SysRoleMenuMapper;
@@ -8,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,12 +45,9 @@ public class SysRoleMenuService extends ServiceImpl<SysRoleMenuMapper, SysRoleMe
      * 保存角色权限配置
      * @param rolePermission
      */
+    @CacheEvict(value = RedisKeyPrefix.CACHE_MENU, key = "#role.roleCode")
     @Transactional
-    public void saveRolePermission(RolePermission rolePermission){
-        SysRole role = roleService.getById(rolePermission.getRoleId());
-        if(role == null){
-            return;
-        }
+    public void saveRolePermission(RolePermission rolePermission, SysRole role){
         // 全删全插
         LambdaQueryWrapper<SysRoleMenu> query = new LambdaQueryWrapper<>();
         query.eq(SysRoleMenu::getRoleId, role.getId());

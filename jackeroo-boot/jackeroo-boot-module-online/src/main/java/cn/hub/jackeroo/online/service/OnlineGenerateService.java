@@ -261,6 +261,7 @@ public class OnlineGenerateService {
         dataMap.put("scheme", scheme);
         dataMap.put("columnList", fieldList);
         dataMap.put("searchList", fieldList.stream().filter(item -> item.getEnableQuery() == Constant.BOOLEAN_YES).collect(Collectors.toList()));
+        dataMap.put("tableDictList", fieldList.stream().filter(item -> StringUtils.isNotBlank(item.getFormDictCode())).collect(Collectors.toSet()));
         dataMap.put("module", module);
         dataMap.put("entityName", table.getClassName());
         dataMap.put("varName", StringUtils.toUnderFirstLetter(table.getClassName()));

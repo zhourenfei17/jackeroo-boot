@@ -95,7 +95,10 @@ public class RoleController extends BaseController {
     @PostMapping("saveRolePermission")
     @ApiOperation(value = "保存角色权限配置")
     public Result saveRolePermission(@Validated @RequestBody RolePermission rolePermission){
-        roleMenuService.saveRolePermission(rolePermission);
+        SysRole role = roleService.getById(rolePermission.getRoleId());
+        if(role != null){
+            roleMenuService.saveRolePermission(rolePermission, role);
+        }
         return ok();
     }
 

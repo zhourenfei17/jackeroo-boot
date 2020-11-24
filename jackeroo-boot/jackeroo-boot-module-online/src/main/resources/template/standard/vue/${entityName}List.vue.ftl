@@ -186,6 +186,9 @@
 import { STable, DataCard<#if existQuery>, SearchCard</#if><#if existJSelect>, JSelect</#if><#if existJDictSelect>, JDictSelect</#if>} from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import ${table.className}FormModal from './modal/${table.className}FormModal'
+<#if tableDictList?? && tableDictList?size &gt; 0>
+import {loadDictItemByCode} from '@/api/system';
+</#if>
 
 export default {
   name: 'RoleList',
@@ -224,6 +227,11 @@ export default {
           defaultSortOrder: '${(table.sortType == "asc")?string('ascend', 'descend')}'
                     </#if>
                 </#if>
+                <#if column.formDictCode?? && column.formDictCode != ''>
+          customRender: (text) => {
+            return this.loadDictText(text, this.dictOptions.${column.entityFieldName})
+          }
+                </#if>
         },
             </#if>
         </#list>
@@ -240,7 +248,17 @@ export default {
     }
   },
   methods: {
+  <#if tableDictList?? && tableDictList?size &gt; 0>
+    initDictionary(){
+    <#list tableDictList as dict>
+      // ${column.dbFieldDesc}
+      loadDictItemByCode('${dict.formDictCode}').then(result => {
+        this.dictOptions.${dict.entityFieldName} = result
+      })
 
+    </#list>
+    }
+  </#if>
   }
 }
 </script>
