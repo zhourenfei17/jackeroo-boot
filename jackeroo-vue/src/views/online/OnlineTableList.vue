@@ -76,6 +76,7 @@ import SelectTableModal from './modal/SelectTableModal'
 import GenerateTableColumn from './modal/GenerateTableColumn'
 import GenerateFileSelect from './modal/GenerateFileSelect'
 import DefaultConfigModal from './modal/DefaultConfigModal'
+import {loadDictItemByCode} from '@/api/system';
 
 export default {
   name: 'OnlineTableList',
@@ -110,6 +111,9 @@ export default {
         {
           title: '主键策略',
           dataIndex: 'idStrategy',
+          customRender: (text) => {
+            return this.loadDictText(text, this.dictOptions.idStrategy)
+          }
         },
         {
           title: '创建时间',
@@ -126,9 +130,17 @@ export default {
         delete: '/online/table/delete',
         generateCode: '/online/generate/generateCode'
       },
+      dictOptions: {
+        idStrategy: []
+      }
     }
   },
   methods: {
+    initDictionary(){
+      loadDictItemByCode('GEN_ID_STRATEGY').then(result => {
+        this.dictOptions.idStrategy = result
+      })
+    },
     handleAdd(){
       this.$refs.selectTableModal.visible = true
       this.$refs.selectTableModal.add()

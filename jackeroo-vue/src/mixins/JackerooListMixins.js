@@ -61,10 +61,30 @@ export const JackerooListMixins = {
       },
     }
   },
-  computed: {
-    
+  /**
+   * 如果引用该混入的组件需要重写created钩子函数，需要注意钩子函数并不会被覆盖，而是先执行混入对象的钩子，再执行组件的钩子；
+   * 如果无特殊情况可以自定义重新实现init()方法，从而达到覆盖钩子函数的目的
+   */
+  created() {
+    this.init()
   },
   methods: {
+    init(){
+      this.initDictionary()
+    },
+    // 加载页面数据字典项，组件需要自定义实现
+    initDictionary(){
+
+    },
+    // 通过字典值，获取字典文本
+    loadDictText(val, dictList){
+      const dict = dictList.filter((item) => item.value == val)
+      if(dict.length === 1){
+        return dict[0].label
+      }else{
+        return ''
+      }
+    },
     // 选中行事件
     onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
