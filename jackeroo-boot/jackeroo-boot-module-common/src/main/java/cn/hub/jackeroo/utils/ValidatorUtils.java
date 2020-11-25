@@ -46,6 +46,10 @@ public class ValidatorUtils {
      * 正则表达式：验证邮政编码
      */
     public static final String REGEX_POST_CODE = "^[1-9]\\\\d{5}$";
+    /**
+     * 正则表达式：验证字母和下划线
+     */
+    public static final String REGEX_LETTER_UNDERLINE = "^[A-Za-z_]+?$]";
 
     /**
      * 校验手机号
@@ -123,6 +127,15 @@ public class ValidatorUtils {
      */
     public static boolean isPostCode(String num){
         return Pattern.matches(REGEX_POST_CODE, num);
+    }
+
+    /**
+     * 校验字母或者下划线
+     * @param str
+     * @return
+     */
+    public static boolean isLetterAndUnderline(String str){
+        return Pattern.matches(REGEX_LETTER_UNDERLINE, str);
     }
 
 }

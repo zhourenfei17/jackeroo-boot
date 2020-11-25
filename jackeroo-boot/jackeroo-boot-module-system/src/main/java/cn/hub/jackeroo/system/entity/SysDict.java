@@ -1,7 +1,9 @@
 package cn.hub.jackeroo.system.entity;
 
+import cn.hub.jackeroo.enums.ValidRuleType;
 import cn.hub.jackeroo.persistence.BaseEntity;
 import cn.hub.jackeroo.utils.validator.annotation.Unique;
+import cn.hub.jackeroo.utils.validator.annotation.ValidRules;
 import cn.hub.jackeroo.utils.validator.groups.First;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Second;
@@ -60,6 +62,13 @@ public class SysDict extends BaseEntity<SysDict> {
     @Length(max = 30, groups = Second.class)
     @NotBlank(groups = Second.class)
     private String label;
+
+    /**
+     * 标签名-英文
+     */
+    @ValidRules(type = ValidRuleType.VALID_LETTER_AND_UNDERLINE, message = "只能输入字母和下划线")
+    @Length(max = 50, groups = Second.class)
+    private String labelEn;
 
     /**
      * 字典编码

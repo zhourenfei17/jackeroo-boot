@@ -251,11 +251,10 @@ export default {
   <#if tableDictList?? && tableDictList?size &gt; 0>
     initDictionary(){
     <#list tableDictList as dict>
-      // ${column.dbFieldDesc}
+      // ${dict.dbFieldDesc}
       loadDictItemByCode('${dict.formDictCode}').then(result => {
         this.dictOptions.${dict.entityFieldName} = result
       })
-
     </#list>
     }
   </#if>

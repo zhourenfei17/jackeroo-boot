@@ -1,10 +1,10 @@
 package cn.hub.jackeroo.system.entity;
 
-import cn.hub.jackeroo.constant.CodeType;
+import cn.hub.jackeroo.enums.ValidRuleType;
 import cn.hub.jackeroo.persistence.BaseEntity;
-import cn.hub.jackeroo.utils.validator.annotation.CodeNum;
 import cn.hub.jackeroo.utils.validator.annotation.Dict;
 import cn.hub.jackeroo.utils.validator.annotation.Unique;
+import cn.hub.jackeroo.utils.validator.annotation.ValidRules;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -106,7 +106,7 @@ public class SysUser extends BaseEntity<SysUser> {
      * 手机
      */
     @Unique(name = "手机号", groups = {Insert.class, Update.class})
-    @CodeNum(type = CodeType.MOBILE)
+    @ValidRules(type = ValidRuleType.VALID_MOBILE)
     @NotBlank
     @ApiModelProperty(value = "手机号")
     private String phone;
@@ -114,7 +114,7 @@ public class SysUser extends BaseEntity<SysUser> {
     /**
      * 座机
      */
-    @CodeNum(type = CodeType.TELEPHONE)
+    @ValidRules(type = ValidRuleType.VALID_TELEPHONE)
     @ApiModelProperty(value = "座机")
     private String telephone;
 

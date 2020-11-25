@@ -8,15 +8,18 @@ import java.time.LocalDate;
 </#if>
 import java.io.Serializable;
 
-import ${scheme.packageName}.persistence.BaseEntity;
-<#if existCodeNum && scheme.enableServerValid == 1>
-import cn.hub.jackeroo.utils.validator.annotation.CodeNum;
+<#if existValidRules && scheme.enableServerValid == 1>
+import cn.hub.jackeroo.enums.ValidRuleType;
 </#if>
+import ${scheme.packageName}.persistence.BaseEntity;
 <#if existDict && scheme.enableServerValid == 1>
 import cn.hub.jackeroo.utils.validator.annotation.Dict;
 </#if>
 <#if existUnique && scheme.enableServerValid == 1>
 import ${scheme.packageName}.utils.validator.annotation.Unique;
+</#if>
+<#if existValidRules && scheme.enableServerValid == 1>
+import cn.hub.jackeroo.utils.validator.annotation.ValidRules;
 </#if>
 import ${scheme.packageName}.utils.validator.groups.Insert;
 import ${scheme.packageName}.utils.validator.groups.Update;
@@ -121,16 +124,16 @@ public class ${table.className} extends BaseEntity<${table.className}> {
         </#if>
         <#if column.formValidator?? && column.formValidator != ''>
             <#if column.formValidator?contains('validMobile')>
-    @CodeNum(type = CodeType.MOBILE)
+    @ValidRules(type = ValidRuleType.VALID_MOBILE, message = "手机号不正确")
             </#if>
             <#if column.formValidator?contains('validPhone')>
-    @CodeNum(type = CodeType.TELEPHONE)
+    @ValidRules(type = ValidRuleType.VALID_TELEPHONE, message = "电话号不正确")
             </#if>
             <#if column.formValidator?contains('validUnique')>
     @Unique(name = "${column.dbFieldDesc}")
             </#if>
             <#if column.formValidator?contains('validIdNumber')>
-    @CodeNum(type = CodeType.ID_CARD)
+    @ValidRules(type = ValidRuleType.VALID_ID_CARD, message = "身份证号不正确")
             </#if>
             <#if column.formValidator?contains('validWebsite')>
     @URL
@@ -139,7 +142,10 @@ public class ${table.className} extends BaseEntity<${table.className}> {
     @Email
             </#if>
             <#if column.formValidator?contains('validPostCode')>
-    @CodeNum(type = CodeType.POST_CODE)
+    @ValidRules(type = ValidRuleType.VALID_POSTCODE, message = "邮编不正确")
+            </#if>
+            <#if column.formValidator?contains('validLetterAndUnderline')>
+    @ValidRules(type = ValidRuleType.VALID_LETTER_AND_UNDERLINE, message = "只能输入字母和下划线")
             </#if>
         </#if>
     </#if>
@@ -167,5 +173,5 @@ public class ${table.className} extends BaseEntity<${table.className}> {
     @TableField(exist = false)
     private String ${column.entityFieldName}End;
     </#if>
-</#list>`
+</#list>
 }

@@ -7,6 +7,7 @@
         a.id as "id",
         a.value as "value",
         a.label as "label",
+        a.label_en as "labelEn",
         a.dict_code as "dictCode",
         a.dict_name as "dictName",
         a.type as "type",

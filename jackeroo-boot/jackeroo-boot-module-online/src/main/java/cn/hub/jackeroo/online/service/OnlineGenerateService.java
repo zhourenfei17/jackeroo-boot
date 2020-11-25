@@ -64,6 +64,7 @@ public class OnlineGenerateService {
     @Autowired
     private OnlineDefaultConfigService defaultConfigService;
 
+
     /**
      * 获取数据库业务表列表-带分页
      * @param onlineTable
@@ -261,7 +262,10 @@ public class OnlineGenerateService {
         dataMap.put("scheme", scheme);
         dataMap.put("columnList", fieldList);
         dataMap.put("searchList", fieldList.stream().filter(item -> item.getEnableQuery() == Constant.BOOLEAN_YES).collect(Collectors.toList()));
-        dataMap.put("tableDictList", fieldList.stream().filter(item -> StringUtils.isNotBlank(item.getFormDictCode())).collect(Collectors.toSet()));
+        dataMap.put("tableDictList", fieldList.stream().filter(item -> item.getEnableList() == Constant.BOOLEAN_YES && StringUtils.isNotBlank(item.getFormDictCode())).collect(Collectors.toSet()));
+        /*dataMap.put("dictMap", fieldList.stream()
+                .filter(item -> StringUtils.isNotBlank(item.getFormDictCode()))
+                .collect(Collectors.toMap(item -> item.getDbFieldName().toUpperCase(), item -> systemApi.getDictItemByCode(item.getFormDictCode()))));*/
         dataMap.put("module", module);
         dataMap.put("entityName", table.getClassName());
         dataMap.put("varName", StringUtils.toUnderFirstLetter(table.getClassName()));
@@ -295,7 +299,7 @@ public class OnlineGenerateService {
     private void analysisColumnField(List<OnlineTableField> fieldList, Map<String, Object> dataMap){
         boolean existLength = false, existPrimaryKey = false, existUnique = false, existLocalDateTime = false, existLocalDate = false,
                 existBigDecimal = false, existFieldFill = false, existRange = false, existNotEmpty = false, existLocker = false,
-                existQuery = false, existCodeNum = false, existEmail = false, existUrl = false, existDigits = false, existDict = false,
+                existQuery = false, existValidRules = false, existEmail = false, existUrl = false, existDigits = false, existDict = false,
                 existBetween = false;
 
         for (OnlineTableField field : fieldList) {
@@ -321,17 +325,19 @@ public class OnlineGenerateService {
             }
 
             if(StringUtils.isNotBlank(field.getFormValidator())){
-                if(field.getFormValidator().contains("validUnique")){
+                if(!existUnique && field.getFormValidator().contains("validUnique")){
                     existUnique = true;
-                }else if(field.getFormValidator().contains("validMobile") ||
-                    field.getFormValidator().contains("validPhone") ||
-                    field.getFormValidator().contains("validIdNumber") ||
-                    field.getFormValidator().contains("validPostCode")){
-                    existCodeNum = true;
-                }else if(field.getFormValidator().contains("validEmail")){
+                }else if(!existEmail && field.getFormValidator().contains("validEmail")){
                     existEmail = true;
-                }else if(field.getFormValidator().contains("validWebsite")){
+                }else if(!existUrl && field.getFormValidator().contains("validWebsite")){
                     existUrl = true;
+                }
+                if(!existValidRules && field.getFormValidator()
+                        .replace("validUnique", "")
+                        .replace("validEmail", "")
+                        .replace("validWebsite", "")
+                        .replace(",", "").length() > 0){
+                    existValidRules = true;
                 }
             }
             if(StringUtils.isNotBlank(field.getFormDictCode())){
@@ -365,7 +371,7 @@ public class OnlineGenerateService {
         dataMap.put("existNotEmpty", existNotEmpty);
         dataMap.put("existLocker", existLocker);
         dataMap.put("existQuery", existQuery);
-        dataMap.put("existCodeNum", existCodeNum);
+        dataMap.put("existValidRules", existValidRules);
         dataMap.put("existEmail", existEmail);
         dataMap.put("existUrl", existUrl);
         dataMap.put("existDigits", existDigits);

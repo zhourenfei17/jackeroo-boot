@@ -16,7 +16,7 @@
     <j-spin :spinning="loading">
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
         <a-row :gutter="formGutter"><#list columnList as column><#if column.enableForm == 1 && column.primaryKey == 0>
-          <a-col :span="rowSpan">
+          <a-col :span="${(column.singleLine == 0)?string('rowSpan', 'fullSpan')}">
             <a-form-model-item label="${column.dbFieldDesc}" prop="${column.entityFieldName}">
                 <#if column.formType == "input">
                     <#if column.entityFieldType == 'Integer' || column.entityFieldType == 'Double' || column.entityFieldType == 'Float' || column.entityFieldType == 'BigDecimal'>
@@ -88,6 +88,7 @@ export default {
       title: '${table.comment}',
       <#if existUnique>tableName: '${table.tableName}',</#if>
       width: '60vw',
+      <#if scheme.formStyle?number &gt; 1>formCol: ${scheme.formStyle},</#if>
       form: {
             <#list columnList as column>
             <#if column.enableForm == 1 || column.primaryKey == 1>
