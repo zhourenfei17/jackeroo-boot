@@ -24,6 +24,8 @@ export const JackerooFormMixins = {
       formGutter: 24,
       // 表单列数，取值1-4
       formCol: 1,
+      // 占整行
+      fullSpan: 24
     }
   },
   computed: {

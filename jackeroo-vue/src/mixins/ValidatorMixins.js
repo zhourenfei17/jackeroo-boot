@@ -61,6 +61,14 @@ export const ValidatorMixins = {
         callback('请填写正确的邮箱地址')
       }
     },
+    // 验证字母和下划线
+    validLetterAndUnderline(rule, value, callback){
+      if(value && /^[A-Za-z_]+?$/.test(value)){
+        callback()
+      }else{
+        callback('请输入字母或者下划线')
+      }
+    },
     // 唯一性校验
     /**
      * rule 参数详解 

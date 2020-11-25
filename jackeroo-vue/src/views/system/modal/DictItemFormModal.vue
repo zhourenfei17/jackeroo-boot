@@ -20,6 +20,11 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
+            <a-form-model-item label="字典项英文名" prop="labelEn">
+              <a-input v-model="form.labelEn" placeholder="请输入字典项名称" :disabled="flag.view"></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="rowSpan">
             <a-form-model-item label="字典项值" prop="value">
               <a-input v-model="form.value" placeholder="请输入字典项值" :disabled="flag.view"></a-input>
             </a-form-model-item>
@@ -54,6 +59,7 @@ export default {
       form: {
         id: undefined,
         label: undefined,
+        labelEn: undefined,
         value: undefined,
         sort: undefined,
         remark: undefined,
@@ -79,6 +85,10 @@ export default {
         label: [
           {required: true, message: '请输入字典项名称'},
           {max: 30, message: '长度需要在0到30之间'},
+        ],
+        labelEn: [
+          {max: 30, message: '长度需要在0到50之间'},
+          {validator: this.validLetterAndUnderline}
         ],
         sort: [
           {min: 0, max: 99999, message: '长度需要在0到5之间', type: 'number'},
