@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -101,6 +102,12 @@ public class OnlineDefaultConfig extends BaseEntity<OnlineDefaultConfig> {
     @Min(0)
     @Max(128)
     private Integer enableServerValid;
+
+    /**
+     * 是否启用权限
+     */
+    @Range(max = 1)
+    private Integer enableSecurity;
 
     /**
      * 列配置

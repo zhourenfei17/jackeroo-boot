@@ -16,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,6 +53,7 @@ public class UserController extends BaseController {
         @ApiImplicitParam(name = "account", value = "登录账号", paramType = ParamType.QUERY),
         @ApiImplicitParam(name = "phone", value = "手机号", paramType = ParamType.QUERY)
     })
+    @RequiresPermissions("system:user:view")
     public Result<IPage<SysUser>> list(@ApiIgnore SysUser sysUser, @Validated PageParam pageParam){
         return ok(userService.findPage(sysUser, pageParam));
     }
@@ -63,6 +65,7 @@ public class UserController extends BaseController {
      */
     @GetMapping("/{id}")
     @ApiOperation(value = "用户详情", notes = "根据id获取用户详情")
+    @RequiresPermissions("system:user:view")
     public Result<SysUser> getById(@PathVariable String id){
         return ok(userService.findById(Long.parseLong(id)));
     }
@@ -75,6 +78,7 @@ public class UserController extends BaseController {
     @PostMapping("save")
     @ApiOperation(value = "保存用户", notes = "保存用户信息")
     @ValidatedUnique(clazz = SysUser.class)
+    @RequiresPermissions("system:user:add")
     public Result save(@Validated(Insert.class) @RequestBody SysUser user){
         userService.insertUser(user);
         return ok();
@@ -88,6 +92,7 @@ public class UserController extends BaseController {
     @PutMapping("update")
     @ApiOperation(value = "更新用户", notes = "更新用户信息")
     @ValidatedUnique(clazz = SysUser.class, groups = Update.class)
+    @RequiresPermissions("system:user:update")
     public Result update(@Validated(Update.class) @RequestBody SysUser user){
         // SysUser sysUser = new SysUser();
         // BeanUtils.copyProperties(user, sysUser);
@@ -106,6 +111,7 @@ public class UserController extends BaseController {
      */
     @DeleteMapping("delete")
     @ApiOperation(value = "删除用户", notes = "根据id删除用户")
+    @RequiresPermissions("system:user:delete")
     public Result delete(@Validated Id id){
         userService.removeById(id.getId());
 

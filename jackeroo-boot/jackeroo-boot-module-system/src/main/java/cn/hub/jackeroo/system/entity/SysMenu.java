@@ -137,7 +137,9 @@ public class SysMenu extends BaseEntity<SysMenu> {
     @TableField(exist = false)
     private List<SysMenu> children;
     @TableField(exist = false)
-    private String group;
+    private String function;
+    @TableField(exist = false)
+    private String module;
     @TableField(exist = false)
     private List<AuthVo> auth;
 

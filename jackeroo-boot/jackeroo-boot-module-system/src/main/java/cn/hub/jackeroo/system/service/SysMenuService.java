@@ -250,7 +250,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         }
 
         if(CollectionUtils.isNotEmpty(menu.getAuth())){
-            List<SysMenu> authList = getAuthMenuList(menu.getAuth(), menu);
+            List<SysMenu> authList = getAuthMenuList(menu.getAuth(), menu, false, 0);
             if(authList.size() > 0){
                 super.saveBatch(authList);
             }
@@ -260,12 +260,15 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     }
 
     private void validMenu(SysMenu menu){
-        if(menu.getLeaf() == Constant.BOOLEAN_YES){
+        if(menu.getLeaf() == null){
+            menu.setLayout(null);
+            menu.setComponent(null);
+        }else if(menu.getLeaf() == Constant.BOOLEAN_YES){
             menu.setLayout(null);
         }else{
             menu.setComponent(null);
         }
-        if(menu.getTarget() == SysMenu.TARGET_OUTSIDE){
+        if(menu.getTarget() == null || menu.getTarget() == SysMenu.TARGET_OUTSIDE){
             menu.setComponent(null);
         }
     }
@@ -274,7 +277,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         return (parentIds == null ? "" : parentIds) + Constant.SPLIT_SLASH + parentId;
     }
 
-    private List<SysMenu> getAuthMenuList(List<AuthVo> voList, SysMenu menu){
+    private List<SysMenu> getAuthMenuList(List<AuthVo> voList, SysMenu menu, boolean fullPermission, int startSort){
         List<SysMenu> authList = new ArrayList<>();
         for (int i = 0; i < voList.size(); i++) {
             AuthVo auth = voList.get(i);
@@ -285,8 +288,13 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
                 authMenu.setParentIds(buildParentIds(menu.getParentIds(), menu.getId()));
                 authMenu.setLevel(menu.getLevel() + 1);
                 authMenu.setName(auth.getLabel());
-                authMenu.setSort((i+ 1) * 10);
-                authMenu.setPermission(menu.getGroup() + ":" + auth.getValue());
+                authMenu.setSort(startSort + (i + 1) * 10);
+                // 如果已经是完整的权限标识，则直接显示，否则需要拼接
+                if(fullPermission){
+                    authMenu.setPermission(auth.getValue());
+                }else{
+                    authMenu.setPermission(menu.getModule() + Constant.SPLIT_SECURITY + menu.getFunction() + Constant.SPLIT_SECURITY + auth.getValue());
+                }
                 authMenu.setType(SysMenu.TYPE_PERMISSION);
 
                 authList.add(authMenu);
@@ -330,21 +338,22 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     @CacheEvict(value = RedisKeyPrefix.CACHE_MENU, allEntries = true)
     public void update(SysMenu menu){
         validMenu(menu);
+        SysMenu sysMenu = super.getById(menu.getId());
+        if(sysMenu != null){
+            menu.setLevel(sysMenu.getLevel());
+            menu.setParentIds(sysMenu.getParentIds());
+        }
+
         if(CollectionUtils.isNotEmpty(menu.getAuth())){
             for (AuthVo authVo : menu.getAuth()) {
-                authVo.setValue(menu.getGroup() + ":" + authVo.getValue());
-            }
-
-            SysMenu sysMenu = super.getById(menu.getId());
-            if(sysMenu != null){
-                menu.setLevel(sysMenu.getLevel());
-                menu.setParentIds(sysMenu.getParentIds());
+                authVo.setValue(menu.getModule() + Constant.SPLIT_SECURITY +  menu.getFunction() + Constant.SPLIT_SECURITY + authVo.getValue());
             }
 
             LambdaQueryWrapper<SysMenu> query = new LambdaQueryWrapper<>();
             query.eq(SysMenu::getParentId, menu.getId());
 
-            List<AuthVo> existAuthList = super.list(query)
+            List<SysMenu> existAuthMenuList = super.list(query);
+            List<AuthVo> existAuthList = existAuthMenuList
                     .stream()
                     .map(item -> new AuthVo(item.getPermission(), item.getName()))
                     .collect(Collectors.toList());
@@ -352,7 +361,12 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
             //新增的
             List<AuthVo> addAuthList = menu.getAuth().stream().filter(item -> !existAuthList.contains(item)).collect(Collectors.toList());
             if(CollectionUtils.isNotEmpty(addAuthList)){
-                List<SysMenu> authList = getAuthMenuList(addAuthList, menu);
+                SysMenu max = existAuthMenuList.stream().max(Comparator.comparingInt(SysMenu::getSort)).get();
+                int maxSort = 0;
+                if(max != null){
+                    maxSort = max.getSort();
+                }
+                List<SysMenu> authList = getAuthMenuList(addAuthList, menu, true, maxSort);
                 super.saveBatch(authList);
             }
 

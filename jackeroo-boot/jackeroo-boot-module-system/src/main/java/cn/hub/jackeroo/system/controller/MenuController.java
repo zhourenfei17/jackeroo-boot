@@ -1,10 +1,12 @@
 package cn.hub.jackeroo.system.controller;
 
+import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysMenu;
 import cn.hub.jackeroo.system.service.SysMenuService;
 import cn.hub.jackeroo.system.vo.Tree;
 import cn.hub.jackeroo.system.vo.TreeSelect;
+import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.utils.UserUtils;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
@@ -13,6 +15,8 @@ import cn.hub.jackeroo.vo.Id;
 import cn.hub.jackeroo.vo.LoginUser;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -140,5 +144,32 @@ public class MenuController extends BaseController {
     @ApiOperation(value = "获取下拉框中的菜单树")
     public Result<TreeSelect> getTreeSelect(){
         return ok(menuService.getTreeSelect());
+    }
+
+    /**
+     * 获取叶子菜单的权限标识前缀
+     * @param pid
+     * @return
+     */
+    @GetMapping("getPermissionPrefix")
+    @ApiOperation(value = "获取叶子菜单的权限标识前缀")
+    public Result getPermissionPrefix(String pid){
+        LambdaQueryWrapper<SysMenu> query = new LambdaQueryWrapper<>();
+        query.eq(SysMenu::getParentId, pid);
+        query.eq(SysMenu::getType, SysMenu.TYPE_PERMISSION);
+        query.last("limit 1");
+
+        SysMenu menu = menuService.getOne(query, false);
+
+        JSONObject json = new JSONObject();
+        if(menu != null && StringUtils.isNotBlank(menu.getPermission())){
+            json.put("module", menu.getPermission().split(Constant.SPLIT_SECURITY)[0]);
+            json.put("function", menu.getPermission().split(Constant.SPLIT_SECURITY)[1]);
+        }else{
+            json.put("module", "");
+            json.put("function", "");
+        }
+
+        return ok(json);
     }
 }

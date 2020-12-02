@@ -63,4 +63,8 @@ public interface Constant {
      * 分隔符-中横线
      */
     String SPLIT_MIDDLE_LINE = "-";
+    /**
+     * 权限标识中的分隔符
+     */
+    String SPLIT_SECURITY = ":";
 }

@@ -141,6 +141,7 @@ public class OnlineGenerateService {
             scheme.setEnablePagination(defaultConfig.getEnablePagination());
             scheme.setEnableSwagger(defaultConfig.getEnableSwagger());
             scheme.setEnableServerValid(defaultConfig.getEnableServerValid());
+            scheme.setEnableSecurity(defaultConfig.getEnableSecurity());
             map.put("scheme", scheme);
         }
 

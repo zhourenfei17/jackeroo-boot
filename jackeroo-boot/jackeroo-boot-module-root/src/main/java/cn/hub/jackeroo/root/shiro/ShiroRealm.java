@@ -115,22 +115,19 @@ public class ShiroRealm extends AuthorizingRealm {
             }
         }
 		log.info("---------------- 获取到以下权限 ----------------");
-		//log.info(info.getStringPermissions().toString());
+		log.info(info.getStringPermissions().toString());
 		log.info("---------------- Shiro 权限获取成功 ----------------------");
-		//return info;
-        return null;
+        return info;
 	}
 
     @Override
     public Object getAuthorizationCacheKey(PrincipalCollection principals) {
-        log.info("=============================== 获取key ===========================");
         LoginUser user = (LoginUser) principals.getPrimaryPrincipal();
         return user.getAccount();
     }
 
     @Override
     public Object getAuthenticationCacheKey(PrincipalCollection principals) {
-        log.info("=============================== 获取key ===========================");
         LoginUser user = (LoginUser) principals.getPrimaryPrincipal();
         return user.getAccount();
     }

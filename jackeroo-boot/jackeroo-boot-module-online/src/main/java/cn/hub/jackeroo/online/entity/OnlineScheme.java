@@ -1,6 +1,8 @@
 package cn.hub.jackeroo.online.entity;
 
+import cn.hub.jackeroo.enums.ValidRuleType;
 import cn.hub.jackeroo.persistence.BaseEntity;
+import cn.hub.jackeroo.utils.validator.annotation.ValidRules;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -8,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -114,4 +117,18 @@ public class OnlineScheme extends BaseEntity<OnlineScheme> {
     @Min(0)
     @Max(1)
     private Integer enableServerValid;
+
+    /**
+     * 是否启用权限
+     */
+    @NotNull
+    @Range(max = 1)
+    private Integer enableSecurity;
+
+    /**
+     * 权限标识
+     */
+    @Length(max = 30)
+    @ValidRules(type = ValidRuleType.VALID_LETTER_AND_UNDERLINE)
+    private String securitySign;
 }
