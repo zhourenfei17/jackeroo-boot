@@ -202,7 +202,11 @@ export default {
           for(const col of this.columns){
             if(prop == col.dataIndex){
               if(col.type == 'checkbox' || col.type == 'multiple'){
-                formData[prop + '_' + i] = newVal[i][prop] ? [newVal[i][prop]] : []
+                if(typeof newVal[i][prop] == 'string' && newVal[i][prop].indexOf(',') > -1){
+                  formData[prop + '_' + i] = newVal[i][prop].split(',')
+                }else{
+                  formData[prop + '_' + i] = newVal[i][prop] ? [newVal[i][prop]] : []
+                }
               }else{
                 formData[prop + '_' + i] = newVal[i][prop]
               }

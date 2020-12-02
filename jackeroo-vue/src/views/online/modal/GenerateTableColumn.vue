@@ -133,7 +133,9 @@ export default {
         template: undefined,
         enablePagination: undefined,
         enableSwagger: undefined,
-        enableServerValid: undefined
+        enableServerValid: undefined,
+        enableSecurity: undefined,
+        securitySign: undefined
       },
       dataSource: [],
       columns: [

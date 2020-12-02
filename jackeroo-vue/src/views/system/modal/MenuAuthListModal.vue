@@ -70,7 +70,7 @@ export default {
           dataIndex: 'label'
         },
         {
-          title: '权限标识后缀',
+          title: '权限代码',
           dataIndex: 'value',
         },
         {
@@ -86,22 +86,32 @@ export default {
         findPermissionByGroupId: '/system/menu/permission/config/findPermissionByGroupId'
       },
       groupId: null,
-      groupChange: false
+      groupChange: false,
+      // 已选中的权限标识
+      checkedAuth: []
     }
   },
   methods: {
-    edit(list, groupId, permissionEdit){
+    edit(list, checkedAuth, groupId, permissionEdit){
       if(groupId && !permissionEdit){
         this.loadPermissionByGroupId(groupId)
       }else{
-        this.dataSource = JSON.parse(JSON.stringify(list))
+        this.dataSource = [...list]
       }
+      this.checkedAuth = [...checkedAuth]
       this.groupId = groupId
       this.visible = true
     },
     loadPermissionByGroupId(groupId){
       getAction(this.url.findPermissionByGroupId, {groupId : groupId}).then(res => {
         this.dataSource = res.data
+        const checked = []
+        for (const item of this.dataSource) {
+          if(item.checked){
+            checked.push(item.value)
+          }
+        }
+        this.checkedAuth = checked
       })
     },
     handleChangePermissionGorup(){
@@ -115,17 +125,7 @@ export default {
       }
     },
     handleConfirm(){
-      if(this.groupChange){
-        const checked = []
-        for(const item of this.dataSource){
-          if(item.checked){
-            checked.push(item.value)
-          }
-        }
-        this.$emit('change', this.dataSource, this.groupId, checked)
-      }else{
-        this.$emit('change', this.dataSource)
-      }
+      this.$emit('change', this.dataSource, this.groupId, this.checkedAuth)
       this.cancel()
     },
     handleAdd(){
@@ -147,13 +147,21 @@ export default {
         }
       }
       this.dataSource.splice(index, 1)
+
+      // 已选中的权限更新
+      let i = this.checkedAuth.indexOf(record.value)
+      if(i > -1){
+        this.checkedAuth.splice(i, 1)
+      }
     },
     cancel(){
       this.visible = false
       this.groupId = null
       this.groupChange = false
+      this.checkedAuth = []
     },
     handleAddPermission(auth){
+      this.checkedAuth.push(auth.value)
       this.dataSource.push(auth)
     },
     handleEditPermission(auth, oldValue){

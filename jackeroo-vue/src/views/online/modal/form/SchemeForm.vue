@@ -53,18 +53,46 @@
           <j-dict-select v-model="formScheme.enableServerValid" dictCode="YES_NO" type="radio"></j-dict-select>
         </a-form-model-item>
       </a-col>
+      <a-col :span="rowSpan">
+        <a-form-model-item label="是否启用权限" prop="enableSecurity">
+          <j-dict-select v-model="formScheme.enableSecurity" dictCode="YES_NO" type="radio"></j-dict-select>
+        </a-form-model-item>
+      </a-col>
+      <a-col :span="rowSpan" v-if="formScheme.enableSecurity == 1">
+        <a-form-model-item label="功能名称" prop="securitySign">
+          <a-input v-model="formScheme.securitySign" placeholder="请输入功能名称" style="width: 90%"></a-input>
+          <a-tooltip placement="topLeft" overlayClassName="tooltip-content"> 
+            <template slot="title">
+              <span>用来拼接权限标识，</span><span class="tooltip-red">规则【功能模块代码:功能名称:权限代码】</span>
+              <br>
+              <span>示例：</span>
+              <br>
+              <span class="tooltip-red">功能模块: 即当前页面的所属模块，例如系统管理对应的代码为【system】</span>
+              <br>
+              <span class="tooltip-red">功能名称: 例如用户管理页面填写【user】</span>
+              <br>
+              <span class="tooltip-red">权限代码: 基本的操作权限，由所选模板决定，例如添加的权限代码对应为【add】</span>
+              <br>
+              <span class="tooltip-red">拼接后权限标识: system:menu:add</span>
+            </template>
+            <a-icon type="exclamation-circle" style="margin-left:20px;"></a-icon>
+          </a-tooltip>
+        </a-form-model-item>
+      </a-col>
     </a-row>
   </a-form-model>
 </template>
 
 <script>
 import { JSelect, JDictSelect} from '@/components'
+import {ValidatorMixins} from '@/mixins/ValidatorMixins';
 
 export default {
   components: {
     JSelect,
     JDictSelect
   },
+  mixins: [ValidatorMixins],
   props: ['formScheme', 'layout', 'formGutter', 'rowSpan'],
   data() {
     return {
@@ -98,6 +126,14 @@ export default {
         ],
         enableServerValid: [
           {required: true, message: '请选择是否开启服务器端校验'}
+        ],
+        enableSecurity: [
+          {required: true, message: '请选择是否启用权限'}
+        ],
+        securitySign: [
+          {required: true, message: '请填写权限标识'},
+          {max: 30, message: '长度需要在0到30之间'},
+          {validator: this.validLetterAndUnderline}
         ]
       },
       url: {
@@ -122,3 +158,9 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.tooltip-red{
+  color: #ff4545;
+}
+</style>

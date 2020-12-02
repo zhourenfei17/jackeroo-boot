@@ -22,6 +22,11 @@ export default {
       type: String,
       required: true
     },
+    // 是否多选，仅type=='select'下有效
+    multi: {
+      type: Boolean,
+      default: false
+    },
     value:{
       type: [String, Number, Array],
       required: false

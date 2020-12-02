@@ -20,11 +20,8 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
-            <a-form-model-item label="权限标识后缀" prop="value">
-              <a-input v-model="form.value" placeholder="请输入权限标识后缀" :disabled="flag.view" style="width:90%;"></a-input>
-              <a-tooltip title="此处填写的权限标识不包含权限前缀部分，如：view、add、edit、delete"> 
-                <a-icon type="exclamation-circle" style="margin-left:20px;"></a-icon>
-              </a-tooltip>
+            <a-form-model-item label="权限代码" prop="value">
+              <a-input v-model="form.value" placeholder="请输入权限代码" :disabled="flag.view"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -60,6 +57,7 @@ export default {
     return {
       title: '权限信息',
       width: '40vw',
+      tableName: 'sys_menu_permission_config',
       form: {
         id: undefined,
         label: undefined,
@@ -68,23 +66,29 @@ export default {
         sort: undefined,
         groupId: undefined
       },
-      rules: {
+      url: {
+        getById: '/system/menu/permission/config/',
+        save: '/system/menu/permission/config/save',
+        update: '/system/menu/permission/config/update'
+      }
+    }
+  },
+  computed: {
+    rules() {
+      return {
         label: [
           {required: true, message: '请输入权限名称'}, 
           {max: 20, message: '长度需要在0到20之间'}
         ],
         value: [
-          {required: true, message: '请输入权限标识后缀'}, 
-          {max: 30, message: '长度需要在0到30之间'}
+          {required: true, message: '请输入权限代码'}, 
+          {max: 30, message: '长度需要在0到30之间'},
+          {validator: this.validLetterAndUnderline},
+          {validator: this.validUnique, condition: 'group_id=' + this.form.groupId, trigger: 'blur', message: '该权限代码已存在'}
         ],
         checked: [
           {required: true, message: '请选择是否选中'}
         ]
-      },
-      url: {
-        getById: '/system/menu/permission/config/',
-        save: '/system/menu/permission/config/save',
-        update: '/system/menu/permission/config/update'
       }
     }
   },

@@ -78,45 +78,58 @@
           </a-col>
           <a-col :span="rowSpan" v-if="type == 1">
             <a-form-model-item label="是否配置权限" prop="setPermission">
-              <a-radio-group v-model="form.setPermission" :disabled="flag.view">
+              <a-radio-group v-model="form.setPermission" :disabled="flag.view || enableCloseAuth">
                 <a-radio :value="0">否</a-radio>
                 <a-radio :value="1">是</a-radio>
               </a-radio-group>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan" v-if="type == 1 && setPermission">
-            <a-form-model-item label="权限标识前缀" prop="group" v-if="form.auth.length > 0">
-              <a-input v-model="form.group" placeholder="请输入权限标识前缀" :disabled="flag.view" style="width:90%;"></a-input>
+            <a-form-model-item label="功能模块" :prop="form.auth.length > 0 ? 'module': undefined">
+              <j-select 
+                v-model="form.module" 
+                placeholder="请选择功能模块" 
+                :url="url.findModuleList" 
+                valueField="code" 
+                :disabled="flag.view" 
+                style="width:90%;">
+              </j-select>
 
-              <a-tooltip placement="left"> 
+              <a-tooltip placement="topLeft" overlayClassName="tooltip-content"> 
                 <template slot="title">
-                  <span>用来拼接权限标识</span>
+                  <span>用来拼接权限标识，</span><span class="tooltip-red">规则【功能模块代码:功能名称:权限代码】</span>
                   <br>
-                  <span class="tooltip-red">示例：</span>
+                  <span>示例：</span>
                   <br>
-                  <span class="tooltip-red">权限标识前缀: system:user</span>
+                  <span class="tooltip-red">功能模块: 例如系统管理对应的代码为【system】</span>
                   <br>
-                  <span class="tooltip-red">权限标识后缀: add</span>
+                  <span class="tooltip-red">功能名称: 例如菜单管理页面填写【menu】</span>
                   <br>
-                  <span class="tooltip-red">拼接后权限标识: system:user:add</span>
+                  <span class="tooltip-red">权限代码: 例如添加的权限代码对应为【add】</span>
+                  <br>
+                  <span class="tooltip-red">拼接后权限标识: system:menu:add</span>
                 </template>
                 <a-icon type="exclamation-circle" style="margin-left:20px;"></a-icon>
               </a-tooltip>
             </a-form-model-item>
-            <a-form-model-item label="权限标识前缀" v-else>
-              <a-input v-model="form.group" placeholder="请输入权限标识前缀" :disabled="flag.view" style="width:90%;"></a-input>
+          </a-col>
+          <a-col :span="rowSpan" v-if="type == 1 && setPermission">
+            <a-form-model-item label="功能名称" :prop="form.auth.length > 0 ? 'function': undefined">
+              <a-input v-model="form.function" placeholder="请输入功能名称" :disabled="flag.view" style="width:90%;"></a-input>
 
-              <a-tooltip placement="left"> 
+              <a-tooltip placement="topLeft" overlayClassName="tooltip-content"> 
                 <template slot="title">
-                  <span>用来拼接权限标识</span>
+                  <span>用来拼接权限标识，</span><span class="tooltip-red">规则【功能模块代码:功能名称:权限代码】</span>
                   <br>
-                  <span class="tooltip-red">示例：</span>
+                  <span>示例：</span>
                   <br>
-                  <span class="tooltip-red">权限标识前缀: system:user</span>
+                  <span class="tooltip-red">功能模块: 例如系统管理对应的代码为【system】</span>
                   <br>
-                  <span class="tooltip-red">权限标识后缀: add</span>
+                  <span class="tooltip-red">功能名称: 例如菜单管理页面填写【menu】</span>
                   <br>
-                  <span class="tooltip-red">拼接后权限标识: system:user:add</span>
+                  <span class="tooltip-red">权限代码: 例如添加的权限代码对应为【add】</span>
+                  <br>
+                  <span class="tooltip-red">拼接后权限标识: system:menu:add</span>
                 </template>
                 <a-icon type="exclamation-circle" style="margin-left:20px;"></a-icon>
               </a-tooltip>
@@ -142,7 +155,7 @@
 <script>
 import { getAction, postAction, httpAction } from '@/api/manage'
 import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
-import { JDrawer, IconSelectInput} from '@/components'
+import { JDrawer, IconSelectInput, JSelect} from '@/components'
 import {TreeSelect} from 'ant-design-vue'
 import MenuAuthListModal from './MenuAuthListModal'
 
@@ -151,7 +164,8 @@ export default {
     JDrawer,
     TreeSelect,
     MenuAuthListModal,
-    IconSelectInput
+    IconSelectInput,
+    JSelect
   },
   mixins: [JackerooFormMixins],
   data(){
@@ -173,7 +187,8 @@ export default {
         hide: 0,
         type: 0,
         setPermission: 1,
-        group: undefined,
+        module: undefined,
+        function: undefined,
         auth: []
       },
       permissionList:[],
@@ -203,7 +218,14 @@ export default {
         sort: [{min: 0, max: 999999, message: '长度需要在0到6之间', type: 'number'}],
         target: [],
         hide: [],
-        group: [{required: true, message: '请填写权限标识前缀'}],
+        function: [
+          {required: true, message: '请填写功能名称'},
+          {max: 30, message: '长度需要在0到30之间'},
+          {validator: this.validLetterAndUnderline}
+        ],
+        module: [
+          {required: true, message: '请选择功能模块'}
+        ],
         auth: []
       },
       url: {
@@ -211,11 +233,13 @@ export default {
         save: '/system/menu/save',
         update: '/system/menu/update',
         getTreeSelect: '/system/menu/getTreeSelect',
-        findDefaultGroupPermission: '/system/menu/permission/config/findDefaultPermissionConfig'
+        findDefaultGroupPermission: '/system/menu/permission/config/findDefaultPermissionConfig',
+        findModuleList: '/system/module/allList'
       },
       treeData: [],
       groupId: null,
-      permissionEdit: false
+      permissionEdit: false,
+      enableCloseAuth: false
     }
   },
   created(){
@@ -233,12 +257,59 @@ export default {
       return this.form.setPermission
     }
   },
+  watch: {
+    setPermission(val){
+      if(val === 1 && this.flag.edit && this.permissionList.length === 0){
+        this.loadDefaultAuthAndChecked()
+      }
+    }
+  },
   methods: {
     add(pid, sort){
       this.form.id = null
       this.form.parentId = pid
       this.form.sort = sort
       this.loading = false
+      this.loadDefaultAuthAndChecked()
+    },
+    edit(id){
+      this.loading = true
+      getAction(this.url.getById + id).then(result => {
+        const data = result.data
+        if(data.auth){
+          // data.function = data.auth[0].value.substring(0, data.auth[0].value.lastIndexOf(':'))
+          data.module = data.auth[0].value.split(':')[0]
+          data.function = data.auth[0].value.split(':')[1]
+
+          const auth = []
+          const permission = []
+          let index = 0
+          for(const a of data.auth){
+            let value = a.value.substring(a.value.lastIndexOf(':') + 1)
+            auth.push(value)
+            index++
+            permission.push({id: index, label: a.label, value: value})
+          }
+          this.permissionList = permission
+          data.auth = auth
+          this.enableCloseAuth = true
+        }else{
+          data.auth = []
+          this.permissionList = []
+          this.enableCloseAuth = false
+        }
+        this.copyProperties(data, this.form)
+        if(this.form.auth == null || this.form.auth.length == 0){
+          this.form.setPermission = 0
+        }else{
+          this.form.setPermission = 1
+        }
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    // 加载默认的权限，并选择默认的选项
+    loadDefaultAuthAndChecked(){
       getAction(this.url.findDefaultGroupPermission).then(res => {
         if(!res.code){
           const permissionList = []
@@ -258,41 +329,10 @@ export default {
         }
       })
     },
-    edit(id){
-      this.loading = true
-      getAction(this.url.getById + id).then(result => {
-        const data = result.data
-        if(data.auth){
-          data.group = data.auth[0].value.substring(0, data.auth[0].value.lastIndexOf(':'))
-
-          const auth = []
-          const permission = []
-          let index = 0
-          for(const a of data.auth){
-            let value = a.value.substring(a.value.lastIndexOf(':') + 1)
-            auth.push(value)
-            index++
-            permission.push({id: index, label: a.label, value: value})
-          }
-          this.permissionList = permission
-          data.auth = auth
-        }else{
-          data.auth = []
-        }
-        this.copyProperties(data, this.form)
-        if(this.form.auth == null || this.form.auth.length == 0){
-          this.form.setPermission = 0
-        }else{
-          this.form.setPermission = 1
-        }
-      }).finally(() => {
-        this.loading = false
-      })
-    },
     handleSubmit(){
       this.$refs.formModel.validate((success) => {
         if(success){
-          const formData = JSON.parse(JSON.stringify(this.form))
+          const formData = {...this.form}
           if(formData.leaf == 1){
             const auth = this.permissionList.filter(item => formData.auth.indexOf(item.value) >= 0)
             formData.auth = auth
@@ -325,14 +365,12 @@ export default {
     },
     handleChangeAuth(permissionList, groupId, checked){
       this.permissionEdit = true
-      this.permissionList = JSON.parse(JSON.stringify(permissionList))
-      if(checked && groupId){
-        this.form.auth = checked
-        this.groupId = groupId
-      }
+      this.permissionList = [...permissionList]
+      this.form.auth = checked
+      this.groupId = groupId
     },
     handleEditAuth(){
-      this.$refs.menuAuthListModal.edit(this.permissionList, this.groupId, this.permissionEdit)
+      this.$refs.menuAuthListModal.edit(this.permissionList, this.form.auth, this.groupId, this.permissionEdit)
     },
     loadTreeData(){
       getAction(this.url.getTreeSelect).then(res => {
@@ -350,9 +388,11 @@ export default {
       this.flag.view = false
 
       this.groupId = null
+      this.enableCloseAuth = false
       this.permissionEdit = false
       this.form.auth = []
-      this.form.group = ''
+      this.form.module = undefined
+      this.form.function = ''
       this.form.layout = 'PageView'
       this.form.setPermission = 1
       this.form.hide = 0
@@ -369,5 +409,15 @@ export default {
 <style lang="less" scoped>
 .tooltip-red{
   color: #ff4545;
+}
+</style>
+
+<style lang="less">
+.tooltip-content{
+  .ant-tooltip-content{
+    .ant-tooltip-inner{
+      width: 350px;
+    }
+  }
 }
 </style>

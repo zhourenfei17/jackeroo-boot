@@ -79,6 +79,11 @@
               <j-dict-select v-model="form.enableServerValid" dictCode="YES_NO" type="radio"></j-dict-select>
             </a-form-model-item>
           </a-col>
+          <a-col :span="rowSpan">
+            <a-form-model-item label="是否启用权限" prop="enableSecurity">
+              <j-dict-select v-model="form.enableSecurity" dictCode="YES_NO" type="radio"></j-dict-select>
+            </a-form-model-item>
+          </a-col>
         </a-row>
       </a-form-model>
 
@@ -150,7 +155,8 @@ export default {
         showCheckbox: undefined,
         enablePagination: undefined,
         enableSwagger: undefined,
-        enableServerValid: undefined
+        enableServerValid: undefined,
+        enableSecurity: undefined
       },
       columns:[
         {
@@ -263,6 +269,8 @@ export default {
         enableSwagger: [
         ],
         enableServerValid: [
+        ],
+        enableSecurity:[
         ]
       }
     }

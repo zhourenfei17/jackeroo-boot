@@ -109,7 +109,6 @@ export default {
       this.$refs.formModal.flag.add = true
       let sort = 0
       for(const item of this.dataSource){
-        console.log(item.sort)
         if(item.sort > sort){
           sort = item.sort
         }
