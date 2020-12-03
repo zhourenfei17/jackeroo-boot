@@ -59,6 +59,18 @@ export const JackerooListMixins = {
             }
           })
       },
+      // 操作列中的JLink组件默认图标icon
+      actionIcon: {
+        view: 'eye',
+        edit: 'edit',
+        delete: 'delete'
+      },
+      // 操作列中的JLink组件默认样式
+      actionType: {
+        view: 'primary',
+        edit: 'primary',
+        delete: 'info'
+      }
     }
   },
   /**

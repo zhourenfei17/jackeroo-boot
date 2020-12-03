@@ -42,24 +42,24 @@
         :showPagination="showPagination"
       >
         <template slot="isDefault" slot-scope="text">
-          <j-tag :type="text == 0 ? 'warning' : 'info'" :text="text == 0 ? '否' : '是'"></j-tag>
+          <j-tag :type="text == 0 ? 'info' : 'primary'" :text="text == 0 ? '否' : '是'"></j-tag>
         </template>
         
         <template slot="disabled" slot-scope="text">
-          <j-tag :type="text == 0 ? 'info' : 'error'" :text="text == 0 ? '启用' : '禁用'"></j-tag>
+          <j-tag :type="text == 0 ? 'primary' : 'error'" :text="text == 0 ? '启用' : '禁用'"></j-tag>
         </template>
 
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
-              <a @click="handleView(record)">详情</a>
-              <a @click="handleEdit(record)">编辑</a>
-              <a @click="handleOpenPermissionListModal(record)">权限列表</a>
-              <a @click="handleSetDefault(record)" v-if="record.isDefault == 0">设为默认</a>
+              <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
+              <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
+              <j-link icon="security-scan" @click="handleOpenPermissionListModal(record)">权限列表</j-link>
+              <j-link icon="undo" @click="handleSetDefault(record)" v-if="record.isDefault == 0">设为默认</j-link>
               <action-menu-list>
-                <a @click="handleDisable(record)" v-if="record.disabled == 0">禁用</a>
-                <a @click="handleEnable(record)" v-if="record.disabled == 1">启用</a>
-                <a @click="handleDelete(record)">删除</a>
+                <j-link @click="handleDisable(record)" v-if="record.disabled == 0">禁用</j-link>
+                <j-link @click="handleEnable(record)" v-if="record.disabled == 1">启用</j-link>
+                <j-link @click="handleDelete(record)">删除</j-link>
               </action-menu-list>
             </action-list>
           </template>

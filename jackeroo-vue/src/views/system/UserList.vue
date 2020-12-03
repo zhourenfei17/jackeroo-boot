@@ -77,17 +77,17 @@
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
-              <a @click="handleView(record)">详情</a>
-              <a @click="handleEdit(record)">编辑</a>
+              <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
+              <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
               <a-popconfirm title="您确定要冻结该用户吗？" v-if="record.status == 0" @confirm="() => frozen(record)">
-                <a class="careful">冻结</a>
+                <j-link icon="frown" type="info">冻结</j-link>
               </a-popconfirm>
               <a-popconfirm title="您确定要解冻该用户吗？" v-if="record.status == 1" @confirm="() => unfrozen(record)">
-                <a class="warning">解冻</a>
+                <j-link icon="smile" type="error">解冻</j-link>
               </a-popconfirm>
               <action-menu-list>
-                <a @click="resetPwd(record)">重置密码</a>
-                <a @click="handleDelete(record)">删除</a>
+                <j-link @click="resetPwd(record)">重置密码</j-link>
+                <j-link @click="handleDelete(record)">删除</j-link>
               </action-menu-list>
             </action-list>
           </template>

@@ -58,7 +58,7 @@ import PageLoading from '@/components/PageLoading'
 import PermissionHelper from '@/utils/helper/permission'
 import './directives/action'
 
-import {ActionList, JModal, JSpin} from '@/components'
+import {ActionList, JModal, JSpin, JLink} from '@/components'
 
 Vue.use(ConfigProvider)
 Vue.use(Layout)
@@ -120,6 +120,8 @@ Vue.use(VueCropper)
 
 Vue.use(FormModel)
 Vue.use(ActionList)
+Vue.use(JLink)
+Vue.component('j-link', JLink)
 Vue.component('j-spin', JSpin)
 Vue.component('j-modal',JModal)
 

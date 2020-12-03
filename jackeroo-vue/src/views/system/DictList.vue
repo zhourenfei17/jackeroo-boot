@@ -51,17 +51,15 @@
         :showPagination="showPagination"
         >
         <template slot="categorySlot" slot-scope="text">
-          <j-tag :type="text == 0 ? 'error' : 'info'" :text="text == 0 ? '系统字典' : '自定义'"></j-tag>
+          <j-tag :type="text == 0 ? 'error' : 'primary'" :text="text == 0 ? '系统字典' : '自定义'"></j-tag>
         </template>
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
-              <a @click="handleView(record)">详情</a>
-              <a @click="handleEdit(record)" v-if="record.category != 0">编辑</a>
-              <a @click="handleDictItem(record)">字典项配置</a>
-              <action-menu-list v-if="record.category != 0">
-                <a @click="handleDelete(record)">删除</a>
-              </action-menu-list>
+              <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
+              <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)" v-if="record.category != 0">编辑</j-link>
+              <j-link icon="bars" @click="handleDictItem(record)">字典项配置</j-link>
+              <j-link :type="actionType.delete" :icon="actionIcon.delete" @click="handleDelete(record)" v-if="record.category != 0">删除</j-link>
             </action-list>
           </template>
         </span>
@@ -121,7 +119,6 @@ export default {
         {
           title: '操作',
           dataIndex: 'action',
-          width: 260,
           scopedSlots: { customRender: 'action' }
         }
       ],

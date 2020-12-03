@@ -56,12 +56,12 @@
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
-              <a @click="handleView(record)">详情</a>
-              <a @click="handleEdit(record)">编辑</a>
+              <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
+              <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
               <action-menu-list>
-                <a @click="handleAdd(record)" v-if="record.leaf == 0">添加下级菜单</a>
-                <a @click="handleEditPermission(record)" v-if="record.leaf == 1">权限列表</a>
-                <a @click="handleDelete(record)">删除</a>
+                <j-link @click="handleAdd(record)" v-if="record.leaf == 0">添加下级菜单</j-link>
+                <j-link @click="handleEditPermission(record)" v-if="record.leaf == 1">权限列表</j-link>
+                <j-link @click="handleDelete(record)">删除</j-link>
               </action-menu-list>
             </action-list>
           </template>
@@ -122,7 +122,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'action',
-          width: '180px',
+          width: '220px',
           scopedSlots: { customRender: 'action' }
         }
       ],

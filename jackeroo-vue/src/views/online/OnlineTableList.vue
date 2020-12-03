@@ -50,11 +50,9 @@
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
-              <a @click="handleEdit(record)">编辑</a>
-              <a @click="handleGenerate(record.id)">生成代码</a>
-              <action-menu-list>
-                <a @click="handleDelete(record)">删除</a>
-              </action-menu-list>
+              <j-link :type="actionType.view" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
+              <j-link icon="code" @click="handleGenerate(record.id)">生成代码</j-link>
+              <j-link :type="actionType.delete" :icon="actionIcon.delete" @click="handleDelete(record)">删除</j-link>
             </action-list>
           </template>
         </span>

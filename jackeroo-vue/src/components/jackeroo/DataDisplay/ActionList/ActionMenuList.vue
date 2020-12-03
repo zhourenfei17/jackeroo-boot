@@ -8,7 +8,7 @@ export default {
     title: {
       type: String,
       default: '更多'
-    }
+    },
   },
   render(){
     const items = filterEmpty(this.$slots.default)
@@ -19,7 +19,7 @@ export default {
 
     return (
       <a-dropdown>
-        <a class="ant-dropdown-link">{this.title}<a-icon type="down"/></a>
+        <j-link class="ant-dropdown-link">{this.title}<a-icon type="down" style="margin-left:5px;"/></j-link>
         <a-menu slot="overlay">
           {itemList}
         </a-menu>

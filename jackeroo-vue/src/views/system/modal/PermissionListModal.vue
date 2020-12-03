@@ -31,8 +31,8 @@
 
         <template slot="action" slot-scope="text, record">
           <action-list>
-            <a @click="handleEdit(record)">编辑</a>
-            <a @click="handleDelete(record)">删除</a>
+            <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
+            <j-link :type="actionType.delete" :icon="actionIcon.delete" @click="handleDelete(record)">删除</j-link>
           </action-list>
         </template>
       </s-table>
@@ -84,7 +84,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'action',
-          width: '140px',
+          width: '160px',
           scopedSlots: { customRender: 'action' }
         }
       ],

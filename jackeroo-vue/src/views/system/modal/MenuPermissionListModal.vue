@@ -29,17 +29,15 @@
         >
 
         <template slot="checked" slot-scope="text">
-          <j-tag :type="text == 0 ? 'warning' : 'info'" :text="text == 0 ? '否' : '是'"></j-tag>
+          <j-tag :type="text == 0 ? 'info' : 'primary'" :text="text == 0 ? '否' : '是'"></j-tag>
         </template>
 
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
-              <a @click="handleView(record)">详情</a>
-              <a @click="handleEdit(record)">编辑</a>
-              <action-menu-list>
-                <a @click="handleDelete(record)">删除</a>
-              </action-menu-list>
+              <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
+              <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
+              <j-link :type="actionType.delete" :icon="actionIcon.delete" @click="handleDelete(record)">删除</j-link>
             </action-list>
           </template>
         </span>
@@ -95,7 +93,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'action',
-          width: '180px',
+          width: '200px',
           scopedSlots: { customRender: 'action' }
         }
       ],
