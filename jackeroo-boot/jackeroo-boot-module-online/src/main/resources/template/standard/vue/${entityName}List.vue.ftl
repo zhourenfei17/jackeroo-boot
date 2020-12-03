@@ -168,11 +168,9 @@
         >
         <template slot="action" slot-scope="text, record">
           <action-list>
-            <a @click="handleView(record)">详情</a>
-            <a @click="handleEdit(record)">编辑</a>
-            <action-menu-list>
-              <a @click="handleDelete(record)">删除</a>
-            </action-menu-list>
+            <a :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</a>
+            <a :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</a>
+            <a :type="actionType.delete" :icon="actionIcon.delete" @click="handleDelete(record)">删除</a>
           </action-list>
         </template>
       </s-table>

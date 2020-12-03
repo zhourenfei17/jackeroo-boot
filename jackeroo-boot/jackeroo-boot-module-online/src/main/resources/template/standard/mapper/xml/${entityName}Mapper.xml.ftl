@@ -49,7 +49,7 @@
         </where>
         <choose>
             <when test="orderBy != null and orderBy != ''">
-                order by ${'$'}{orderBy}
+                order by a.${'$'}{orderBy}
             </when>
             <otherwise>
                 <#if table.sortColumn?? && table.sortColumn != "">
