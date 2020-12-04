@@ -315,11 +315,13 @@ export const constantRouterMap = [
       {
         path: 'login',
         name: 'login',
+        meta: {title: '登录'},
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
       },
       {
         path: 'register',
         name: 'register',
+        meta: {title: '注册'},
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
       },
       {

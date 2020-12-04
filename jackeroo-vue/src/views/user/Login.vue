@@ -1,83 +1,80 @@
 <template>
   <div class="main">
+    <div style="line-height:24px;padding: 10px;font-size: 16px;text-align:center;font-weight:bolder;">
+      账号密码登录
+    </div>
     <a-form
       id="formLogin"
       class="user-layout-login"
       ref="formLogin"
       :form="form"
     >
-      <a-tabs
-        :activeKey="customActiveKey"
-        :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-        @change="handleTabClick"
-      >
-        <a-tab-pane key="tab1" tab="账号密码登录">
-          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" :message="errorMsg" />
-          <a-form-item>
-            <a-input
-              size="large"
-              type="text"
-              placeholder="请输入账号"
-              v-decorator="[
-                'account',
-                {rules: [{ required: true, message: '请输入登录账号' }], validateTrigger: 'change'}
-              ]"
-            >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
+      <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" :message="errorMsg" />
+      <a-form-item>
+        <a-input
+          size="large"
+          type="text"
+          placeholder="请输入账号"
+          v-decorator="[
+            'account',
+            {rules: [{ required: true, message: '请输入登录账号' }], validateTrigger: 'change'}
+          ]"
+        >
+          <span slot="suffix" class="login-input-icon"><a-icon type="user" /></span>
+        </a-input>
+      </a-form-item>
 
-          <a-form-item>
-            <a-input
-              size="large"
-              type="password"
-              autocomplete="false"
-              placeholder="请输入密码"
-              v-decorator="[
-                'pwd',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-              ]"
-            >
-              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
+      <a-form-item>
+        <a-input
+          size="large"
+          :type="pwdVisible ? 'text' : 'password'"
+          autocomplete="false"
+          placeholder="请输入密码"
+          v-decorator="[
+            'pwd',
+            {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+          ]"
+        >
+          <span slot="suffix" class="login-input-icon" @click="chagnePwdVisible">
+            <a-icon :type="pwdVisible ? 'eye-invisible' : 'eye'" />
+          </span>
+        </a-input>
+      </a-form-item>
 
-          <a-form-item>
-            <a-row>
-              <a-col :span="16">
-                <a-input 
-                  size="large" 
-                  type="text" 
-                  placeholder="请输入验证码"
-                  v-decorator="[
-                    'captcha',
-                    {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}
-                  ]"
-                  >
-                    <a-icon slot="prefix" type="smile" :style="{ color: 'rgba(0,0,0,.25)' }" />
-                  </a-input>
-              </a-col>
-              <a-col :span="8" style="text-align:right;">
-                <img v-if="validImg" :src="validImg" @click="generateRandomImage" 
-                  title="点击更换图片"
-                  style="height: 35px;width: 105px;cursor: pointer;">
-                <a-button v-else loading>加载中...</a-button>
-              </a-col>
-            </a-row>
-          </a-form-item>
-        </a-tab-pane>
-      </a-tabs>
+      <a-form-item>
+        <a-input 
+          size="large" 
+          type="text" 
+          placeholder="请输入验证码"
+          v-decorator="[
+            'captcha',
+            {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}
+          ]"
+          >
+          <span slot="suffix" class="login-input-icon"><a-icon type="code" /></span>
+        </a-input>
+      </a-form-item>
 
       <a-form-item style="margin-top:24px">
-        <a-button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          class="login-button"
-          :loading="state.loginBtn"
-          :disabled="state.loginBtn"
-          @click.stop.prevent="handleSubmit"
-        >确定</a-button>
+        <a-row>
+          <a-col :span="16">
+            <img v-if="validImg" :src="validImg" @click="generateRandomImage" 
+              title="点击更换图片"
+              style="height: 35px;width: 105px;cursor: pointer;">
+            <a-button v-else loading>加载中...</a-button>
+          </a-col>
+          <a-col :span="6" :offset="2" style="text-align:right;">
+            <a-button
+              type="primary"
+              htmlType="submit"
+              icon="login"
+              class="login-button"
+              :loading="state.loginBtn"
+              :disabled="state.loginBtn"
+              @click.stop.prevent="handleSubmit"
+            >登录</a-button>
+          </a-col>
+        </a-row>
       </a-form-item>
 
     </a-form>
@@ -122,6 +119,8 @@ export default {
       },
       loginKey: null,
       validImg: null,
+      // 密码是否可见
+      pwdVisible: false,
       errorMsg: '账号或密码错误',
       url: {
         generateImg: '/auth/generateImg/',
@@ -142,6 +141,9 @@ export default {
   },
   methods: {
     ...mapActions(['Login']),
+    chagnePwdVisible(){
+      this.pwdVisible = !this.pwdVisible
+    },
     // handler
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
@@ -203,7 +205,7 @@ export default {
               if(!res.code){
                 this.loginSuccess(res)
               }else{
-                this.$message.error(res.msg)
+                // this.$message.error(res.msg)
               }
             })
             .catch(err => this.requestFailed(err))
@@ -286,17 +288,41 @@ export default {
       this.generateRandomImage()
       this.errorMsg = err.msg || '请求出现错误，请稍后再试'
       this.isLoginError = true
-      this.$notification['error']({
+      /* this.$notification['error']({
         message: '错误',
         description: err.msg || '请求出现错误，请稍后再试',
         duration: 4
-      })
+      }) */
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+.main{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  opacity: 0.9;
+  padding: 20px;
+  border-radius: 5px;
+
+  .login-input-icon{
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    text-align: center;
+    padding-top:6.5px;
+  }
+  .login-input-icon:hover{
+    font-size: 16px;
+    padding-top:5px;
+    background-color: #ccc;
+  }
+}
 .user-layout-login {
   label {
     font-size: 14px;
@@ -315,8 +341,8 @@ export default {
   button.login-button {
     padding: 0 15px;
     font-size: 16px;
-    height: 40px;
     width: 100%;
+    height: 38px;
   }
 
   .user-login-other {
