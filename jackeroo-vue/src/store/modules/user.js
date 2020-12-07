@@ -54,9 +54,9 @@ const user = {
     GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
-          const result = response.result
+          const result = response.data
 
-          if (result.role && result.role.permissions.length > 0) {
+          /* if (result.role && result.role.permissions.length > 0) {
             const role = result.role
             role.permissions = result.role.permissions
             role.permissions.map(per => {
@@ -67,6 +67,15 @@ const user = {
             })
             role.permissionList = role.permissions.map(permission => { return permission.permissionId })
             commit('SET_ROLES', result.role)
+            commit('SET_INFO', result)
+          } else {
+            reject(new Error('getInfo: roles must be a non-null array !'))
+          } */
+
+          if (result.roleCode) {
+            const role = {roleCode: result.roleCode}
+            role.permissionList = result.permissionList
+            commit('SET_ROLES', [role])
             commit('SET_INFO', result)
           } else {
             reject(new Error('getInfo: roles must be a non-null array !'))
@@ -92,6 +101,7 @@ const user = {
         }).finally(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
+          commit('SET_INFO', {})
           storage.remove(ACCESS_TOKEN)
         })
       })

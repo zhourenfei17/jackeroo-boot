@@ -123,7 +123,7 @@ export const generator = (routerMap, parent) => {
   return routerMap.map(item => {
     // const { title, show, hideChildren, hiddenHeaderContent, target, icon } = item.meta || {}
     const {name, type, href, component, icon, target, hide} = item || {}
-    let routerName = item.routerName || href ? href.replace(new RegExp('/', 'gm'), '-') : ''
+    let routerName = item.routerName || href ? href.replace(new RegExp('/', 'gm'), '-').substring(1) : ''
     // let componentName = ((component == '/BasicLayout' || component == '/RouteView') ? (() => import(`@/layouts${component}`)) : (() => import(`@/views${component}`)))
     let componentName = (item.layout ? (() => import(`@/layouts/${item.layout}`)) : (() => import(`@/views${component}`)))
     const currentRouter = {
