@@ -25,7 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -382,5 +385,29 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         }
 
         super.updateById(menu);
+    }
+
+    /**
+     * 根据角色获取所有的权限列表
+     * @param roleCode
+     * @return
+     */
+    public List<AuthVo> getPermissionByRole(String roleCode){
+        List<SysMenu> menuList = this.getMenuByRole(roleCode);
+
+        List<AuthVo> permissionList = new LinkedList<>();
+        this.getPermissionInMenuList(menuList, permissionList);
+
+        return permissionList;
+    }
+
+    private void getPermissionInMenuList(List<SysMenu> menuList, List<AuthVo> permissionList){
+        for (SysMenu menu : menuList) {
+            if(menu.getLeaf() == Constant.BOOLEAN_YES && CollectionUtils.isNotEmpty(menu.getAuth())){
+                permissionList.addAll(menu.getAuth());
+            }else if(CollectionUtils.isNotEmpty(menu.getChildren())){
+                this.getPermissionInMenuList(menu.getChildren(), permissionList);
+            }
+        }
     }
 }

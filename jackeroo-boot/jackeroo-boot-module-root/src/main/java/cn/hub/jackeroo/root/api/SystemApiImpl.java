@@ -1,10 +1,13 @@
 package cn.hub.jackeroo.root.api;
 
 import cn.hub.jackeroo.api.ISystemApi;
+import cn.hub.jackeroo.root.shiro.ShiroRealm;
 import cn.hub.jackeroo.system.entity.SysModule;
 import cn.hub.jackeroo.system.service.SysDictService;
 import cn.hub.jackeroo.system.service.SysModuleService;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +48,14 @@ public class SystemApiImpl implements ISystemApi {
      */
     public List<JSONObject> getDictItemByCode(String dictCode){
         return dictService.findDictItemByDictCode(dictCode).stream().map(item -> (JSONObject)JSONObject.toJSON(item)).collect(Collectors.toList());
+    }
+
+    /**
+     * 清除当前用户缓存
+     */
+    public void clearAuthorizationCache(){
+        DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager)SecurityUtils.getSecurityManager();
+        ShiroRealm realm = (ShiroRealm)securityManager.getRealms().iterator().next();
+        realm.clearAllCachedAuthorizationInfo();
     }
 }

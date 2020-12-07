@@ -24,4 +24,9 @@ public interface ISystemApi {
      * @return
      */
     List<JSONObject> getDictItemByCode(String dictCode);
+
+    /**
+     * 清除当前用户权限缓存
+     */
+    void clearAuthorizationCache();
 }

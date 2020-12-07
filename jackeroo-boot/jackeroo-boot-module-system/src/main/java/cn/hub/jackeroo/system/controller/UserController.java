@@ -3,12 +3,15 @@ package cn.hub.jackeroo.system.controller;
 import cn.hub.jackeroo.constant.ParamType;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysUser;
+import cn.hub.jackeroo.system.service.SysMenuService;
 import cn.hub.jackeroo.system.service.SysUserService;
+import cn.hub.jackeroo.utils.UserUtils;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
+import cn.hub.jackeroo.vo.LoginUser;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -41,6 +44,8 @@ import springfox.documentation.annotations.ApiIgnore;
 public class UserController extends BaseController {
     @Autowired
     private SysUserService userService;
+    @Autowired
+    private SysMenuService menuService;
 
     /**
      * 用户列表
@@ -56,6 +61,19 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:view")
     public Result<IPage<SysUser>> list(@ApiIgnore SysUser sysUser, @Validated PageParam pageParam){
         return ok(userService.findPage(sysUser, pageParam));
+    }
+
+    /**
+     * 获取当前登录用户详细信息
+     * @return
+     */
+    @GetMapping("info")
+    @ApiOperation(value = "获取当前登录用户详细信息")
+    public Result<SysUser> info(){
+        LoginUser user = UserUtils.getUser();
+        SysUser userInfo = userService.findById(user.getId());
+        userInfo.setPermissionList(menuService.getPermissionByRole(user.getRoleCode()));
+        return ok(userInfo);
     }
 
     /**

@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.system.service;
 
+import cn.hub.jackeroo.api.ISystemApi;
 import cn.hub.jackeroo.constant.RedisKeyPrefix;
 import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.entity.SysRoleMenu;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 public class SysRoleMenuService extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> {
 
     @Autowired
-    private SysRoleService roleService;
+    private ISystemApi systemApi;
     /**
      * 根据角色id获取拥有的菜单、权限列表
      * @param roleId
@@ -66,5 +67,7 @@ public class SysRoleMenuService extends ServiceImpl<SysRoleMenuMapper, SysRoleMe
         if(CollectionUtils.isNotEmpty(roleMenuList)){
             super.saveBatch(roleMenuList, 100);
         }
+        //清除当前用户缓存
+        systemApi.clearAuthorizationCache();
     }
 }

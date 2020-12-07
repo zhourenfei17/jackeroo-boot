@@ -2,6 +2,7 @@ package cn.hub.jackeroo.system.entity;
 
 import cn.hub.jackeroo.enums.ValidRuleType;
 import cn.hub.jackeroo.persistence.BaseEntity;
+import cn.hub.jackeroo.system.vo.AuthVo;
 import cn.hub.jackeroo.utils.validator.annotation.Dict;
 import cn.hub.jackeroo.utils.validator.annotation.Unique;
 import cn.hub.jackeroo.utils.validator.annotation.ValidRules;
@@ -11,6 +12,8 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -22,6 +25,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -71,6 +75,7 @@ public class SysUser extends BaseEntity<SysUser> {
     /**
      * 登录密码
      */
+    @JsonIgnore
     @NotBlank(groups = Insert.class)
     @Null(groups = Update.class)
     @ApiModelProperty(hidden = true)
@@ -79,6 +84,7 @@ public class SysUser extends BaseEntity<SysUser> {
     /**
      * 动态盐
      */
+    @JsonIgnore
     @Null
     @ApiModelProperty(hidden = true)
     private String salt;
@@ -175,4 +181,10 @@ public class SysUser extends BaseEntity<SysUser> {
      */
     @TableField(exist = false)
     private String roleCode;
+    /**
+     * 拥有的权限
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    @TableField(exist = false)
+    private List<AuthVo> permissionList;
 }
