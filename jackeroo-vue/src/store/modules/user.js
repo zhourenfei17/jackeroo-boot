@@ -2,6 +2,7 @@ import storage from 'store'
 import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
+import permission from './async-router'
 
 const user = {
   state: {
@@ -74,7 +75,11 @@ const user = {
 
           if (result.roleCode) {
             const role = {roleCode: result.roleCode}
-            role.permissionList = result.permissionList
+            const permissionList = []
+            result.permissionList && result.permissionList.forEach(permission => {
+              permissionList.push(permission.value)
+            });
+            role.permissionList = permissionList
             commit('SET_ROLES', [role])
             commit('SET_INFO', result)
           } else {

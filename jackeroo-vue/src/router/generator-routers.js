@@ -122,16 +122,20 @@ export const generatorDynamicRouter = (token) => {
 export const generator = (routerMap, parent) => {
   return routerMap.map(item => {
     // const { title, show, hideChildren, hiddenHeaderContent, target, icon } = item.meta || {}
-    const {name, type, href, component, icon, target, hide} = item || {}
+    const {name, type, href, component, icon, target, hide, auth} = item || {}
     let routerName = item.routerName || href ? href.replace(new RegExp('/', 'gm'), '-').substring(1) : ''
     // let componentName = ((component == '/BasicLayout' || component == '/RouteView') ? (() => import(`@/layouts${component}`)) : (() => import(`@/views${component}`)))
     let componentName = (item.layout ? (() => import(`@/layouts/${item.layout}`)) : (() => import(`@/views${component}`)))
+    // 权限标识集合
+    const permissionList = []
+    auth && auth.forEach(permission => {
+      permissionList.push(permission.value)
+    });
     const currentRouter = {
       // 如果路由设置了 path，则作为默认 path，否则 路由地址 动态拼接生成如 /dashboard/workplace
       // path: item.path || `${parent && parent.path || ''}/${item.key}`,
       path: href || '',
       // 路由名称，建议唯一
-      // name: item.name || item.key || '',
       name: routerName,
       // 该路由对应页面的 组件 :方案1
       // component: constantRouterComponents[item.component || item.key],
@@ -139,14 +143,13 @@ export const generator = (routerMap, parent) => {
       // component: (constantRouterComponents[item.component || item.key]) || (() => import(`@/views/${item.component}`)),
       // component: (constantRouterComponents[component]) || (() => import(`@/views${component}`)),
       component: componentName,
-
       // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
       meta: {
         title: name,
         icon: icon || undefined,
         hiddenHeaderContent: false,
         target: target == 1 ? undefined : 'blank' || undefined,
-        // permission: item.name
+        permission: permissionList
       }
     }
     // 是否设置了隐藏菜单

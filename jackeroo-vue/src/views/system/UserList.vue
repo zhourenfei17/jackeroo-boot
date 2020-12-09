@@ -47,7 +47,7 @@
         :tableAlign="tableAlign">
 
       <template slot="toolbar">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-button type="primary" icon="plus" v-action="'system:user:add'" @click="handleAdd">新建</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -78,16 +78,16 @@
           <template>
             <action-list>
               <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
-              <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
-              <a-popconfirm title="您确定要冻结该用户吗？" v-if="record.status == 0" @confirm="() => frozen(record)">
+              <j-link :type="actionType.edit" :icon="actionIcon.edit" v-action="'system:user:update'" @click="handleEdit(record)">编辑</j-link>
+              <a-popconfirm title="您确定要冻结该用户吗？" v-if="record.status == 0" v-action="'system:user:frozen'" @confirm="() => frozen(record)">
                 <j-link icon="frown" type="info">冻结</j-link>
               </a-popconfirm>
-              <a-popconfirm title="您确定要解冻该用户吗？" v-if="record.status == 1" @confirm="() => unfrozen(record)">
+              <a-popconfirm title="您确定要解冻该用户吗？" v-if="record.status == 1" v-action="'system:user:frozen'" @confirm="() => unfrozen(record)">
                 <j-link icon="smile" type="error">解冻</j-link>
               </a-popconfirm>
               <action-menu-list>
-                <j-link @click="resetPwd(record)">重置密码</j-link>
-                <j-link @click="handleDelete(record)">删除</j-link>
+                <j-link @click="resetPwd(record)" v-action="'system:user:reset'">重置密码</j-link>
+                <j-link @click="handleDelete(record)" v-action="'system:user:delete'">删除</j-link>
               </action-menu-list>
             </action-list>
           </template>
