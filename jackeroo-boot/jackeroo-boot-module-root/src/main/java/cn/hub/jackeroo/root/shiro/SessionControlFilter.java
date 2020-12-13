@@ -1,34 +1,30 @@
 package cn.hub.jackeroo.root.shiro;
 
+import cn.hub.jackeroo.enums.ResultStatusCode;
 import cn.hub.jackeroo.service.RedisService;
+import cn.hub.jackeroo.utils.ResultUtil;
 import cn.hub.jackeroo.vo.LoginUser;
-import com.alibaba.fastjson.JSON;
+import cn.hub.jackeroo.vo.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.DefaultSessionKey;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
-import org.apache.shiro.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Serializable;
-import java.io.Writer;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 自定义session拦截器，实现同一用户并发登录人数控制
  */
+@Slf4j
 public class SessionControlFilter extends AccessControlFilter {
 
-	private String kickOutUrl; // 踢出后到的地址
+	// private String kickOutUrl; // 踢出后到的地址
 
 	private boolean kickOutAfter = false; // 踢出之前登录的/之后登录的用户 默认踢出之前登录的用户
 
@@ -57,14 +53,6 @@ public class SessionControlFilter extends AccessControlFilter {
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
 		Subject subject = getSubject(request, response);
 		if (!subject.isAuthenticated() && !subject.isRemembered()) {
-			// 如果是ajax访问请求，则返回300错误，前端根据code做对应处理
-			if ("XMLHttpRequest".equalsIgnoreCase(((HttpServletRequest) request).getHeader("X-Requested-With"))) {
-				Map<String, String> resultMap = new HashMap<>();
-				resultMap.put("code", "300");
-				resultMap.put("message", "您已经在其他地方登录，请重新登录！");
-				// 输出json串
-				out(response, resultMap);
-			}
 			// 如果没有登录，直接进行之后的流程
 			return true;
 		}
@@ -98,12 +86,12 @@ public class SessionControlFilter extends AccessControlFilter {
 			Serializable kickOutSessionId;
 			if (kickOutAfter) { // 如果踢出后者
 				// kickoutSessionId = deque.removeFirst();
-                kickOutSessionId = deque.remove(0);
+                kickOutSessionId = deque.remove(deque.size() - 1);
 				// 踢出后再更新下缓存队列
 				// cache.put(username, deque);
 			} else { // 否则踢出前者
 				// kickoutSessionId = deque.removeLast();
-                kickOutSessionId = deque.remove(deque.size() - 1);
+                kickOutSessionId = deque.remove(0);
 				// 踢出后再更新下缓存队列
 				// cache.put(username, deque);
 			}
@@ -135,42 +123,11 @@ public class SessionControlFilter extends AccessControlFilter {
 			}
 			saveRequest(request);
 
-			Map<String, String> resultMap = new HashMap<>();
-			// 判断是不是Ajax请求
-			if ("XMLHttpRequest".equalsIgnoreCase(((HttpServletRequest) request).getHeader("X-Requested-With"))) {
-				resultMap.put("user_status", "300");
-				resultMap.put("message", "您已经在其他地方登录，请重新登录！");
-				// 输出json串
-				out(response, resultMap);
-			} else {
-				// 重定向
-				WebUtils.issueRedirect(request, response, kickOutUrl);
-			}
+            ResultUtil.writeJson(response, new Result<>(ResultStatusCode.KICK_OUT_ERROR));
 			return false;
 		}
 		return true;
 	}
-
-	private void out(ServletResponse response, Map<String, String> resultMap) throws IOException {
-		try {
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json; charset=utf-8");
-
-			Writer out = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
-			out.write(JSON.toJSONString(resultMap));
-			out.flush();
-			out.close();
-		}
-		catch (Exception e) {
-			System.err.println("KickoutSessionFilter.class 输出JSON异常，可以忽略。");
-		}
-	}
-
-
-	public void setKickOutUrl(String kickoutUrl) {
-		this.kickOutUrl = kickOutUrl;
-	}
-
 
 	public void setKickOutAfter(boolean kickOutAfter) {
 		this.kickOutAfter = kickOutAfter;

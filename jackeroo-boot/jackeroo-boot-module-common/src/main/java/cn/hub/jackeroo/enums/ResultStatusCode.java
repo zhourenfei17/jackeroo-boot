@@ -22,6 +22,7 @@ public enum ResultStatusCode {
     UNAUTHO_ERROR(10001, "您没有该权限"),
     UPLOAD_ERROR(10002, "上传文件异常"),
     CAPTCHA_ERROR(10003, "验证码错误"),
+    KICK_OUT_ERROR(40001, "账号已在其他地方登录"),
     BUSSINESS_ERROR(50000, "业务异常"),
     NOT_EXIST_USER_OR_ERROR_PWD(50101, "该用户不存在或密码错误"),
     LOGINED_IN(50102, "该用户已登录"),

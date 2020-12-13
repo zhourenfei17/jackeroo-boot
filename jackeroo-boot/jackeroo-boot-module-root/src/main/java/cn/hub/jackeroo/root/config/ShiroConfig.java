@@ -242,7 +242,7 @@ public class ShiroConfig {
         kickOutSessionControlFilter.setKickOutAfter(false);
         kickOutSessionControlFilter.setMaxSession(sameUserCount);
         kickOutSessionControlFilter.setKeyPrefix(RedisKeyPrefix.SAME_USER_SESSION_LIST);
-        kickOutSessionControlFilter.setKickOutUrl("/common/kickout");
+        // kickOutSessionControlFilter.setKickOutUrl("/common/kickout");
 		return kickOutSessionControlFilter;
 	}
 

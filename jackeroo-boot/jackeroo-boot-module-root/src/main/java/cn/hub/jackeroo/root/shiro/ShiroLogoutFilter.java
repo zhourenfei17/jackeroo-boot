@@ -37,6 +37,9 @@ public class ShiroLogoutFilter extends LogoutFilter {
         String sessionId = (String)subject.getSession().getId();
 
         LoginUser user = (LoginUser)subject.getPrincipal();
+        if(user == null){
+            return true;
+        }
 
         // Check if POST only logout is enabled
         if (isPostOnlyLogout()) {
