@@ -54,7 +54,7 @@
             <action-list>
               <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
               <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
-              <j-link icon="security-scan" @click="handleOpenPermissionListModal(record)">权限列表</j-link>
+              <j-link icon="safety" @click="handleOpenPermissionListModal(record)">权限列表</j-link>
               <j-link icon="undo" @click="handleSetDefault(record)" v-if="record.isDefault == 0">设为默认</j-link>
               <action-menu-list>
                 <j-link @click="handleDisable(record)" v-if="record.disabled == 0">禁用</j-link>

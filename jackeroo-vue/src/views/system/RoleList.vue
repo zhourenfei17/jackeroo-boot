@@ -52,7 +52,7 @@
             <action-list>
               <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
               <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
-              <j-link icon="security-scan" @click="handleSetPermission(record)">配置权限</j-link>
+              <j-link icon="safety" @click="handleSetPermission(record)">配置权限</j-link>
               <j-link :type="actionType.delete" :icon="actionIcon.delete" @click="handleDelete(record)">删除</j-link>
             </action-list>
           </template>

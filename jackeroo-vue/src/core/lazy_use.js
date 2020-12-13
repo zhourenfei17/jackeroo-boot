@@ -55,8 +55,11 @@ import VueCropper from 'vue-cropper'
 import Dialog from '@/components/Dialog'
 import MultiTab from '@/components/MultiTab'
 import PageLoading from '@/components/PageLoading'
-import PermissionHelper from '@/utils/helper/permission'
+import $auth from '@/utils/helper/permission'
+import $role from '@/utils/helper/role';
+// 引入自定义指令
 import './directives/action'
+import './directives/role';
 
 import {ActionList, JModal, JSpin, JLink} from '@/components'
 
@@ -115,7 +118,10 @@ Vue.use(Viser)
 Vue.use(Dialog) // this.$dialog func
 Vue.use(MultiTab)
 Vue.use(PageLoading)
-Vue.use(PermissionHelper)
+// 自定义权限和角色插件
+Vue.use($auth)
+Vue.use($role)
+
 Vue.use(VueCropper)
 
 Vue.use(FormModel)

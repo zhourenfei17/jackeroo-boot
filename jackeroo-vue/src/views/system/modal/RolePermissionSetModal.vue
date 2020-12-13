@@ -125,20 +125,27 @@ export default {
         }
         if(node.children){
           if(!checked){
+            // 如果当前节点存在子节点，但是当前节点为选中，则直接添加至unCheckNodeKeys，不再继续检查其子节点状态
             uncheckNodeKeys.push(node.key)
+          }else{
+            this.loopAndCheckNode(node.children, permissionList, checkedKeys, halfCheckedKeys, uncheckNodeKeys, node.key)
+            // 如果当前节点在遍历子节点的时候，已经存在于halfCheckedKeys中，则表示该节点的父节点也会存在halfCheckedKeys中
+            if(halfCheckedKeys.indexOf(node.key)){
+              childrenCheckedNum--
+            }
           }
-          this.loopAndCheckNode(node.children, permissionList, checkedKeys, halfCheckedKeys, uncheckNodeKeys, node.key)
         }else{
+          // 如果当前节点没有子节点，且当前节点已选中的，则直接添加到checkedKeys
           if(checked){
             checkedKeys.push(node.key)
           }
         }
-        
       }
+      // 如果当前节点为子节点，则判断所有兄弟节点是否都已选中，如果是则添加到checkedKeys，否则添加到halfCheckedKeys
       if(parentKey){
         if(childrenCheckedNum == treeData.length){
           checkedKeys.push(parentKey)
-        }else if(childrenCheckedNum > 0){
+        }else{
           halfCheckedKeys.push(parentKey)
         }
       }

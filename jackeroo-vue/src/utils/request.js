@@ -20,7 +20,7 @@ const errorHandler = (error) => {
   if (error.response) {
     const data = error.response.data
     // 从 localstorage 获取 token
-    const token = storage.get(ACCESS_TOKEN)
+    // const token = storage.get(ACCESS_TOKEN)
     if (error.response.status === 401) {
       notification.error({
         message: '退出登录',
@@ -54,7 +54,11 @@ request.interceptors.request.use(config => {
 request.interceptors.response.use((response) => {
   if(response.config.responseType == 'json'){
     if(response.data.code === 401){
-      asyncSkip()
+      // token失效退出登录
+      warningAndSkip()
+    }else if(response.data.code === 40001){
+      // 账号被挤退出登录
+      warningAndSkip('您的账号已经在其他地方登录，如非本人操作，请立即修改密码！')
     }else if(response.data.code != 0){
       message.error(response.data.msg)
     }
@@ -62,17 +66,14 @@ request.interceptors.response.use((response) => {
   return response.data
 }, errorHandler)
 
-async function asyncSkip(){
-  await warningAndSkip()
-}
 
-function warningAndSkip(){
+function warningAndSkip(msg){
   return new Promise(function(resolve, reject){
     let token = storage.get(ACCESS_TOKEN)
     if(token){
       notification.error({
         message: '退出登录',
-        description: '登录信息失效，请重新登录'
+        description: msg || '登录信息失效，请重新登录'
       })
       
       store.commit('SET_TOKEN', '')
