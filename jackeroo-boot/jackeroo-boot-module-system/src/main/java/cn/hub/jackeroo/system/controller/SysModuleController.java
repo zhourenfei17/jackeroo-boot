@@ -14,6 +14,7 @@ import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,6 +52,7 @@ public class SysModuleController extends BaseController {
      */
     @GetMapping("list")
     @ApiOperation("系统模块列表")
+    @RequiresPermissions("system:module:view")
     public Result<IPage<SysModule>> list(SysModule module, @Validated PageParam pageParam){
         return ok(service.findPage(module, pageParam));
     }
@@ -82,6 +84,7 @@ public class SysModuleController extends BaseController {
      */
     @GetMapping("/{id}")
     @ApiOperation("获取模块信息详情")
+    @RequiresPermissions("system:module:view")
     public Result<SysModule> get(@PathVariable String id){
         return ok(service.getById(id));
     }
@@ -94,6 +97,7 @@ public class SysModuleController extends BaseController {
     @PostMapping("save")
     @ApiOperation("保存模块")
     @ValidatedUnique(clazz = SysModule.class)
+    @RequiresPermissions("system:module:add")
     public Result save(@Validated(Insert.class) @RequestBody SysModule module){
         service.save(module);
         return ok();
@@ -107,6 +111,7 @@ public class SysModuleController extends BaseController {
     @PutMapping("update")
     @ApiOperation("更新模块")
     @ValidatedUnique(clazz = SysModule.class)
+    @RequiresPermissions("system:module:update")
     public Result update(@Validated(Update.class) @RequestBody SysModule module){
         service.updateById(module);
         return ok();
@@ -119,6 +124,7 @@ public class SysModuleController extends BaseController {
      */
     @DeleteMapping("delete")
     @ApiOperation("删除模块")
+    @RequiresPermissions("system:module:delete")
     public Result delete(@Validated Id id){
         service.removeById(id.getId());
         return ok();

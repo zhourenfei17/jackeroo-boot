@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
     public Result unauthorizedException(UnauthorizedException e) {
         log.error(e.getMessage(), e);
 
-        return new Result(ResultStatusCode.UNAUTHO_ERROR);
+        return new Result(ResultStatusCode.UN_AUTH_ERROR);
     }
 
     /**

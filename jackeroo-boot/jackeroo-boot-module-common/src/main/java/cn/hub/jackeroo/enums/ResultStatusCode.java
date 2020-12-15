@@ -19,7 +19,7 @@ public enum ResultStatusCode {
     INVALID_TOKEN(401, "无效的Access-Token"),
     METHOD_NOT_ALLOWED(405, "不支持当前请求方法"),
     SYSTEM_ERR(500, "服务器运行异常"),
-    UNAUTHO_ERROR(10001, "您没有该权限"),
+    UN_AUTH_ERROR(10001, "您没有权限访问"),
     UPLOAD_ERROR(10002, "上传文件异常"),
     CAPTCHA_ERROR(10003, "验证码错误"),
     KICK_OUT_ERROR(40001, "账号已在其他地方登录"),

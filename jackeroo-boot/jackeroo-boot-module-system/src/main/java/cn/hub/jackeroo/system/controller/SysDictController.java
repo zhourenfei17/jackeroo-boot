@@ -17,6 +17,7 @@ import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,6 +58,7 @@ public class SysDictController extends BaseController {
     */
     @GetMapping("list")
     @ApiOperation("数据字典列表")
+    @RequiresPermissions("system:dict:view")
     public Result<IPage<SysDict>> list(SysDict entity, @Validated PageParam pageParam){
         entity.setType(SysDict.TYPE_DICT);
         if(StringUtils.isEmpty(pageParam.getSortField())){
@@ -85,6 +87,7 @@ public class SysDictController extends BaseController {
      */
     @GetMapping("itemList")
     @ApiOperation("字典项列表")
+    @RequiresPermissions("system:dict:view")
     public Result<IPage<SysDict>> itemList(@Validated PageParam pageParam, @RequestParam String dictCode){
         SysDict sysDict = new SysDict();
         sysDict.setType(SysDict.TYPE_DICT_ITEM);
@@ -120,6 +123,7 @@ public class SysDictController extends BaseController {
     */
     @GetMapping("/{id}")
     @ApiOperation("获取数据字典详情")
+    @RequiresPermissions("system:dict:view")
     public Result<SysDict> get(@PathVariable String id){
         return ok(service.getById(id));
     }
@@ -132,6 +136,7 @@ public class SysDictController extends BaseController {
     @PostMapping("save")
     @ApiOperation("保存数据字典")
     @ValidatedUnique(clazz = SysDict.class, condition = "type=0", groups = Second.class)
+    @RequiresPermissions("system:dict:add")
     public Result save(@Validated({Insert.class, First.class}) @RequestBody SysDict entity){
         service.saveDict(entity);
         return ok();
@@ -145,6 +150,7 @@ public class SysDictController extends BaseController {
     @PostMapping("saveDictItem")
     @ApiOperation("保存数据字典项")
     @ValidatedUnique(clazz = SysDict.class, condition = "type=1 and dict_code = #{dictCode}", groups = First.class)
+    @RequiresPermissions("system:dict:add")
     public Result saveDictItem(@Validated({Insert.class, Second.class}) @RequestBody SysDict entity){
         service.saveDictItem(entity);
         return ok();
@@ -158,6 +164,7 @@ public class SysDictController extends BaseController {
     @PutMapping("update")
     @ApiOperation("更新数据字典")
     @ValidatedUnique(clazz = SysDict.class)
+    @RequiresPermissions("system:dict:edit")
     public Result update(@Validated({Update.class, First.class}) @RequestBody SysDict entity){
         service.updateDict(entity);
         return ok();
@@ -171,6 +178,7 @@ public class SysDictController extends BaseController {
     @PutMapping("updateDictItem")
     @ApiOperation("更新数据字典项")
     @ValidatedUnique(clazz = SysDict.class)
+    @RequiresPermissions("system:dict:edit")
     public Result updateDictItem(@Validated({Update.class, Second.class}) @RequestBody SysDict entity){
         service.updateDictItem(entity);
         return ok();
@@ -183,6 +191,7 @@ public class SysDictController extends BaseController {
      */
     @DeleteMapping("deleteDict")
     @ApiOperation("删除字典信息")
+    @RequiresPermissions("system:dict:delete")
     public Result deleteDict(@Validated Id id){
         service.delete(id.getId());
         return ok();
@@ -195,6 +204,7 @@ public class SysDictController extends BaseController {
     */
     @DeleteMapping("deleteDictItem")
     @ApiOperation("删除字典项信息")
+    @RequiresPermissions("system:dict:delete")
     public Result deleteDictItem(@Validated Id id){
         service.delete(id.getId());
         return ok();

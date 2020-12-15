@@ -17,6 +17,7 @@ import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,6 +52,7 @@ public class RoleController extends BaseController {
      */
     @GetMapping("list")
     @ApiOperation(value = "角色列表", response = Result.class)
+    @RequiresPermissions("system:role:view")
     public Result<IPage<SysRole>> list(SysRole sysRole, @Validated PageParam pageParam){
         return ok(roleService.findPage(sysRole, pageParam));
     }
@@ -83,6 +85,7 @@ public class RoleController extends BaseController {
      */
     @GetMapping("/{id}")
     @ApiOperation(value = "角色详情", response = Result.class)
+    @RequiresPermissions("system:role:view")
     public Result<SysRole> getById(@PathVariable String id){
         return ok(roleService.getById(id));
     }
@@ -94,6 +97,7 @@ public class RoleController extends BaseController {
      */
     @PostMapping("saveRolePermission")
     @ApiOperation(value = "保存角色权限配置")
+    @RequiresPermissions("system:role:setAuth")
     public Result saveRolePermission(@Validated @RequestBody RolePermission rolePermission){
         SysRole role = roleService.getById(rolePermission.getRoleId());
         if(role != null){
@@ -110,6 +114,7 @@ public class RoleController extends BaseController {
     @PostMapping("save")
     @ApiOperation(value = "保存角色", response = Result.class)
     @ValidatedUnique(clazz = SysRole.class)
+    @RequiresPermissions("system:role:add")
     public Result save(@Validated(Insert.class) @RequestBody SysRole role){
         // validService.validEntityUniqueField(role);
         roleService.save(role);
@@ -124,6 +129,7 @@ public class RoleController extends BaseController {
     @PutMapping("update")
     @ApiOperation(value = "更新角色", response = Result.class)
     @ValidatedUnique(clazz = SysRole.class)
+    @RequiresPermissions("system:role:update")
     public Result update(@Validated(Update.class) @RequestBody SysRole role){
         // validService.validEntityUniqueField(role);
         roleService.updateById(role);
@@ -137,6 +143,7 @@ public class RoleController extends BaseController {
      */
     @DeleteMapping("delete")
     @ApiOperation(value = "删除角色", response = Result.class)
+    @RequiresPermissions("system:role:delete")
     public Result delete(@Validated Id id){
         roleService.removeById(id.getId());
 

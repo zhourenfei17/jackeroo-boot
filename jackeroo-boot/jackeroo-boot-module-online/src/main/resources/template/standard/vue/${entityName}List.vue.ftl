@@ -145,7 +145,7 @@
       :tableAlign="tableAlign">
 
       <template slot="toolbar">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-button type="primary" icon="plus"<#if scheme.enableSecurity == 1> v-action="'${module.code}:${scheme.securitySign}:add'"</#if> @click="handleAdd">新建</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -169,8 +169,8 @@
         <template slot="action" slot-scope="text, record">
           <action-list>
             <a :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</a>
-            <a :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</a>
-            <a :type="actionType.delete" :icon="actionIcon.delete" @click="handleDelete(record)">删除</a>
+            <a :type="actionType.edit" :icon="actionIcon.edit"<#if scheme.enableSecurity == 1> v-action="'${module.code}:${scheme.securitySign}:update'"</#if> @click="handleEdit(record)">编辑</a>
+            <a :type="actionType.delete" :icon="actionIcon.delete"<#if scheme.enableSecurity == 1> v-action="'${module.code}:${scheme.securitySign}:delete'"</#if> @click="handleDelete(record)">删除</a>
           </action-list>
         </template>
       </s-table>

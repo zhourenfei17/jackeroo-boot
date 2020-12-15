@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,6 +53,7 @@ public class MenuController extends BaseController {
      */
     @GetMapping("list")
     @ApiOperation(value = "获取完整菜单树")
+    @RequiresPermissions("system:menu:view")
     public Result<List<SysMenu>> list(String name){
         return ok(menuService.getMenuFullTree(name));
     }
@@ -95,6 +97,7 @@ public class MenuController extends BaseController {
      */
     @GetMapping("/{id}")
     @ApiOperation(value = "菜单详情")
+    @RequiresPermissions("system:menu:view")
     public Result<SysMenu> getById(@PathVariable String id){
         return ok(menuService.getMenuDetail(id));
     }
@@ -106,6 +109,7 @@ public class MenuController extends BaseController {
      */
     @PostMapping("save")
     @ApiOperation(value = "保存菜单")
+    @RequiresPermissions("system:menu:add")
     public Result save(@Validated(Insert.class) @RequestBody SysMenu menu){
         menuService.save(menu);
         return ok();
@@ -118,6 +122,7 @@ public class MenuController extends BaseController {
      */
     @PutMapping("update")
     @ApiOperation(value = "更新菜单")
+    @RequiresPermissions("system:menu:update")
     public Result update(@Validated(Update.class) @RequestBody SysMenu menu){
         menuService.update(menu);
         return ok();
@@ -130,6 +135,7 @@ public class MenuController extends BaseController {
      */
     @DeleteMapping("delete")
     @ApiOperation(value = "删除菜单")
+    @RequiresPermissions("system:menu:delete")
     public Result delete(@Validated Id id){
         menuService.removeById(id.getId());
 

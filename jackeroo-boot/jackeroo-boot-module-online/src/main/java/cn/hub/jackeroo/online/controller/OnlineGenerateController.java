@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -78,6 +79,7 @@ public class OnlineGenerateController extends BaseController {
      */
     @PostMapping("save")
     @ApiOperation("保存代码生成信息")
+    @RequiresPermissions("online:generate:add")
     public Result save(@RequestBody GenerateTableDetail detail){
         return ok(service.save(detail));
     }
@@ -88,6 +90,7 @@ public class OnlineGenerateController extends BaseController {
      */
     @PostMapping("generateCode")
     @ApiOperation("生成代码")
+    @RequiresPermissions("online:generate:generate")
     public Result generateCode(@Validated @RequestBody GenerateCodeParam param){
         service.generateCode(param.getId(), param.getOutputDir(), param.getOverride(), param.getTemplateType());
         return ok();

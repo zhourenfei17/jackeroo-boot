@@ -10,6 +10,7 @@ import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,6 +41,7 @@ public class OnlineTableController extends BaseController {
      */
     @GetMapping("list")
     @ApiOperation("业务表列表")
+    @RequiresPermissions("online:generate:view")
     public Result<IPage<OnlineTable>> list(OnlineTable onlineTable, @Validated PageParam pageParam){
         return ok(service.findPage(onlineTable, pageParam));
     }
@@ -51,6 +53,7 @@ public class OnlineTableController extends BaseController {
      */
     @GetMapping("/{id}")
     @ApiOperation("获取业务表生成代码详细信息")
+    @RequiresPermissions("online:generate:view")
     public Result get(@PathVariable String id){
         return ok(service.get(id));
     }
@@ -61,6 +64,7 @@ public class OnlineTableController extends BaseController {
      */
     @DeleteMapping("delete")
     @ApiOperation("删除业务表配置")
+    @RequiresPermissions("online:generate:delete")
     public Result delete(@Validated Id id){
         service.delete(id.getId());
 

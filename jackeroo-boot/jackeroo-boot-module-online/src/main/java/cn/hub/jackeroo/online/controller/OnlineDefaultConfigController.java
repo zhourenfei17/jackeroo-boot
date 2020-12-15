@@ -8,6 +8,7 @@ import cn.hub.jackeroo.vo.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,7 @@ public class OnlineDefaultConfigController extends BaseController {
      */
     @GetMapping("getConfig")
     @ApiOperation("获取默认配置记录")
+    @RequiresPermissions("online:generate:setting")
     public Result<OnlineDefaultConfig> getConfig(){
         return ok(service.getConfig());
     }
@@ -47,6 +49,7 @@ public class OnlineDefaultConfigController extends BaseController {
      */
     @PostMapping("save")
     @ApiOperation("保存默认配置")
+    @RequiresPermissions("online:generate:setting")
     public Result save(@RequestBody @Validated OnlineDefaultConfig onlineDefaultConfig){
         service.saveOrUpdate(onlineDefaultConfig);
 

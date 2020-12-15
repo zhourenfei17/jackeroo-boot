@@ -21,6 +21,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 </#if>
+<#if scheme.enableSecurity == 1>
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+</#if>
 import org.springframework.beans.factory.annotation.Autowired;
 <#if scheme.enableServerValid == 1>
 import org.springframework.validation.annotation.Validated;
@@ -64,6 +67,9 @@ public class ${table.className}Controller extends BaseController {
 <#if scheme.enableSwagger == 1>
     @ApiOperation("${table.comment}列表")
 </#if>
+<#if scheme.enableSecurity == 1>
+    @RequiresPermissions("${module.code}:${scheme.securitySign}:view")
+</#if>
     public Result<IPage<${table.className}>> list(${table.className} ${varName}, <#if scheme.enableServerValid == 1>@Validated</#if> PageParam pageParam){
         return ok(service.findPage(${varName}, pageParam));
     }
@@ -76,6 +82,9 @@ public class ${table.className}Controller extends BaseController {
     @GetMapping("/{id}")
 <#if scheme.enableSwagger == 1>
     @ApiOperation("获取${table.comment}详情")
+</#if>
+<#if scheme.enableSecurity == 1>
+    @RequiresPermissions("${module.code}:${scheme.securitySign}:view")
 </#if>
     public Result<${table.className}> get(@PathVariable String id){
         return ok(service.getById(id));
@@ -92,6 +101,9 @@ public class ${table.className}Controller extends BaseController {
 </#if>
 <#if existUnique && scheme.enableServerValid == 1>
     @ValidatedUnique(clazz = ${table.className}.class)
+</#if>
+<#if scheme.enableSecurity == 1>
+    @RequiresPermissions("${module.code}:${scheme.securitySign}:add")
 </#if>
     public Result save(<#if scheme.enableServerValid == 1>@Validated(Insert.class)</#if> @RequestBody ${table.className} ${varName}){
         service.save(${varName});
@@ -110,6 +122,9 @@ public class ${table.className}Controller extends BaseController {
 <#if existUnique && scheme.enableServerValid == 1>
     @ValidatedUnique(clazz = ${table.className}.class)
 </#if>
+<#if scheme.enableSecurity == 1>
+    @RequiresPermissions("${module.code}:${scheme.securitySign}:update")
+</#if>
     public Result update(<#if scheme.enableServerValid == 1>@Validated(Update.class)</#if> @RequestBody ${table.className} ${varName}){
         service.updateById(${varName});
         return ok();
@@ -123,6 +138,9 @@ public class ${table.className}Controller extends BaseController {
     @DeleteMapping("delete")
 <#if scheme.enableSwagger == 1>
     @ApiOperation("删除${table.comment}")
+</#if>
+<#if scheme.enableSecurity == 1>
+    @RequiresPermissions("${module.code}:${scheme.securitySign}:delete")
 </#if>
     public Result delete(<#if scheme.enableServerValid == 1>@Validated</#if> Id id){
         service.removeById(id.getId());

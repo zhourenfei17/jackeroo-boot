@@ -14,6 +14,7 @@ import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,6 +51,7 @@ public class SysMenuPermissionGroupController extends BaseController {
      */
     @GetMapping("list")
     @ApiOperation(value = "菜单权限配置组别列表", response = Result.class)
+    @RequiresPermissions("system:permission:view")
     public Result<IPage<SysMenuPermissionGroup>> list(SysMenuPermissionGroup sysMenuPermissionGroup, @Validated PageParam pageParam){
         return ok(permissionGroupService.findPage(sysMenuPermissionGroup, pageParam));
     }
@@ -72,6 +74,7 @@ public class SysMenuPermissionGroupController extends BaseController {
      */
     @GetMapping("/{id}")
     @ApiOperation(value = "菜单权限配置组别详情", response = Result.class)
+    @RequiresPermissions("system:permission:view")
     public Result<SysMenuPermissionGroup> getById(@PathVariable String id){
         return ok(permissionGroupService.getById(id));
     }
@@ -84,6 +87,7 @@ public class SysMenuPermissionGroupController extends BaseController {
     @PostMapping("save")
     @ApiOperation(value = "保存菜单权限配置组别", response = Result.class)
     @ValidatedUnique(clazz = SysMenuPermissionGroup.class)
+    @RequiresPermissions("system:permission:add")
     public Result save(@Validated(Insert.class) @RequestBody SysMenuPermissionGroup sysMenuPermissionGroup){
         permissionGroupService.save(sysMenuPermissionGroup);
         return ok();
@@ -97,6 +101,7 @@ public class SysMenuPermissionGroupController extends BaseController {
     @PutMapping("update")
     @ApiOperation(value = "更新菜单权限配置组别", response = Result.class)
     @ValidatedUnique(clazz = SysMenuPermissionGroup.class)
+    @RequiresPermissions("system:permission:update")
     public Result update(@Validated(Update.class) @RequestBody SysMenuPermissionGroup sysMenuPermissionGroup){
         permissionGroupService.updateById(sysMenuPermissionGroup);
         return ok();
@@ -109,6 +114,7 @@ public class SysMenuPermissionGroupController extends BaseController {
      */
     @DeleteMapping("delete")
     @ApiOperation(value = "删除菜单权限配置组别", response = Result.class)
+    @RequiresPermissions("system:permission:delete")
     public Result delete(@Validated Id id){
         permissionGroupService.removeById(id.getId());
 
@@ -122,6 +128,7 @@ public class SysMenuPermissionGroupController extends BaseController {
      */
     @PutMapping("setDefault")
     @ApiOperation(value = "设为默认", response =  Result.class)
+    @RequiresPermissions("system:permission:update")
     public Result setDefault(@Validated @RequestBody Id id){
         permissionGroupService.setDefault(id.getId());
         return ok();
@@ -134,6 +141,7 @@ public class SysMenuPermissionGroupController extends BaseController {
      */
     @PutMapping("disable")
     @ApiOperation(value = "禁用")
+    @RequiresPermissions("system:permission:update")
     public Result disable(@Validated @RequestBody Id id){
         permissionGroupService.updateDisabled(id.getId(), SysMenuPermissionGroup.DISABLED_FLAG_DISABLE);
         return ok();
@@ -146,6 +154,7 @@ public class SysMenuPermissionGroupController extends BaseController {
      */
     @PutMapping("enable")
     @ApiOperation(value = "启用")
+    @RequiresPermissions("system:permission:update")
     public Result enable(@Validated @RequestBody Id id){
         permissionGroupService.updateDisabled(id.getId(), SysMenuPermissionGroup.DISABLED_FLAG_ENABLE);
         return ok();

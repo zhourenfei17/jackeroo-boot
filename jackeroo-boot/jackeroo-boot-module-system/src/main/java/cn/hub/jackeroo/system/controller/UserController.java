@@ -143,6 +143,7 @@ public class UserController extends BaseController {
      */
     @PutMapping("frozen")
     @ApiOperation(value = "冻结用户")
+    @RequiresPermissions("system:user:frozen")
     public Result frozen(@Validated @RequestBody Id id){
         userService.frozenUser(id.getId());
 
@@ -156,6 +157,7 @@ public class UserController extends BaseController {
      */
     @PutMapping("unfrozen")
     @ApiOperation(value = "解冻用户")
+    @RequiresPermissions("system:user:frozen")
     public Result unfrozen(@Validated @RequestBody Id id){
         userService.unfrozenUser(id.getId());
 
@@ -169,6 +171,7 @@ public class UserController extends BaseController {
      */
     @PutMapping("resetPwd")
     @ApiOperation(value = "重置密码")
+    @RequiresPermissions("system:user:reset")
     public Result resetPassword(@Validated @RequestBody Id id){
         userService.resetPassword(id.getId());
 
