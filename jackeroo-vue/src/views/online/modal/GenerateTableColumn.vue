@@ -84,7 +84,7 @@
       
       <a-button @click="cancel">取消</a-button>
       <a-button type="primary" @click="handleSubmit(false)">保存</a-button>
-      <a-button type="primary" @click="handleSubmit(true)">保存并生成代码</a-button>
+      <a-button type="primary" v-action="'online:generate:generate'" @click="handleSubmit(true)">保存并生成代码</a-button>
     </template>
   </j-modal>
 </template>

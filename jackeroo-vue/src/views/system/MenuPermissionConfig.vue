@@ -20,7 +20,7 @@
         :tableAlign="tableAlign">
 
       <template slot="toolbar">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-button type="primary" icon="plus" v-action="'system:permission:add'" @click="handleAdd">新建</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -53,13 +53,13 @@
           <template>
             <action-list>
               <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
-              <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
+              <j-link :type="actionType.edit" :icon="actionIcon.edit" v-action="'system:permission:update'" @click="handleEdit(record)">编辑</j-link>
               <j-link icon="safety" @click="handleOpenPermissionListModal(record)">权限列表</j-link>
-              <j-link icon="undo" @click="handleSetDefault(record)" v-if="record.isDefault == 0">设为默认</j-link>
+              <j-link icon="undo" v-action="'system:permission:update'" @click="handleSetDefault(record)" v-if="record.isDefault == 0">设为默认</j-link>
               <action-menu-list>
-                <j-link @click="handleDisable(record)" v-if="record.disabled == 0">禁用</j-link>
-                <j-link @click="handleEnable(record)" v-if="record.disabled == 1">启用</j-link>
-                <j-link @click="handleDelete(record)">删除</j-link>
+                <j-link v-action="'system:permission:update'" @click="handleDisable(record)" v-if="record.disabled == 0">禁用</j-link>
+                <j-link v-action="'system:permission:update'" @click="handleEnable(record)" v-if="record.disabled == 1">启用</j-link>
+                <j-link v-action="'system:permission:delete'" @click="handleDelete(record)">删除</j-link>
               </action-menu-list>
             </action-list>
           </template>

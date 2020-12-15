@@ -26,7 +26,7 @@
                 placeholder="请选择功能模块" 
                 :url="url.findModuleList" 
                 valueField="code" 
-                disabled
+                :disabled="prefixDisabled"
                 style="width:90%;">
               </j-select>
 
@@ -50,7 +50,7 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="功能名称" prop="function">
-              <a-input v-model="form.function" placeholder="请输入功能名称" disabled style="width:90%;"></a-input>
+              <a-input v-model="form.function" placeholder="请输入功能名称" :disabled="prefixDisabled" style="width:90%;"></a-input>
 
               <a-tooltip placement="topLeft" overlayClassName="tooltip-content"> 
                 <template slot="title">
@@ -115,8 +115,11 @@ export default {
         getById: '/system/menu/',
         save: '/system/menu/save',
         update: '/system/menu/update',
-        getPermissionPrefix: '/system/menu/getPermissionPrefix'
-      }
+        getPermissionPrefix: '/system/menu/getPermissionPrefix',
+        findModuleList: '/system/module/allList'
+      },
+      // 权限标识前缀是否可编辑，如果没有添加过权限，则可编辑，如果已经添加过，则不可编辑
+      prefixDisabled: true
     }
   },
   computed: {
@@ -149,6 +152,7 @@ export default {
       this.loading = false
     },
     edit(id){
+      this.prefixDisabled = true
       getAction(this.url.getById + id).then(result => {
         let permission = result.data.permission.split(':')
         result.data.module = permission[0]
@@ -164,6 +168,12 @@ export default {
         if(!result.code){
           this.form.module = result.data.module
           this.form.function = result.data.function
+          if(this.form.module == ''){
+            this.form.module = undefined
+            this.prefixDisabled = false
+          }else{
+            this.prefixDisabled = true
+          }
         }
       })
     },

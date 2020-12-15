@@ -14,7 +14,7 @@
         style="margin-top:-24px;">
 
       <template slot="toolbar">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-button type="primary" icon="plus" v-action="'system:permission:add'" @click="handleAdd">新建</a-button>
       </template>
 
       <s-table
@@ -36,8 +36,8 @@
           <template>
             <action-list>
               <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
-              <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
-              <j-link :type="actionType.delete" :icon="actionIcon.delete" @click="handleDelete(record)">删除</j-link>
+              <j-link :type="actionType.edit" :icon="actionIcon.edit" v-action="'system:permission:update'" @click="handleEdit(record)">编辑</j-link>
+              <j-link :type="actionType.delete" :icon="actionIcon.delete" v-action="'system:permission:delete'" @click="handleDelete(record)">删除</j-link>
             </action-list>
           </template>
         </span>

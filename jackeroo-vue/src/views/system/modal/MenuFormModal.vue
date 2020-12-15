@@ -237,7 +237,7 @@ export default {
         findModuleList: '/system/module/allList'
       },
       treeData: [],
-      groupId: null,
+      groupId: undefined,
       permissionEdit: false,
       enableCloseAuth: false
     }

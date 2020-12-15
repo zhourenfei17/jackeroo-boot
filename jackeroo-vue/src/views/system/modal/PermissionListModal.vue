@@ -14,7 +14,7 @@
         style="margin-top:-24px;">
 
       <template slot="toolbar">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-button type="primary" icon="plus" v-action="'system:menu:add'" @click="handleAdd">新建</a-button>
       </template>
 
       <s-table
@@ -31,8 +31,8 @@
 
         <template slot="action" slot-scope="text, record">
           <action-list>
-            <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
-            <j-link :type="actionType.delete" :icon="actionIcon.delete" @click="handleDelete(record)">删除</j-link>
+            <j-link :type="actionType.edit" :icon="actionIcon.edit" v-action="'system:menu:update'" @click="handleEdit(record)">编辑</j-link>
+            <j-link :type="actionType.delete" :icon="actionIcon.delete" v-action="'system:menu:delete'" @click="handleDelete(record)">删除</j-link>
           </action-list>
         </template>
       </s-table>

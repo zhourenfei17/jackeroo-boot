@@ -25,7 +25,7 @@
         :tableAlign="tableAlign">
 
       <template slot="toolbar">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-button type="primary" icon="plus" v-action="'system:module:add'" @click="handleAdd">新建</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -50,8 +50,8 @@
           <template>
             <action-list>
               <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
-              <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
-              <j-link :type="actionType.delete" :icon="actionIcon.delete" @click="handleDelete(record)">删除</j-link>
+              <j-link :type="actionType.edit" :icon="actionIcon.edit" v-action="'system:module:update'" @click="handleEdit(record)">编辑</j-link>
+              <j-link :type="actionType.delete" :icon="actionIcon.delete" v-action="'system:module:delete'" @click="handleDelete(record)">删除</j-link>
             </action-list>
           </template>
         </span>

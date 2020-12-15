@@ -21,7 +21,7 @@
       :icon="['refresh', 'lineHeight', 'treeExpand', 'columnSet', 'fullscreen']">
 
       <template slot="toolbar">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建菜单</a-button>
+        <a-button type="primary" icon="plus" v-action="'system:menu:add'" @click="handleAdd">新建菜单</a-button>
       </template>
       <!-- <div class="table-operator">
         <a-button type="primary" icon="plus" @click="handleAdd">新建菜单</a-button>
@@ -57,11 +57,11 @@
           <template>
             <action-list>
               <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
-              <j-link :type="actionType.edit" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
+              <j-link :type="actionType.edit" :icon="actionIcon.edit" v-action="'system:menu:update'" @click="handleEdit(record)">编辑</j-link>
               <action-menu-list>
-                <j-link @click="handleAdd(record)" v-if="record.leaf == 0">添加下级菜单</j-link>
+                <j-link v-action="'system:menu:update'" @click="handleAdd(record)" v-if="record.leaf == 0">添加下级菜单</j-link>
                 <j-link @click="handleEditPermission(record)" v-if="record.leaf == 1">权限列表</j-link>
-                <j-link @click="handleDelete(record)">删除</j-link>
+                <j-link v-action="'system:menu:delete'" @click="handleDelete(record)">删除</j-link>
               </action-menu-list>
             </action-list>
           </template>

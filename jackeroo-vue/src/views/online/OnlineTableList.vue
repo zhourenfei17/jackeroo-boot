@@ -25,8 +25,8 @@
         tableAlign="left">
 
       <template slot="toolbar">
-        <a-button @click="handleOpenDefaultConfigModal" icon="setting" style="margin-right:8px;">默认配置</a-button>
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-button @click="handleOpenDefaultConfigModal" icon="setting" v-action="'online:generate:setting'" style="margin-right:8px;">默认配置</a-button>
+        <a-button type="primary" icon="plus" v-action="'online:generate:add'" @click="handleAdd">新建</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -50,9 +50,9 @@
         <span slot="action" slot-scope="text, record">
           <template>
             <action-list>
-              <j-link :type="actionType.view" :icon="actionIcon.edit" @click="handleEdit(record)">编辑</j-link>
-              <j-link icon="code" @click="handleGenerate(record.id)">生成代码</j-link>
-              <j-link :type="actionType.delete" :icon="actionIcon.delete" @click="handleDelete(record)">删除</j-link>
+              <j-link :type="actionType.view" :icon="actionIcon.edit" v-action="'online:generate:update'" @click="handleEdit(record)">编辑</j-link>
+              <j-link icon="code" v-action="'online:generate:generate'" @click="handleGenerate(record.id)">生成代码</j-link>
+              <j-link :type="actionType.delete" :icon="actionIcon.delete" v-action="'online:generate:delete'" @click="handleDelete(record)">删除</j-link>
             </action-list>
           </template>
         </span>

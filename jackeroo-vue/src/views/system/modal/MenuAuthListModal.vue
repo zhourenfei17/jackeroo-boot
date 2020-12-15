@@ -85,7 +85,7 @@ export default {
         delete: '/system/menu/delete',
         findPermissionByGroupId: '/system/menu/permission/config/findPermissionByGroupId'
       },
-      groupId: null,
+      groupId: undefined,
       groupChange: false,
       // 已选中的权限标识
       checkedAuth: []
@@ -156,7 +156,7 @@ export default {
     },
     cancel(){
       this.visible = false
-      this.groupId = null
+      this.groupId = undefined
       this.groupChange = false
       this.checkedAuth = []
     },

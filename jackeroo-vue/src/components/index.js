@@ -27,20 +27,20 @@ import ArticleListContent from '@/components/ArticleListContent'
 
 import Dialog from '@/components/Dialog'
 
-import JSpin from '@/components/jackeroo/Feedback/Spin'
-import ActionList from '@/components/jackeroo/DataDisplay/ActionList'
-import JModal from '@/components/jackeroo/Feedback/Modal'
-import JDrawer from '@/components/jackeroo/Feedback/Drawer'
-import JTag from '@/components/jackeroo/DataDisplay/Tag/JTag'
-import DataCard from '@/components/jackeroo/Layout/DataCard'
-import SearchCard from '@/components/jackeroo/Layout/SearchCard'
-import EditTable from '@/components/jackeroo/DataDisplay/EditTable'
-import FileSelector from '@/components/jackeroo/Form/Selector/FileSelector'
-import JSelect from '@/components/jackeroo/Form/Selector/Select'
-import JDictSelect from '@/components/jackeroo/Form/Selector/DictSelector'
-import DragTable from '@/components/jackeroo/DataDisplay/DragTable'
-import IconSelectInput from '@/components/jackeroo/Form/Selector/IconSelectorInput'
-import JLink from '@/components/jackeroo/General/Link';
+import JSpin from '@/components/Jackeroo/Feedback/Spin'
+import ActionList from '@/components/Jackeroo/DataDisplay/ActionList'
+import JModal from '@/components/Jackeroo/Feedback/Modal'
+import JDrawer from '@/components/Jackeroo/Feedback/Drawer'
+import JTag from '@/components/Jackeroo/DataDisplay/Tag/JTag'
+import DataCard from '@/components/Jackeroo/Layout/DataCard'
+import SearchCard from '@/components/Jackeroo/Layout/SearchCard'
+import EditTable from '@/components/Jackeroo/DataDisplay/EditTable'
+import FileSelector from '@/components/Jackeroo/Form/Selector/FileSelector'
+import JSelect from '@/components/Jackeroo/Form/Selector/Select'
+import JDictSelect from '@/components/Jackeroo/Form/Selector/DictSelector'
+import DragTable from '@/components/Jackeroo/DataDisplay/DragTable'
+import IconSelectInput from '@/components/Jackeroo/Form/Selector/IconSelectorInput'
+import JLink from '@/components/Jackeroo/General/Link';
 
 export {
   AvatarList,
