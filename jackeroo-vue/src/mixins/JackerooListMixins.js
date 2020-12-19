@@ -140,8 +140,36 @@ export const JackerooListMixins = {
         onOk: () => {
           this.$loading.show()
           deleteAction(this.url.delete, {id: record.id}).then(res => {
-            this.$message.success('操作成功')
-            this.refreshData()
+            if(!res.code){
+              this.$message.success('操作成功')
+              this.refreshData()
+            }else{
+              this.$message.error(res.msg)
+            }
+          }).finally(() => {
+            this.$loading.hide()
+          })
+        }
+      });
+    },
+    // 批量删除
+    handleDeleteBatch(){
+      if(this.selectedRowKeys.length == 0){
+        this.$message.warning('请选择需要删除的记录')
+        return
+      }
+      this.$confirm({
+        title: "批量删除数据",
+        content: "确认删除选中的数据吗？",
+        onOk: () => {
+          this.$loading.show()
+          deleteAction(this.url.deleteBatch, {ids: this.selectedRowKeys}).then(res => {
+            if(!res.code){
+              this.$message.success('操作成功')
+              this.refreshData()
+            }else{
+              this.$message.error(res.msg)
+            }
           }).finally(() => {
             this.$loading.hide()
           })

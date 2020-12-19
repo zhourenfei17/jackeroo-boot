@@ -58,7 +58,7 @@ export function deleteAction(url,parameter) {
   return axios({
     url: url,
     method: method.DELETE,
-    params: parameter
+    data: parameter
   })
 }
 //获取服务器返回的文件流

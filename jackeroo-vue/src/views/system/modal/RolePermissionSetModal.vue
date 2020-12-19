@@ -130,7 +130,7 @@ export default {
           }else{
             this.loopAndCheckNode(node.children, permissionList, checkedKeys, halfCheckedKeys, uncheckNodeKeys, node.key)
             // 如果当前节点在遍历子节点的时候，已经存在于halfCheckedKeys中，则表示该节点的父节点也会存在halfCheckedKeys中
-            if(halfCheckedKeys.indexOf(node.key)){
+            if(halfCheckedKeys.indexOf(node.key) > -1){
               childrenCheckedNum--
             }
           }
@@ -183,10 +183,12 @@ export default {
       this.loopAndFindNode(this.treeData, checkedKeys, true)
 
       this.checkedKeys = checkedKeys
+      this.halfCheckedKeys = []
     },
     //取消全选
     handleUnSelectAll(){
       this.checkedKeys = []
+      this.halfCheckedKeys = []
     },
     //反选
     handleContrarySelect(){
