@@ -12,6 +12,7 @@ import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
+import cn.hub.jackeroo.vo.IdList;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -145,8 +146,21 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "删除角色", response = Result.class)
     @RequiresPermissions("system:role:delete")
     public Result delete(@Validated Id id){
-        roleService.removeById(id.getId());
+        roleService.delete(id.getId());
 
+        return ok();
+    }
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("deleteBatch")
+    @ApiOperation(value = "批量删除")
+    @RequiresPermissions("system:role:delete")
+    public Result deleteBatch(@Validated @RequestBody IdList ids){
+        roleService.delete(ids.getIds().toArray(new String[]{}));
         return ok();
     }
 }

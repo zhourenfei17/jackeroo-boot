@@ -11,6 +11,7 @@ import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
+import cn.hub.jackeroo.vo.IdList;
 import cn.hub.jackeroo.vo.LoginUser;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.expression.Ids;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
@@ -72,6 +74,7 @@ public class UserController extends BaseController {
     public Result<SysUser> info(){
         LoginUser user = UserUtils.getUser();
         SysUser userInfo = userService.findById(user.getId());
+        userInfo.setPassword(null);
         userInfo.setPermissionList(menuService.getPermissionByRole(user.getRoleCode()));
         return ok(userInfo);
     }
@@ -85,7 +88,9 @@ public class UserController extends BaseController {
     @ApiOperation(value = "用户详情", notes = "根据id获取用户详情")
     @RequiresPermissions("system:user:view")
     public Result<SysUser> getById(@PathVariable String id){
-        return ok(userService.findById(Long.parseLong(id)));
+        SysUser user = userService.findById(id);
+        user.setPassword(null);
+        return ok(user);
     }
 
     /**
@@ -137,6 +142,19 @@ public class UserController extends BaseController {
     }
 
     /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("deleteBatch")
+    @ApiOperation(value = "批量删除")
+    @RequiresPermissions("system:user:delete")
+    public Result deleteBatch(@Validated @RequestBody IdList ids){
+        userService.removeByIds(ids.getIds());
+        return ok();
+    }
+
+    /**
      * 冻结用户
      * @param id
      * @return
@@ -175,6 +193,32 @@ public class UserController extends BaseController {
     public Result resetPassword(@Validated @RequestBody Id id){
         userService.resetPassword(id.getId());
 
+        return ok();
+    }
+
+    /**
+     * 批量冻结用户
+     * @param ids
+     * @return
+     */
+    @PutMapping("frozenBatch")
+    @ApiOperation("批量冻结用户")
+    @RequiresPermissions("system:user:frozen")
+    public Result frozenBatch(@Validated @RequestBody IdList ids){
+        userService.frozenUser(ids.getIds().toArray(new String[]{}));
+        return ok();
+    }
+
+    /**
+     * 批量解冻用户
+     * @param ids
+     * @return
+     */
+    @PutMapping("unfrozenBatch")
+    @ApiOperation("批量解冻用户")
+    @RequiresPermissions("system:user:frozen")
+    public Result unfrozenBatch(@Validated @RequestBody IdList ids){
+        userService.unfrozenUser(ids.getIds().toArray(new String[]{}));
         return ok();
     }
 }

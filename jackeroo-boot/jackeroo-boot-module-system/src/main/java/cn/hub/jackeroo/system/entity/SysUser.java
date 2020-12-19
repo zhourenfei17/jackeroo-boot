@@ -75,7 +75,6 @@ public class SysUser extends BaseEntity<SysUser> {
     /**
      * 登录密码
      */
-    @JsonIgnore
     @NotBlank(groups = Insert.class)
     @Null(groups = Update.class)
     @ApiModelProperty(hidden = true)

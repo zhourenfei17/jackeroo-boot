@@ -9,6 +9,7 @@ import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
+import cn.hub.jackeroo.vo.IdList;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -45,7 +46,7 @@ import java.util.List;
 public class SysMenuPermissionConfigController extends BaseController {
 
     @Autowired
-    private SysMenuPermissionConfigService permissionGroupService;
+    private SysMenuPermissionConfigService permissionConfigService;
     /**
      * 菜单权限配置列表
      * @return
@@ -54,7 +55,7 @@ public class SysMenuPermissionConfigController extends BaseController {
     @ApiOperation(value = "菜单权限配置列表", response = Result.class)
     @RequiresPermissions("system:permission:view")
     public Result<IPage<SysMenuPermissionConfig>> list(SysMenuPermissionConfig sysMenuPermissionConfig, @Validated PageParam pageParam){
-        return ok(permissionGroupService.findPage(sysMenuPermissionConfig, pageParam));
+        return ok(permissionConfigService.findPage(sysMenuPermissionConfig, pageParam));
     }
 
     /**
@@ -64,7 +65,7 @@ public class SysMenuPermissionConfigController extends BaseController {
     @GetMapping("findDefaultPermissionConfig")
     @ApiOperation(value = "获取默认组权限列表")
     public Result<List<SysMenuPermissionConfig>> findDefaultPermissionConfig(){
-        return ok(permissionGroupService.findListByDefaultGroup());
+        return ok(permissionConfigService.findListByDefaultGroup());
     }
 
     /**
@@ -75,7 +76,7 @@ public class SysMenuPermissionConfigController extends BaseController {
     @GetMapping("findPermissionByGroupId")
     @ApiOperation(value = "根据分组id获取权限列表")
     public Result<List<SysMenuPermissionConfig>> findPermissionByGroupId(@RequestParam Long groupId){
-        return ok(permissionGroupService.findListByGroupId(groupId));
+        return ok(permissionConfigService.findListByGroupId(groupId));
     }
 
     /**
@@ -87,7 +88,7 @@ public class SysMenuPermissionConfigController extends BaseController {
     @ApiOperation(value = "菜单权限配置详情", response = Result.class)
     @RequiresPermissions("system:permission:view")
     public Result<SysMenuPermissionConfig> getById(@PathVariable String id){
-        return ok(permissionGroupService.getById(id));
+        return ok(permissionConfigService.getById(id));
     }
 
     /**
@@ -100,7 +101,7 @@ public class SysMenuPermissionConfigController extends BaseController {
     @ValidatedUnique(clazz = SysMenuPermissionConfig.class)
     @RequiresPermissions("system:permission:add")
     public Result save(@Validated(Insert.class) @RequestBody SysMenuPermissionConfig sysMenuPermissionConfig){
-        permissionGroupService.save(sysMenuPermissionConfig);
+        permissionConfigService.save(sysMenuPermissionConfig);
         return ok();
     }
 
@@ -114,7 +115,7 @@ public class SysMenuPermissionConfigController extends BaseController {
     @ValidatedUnique(clazz = SysMenuPermissionConfig.class)
     @RequiresPermissions("system:permission:update")
     public Result update(@Validated(Update.class) @RequestBody SysMenuPermissionConfig sysMenuPermissionConfig){
-        permissionGroupService.updateById(sysMenuPermissionConfig);
+        permissionConfigService.updateById(sysMenuPermissionConfig);
         return ok();
     }
 
@@ -127,8 +128,20 @@ public class SysMenuPermissionConfigController extends BaseController {
     @ApiOperation(value = "删除菜单权限配置", response = Result.class)
     @RequiresPermissions("system:permission:delete")
     public Result delete(@Validated Id id){
-        permissionGroupService.removeById(id.getId());
+        permissionConfigService.removeById(id.getId());
 
+        return ok();
+    }
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("deleteBatch")
+    @ApiOperation(value = "批量删除")
+    @RequiresPermissions("system:permission:delete")
+    public Result deleteBatch(@Validated @RequestBody IdList ids){
+        permissionConfigService.removeByIds(ids.getIds());
         return ok();
     }
 }

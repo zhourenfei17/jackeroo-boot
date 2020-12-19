@@ -27,7 +27,10 @@ public class ValidRulesValidator implements ConstraintValidator<ValidRules, Seri
 
     @Override
     public boolean isValid(Serializable value, ConstraintValidatorContext context) {
-        String val = value.toString();
+        String val = null;
+        if(value != null){
+            val = value.toString();
+        }
         if(StringUtils.isEmpty(val) || this.types.length == 0){
             return true;
         }

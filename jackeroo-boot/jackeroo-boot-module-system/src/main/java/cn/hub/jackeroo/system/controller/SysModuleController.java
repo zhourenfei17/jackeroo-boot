@@ -9,6 +9,7 @@ import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
+import cn.hub.jackeroo.vo.IdList;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -127,6 +128,19 @@ public class SysModuleController extends BaseController {
     @RequiresPermissions("system:module:delete")
     public Result delete(@Validated Id id){
         service.removeById(id.getId());
+        return ok();
+    }
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("deleteBatch")
+    @ApiOperation(value = "批量删除")
+    @RequiresPermissions("system:module:delete")
+    public Result deleteBatch(@Validated @RequestBody IdList ids){
+        service.removeByIds(ids.getIds());
         return ok();
     }
 }

@@ -133,11 +133,11 @@ public class ShiroConfig {
 		// 启用身份验证器缓存，即缓存AuthenticationInfo信息，默认为false
         shiroRealm.setAuthenticationCachingEnabled(true);
         // 缓存AuthenticationInfo信息的名称
-        shiroRealm.setAuthenticationCacheName("AUTHENTICATION");
+        shiroRealm.setAuthenticationCacheName(RedisKeyPrefix.AUTHENTICATION_NAME);
         // 启用授权缓存，即缓存AuthorizationInfo信息，默认为false
         shiroRealm.setAuthorizationCachingEnabled(true);
         // 缓存AuthorizationInfo信息的名称
-        shiroRealm.setAuthorizationCacheName("AUTHORIZATION");
+        shiroRealm.setAuthorizationCacheName(RedisKeyPrefix.AUTHORIZATION_NAME);
 
 		return shiroRealm;
 	}

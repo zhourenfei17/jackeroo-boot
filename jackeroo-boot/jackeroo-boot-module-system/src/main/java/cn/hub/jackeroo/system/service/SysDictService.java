@@ -157,24 +157,26 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
      * @param id
      */
     @Transactional
-    public void delete(String id){
-        SysDict dict = super.getById(id);
-        if(dict == null){
-            return;
-        }
-        if(dict.getCategory() == SysDict.CATEGORY_SYSTEM){
-            throw new JackerooException("系统字典无法删除");
-        }
-        LambdaUpdateWrapper<SysDict> query = new LambdaUpdateWrapper<>();
-        if(dict.getType() == SysDict.TYPE_DICT){
-            // 除了要删除字典信息，还要同时删除字典项
-            query.eq(SysDict::getDictCode, dict.getDictCode());
-            super.remove(query);
-        }else{
-            query.eq(SysDict::getId, id);
-            query.eq(SysDict::getType, dict.getType());
+    public void delete(String ...id){
+        for (String s : id) {
+            SysDict dict = super.getById(s);
+            if(dict == null){
+                return;
+            }
+            if(dict.getCategory() == SysDict.CATEGORY_SYSTEM){
+                throw new JackerooException("系统字典无法删除");
+            }
+            LambdaUpdateWrapper<SysDict> query = new LambdaUpdateWrapper<>();
+            if(dict.getType() == SysDict.TYPE_DICT){
+                // 除了要删除字典信息，还要同时删除字典项
+                query.eq(SysDict::getDictCode, dict.getDictCode());
+                super.remove(query);
+            }else{
+                query.eq(SysDict::getId, s);
+                query.eq(SysDict::getType, dict.getType());
 
-            super.remove(query);
+                super.remove(query);
+            }
         }
     }
 }

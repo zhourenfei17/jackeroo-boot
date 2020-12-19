@@ -1,16 +1,25 @@
 package cn.hub.jackeroo.root.api;
 
 import cn.hub.jackeroo.api.ISystemApi;
+import cn.hub.jackeroo.constant.Constant;
+import cn.hub.jackeroo.constant.RedisKeyPrefix;
 import cn.hub.jackeroo.root.shiro.ShiroRealm;
+import cn.hub.jackeroo.service.RedisService;
 import cn.hub.jackeroo.system.entity.SysModule;
+import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.service.SysDictService;
 import cn.hub.jackeroo.system.service.SysModuleService;
+import cn.hub.jackeroo.system.service.SysUserService;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +35,10 @@ public class SystemApiImpl implements ISystemApi {
     private SysModuleService moduleService;
     @Autowired
     private SysDictService dictService;
+    @Autowired
+    private RedisService redisService;
+    @Autowired
+    private SysUserService userService;
 
     /**
      * 通过id获取模块信息
@@ -47,7 +60,8 @@ public class SystemApiImpl implements ISystemApi {
      * @return
      */
     public List<JSONObject> getDictItemByCode(String dictCode){
-        return dictService.findDictItemByDictCode(dictCode).stream().map(item -> (JSONObject)JSONObject.toJSON(item)).collect(Collectors.toList());
+        List list = dictService.findDictItemByDictCode(dictCode);
+        return JSONArray.parseArray(JSONArray.toJSONString(list), JSONObject.class);
     }
 
     /**
@@ -57,5 +71,29 @@ public class SystemApiImpl implements ISystemApi {
         DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager)SecurityUtils.getSecurityManager();
         ShiroRealm realm = (ShiroRealm)securityManager.getRealms().iterator().next();
         realm.clearAllCachedAuthorizationInfo();
+    }
+
+    /**
+     * 踢用户下线。直接删除redis的session和shiro缓存
+     * @param userId
+     */
+    public void kickOutUser(Serializable userId){
+        SysUser user = userService.findById(userId);
+        if(user != null){
+            List<String> sessionList = redisService.getList(RedisKeyPrefix.SAME_USER_SESSION_LIST + user.getAccount(), String.class);
+            if(CollectionUtils.isNotEmpty(sessionList)){
+                List<String> deleteKeys = new ArrayList<>();
+                for (String sessionId : sessionList) {
+                    // 用户的session信息
+                    deleteKeys.add(RedisKeyPrefix.USER_SESSION + sessionId);
+                }
+                // 用户的身份认证信息
+                deleteKeys.add(RedisKeyPrefix.USER_CACHE + RedisKeyPrefix.AUTHENTICATION_NAME + Constant.SPLIT_SECURITY + user.getAccount());
+                // 用户的授权信息
+                deleteKeys.add(RedisKeyPrefix.USER_CACHE + RedisKeyPrefix.AUTHORIZATION_NAME + Constant.SPLIT_SECURITY + user.getAccount());
+
+                redisService.deleteKey(deleteKeys);
+            }
+        }
     }
 }

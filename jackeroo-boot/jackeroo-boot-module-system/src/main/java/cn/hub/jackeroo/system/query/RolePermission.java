@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author alex
@@ -15,5 +15,5 @@ public class RolePermission {
     @NotBlank
     private String roleId;
     @NotNull
-    private List<String> permissionList;
+    private Set<String> permissionList;
 }

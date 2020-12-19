@@ -2,6 +2,7 @@ package cn.hub.jackeroo.api;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,4 +30,10 @@ public interface ISystemApi {
      * 清除当前用户权限缓存
      */
     void clearAuthorizationCache();
+
+    /**
+     * 踢用户下线
+     * @param userId
+     */
+    void kickOutUser(Serializable userId);
 }

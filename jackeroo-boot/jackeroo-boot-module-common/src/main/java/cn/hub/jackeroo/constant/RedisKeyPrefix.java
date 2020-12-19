@@ -20,6 +20,16 @@ public interface RedisKeyPrefix {
      * Shiro缓存key
      */
     String USER_CACHE = "SYS:CACHE:USER:";
+
+    /**
+     * shiro身份认证名称
+     */
+    String AUTHENTICATION_NAME = "AUTHENTICATION";
+
+    /**
+     * shiro授权名称
+     */
+    String AUTHORIZATION_NAME = "AUTHORIZATION";
     /**
      * Session key
      */

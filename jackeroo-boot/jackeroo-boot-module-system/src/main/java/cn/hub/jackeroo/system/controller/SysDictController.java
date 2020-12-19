@@ -12,6 +12,7 @@ import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Second;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import cn.hub.jackeroo.vo.Id;
+import cn.hub.jackeroo.vo.IdList;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -194,6 +196,19 @@ public class SysDictController extends BaseController {
     @RequiresPermissions("system:dict:delete")
     public Result deleteDict(@Validated Id id){
         service.delete(id.getId());
+        return ok();
+    }
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("deleteBatch")
+    @ApiOperation(value = "批量删除")
+    @RequiresPermissions("system:dict:delete")
+    public Result deleteBatch(@Validated @RequestBody IdList ids){
+        service.delete(ids.getIds().toArray(new String[]{}));
         return ok();
     }
 

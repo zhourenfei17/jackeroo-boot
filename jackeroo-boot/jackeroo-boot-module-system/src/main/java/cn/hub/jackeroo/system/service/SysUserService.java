@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.system.service;
 
+import cn.hub.jackeroo.api.ISystemApi;
 import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.enums.ResultStatusCode;
 import cn.hub.jackeroo.exception.JackerooException;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -34,6 +37,8 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
     private SysUserMapper mapper;
     @Autowired
     private SysUserRoleService userRoleService;
+    @Autowired
+    private ISystemApi systemApi;
 
     /**
      * 查询数据列表-带分页
@@ -44,7 +49,13 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         sysUser.setDelFlag(Constant.DEL_FLAG_NORMAL);
 
         Page<SysUser> page = sysUser.initPage(pageParam);
-        page.setRecords(mapper.findList(sysUser));
+
+        List<SysUser> list = mapper.findList(sysUser);
+        for (SysUser user : list) {
+            user.setPassword(null);
+        }
+
+        page.setRecords(list);
 
         return page;
     }
@@ -64,7 +75,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * @param userId
      * @return
      */
-    public SysUser findById(Long userId){
+    public SysUser findById(Serializable userId){
         return mapper.findById(userId);
     }
 
@@ -115,14 +126,16 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * 冻结用户
      * @param id
      */
-    public void frozenUser(String id){
-        SysUser sysUser = getById(id);
-        if(sysUser != null){
-            sysUser.setStatus(Constant.USER_STATUS_FROZEN);
+    public void frozenUser(String ...id){
+        for (String userId : id) {
+            SysUser sysUser = getById(userId);
+            if(sysUser != null && sysUser.getStatus() == Constant.USER_STATUS_NORMAL){
+                sysUser.setStatus(Constant.USER_STATUS_FROZEN);
 
-            super.updateById(sysUser);
+                super.updateById(sysUser);
 
-            // TODO 冻结用户需要清除用户的redis缓存，避免用户仍然在登录状态
+                systemApi.kickOutUser(userId);
+            }
         }
     }
 
@@ -130,12 +143,14 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * 解冻用户
      * @param id
      */
-    public void unfrozenUser(String id){
-        SysUser sysUser = getById(id);
-        if(sysUser != null){
-            sysUser.setStatus(Constant.USER_STATUS_NORMAL);
+    public void unfrozenUser(String ...id){
+        for (String userId : id) {
+            SysUser sysUser = getById(userId);
+            if(sysUser != null && sysUser.getStatus() == Constant.USER_STATUS_FROZEN){
+                sysUser.setStatus(Constant.USER_STATUS_NORMAL);
 
-            super.updateById(sysUser);
+                super.updateById(sysUser);
+            }
         }
     }
 
