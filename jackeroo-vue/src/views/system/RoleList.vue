@@ -25,15 +25,15 @@
         :tableAlign="tableAlign">
 
       <template slot="toolbar">
-        <a-button type="primary" icon="plus" v-action="'system:role:add'" @click="handleAdd">新建</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
-            <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
+            <a-menu-item key="1" @click="handleDeleteBatch"><a-icon type="delete" />删除</a-menu-item>
           </a-menu>
-          <a-button style="margin-left: 8px">
+          <a-button style="margin-right: 8px">
             批量操作 <a-icon type="down" />
           </a-button>
         </a-dropdown>
+        <a-button type="primary" icon="plus" v-action="'system:role:add'" @click="handleAdd">新建</a-button>
       </template>
 
       <s-table
@@ -115,7 +115,8 @@ export default {
       ],
       url: {
         list: '/system/role/list',
-        delete: '/system/role/delete'
+        delete: '/system/role/delete',
+        deleteBatch: '/system/role/deleteBatch'
       },
     }
   },

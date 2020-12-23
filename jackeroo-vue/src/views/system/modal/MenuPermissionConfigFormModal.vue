@@ -50,6 +50,7 @@
 <script>
 import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import { getAction, httpAction } from '@/api/manage'
+import { message } from 'ant-design-vue'
 
 export default {
   mixins: [JackerooFormMixins],
@@ -69,7 +70,8 @@ export default {
       url: {
         getById: '/system/menu/permission/config/',
         save: '/system/menu/permission/config/save',
-        update: '/system/menu/permission/config/update'
+        update: '/system/menu/permission/config/update',
+        getMaxSort: '/system/menu/permission/config/getMaxSort'
       }
     }
   },
@@ -88,6 +90,9 @@ export default {
         ],
         checked: [
           {required: true, message: '请选择是否选中'}
+        ],
+        sort: [
+          {required: true, message: '请填写排序号'}
         ]
       }
     }
@@ -96,6 +101,7 @@ export default {
     add(groupId){
       this.form.id = null
       this.form.groupId = groupId
+      this.getMaxSort()
       this.loading = false
     },
     edit(id){
@@ -103,6 +109,13 @@ export default {
         this.copyProperties(result.data, this.form)
       }).finally(() => {
         this.loading = false
+      })
+    },
+    getMaxSort(){
+      getAction(this.url.getMaxSort, {groupId: this.form.groupId}).then(result => {
+        if(!result.code){
+          this.form.sort = result.data
+        }
       })
     },
     handleSubmit(){

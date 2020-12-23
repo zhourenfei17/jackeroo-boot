@@ -296,7 +296,7 @@ export default {
         content: "确认解冻选中的用户吗？",
         onOk: () => {
           this.$loading.show()
-          deleteAction(this.url.unfrozenBatch, {ids: this.selectedRowKeys}).then(res => {
+          putAction(this.url.unfrozenBatch, {ids: this.selectedRowKeys}).then(res => {
             if(!res.code){
               this.$message.success('操作成功')
               this.refreshData()

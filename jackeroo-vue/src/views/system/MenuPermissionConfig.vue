@@ -20,15 +20,15 @@
         :tableAlign="tableAlign">
 
       <template slot="toolbar">
-        <a-button type="primary" icon="plus" v-action="'system:permission:add'" @click="handleAdd">新建</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
-            <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
+            <a-menu-item key="1" @click="handleDeleteBatch"><a-icon type="delete" />删除</a-menu-item>
           </a-menu>
-          <a-button style="margin-left: 8px">
+          <a-button style="margin-right: 8px">
             批量操作 <a-icon type="down" />
           </a-button>
         </a-dropdown>
+        <a-button type="primary" icon="plus" v-action="'system:permission:add'" @click="handleAdd">新建</a-button>
       </template>
 
       <s-table
@@ -124,7 +124,8 @@ export default {
         delete: '/system/menu/permission/group/delete',
         setDefault: '/system/menu/permission/group/setDefault',
         disable: '/system/menu/permission/group/disable',
-        enable: '/system/menu/permission/group/enable'
+        enable: '/system/menu/permission/group/enable',
+        deleteBatch: '/system/menu/permission/group/deleteBatch'
       },
     }
   },
