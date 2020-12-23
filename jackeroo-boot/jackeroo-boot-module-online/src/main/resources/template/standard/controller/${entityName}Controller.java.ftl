@@ -14,6 +14,7 @@ import ${scheme.packageName}.utils.validator.groups.Insert;
 import ${scheme.packageName}.utils.validator.groups.Update;
 </#if>
 import ${scheme.packageName}.vo.Id;
+import ${scheme.packageName}.vo.IdList;
 import ${scheme.packageName}.vo.PageParam;
 import ${scheme.packageName}.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -70,7 +71,7 @@ public class ${table.className}Controller extends BaseController {
 <#if scheme.enableSecurity == 1>
     @RequiresPermissions("${module.code}:${scheme.securitySign}:view")
 </#if>
-    public Result<IPage<${table.className}>> list(${table.className} ${varName}, <#if scheme.enableServerValid == 1>@Validated</#if> PageParam pageParam){
+    public Result<IPage<${table.className}>> list(${table.className} ${varName}, <#if scheme.enableServerValid == 1>@Validated </#if>PageParam pageParam){
         return ok(service.findPage(${varName}, pageParam));
     }
 
@@ -105,7 +106,7 @@ public class ${table.className}Controller extends BaseController {
 <#if scheme.enableSecurity == 1>
     @RequiresPermissions("${module.code}:${scheme.securitySign}:add")
 </#if>
-    public Result save(<#if scheme.enableServerValid == 1>@Validated(Insert.class)</#if> @RequestBody ${table.className} ${varName}){
+    public Result save(<#if scheme.enableServerValid == 1>@Validated(Insert.class) </#if>@RequestBody ${table.className} ${varName}){
         service.save(${varName});
         return ok();
     }
@@ -125,7 +126,7 @@ public class ${table.className}Controller extends BaseController {
 <#if scheme.enableSecurity == 1>
     @RequiresPermissions("${module.code}:${scheme.securitySign}:update")
 </#if>
-    public Result update(<#if scheme.enableServerValid == 1>@Validated(Update.class)</#if> @RequestBody ${table.className} ${varName}){
+    public Result update(<#if scheme.enableServerValid == 1>@Validated(Update.class) </#if>@RequestBody ${table.className} ${varName}){
         service.updateById(${varName});
         return ok();
     }
@@ -142,8 +143,25 @@ public class ${table.className}Controller extends BaseController {
 <#if scheme.enableSecurity == 1>
     @RequiresPermissions("${module.code}:${scheme.securitySign}:delete")
 </#if>
-    public Result delete(<#if scheme.enableServerValid == 1>@Validated</#if> Id id){
+    public Result delete(<#if scheme.enableServerValid == 1>@Validated </#if>Id id){
         service.removeById(id.getId());
+        return ok();
+    }
+
+    /**
+    * 批量删除${table.comment}
+    * @param id
+    * @return
+    */
+    @DeleteMapping("deleteBatch")
+    <#if scheme.enableSwagger == 1>
+    @ApiOperation("批量删除${table.comment}")
+    </#if>
+    <#if scheme.enableSecurity == 1>
+    @RequiresPermissions("${module.code}:${scheme.securitySign}:delete")
+    </#if>
+    public Result deleteBatch(<#if scheme.enableServerValid == 1>@Validated </#if>@RequestBody IdList ids){
+        service.removeByIds(ids.getIds());
         return ok();
     }
 }

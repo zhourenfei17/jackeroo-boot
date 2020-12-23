@@ -59,7 +59,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
     @Transactional
     public void delete(String ...id){
         for (String roleId : id) {
-            SysRole role = super.getById(id);
+            SysRole role = super.getById(roleId);
             if(role != null){
                 if(userRoleService.existRole(roleId)){
                     throw new JackerooException(String.format("角色【%s】正在使用，无法删除！", role.getRoleName()));

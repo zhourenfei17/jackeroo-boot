@@ -117,7 +117,7 @@ public class SysMenuPermissionGroupController extends BaseController {
     @ApiOperation(value = "删除菜单权限配置组别", response = Result.class)
     @RequiresPermissions("system:permission:delete")
     public Result delete(@Validated Id id){
-        permissionGroupService.removeById(id.getId());
+        permissionGroupService.delete(id.getId());
 
         return ok();
     }
@@ -131,7 +131,7 @@ public class SysMenuPermissionGroupController extends BaseController {
     @ApiOperation(value = "批量删除")
     @RequiresPermissions("system:permission:delete")
     public Result deleteBatch(@Validated @RequestBody IdList ids){
-        permissionGroupService.removeByIds(ids.getIds());
+        permissionGroupService.delete(ids.getIds().toArray(new String[]{}));
         return ok();
     }
 

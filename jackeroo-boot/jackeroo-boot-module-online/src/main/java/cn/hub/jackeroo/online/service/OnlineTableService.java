@@ -63,14 +63,16 @@ public class OnlineTableService extends ServiceImpl<OnlineTableMapper, OnlineTab
 
     /**
      * 删除业务表配置信息
-     * @param tableId
+     * @param ids
      */
     @Transactional
-    public void delete(Serializable tableId){
-        tableFieldService.deleteByTableId(tableId);
+    public void delete(Serializable ...ids){
+        for (Serializable tableId : ids) {
+            tableFieldService.deleteByTableId(tableId);
 
-        schemeService.deleteByTableId(tableId);
+            schemeService.deleteByTableId(tableId);
 
-        super.removeById(tableId);
+            super.removeById(tableId);
+        }
     }
 }

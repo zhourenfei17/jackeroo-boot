@@ -144,4 +144,15 @@ public class SysMenuPermissionConfigController extends BaseController {
         permissionConfigService.removeByIds(ids.getIds());
         return ok();
     }
+
+    /**
+     * 获取最大排序号
+     * @param groupId
+     * @return
+     */
+    @GetMapping("getMaxSort")
+    @ApiOperation("获取最大排序号")
+    public Result getMaxSort(@RequestParam String groupId){
+        return ok(permissionConfigService.getMaxSort(groupId));
+    }
 }

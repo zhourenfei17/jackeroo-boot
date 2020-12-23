@@ -5,6 +5,7 @@ import cn.hub.jackeroo.online.service.OnlineTableService;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.vo.Id;
+import cn.hub.jackeroo.vo.IdList;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -68,6 +70,19 @@ public class OnlineTableController extends BaseController {
     public Result delete(@Validated Id id){
         service.delete(id.getId());
 
+        return ok();
+    }
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("deleteBatch")
+    @ApiOperation("批量删除")
+    @RequiresPermissions("online:generate:delete")
+    public Result deleteBatch(@Validated @RequestBody IdList ids){
+        service.delete(ids.getIds().toArray(new String[]{}));
         return ok();
     }
 }

@@ -73,4 +73,34 @@ public class SysMenuPermissionConfigService extends ServiceImpl<SysMenuPermissio
 
         return super.list(query);
     }
+
+    /**
+     * 根据分组id删除
+     * @param groupId
+     */
+    public void deleteByGroupId(String groupId){
+        LambdaQueryWrapper<SysMenuPermissionConfig> query = new LambdaQueryWrapper<>();
+        query.eq(SysMenuPermissionConfig::getGroupId, groupId);
+
+        super.remove(query);
+    }
+
+    /**
+     * 获取最大排序号
+     * @param groupId
+     * @return
+     */
+    public int getMaxSort(String groupId){
+        LambdaQueryWrapper<SysMenuPermissionConfig> query = new LambdaQueryWrapper<>();
+        query.eq(SysMenuPermissionConfig::getGroupId, groupId);
+        query.orderByDesc(SysMenuPermissionConfig::getSort);
+        query.last("limit 1");
+
+        SysMenuPermissionConfig confg = super.getOne(query, false);
+        if(confg != null){
+            return confg.getSort() - (confg.getSort() % 10) + 10;
+        }else{
+            return 10;
+        }
+    }
 }

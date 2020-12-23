@@ -49,7 +49,7 @@ public class ValidatorUtils {
     /**
      * 正则表达式：验证字母和下划线
      */
-    public static final String REGEX_LETTER_UNDERLINE = "^[A-Za-z_]+?$]";
+    public static final String REGEX_LETTER_UNDERLINE = "^[A-Za-z_]+?$";
 
     /**
      * 校验手机号

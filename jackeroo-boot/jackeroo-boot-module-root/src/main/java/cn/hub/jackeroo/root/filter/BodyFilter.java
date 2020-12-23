@@ -2,6 +2,7 @@ package cn.hub.jackeroo.root.filter;
 
 import cn.hub.jackeroo.root.filter.wrapper.HttpRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -25,7 +26,8 @@ public class BodyFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        if(request.getMethod().equalsIgnoreCase("POST") || request.getMethod().equalsIgnoreCase("PUT")){
+        if(request.getMethod().equalsIgnoreCase(HttpMethod.POST.name()) || request.getMethod().equalsIgnoreCase(HttpMethod.PUT.name())
+            || request.getMethod().equalsIgnoreCase(HttpMethod.DELETE.name())){
             HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);
             chain.doFilter(requestWrapper, response);
             return;

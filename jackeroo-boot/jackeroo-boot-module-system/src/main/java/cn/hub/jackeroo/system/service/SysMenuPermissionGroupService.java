@@ -1,16 +1,16 @@
 package cn.hub.jackeroo.system.service;
 
 import cn.hub.jackeroo.constant.Constant;
-import cn.hub.jackeroo.system.entity.SysMenuPermissionConfig;
 import cn.hub.jackeroo.system.entity.SysMenuPermissionGroup;
 import cn.hub.jackeroo.system.mapper.SysMenuPermissionGroupMapper;
 import cn.hub.jackeroo.vo.PageParam;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +30,9 @@ public class SysMenuPermissionGroupService extends ServiceImpl<SysMenuPermission
 
     @Resource
     private SysMenuPermissionGroupMapper mapper;
+    @Autowired
+    @Lazy
+    private SysMenuPermissionConfigService configService;
     /**
      * 查询数据列表-带分页
      * @param sysMenuPermissionGroup
@@ -85,5 +88,20 @@ public class SysMenuPermissionGroupService extends ServiceImpl<SysMenuPermission
         update.set(SysMenuPermissionGroup::getDisabled, disabledFlag);
 
         super.update(update);
+    }
+
+    /**
+     * 删除菜单权限配置
+     * @param id
+     */
+    public void delete(String ...id){
+        for (String groupId : id) {
+            SysMenuPermissionGroup group = super.getById(groupId);
+            if(group != null){
+                configService.deleteByGroupId(groupId);
+
+                super.removeById(groupId);
+            }
+        }
     }
 }
