@@ -53,11 +53,19 @@
             <a-menu-item key="2" @click="handleFrozenBatch"><a-icon type="lock" />冻结</a-menu-item>
             <a-menu-item key="3" @click="handleUnfrozenBatch"><a-icon type="unlock" />解冻</a-menu-item>
           </a-menu>
-          <a-button style="margin-right: 8px">
+          <a-button>
             批量操作 <a-icon type="down" />
           </a-button>
         </a-dropdown>
-        <a-button type="primary" icon="plus" v-action="'system:user:add'" @click="handleAdd">新建</a-button>
+        <a-button type="primary" icon="plus" v-action="'system:user:add'" @click="handleAdd" style="margin-left: 8px">新建</a-button>
+        <a-dropdown-button style="margin-left: 8px">
+          <a-icon type="file-excel"></a-icon>
+          <a-menu slot="overlay">
+            <a-menu-item key="1" @click="handleExport"><a-icon type="export" />导出</a-menu-item>
+            <a-menu-item key="2"><a-icon type="import" />导入</a-menu-item>
+          </a-menu>
+          <a-icon type="down" slot="icon"></a-icon>
+        </a-dropdown-button>
       </template>
 
       <s-table
@@ -103,7 +111,7 @@
 import { STable, Ellipsis, DataCard, SearchCard, JDictSelect } from '@/components'
 import UserFormModal from './modal/UserFormModal'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
-import { putAction, getAction, deleteAction } from '@/api/manage'
+import { putAction, getAction, deleteAction, getFile } from '@/api/manage'
 
 const statusMap = {
   0: {
@@ -308,6 +316,44 @@ export default {
           })
         }
       });
+    },
+    handleExport(){
+      this.$loading.show()
+      let t1 = new Date().getTime()
+      getFile('/system/user/exportExcel').then(result => {
+        if(result.data.type == 'application/json'){
+          let reader = new FileReader()
+          reader.readAsText(result.data, 'utf-8')
+          reader.onload = () => {
+            let data = JSON.parse(reader.result)
+
+            if(data.code){
+              this.$message.error('导出excel失败')
+              return
+            }
+          }
+          return
+        }
+        
+        let fileName = decodeURI(result.headers['content-disposition'].substring(result.headers['content-disposition'].indexOf('=') + 1))
+        if (typeof window.navigator.msSaveBlob !== 'undefined') {
+          window.navigator.msSaveBlob(new Blob([result.data],{type: 'application/vnd.ms-excel'}), fileName)
+        }else{
+          let url = window.URL.createObjectURL(new Blob([result.data],{type: 'application/vnd.ms-excel'}))
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          link.setAttribute('download', fileName)
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link); //下载完成移除元素
+          window.URL.revokeObjectURL(url); //释放掉blob对象
+        }
+      }).finally(() => {
+        this.$loading.hide()
+        let t2 = new Date().getTime()
+        this.$message.info('导出成功，共耗时：' + ((t2 - t1) / 1000) + 's')
+      })
     }
   }
 }

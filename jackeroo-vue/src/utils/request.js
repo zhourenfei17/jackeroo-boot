@@ -62,6 +62,9 @@ request.interceptors.response.use((response) => {
     }else if(response.data.code != 0){
       message.error(response.data.msg)
     }
+  }else if(response.config.responseType == 'blob'){
+    // 如果是下载文件，则不作任何处理，直接返回response对象，response对象包含headers等信息
+    return response
   }
   return response.data
 }, errorHandler)

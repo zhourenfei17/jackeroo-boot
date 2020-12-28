@@ -173,7 +173,7 @@ export default {
     // 生成Gif动态图片验证码
     generateGif(){
       getFile(this.url.generateGif + this.loginKey).then(result => {
-        const src = window.URL.createObjectURL(result)
+        const src = window.URL.createObjectURL(result.data)
         this.validImg = src
       })
     },
