@@ -1,6 +1,6 @@
 package cn.hub.jackeroo.utils.excel;
 
-import cn.hub.jackeroo.utils.Encodes;
+/*import cn.hub.jackeroo.utils.Encodes;
 import cn.hub.jackeroo.utils.Reflections;
 import cn.hub.jackeroo.utils.excel.annotation.ExcelField;
 import com.google.common.collect.Lists;
@@ -33,7 +33,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Map;*/
 
 /**
  * 导出Excel文件（导出“XLSX”格式，支持大数据量导出   @see org.apache.poi.ss.SpreadsheetVersion）
@@ -42,49 +42,49 @@ import java.util.Map;
  */
 public class ExportExcel {
 	
-	private static Logger log = LoggerFactory.getLogger(ExportExcel.class);
+	/*private static Logger log = LoggerFactory.getLogger(ExportExcel.class);
 			
-	/**
+	*//**
 	 * 工作薄对象
-	 */
+	 *//*
 	private SXSSFWorkbook wb;
 	
-	/**
+	*//**
 	 * 工作表对象
-	 */
+	 *//*
 	private Sheet sheet;
 	
-	/**
+	*//**
 	 * 样式列表
-	 */
+	 *//*
 	private Map<String, CellStyle> styles;
 	
-	/**
+	*//**
 	 * 当前行号
-	 */
+	 *//*
 	private int rownum;
 	
-	/**
+	*//**
 	 * 注解列表（Object[]{ ExcelField, Field/Method }）
-	 */
+	 *//*
 	List<Object[]> annotationList = Lists.newArrayList();
 	
-	/**
+	*//**
 	 * 构造函数
 	 * @param title 表格标题，传“空值”，表示无标题
 	 * @param cls 实体对象，通过annotation.ExportField获取标题
-	 */
+	 *//*
 	public ExportExcel(String title, Class<?> cls){
 		this(title, cls, 1);
 	}
 	
-	/**
+	*//**
 	 * 构造函数
 	 * @param title 表格标题，传“空值”，表示无标题
 	 * @param cls 实体对象，通过annotation.ExportField获取标题
 	 * @param type 导出类型（1:导出数据；2：导出模板）
 	 * @param groups 导入分组
-	 */
+	 *//*
 	public ExportExcel(String title, Class<?> cls, int type, int... groups){
 		// Get annotation field 
 		Field[] fs = cls.getDeclaredFields();
@@ -157,29 +157,29 @@ public class ExportExcel {
 		initialize(title, headerList);
 	}
 	
-	/**
+	*//**
 	 * 构造函数
 	 * @param title 表格标题，传“空值”，表示无标题
 	 * @param headers 表头数组
-	 */
+	 *//*
 	public ExportExcel(String title, String[] headers) {
 		initialize(title, Lists.newArrayList(headers));
 	}
 	
-	/**
+	*//**
 	 * 构造函数
 	 * @param title 表格标题，传“空值”，表示无标题
 	 * @param headerList 表头列表
-	 */
+	 *//*
 	public ExportExcel(String title, List<String> headerList) {
 		initialize(title, headerList);
 	}
 	
-	/**
+	*//**
 	 * 初始化函数
 	 * @param title 表格标题，传“空值”，表示无标题
 	 * @param headerList 表头列表
-	 */
+	 *//*
 	private void initialize(String title, List<String> headerList) {
 		this.wb = new SXSSFWorkbook(500);
 		this.sheet = wb.createSheet("Export");
@@ -222,11 +222,11 @@ public class ExportExcel {
 		log.debug("Initialize success.");
 	}
 	
-	/**
+	*//**
 	 * 创建表格样式
 	 * @param wb 工作薄对象
 	 * @return 样式列表
-	 */
+	 *//*
 	private Map<String, CellStyle> createStyles(Workbook wb) {
 		Map<String, CellStyle> styles = new HashMap<String, CellStyle>();
 		
@@ -288,34 +288,34 @@ public class ExportExcel {
 		return styles;
 	}
 
-	/**
+	*//**
 	 * 添加一行
 	 * @return 行对象
-	 */
+	 *//*
 	public Row addRow(){
 		return sheet.createRow(rownum++);
 	}
 	
 
-	/**
+	*//**
 	 * 添加一个单元格
 	 * @param row 添加的行
 	 * @param column 添加列号
 	 * @param val 添加值
 	 * @return 单元格对象
-	 */
+	 *//*
 	public Cell addCell(Row row, int column, Object val, ExcelField e){
 		return this.addCell(row, column, val, 0, Class.class, e);
 	}
 	
-	/**
+	*//**
 	 * 添加一个单元格
 	 * @param row 添加的行
 	 * @param column 添加列号
 	 * @param val 添加值
 	 * @param align 对齐方式（1：靠左；2：居中；3：靠右）
 	 * @return 单元格对象
-	 */
+	 *//*
 	public Cell addCell(Row row, int column, Object val, int align, Class<?> fieldType, ExcelField e){
 		Cell cell = row.createCell(column);
 		CellStyle style = styles.get("data"+(align>=1&&align<=3?align:""));
@@ -353,10 +353,10 @@ public class ExportExcel {
 		return cell;
 	}
 
-	/**
+	*//**
 	 * 添加数据（通过annotation.ExportField添加数据）
 	 * @return list 数据列表
-	 */
+	 *//*
 	public <E> ExportExcel setDataList(List<E> list){
 		for (E e : list){
 			int colunm = 0;
@@ -377,9 +377,9 @@ public class ExportExcel {
 						}
 					}
 					// If is dict, get dict label
-					/*if (StringUtils.isNotBlank(ef.dictType())){
+					*//*if (StringUtils.isNotBlank(ef.dictType())){
 						val = DictUtils.getDictLabel(val==null?"":val.toString(), ef.dictType(), "");
-					}*/
+					}*//*
 				}catch(Exception ex) {
 					// Failure to ignore
 					log.info(ex.toString());
@@ -393,19 +393,19 @@ public class ExportExcel {
 		return this;
 	}
 	
-	/**
+	*//**
 	 * 输出数据流
 	 * @param os 输出数据流
-	 */
+	 *//*
 	public ExportExcel write(OutputStream os) throws IOException{
 		wb.write(os);
 		return this;
 	}
 	
-	/**
+	*//**
 	 * 输出到客户端
 	 * @param fileName 输出文件名
-	 */
+	 *//*
 	public ExportExcel write(HttpServletResponse response, String fileName) throws IOException{
 		response.reset();
         response.setContentType("application/octet-stream; charset=utf-8");
@@ -414,21 +414,21 @@ public class ExportExcel {
 		return this;
 	}
 	
-	/**
+	*//**
 	 * 输出到文件
 	 * @param name 输出文件名
-	 */
+	 *//*
 	public ExportExcel writeFile(String name) throws IOException{
 		FileOutputStream os = new FileOutputStream(name);
 		this.write(os);
 		return this;
 	}
 	
-	/**
+	*//**
 	 * 清理临时文件
-	 */
+	 *//*
 	public ExportExcel dispose(){
 		wb.dispose();
 		return this;
-	}
+	}*/
 }

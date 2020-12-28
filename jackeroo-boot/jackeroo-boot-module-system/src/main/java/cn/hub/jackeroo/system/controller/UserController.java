@@ -5,8 +5,10 @@ import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.service.SysMenuService;
 import cn.hub.jackeroo.system.service.SysUserService;
+import cn.hub.jackeroo.utils.ResultUtil;
 import cn.hub.jackeroo.utils.UserUtils;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
+import cn.hub.jackeroo.utils.easyexcel.EasyExcelUtils;
 import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
@@ -15,11 +17,13 @@ import cn.hub.jackeroo.vo.IdList;
 import cn.hub.jackeroo.vo.LoginUser;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -33,11 +37,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+
 /**
  * 系统用户相关接口
  * @author alex
  * @date 2020/06/01
  */
+@Slf4j
 @ApiModule(moduleName = "系统管理")
 @Api(tags = "用户管理")
 @RestController
@@ -219,5 +227,29 @@ public class UserController extends BaseController {
     public Result unfrozenBatch(@Validated @RequestBody IdList ids){
         userService.unfrozenUser(ids.getIds().toArray(new String[]{}));
         return ok();
+    }
+
+    /**
+     * 导出excel
+     * @param response
+     * @return
+     */
+    @GetMapping("exportExcel")
+    public void exportExcel(HttpServletResponse response){
+        /*try {
+            response.setContentType("application/vnd.ms-excel");
+            response.setCharacterEncoding("utf-8");
+            // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+            String fileName = URLEncoder.encode("测试", "UTF-8").replaceAll("\\+", "%20");
+            response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+            // 这里需要设置不关闭流
+            EasyExcel.write(response.getOutputStream(), SysUser.class).autoCloseStream(Boolean.FALSE).sheet("模板")
+                    .doWrite(userService.list());
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            ResultUtil.writeJson(response, error("导出excel失败"));
+        }*/
+
+        EasyExcelUtils.exportExcel(response, userService.list(), "用户信息", "用户信息", SysUser.class);
     }
 }

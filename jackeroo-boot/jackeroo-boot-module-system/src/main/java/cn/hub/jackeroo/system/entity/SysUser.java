@@ -3,11 +3,14 @@ package cn.hub.jackeroo.system.entity;
 import cn.hub.jackeroo.enums.ValidRuleType;
 import cn.hub.jackeroo.persistence.BaseEntity;
 import cn.hub.jackeroo.system.vo.AuthVo;
+import cn.hub.jackeroo.utils.easyexcel.annotation.ExcelField;
+import cn.hub.jackeroo.utils.easyexcel.converter.LocalDateTimeConverter;
 import cn.hub.jackeroo.utils.validator.annotation.Dict;
 import cn.hub.jackeroo.utils.validator.annotation.Unique;
 import cn.hub.jackeroo.utils.validator.annotation.ValidRules;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -54,6 +57,7 @@ public class SysUser extends BaseEntity<SysUser> {
     @NotBlank
     @Length(max = 20)
     @ApiModelProperty(value = "姓名")
+    @ExcelField(title = "姓名", sort = 0, width = 50)
     private String name;
 
     /**
@@ -61,6 +65,7 @@ public class SysUser extends BaseEntity<SysUser> {
      */
     @Length(max = 60)
     @ApiModelProperty(value = "员工号")
+    @ExcelField(title = "员工号", sort = 1)
     private String code;
 
     /**
@@ -70,6 +75,7 @@ public class SysUser extends BaseEntity<SysUser> {
     @NotBlank
     @Length(min = 5, max = 30)
     @ApiModelProperty(value = "登录账号")
+    @ExcelField(title = "登录账号", sort = 2)
     private String account;
 
     /**
@@ -99,12 +105,14 @@ public class SysUser extends BaseEntity<SysUser> {
      */
     @Dict(dictCode = "COMMON.SEX")
     @ApiModelProperty(value = "性别")
+    @ExcelField(title = "性别", sort = 3, dictType = "COMMON_SEX")
     private Integer gender;
 
     /**
      * 生日
      */
     @ApiModelProperty(value = "生日")
+    @ExcelField(title = "生日", sort = 4, width = 30)
     private String birthday;
 
     /**
@@ -114,6 +122,7 @@ public class SysUser extends BaseEntity<SysUser> {
     @ValidRules(type = ValidRuleType.VALID_MOBILE)
     @NotBlank
     @ApiModelProperty(value = "手机号")
+    @ExcelField(title = "手机", sort = 6, width = 40)
     private String phone;
 
     /**
@@ -150,6 +159,7 @@ public class SysUser extends BaseEntity<SysUser> {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间")
+    @ExcelField(title = "创建时间", sort = 5)
     private LocalDateTime createTime;
     /**
      * 更新人

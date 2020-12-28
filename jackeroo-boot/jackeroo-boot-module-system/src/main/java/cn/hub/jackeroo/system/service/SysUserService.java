@@ -161,7 +161,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
     public void resetPassword(String id){
         SysUser sysUser = getById(id);
         if(sysUser != null){
-            Assert.isEmpty(sysUser.getPhone(), "重置密码失败");
+            Assert.notEmpty(sysUser.getPhone(), "重置密码失败");
 
             String passwordEncode = PasswordUtil.encrypt(sysUser.getAccount(),
                     sysUser.getPhone().substring(sysUser.getPhone().length() - 6), sysUser.getSalt());

@@ -4,7 +4,7 @@ import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.online.entity.OnlineDefaultConfig;
 import cn.hub.jackeroo.online.mapper.OnlineDefaultConfigMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
