@@ -29,7 +29,8 @@ public enum ResultStatusCode {
     USER_FROZEN(50103, "该用户已被冻结"),
     SHIRO_ERROR(50104, "登录异常"),
     INVALID_CAPTCHA(50105, "无效的验证码"),
-    EXIST_SAME_ACCOUNT(50106, "该账号已存在");
+    EXIST_SAME_ACCOUNT(50106, "该账号已存在"),
+    EXCEL_EXPORT_ERROR(6000, "导出excel失败！");
 
     private int code;
 

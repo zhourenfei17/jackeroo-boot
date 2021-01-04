@@ -15,7 +15,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,15 +32,6 @@ public class LoadExcelFieldCellHandler implements CellWriteHandler {
 
     private List<ExcelField> excelFieldList;
 
-    private List<Head> headList = new ArrayList<>();
-    /**
-     * 当前所在列
-     */
-    private volatile int columnIndex = -1;
-    /**
-     * 当前行
-     */
-    private volatile int rowIndex = 0;
     /**
      * 字典项缓存，避免频繁去redis读
      */
@@ -73,7 +63,6 @@ public class LoadExcelFieldCellHandler implements CellWriteHandler {
      */
     @Override
     public void afterCellDataConverted(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, CellData cellData, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
-
     }
 
     /**
@@ -88,17 +77,8 @@ public class LoadExcelFieldCellHandler implements CellWriteHandler {
      */
     @Override
     public void afterCellDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, List<CellData> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
-        if(isHead){
-            headList.add(head);
-        }else{
-            if(relativeRowIndex.intValue() != this.rowIndex){
-                this.columnIndex = -1;
-                this.rowIndex = relativeRowIndex;
-            }
-
-            head = headList.get(++this.columnIndex);
-
-            ExcelField excelField = excelFieldList.get(head.getColumnIndex());
+        if(!isHead){
+            ExcelField excelField = excelFieldList.get(cell.getColumnIndex());
             CellData cellData = cellDataList.get(0);
             // 处理字典项字段
             if(StringUtils.isNotBlank(excelField.dictType()) && cellData.getType() != EMPTY){

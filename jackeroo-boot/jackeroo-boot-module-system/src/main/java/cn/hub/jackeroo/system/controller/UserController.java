@@ -1,6 +1,7 @@
 package cn.hub.jackeroo.system.controller;
 
 import cn.hub.jackeroo.constant.ParamType;
+import cn.hub.jackeroo.enums.ResultStatusCode;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.service.SysMenuService;
@@ -9,6 +10,7 @@ import cn.hub.jackeroo.utils.ResultUtil;
 import cn.hub.jackeroo.utils.UserUtils;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.utils.easyexcel.EasyExcelUtils;
+import cn.hub.jackeroo.utils.easyexcel.model.ExportExcelWriteBuilder;
 import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
@@ -38,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.URLEncoder;
 
 /**
@@ -236,20 +239,10 @@ public class UserController extends BaseController {
      */
     @GetMapping("exportExcel")
     public void exportExcel(HttpServletResponse response){
-        /*try {
-            response.setContentType("application/vnd.ms-excel");
-            response.setCharacterEncoding("utf-8");
-            // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
-            String fileName = URLEncoder.encode("测试", "UTF-8").replaceAll("\\+", "%20");
-            response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
-            // 这里需要设置不关闭流
-            EasyExcel.write(response.getOutputStream(), SysUser.class).autoCloseStream(Boolean.FALSE).sheet("模板")
-                    .doWrite(userService.list());
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            ResultUtil.writeJson(response, error("导出excel失败"));
-        }*/
-
-        EasyExcelUtils.exportExcel(response, userService.list(), "用户信息", "用户信息", SysUser.class);
+        try {
+            new ExportExcelWriteBuilder().autoTrim(true).needHead(false).fileAndSheetName("用户信息").doWrite(response, userService.list(), SysUser.class);
+        } catch (IOException e) {
+            ResultUtil.writeJson(response, ResultStatusCode.EXCEL_EXPORT_ERROR);
+        }
     }
 }
