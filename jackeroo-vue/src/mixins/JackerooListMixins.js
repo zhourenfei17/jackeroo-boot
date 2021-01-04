@@ -24,7 +24,8 @@ export const JackerooListMixins = {
       tableKey: 'id',
       rowSelection : {
         selectedRowKeys: this.selectedRowKeys,
-        onChange: this.onSelectChange
+        onChange: this.onSelectChange,
+        selections: []
       },
       // 表大小
       tableSize: 'default',
