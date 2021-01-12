@@ -15,4 +15,8 @@ public class EasyExcelUtils {
     public static void exportExcel(HttpServletResponse response, List<? extends Object> list, String fileName, String sheetName, Class clazz){
 
     }
+
+    public static void exportTemplate(HttpServletResponse response, Class clazz){
+
+    }
 }

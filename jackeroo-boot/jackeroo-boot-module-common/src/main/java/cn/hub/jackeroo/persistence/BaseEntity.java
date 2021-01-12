@@ -54,6 +54,9 @@ public abstract class BaseEntity<T extends Serializable> implements Serializable
 
     public Page<T> initPage(PageParam pageParam){
         page = new Page();
+        if(pageParam == null){
+            return page;
+        }
         page.setCurrent(pageParam.getPageNo());
         page.setSize(pageParam.getPageSize());
         if(StringUtils.isNotBlank(pageParam.getSortField())){

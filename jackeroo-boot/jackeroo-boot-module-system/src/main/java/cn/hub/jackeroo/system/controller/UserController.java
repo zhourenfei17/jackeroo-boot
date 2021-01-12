@@ -238,9 +238,9 @@ public class UserController extends BaseController {
      * @return
      */
     @GetMapping("exportExcel")
-    public void exportExcel(HttpServletResponse response){
+    public void exportExcel(HttpServletResponse response, SysUser sysUser){
         try {
-            new ExportExcelWriteBuilder().autoTrim(true).needHead(false).fileAndSheetName("用户信息").doWrite(response, userService.list(), SysUser.class);
+            new ExportExcelWriteBuilder().autoTrim(true).fileAndSheetName("用户信息").doWrite(response, userService.findList(sysUser), SysUser.class);
         } catch (IOException e) {
             ResultUtil.writeJson(response, ResultStatusCode.EXCEL_EXPORT_ERROR);
         }

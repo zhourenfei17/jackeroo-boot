@@ -27,7 +27,7 @@ public class LoadExcelFieldWidthStrategy extends AbstractColumnWidthStyleStrateg
     @Override
     protected void setColumnWidth(WriteSheetHolder writeSheetHolder, List<CellData> cellDataList, Cell cell, Head head,
                                   Integer relativeRowIndex, Boolean isHead) {
-        if(!isHead){
+        if(isHead || relativeRowIndex > 0){
             return;
         }
         Integer columnWidth;

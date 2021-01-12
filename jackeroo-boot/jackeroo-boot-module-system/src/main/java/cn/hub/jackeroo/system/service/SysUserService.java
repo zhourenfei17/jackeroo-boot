@@ -46,11 +46,10 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * @return
      */
     public IPage<SysUser> findPage(SysUser sysUser, PageParam pageParam){
-        sysUser.setDelFlag(Constant.DEL_FLAG_NORMAL);
 
         Page<SysUser> page = sysUser.initPage(pageParam);
 
-        List<SysUser> list = mapper.findList(sysUser);
+        List<SysUser> list = this.findList(sysUser);
         for (SysUser user : list) {
             user.setPassword(null);
         }
@@ -58,6 +57,16 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         page.setRecords(list);
 
         return page;
+    }
+
+    /**
+     * 查询数据列表
+     * @param sysUser
+     * @return
+     */
+    public List<SysUser> findList(SysUser sysUser){
+        sysUser.setDelFlag(Constant.DEL_FLAG_NORMAL);
+        return mapper.findList(sysUser);
     }
     /**
      * 通过登录账号获取用户信息

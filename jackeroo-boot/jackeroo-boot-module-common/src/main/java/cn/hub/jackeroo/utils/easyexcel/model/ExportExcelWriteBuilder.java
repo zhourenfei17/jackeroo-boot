@@ -3,6 +3,7 @@ package cn.hub.jackeroo.utils.easyexcel.model;
 import cn.hub.jackeroo.utils.LocalDateUtils;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.utils.easyexcel.annotation.ExcelField;
+import cn.hub.jackeroo.utils.easyexcel.annotation.enums.ExcelType;
 import cn.hub.jackeroo.utils.easyexcel.converter.LocalDateTimeConverter;
 import cn.hub.jackeroo.utils.easyexcel.handler.LoadExcelFieldCellHandler;
 import cn.hub.jackeroo.utils.easyexcel.handler.strategy.LoadExcelFieldStyleStrategy;
@@ -12,6 +13,8 @@ import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
+import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+import com.alibaba.excel.write.style.row.SimpleRowHeightStyleStrategy;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import net.sf.cglib.beans.BeanMap;
 
@@ -43,6 +46,14 @@ public class ExportExcelWriteBuilder {
      * 文件后缀名
      */
     private String fileSuffix = ExcelTypeEnum.XLSX.getValue();
+    /**
+     * 是否为自定义宽度
+     */
+    private Boolean autoWidth = false;
+    /**
+     * 行高
+     */
+    private Short rowHeight;
 
     private ExcelWriterBuilder builder;
 
@@ -50,6 +61,7 @@ public class ExportExcelWriteBuilder {
 
     private static final String FILE_ENCODING = "UTF-8";
     private static final String CONTENT_TYPE_EXCEL = "application/vnd.ms-excel";
+    private static final short MIN_ROW_HEIGHT = 20;
 
     public ExportExcelWriteBuilder() {
         builder = EasyExcel.write()
@@ -108,6 +120,26 @@ public class ExportExcelWriteBuilder {
     }
 
     /**
+     * 是否自适应宽度
+     * @param autoWidth
+     * @return
+     */
+    public ExportExcelWriteBuilder autoWidth(Boolean autoWidth){
+        this.autoWidth = autoWidth;
+        return this;
+    }
+
+    /**
+     * 设置行高
+     * @param rowHeight
+     * @return
+     */
+    public ExportExcelWriteBuilder rowHeight(short rowHeight){
+        this.rowHeight = rowHeight;
+        return this;
+    }
+
+    /**
      * 设置sheet的名称
      * @param sheetName
      * @return
@@ -151,7 +183,7 @@ public class ExportExcelWriteBuilder {
         List<ExcelField> excelFieldList = new ArrayList<>();
         for (Field field : fields) {
             ExcelField excelField = field.getAnnotation(ExcelField.class);
-            if(excelField != null){
+            if(excelField != null && excelField.type() != ExcelType.ONLY_IMPORT){
                 excelFieldList.add(excelField);
                 columnMap.put(excelField.sort(), field.getName());
             }
@@ -168,13 +200,14 @@ public class ExportExcelWriteBuilder {
 
         response.setContentType(CONTENT_TYPE_EXCEL);
         response.setCharacterEncoding(FILE_ENCODING);
-        // 这里URLEncoder.encode可以防止中文乱码
+
         if(StringUtils.isBlank(fileName)){
             fileName = "文档";
         }
         if(this.useTime){
             fileName = fileName + "_" + LocalDateUtils.getLocalDateTimeStr();
         }
+        // 这里URLEncoder.encode可以防止中文乱码
         fileName = URLEncoder.encode(fileName, FILE_ENCODING).replaceAll("\\+", "%20");
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + fileSuffix);
 
@@ -186,10 +219,22 @@ public class ExportExcelWriteBuilder {
             }
             return entity;
         }).collect(Collectors.toList());
-
+        // 定义LocalDateTime类型转化器
         builder.registerConverter(new LocalDateTimeConverter());
-        builder.registerWriteHandler(new LoadExcelFieldWidthStrategy(excelFieldList));
+        // 宽度调整策略
+        if(autoWidth){
+            builder.registerWriteHandler(new LongestMatchColumnWidthStyleStrategy());
+        }else{
+            builder.registerWriteHandler(new LoadExcelFieldWidthStrategy(excelFieldList));
+        }
+        // 设置行高
+        if(this.rowHeight == null || this.rowHeight < MIN_ROW_HEIGHT){
+            this.rowHeight = MIN_ROW_HEIGHT;
+        }
+        builder.registerWriteHandler(new SimpleRowHeightStyleStrategy(rowHeight, rowHeight));
+        // 样式调整策略
         builder.registerWriteHandler(new LoadExcelFieldStyleStrategy(excelFieldList));
+        // 自定义cell值填充策略
         builder.registerWriteHandler(new LoadExcelFieldCellHandler(excelFieldList));
         builder.head(headers);
         builder.file(response.getOutputStream());
