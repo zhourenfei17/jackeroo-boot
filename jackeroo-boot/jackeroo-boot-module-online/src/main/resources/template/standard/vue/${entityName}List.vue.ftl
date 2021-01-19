@@ -154,6 +154,14 @@
           </a-button>
         </a-dropdown>
         <a-button type="primary" icon="plus"<#if scheme.enableSecurity == 1> v-action="'${module.code}:${scheme.securitySign}:add'"</#if> @click="handleAdd">新建</a-button>
+        <a-dropdown-button style="margin-left: 8px">
+          <a-icon type="file-excel"></a-icon>
+          <a-menu slot="overlay">
+            <a-menu-item key="1" @click="handleExport"><a-icon type="export" />导出</a-menu-item>
+            <a-menu-item key="2"><a-icon type="import" />导入</a-menu-item>
+          </a-menu>
+          <a-icon type="down" slot="icon"></a-icon>
+        </a-dropdown-button>
       </template>
 
       <s-table
@@ -242,7 +250,8 @@ export default {
       url: {
         list: '/${module.code}/${pathName}/list',
         delete: '/${module.code}/${pathName}/delete',
-        deleteBatch: '/${module.code}/${pathName}/deleteBatch'
+        deleteBatch: '/${module.code}/${pathName}/deleteBatch',
+        exportExcel: '/${module.code}/${pathName}/exportExcel'
       },
     }
   },

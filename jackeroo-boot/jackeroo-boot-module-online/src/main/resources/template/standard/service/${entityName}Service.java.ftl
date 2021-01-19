@@ -11,28 +11,37 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
-* <p>
-* ${table.comment} 服务实现类
-* </p>
-*
-* @author ${scheme.author}
-* @since ${createDate}
-*/
+ * <p>
+ * ${table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${scheme.author}
+ * @since ${createDate}
+ */
 @Service
 public class ${table.className}Service extends ServiceImpl<${table.className}Mapper, ${table.className}> {
     @Resource
     private ${table.className}Mapper mapper;
 
     /**
-    * 查询数据列表-带分页
-    * @param ${varName}
-    * @param pageParam
-    * @return
-    */
+     * 查询数据列表-带分页
+     * @param ${varName}
+     * @param pageParam
+     * @return
+     */
     public IPage<${table.className}> findPage(${table.className} ${varName}, PageParam pageParam){
         Page<${table.className}> page = ${varName}.initPage(pageParam);
-        page.setRecords(mapper.findList(${varName}));
+        page.setRecords(this.findList(${varName}));
 
         return page;
+    }
+
+    /**
+     * 查询数据列表
+     * @param sysUser
+     * @return
+     */
+    public List<${table.className}> findList(${table.className} ${varName}){
+        return mapper.findList(${varName});
     }
 }

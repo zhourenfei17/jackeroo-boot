@@ -40,13 +40,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
-* <p>
-* ${table.comment} 前端控制器
-* </p>
-*
-* @author ${scheme.author}
-* @since ${createDate}
-*/
+ * <p>
+ * ${table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${scheme.author}
+ * @since ${createDate}
+ */
 <#if scheme.enableSwagger == 1>
 @ApiModule(moduleName = "${module.name}")
 @Api(tags = "${table.comment}")
@@ -59,11 +59,11 @@ public class ${table.className}Controller extends BaseController {
     private ${table.className}Service service;
 
     /**
-    * ${table.comment}列表
-    * @param ${varName}
-    * @param pageParam
-    * @return
-    */
+     * ${table.comment}列表
+     * @param ${varName}
+     * @param pageParam
+     * @return
+     */
     @GetMapping("list")
 <#if scheme.enableSwagger == 1>
     @ApiOperation("${table.comment}列表")
@@ -76,10 +76,10 @@ public class ${table.className}Controller extends BaseController {
     }
 
     /**
-    * 获取${table.comment}详情
-    * @param id
-    * @return
-    */
+     * 获取${table.comment}详情
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
 <#if scheme.enableSwagger == 1>
     @ApiOperation("获取${table.comment}详情")
@@ -92,10 +92,10 @@ public class ${table.className}Controller extends BaseController {
     }
 
     /**
-    * 保存${table.comment}
-    * @param ${varName}
-    * @return
-    */
+     * 保存${table.comment}
+     * @param ${varName}
+     * @return
+     */
     @PostMapping("save")
 <#if scheme.enableSwagger == 1>
     @ApiOperation("保存${table.comment}")
@@ -112,10 +112,10 @@ public class ${table.className}Controller extends BaseController {
     }
 
     /**
-    * 更新${table.comment}
-    * @param ${varName}
-    * @return
-    */
+     * 更新${table.comment}
+     * @param ${varName}
+     * @return
+     */
     @PutMapping("update")
 <#if scheme.enableSwagger == 1>
     @ApiOperation("更新${table.comment}")
@@ -132,10 +132,10 @@ public class ${table.className}Controller extends BaseController {
     }
 
     /**
-    * 删除${table.comment}
-    * @param id
-    * @return
-    */
+     * 删除${table.comment}
+     * @param id
+     * @return
+     */
     @DeleteMapping("delete")
 <#if scheme.enableSwagger == 1>
     @ApiOperation("删除${table.comment}")
@@ -149,10 +149,10 @@ public class ${table.className}Controller extends BaseController {
     }
 
     /**
-    * 批量删除${table.comment}
-    * @param id
-    * @return
-    */
+     * 批量删除${table.comment}
+     * @param id
+     * @return
+     */
     @DeleteMapping("deleteBatch")
     <#if scheme.enableSwagger == 1>
     @ApiOperation("批量删除${table.comment}")
@@ -163,5 +163,28 @@ public class ${table.className}Controller extends BaseController {
     public Result deleteBatch(<#if scheme.enableServerValid == 1>@Validated </#if>@RequestBody IdList ids){
         service.removeByIds(ids.getIds());
         return ok();
+    }
+
+    /**
+     * 导出excel
+     * @param response
+     * @return
+     */
+    @GetMapping("exportExcel")
+    <#if scheme.enableSwagger == 1>
+    @ApiOperation("导出excel")
+    </#if>
+    <#if scheme.enableSecurity == 1>
+    @RequiresPermissions("${module.code}:${scheme.securitySign}:export")
+    </#if>
+    public void exportExcel(HttpServletResponse response, ${table.className} ${varName}){
+        try {
+            new ExportExcelWriteBuilder()
+                .autoTrim(true)
+                .fileAndSheetName("${table.comment}")
+                .doWrite(response, service.findList(${varName}), ${table.className}.class);
+        } catch (IOException e) {
+            ResultUtil.writeJson(response, ResultStatusCode.EXCEL_EXPORT_ERROR);
+        }
     }
 }
