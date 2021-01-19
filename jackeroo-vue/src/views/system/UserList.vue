@@ -197,7 +197,8 @@ export default {
         unfrozenBatch: '/system/user/unfrozenBatch',
         resetPwd: '/system/user/resetPwd',
         delete: '/system/user/delete',
-        deleteBatch: '/system/user/deleteBatch'
+        deleteBatch: '/system/user/deleteBatch',
+        exportExcel: '/system/user/exportExcel'
       }
     }
   },
@@ -316,44 +317,6 @@ export default {
           })
         }
       });
-    },
-    handleExport(){
-      this.$loading.show()
-      let t1 = new Date().getTime()
-      getFile('/system/user/exportExcel').then(result => {
-        if(result.data.type == 'application/json'){
-          let reader = new FileReader()
-          reader.readAsText(result.data, 'utf-8')
-          reader.onload = () => {
-            let data = JSON.parse(reader.result)
-
-            if(data.code){
-              this.$message.error('导出excel失败')
-              return
-            }
-          }
-          return
-        }
-        
-        let fileName = decodeURI(result.headers['content-disposition'].substring(result.headers['content-disposition'].indexOf('=') + 1))
-        if (typeof window.navigator.msSaveBlob !== 'undefined') {
-          window.navigator.msSaveBlob(new Blob([result.data],{type: 'application/vnd.ms-excel'}), fileName)
-        }else{
-          let url = window.URL.createObjectURL(new Blob([result.data],{type: 'application/vnd.ms-excel'}))
-          let link = document.createElement('a')
-          link.style.display = 'none'
-          link.href = url
-          link.setAttribute('download', fileName)
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link); //下载完成移除元素
-          window.URL.revokeObjectURL(url); //释放掉blob对象
-        }
-      }).finally(() => {
-        this.$loading.hide()
-        let t2 = new Date().getTime()
-        this.$message.info('导出成功，共耗时：' + ((t2 - t1) / 1000) + 's')
-      })
     }
   }
 }
