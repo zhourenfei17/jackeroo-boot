@@ -2,7 +2,10 @@
   <div>
     <a-input :placeholder="placeholder" v-model="value" readOnly :disabled="disabled" @mouseenter="showClose" @mouseleave="hideClose">
       <span v-if="!value" slot="addonBefore" style="width:15px;display: inline-block;"></span>
-      <a-icon v-else :type="value" slot="addonBefore"></a-icon>
+      <span v-else slot="addonBefore">
+        <icon-font v-if="value.indexOf('icon-') == 0" :type="value"></icon-font>
+        <a-icon v-else :type="value"></a-icon>
+      </span>
 
       <a-icon type="close-circle" slot="suffix" :class="closeClass" @click="clearIcon" @mouseenter="showClose" @mouseleave="hideClose"></a-icon>
 

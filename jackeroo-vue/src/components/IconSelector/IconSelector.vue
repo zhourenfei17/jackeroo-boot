@@ -4,7 +4,8 @@
       <a-tab-pane v-for="v in icons" :tab="v.title" :key="v.key">
         <ul>
           <li v-for="(icon, key) in v.icons" :key="`${v.key}-${key}`" :class="{ 'active': selectedIcon==icon }" @click="handleSelectedIcon(icon)" >
-            <a-icon :type="icon" :style="{ fontSize: '36px' }" />
+            <a-icon :type="icon" :style="{ fontSize: '36px' }" v-if="v.key != 'iconfont'"/>
+            <icon-font :type="icon" :style="{ fontSize: '36px' }" v-else/>
           </li>
         </ul>
       </a-tab-pane>

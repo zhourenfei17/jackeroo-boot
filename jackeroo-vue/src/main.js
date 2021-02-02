@@ -20,6 +20,12 @@ import './core/lazy_use'
 import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less'
+import {Icon} from 'ant-design-vue'
+import iconfontJs from '@/components/IconSelector/iconfont.js'
+
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: iconfontJs
+})
 
 Vue.config.productionTip = false
 
@@ -27,6 +33,7 @@ Vue.config.productionTip = false
 Vue.use(VueAxios)
 Vue.component('pro-layout', ProLayout)
 Vue.component('page-header-wrapper', PageHeaderWrapper)
+Vue.component('icon-font', IconFont)
 
 window.umi_plugin_ant_themeVar = themePluginConfig.theme
 
