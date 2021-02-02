@@ -22,11 +22,6 @@ export const JackerooListMixins = {
       },
       // 主键字段
       tableKey: 'id',
-      rowSelection : {
-        selectedRowKeys: this.selectedRowKeys,
-        onChange: this.onSelectChange,
-        selections: []
-      },
       // 表大小
       tableSize: 'default',
       // 列默认对齐方式
@@ -71,6 +66,15 @@ export const JackerooListMixins = {
         view: 'primary',
         edit: 'primary',
         delete: 'info'
+      }
+    }
+  },
+  computed: {
+    rowSelection() {
+      return {
+        selectedRowKeys: this.selectedRowKeys,
+        onChange: this.onSelectChange,
+        selections: []
       }
     }
   },

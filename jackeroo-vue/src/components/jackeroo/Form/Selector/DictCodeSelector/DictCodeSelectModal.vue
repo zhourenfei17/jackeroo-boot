@@ -91,15 +91,19 @@ export default {
           dataIndex: 'remark',
         }
       ],
-      rowSelection : {
-        selectedRowKeys: this.selectedRowKeys,
-        onChange: this.onSelectChange,
-        type: 'radio'
-      },
       firstLoad: true,
       url: {
         list: '/system/dict/list',
       },
+    }
+  },
+  computed: {
+    rowSelection(){
+      return {
+        selectedRowKeys: this.selectedRowKeys,
+        onChange: this.onSelectChange,
+        type: 'radio'
+      }
     }
   },
   methods: {
@@ -124,8 +128,7 @@ export default {
       this.visible = false
     },
     clear(){
-      this.selectedRowKeys = []
-      this.selectedRows = []
+      this.$refs.table.clearSelected()
       this.$emit('ok', null)
       this.visible = false
     }
