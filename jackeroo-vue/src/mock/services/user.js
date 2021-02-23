@@ -2,7 +2,6 @@ import Mock from 'mockjs2'
 import { builder } from '../util'
 
 const info = (options) => {
-  console.log('options', options)
   const userInfo = {
     'id': '4291d7da9005377ec9aec4a71ea837f',
     'name': '天野远子',
@@ -762,9 +761,8 @@ const userNav = (options) => {
     }
   ]
   const json = builder(nav)
-  console.log('json', json)
   return json
 }
 
-Mock.mock(/\/api\/user\/info/, 'get', info)
+// Mock.mock(/\/api\/user\/info/, 'get', info)
 Mock.mock(/\/api\/user\/nav/, 'get', userNav)

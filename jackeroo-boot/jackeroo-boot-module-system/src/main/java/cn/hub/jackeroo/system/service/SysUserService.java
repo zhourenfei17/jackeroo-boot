@@ -1,22 +1,23 @@
 package cn.hub.jackeroo.system.service;
 
+import cn.hub.jackeroo.api.ISystemApi;
 import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.enums.ResultStatusCode;
 import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.system.entity.SysUser;
+import cn.hub.jackeroo.system.entity.SysUserRole;
 import cn.hub.jackeroo.system.mapper.SysUserMapper;
 import cn.hub.jackeroo.utils.Assert;
 import cn.hub.jackeroo.utils.PasswordUtil;
 import cn.hub.jackeroo.utils.StringUtils;
-import cn.hub.jackeroo.vo.PageParam;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -31,17 +32,19 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
 
     @Resource
     private SysUserMapper mapper;
+    @Autowired
+    private SysUserRoleService userRoleService;
+    @Autowired
+    private ISystemApi systemApi;
 
     /**
-     * 查询数据列表-带分页
+     * 查询数据列表
      * @param sysUser
      * @return
      */
-    public IPage<SysUser> findPage(SysUser sysUser, PageParam pageParam){
-        Page<SysUser> page = sysUser.initPage(pageParam);
-        page.setRecords(mapper.findList(sysUser));
-
-        return page;
+    public List<SysUser> findList(SysUser sysUser){
+        sysUser.setDelFlag(Constant.DEL_FLAG_NORMAL);
+        return mapper.findList(sysUser);
     }
     /**
      * 通过登录账号获取用户信息
@@ -49,12 +52,18 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * @return
      */
     public SysUser findByAccount(String account){
-        LambdaQueryWrapper<SysUser> query = new LambdaQueryWrapper<>();
-        query.eq(SysUser::getAccount, account);
-
-        SysUser user = super.getOne(query);
+        SysUser user = mapper.findByAccount(account);
 
         return user;
+    }
+
+    /**
+     * 通过用户id获取用户信息
+     * @param userId
+     * @return
+     */
+    public SysUser findById(Serializable userId){
+        return mapper.findById(userId);
     }
 
     /**
@@ -73,20 +82,47 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         user.setDelFlag(Constant.DEL_FLAG_NORMAL);
         user.setStatus(0);
         super.save(user);
+
+        // 保存用户角色关系
+        SysUserRole userRole = new SysUserRole();
+        userRole.setRoleId(user.getRoleId());
+        userRole.setUserId(user.getId());
+        userRoleService.save(userRole);
+    }
+
+    /**
+     * 更新用户信息
+     * @param user
+     */
+    @Transactional
+    public void updateUser(SysUser user){
+        // 编辑用户无法修改密码和账号
+        user.setPassword(null);
+        user.setAccount(null);
+
+        super.updateById(user);
+
+        // 保存用户角色关系
+        SysUserRole userRole = new SysUserRole();
+        userRole.setRoleId(user.getRoleId());
+        userRole.setUserId(user.getId());
+        userRoleService.saveOrUpdate(userRole);
     }
 
     /**
      * 冻结用户
      * @param id
      */
-    public void frozenUser(String id){
-        SysUser sysUser = getById(id);
-        if(sysUser != null){
-            sysUser.setStatus(Constant.USER_STATUS_FROZEN);
+    public void frozenUser(String ...id){
+        for (String userId : id) {
+            SysUser sysUser = getById(userId);
+            if(sysUser != null && sysUser.getStatus() == Constant.USER_STATUS_NORMAL){
+                sysUser.setStatus(Constant.USER_STATUS_FROZEN);
 
-            super.updateById(sysUser);
+                super.updateById(sysUser);
 
-            // TODO 冻结用户需要清除用户的redis缓存，避免用户仍然在登录状态
+                systemApi.kickOutUser(userId);
+            }
         }
     }
 
@@ -94,12 +130,14 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * 解冻用户
      * @param id
      */
-    public void unfrozenUser(String id){
-        SysUser sysUser = getById(id);
-        if(sysUser != null){
-            sysUser.setStatus(Constant.USER_STATUS_NORMAL);
+    public void unfrozenUser(String ...id){
+        for (String userId : id) {
+            SysUser sysUser = getById(userId);
+            if(sysUser != null && sysUser.getStatus() == Constant.USER_STATUS_FROZEN){
+                sysUser.setStatus(Constant.USER_STATUS_NORMAL);
 
-            super.updateById(sysUser);
+                super.updateById(sysUser);
+            }
         }
     }
 
@@ -110,7 +148,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
     public void resetPassword(String id){
         SysUser sysUser = getById(id);
         if(sysUser != null){
-            Assert.isEmpty(sysUser.getPhone(), "重置密码失败");
+            Assert.notEmpty(sysUser.getPhone(), "重置密码失败");
 
             String passwordEncode = PasswordUtil.encrypt(sysUser.getAccount(),
                     sysUser.getPhone().substring(sysUser.getPhone().length() - 6), sysUser.getSalt());

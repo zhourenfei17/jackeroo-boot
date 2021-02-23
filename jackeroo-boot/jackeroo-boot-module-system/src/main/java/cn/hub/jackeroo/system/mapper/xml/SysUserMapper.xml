@@ -25,7 +25,10 @@
     <select id="findList" resultType="cn.hub.jackeroo.system.entity.SysUser">
         select
           <include refid="baseColumns"></include>
+          ,c.id as roleId, c.role_name as roleName
         from sys_user a
+        left join sys_user_role b on a.id=b.user_id
+        left join sys_role c on b.role_id=c.id
         <where>
             <if test="name != null and name != ''">
                 and a.name like CONCAT('%', #{name}, '%')
@@ -42,14 +45,41 @@
             <if test="gender != null">
                 and a.gender = #{gender}
             </if>
+            <if test="delFlag != null">
+                and a.del_flag = #{delFlag}
+            </if>
         </where>
         <choose>
             <when test="orderBy != null">
-                ${orderBY}
+                order by a.${orderBy}
             </when>
             <otherwise>
                 order by a.create_time asc
             </otherwise>
         </choose>
+    </select>
+
+    <select id="findByAccount" resultType="cn.hub.jackeroo.system.entity.SysUser">
+        select
+          <include refid="baseColumns"></include>
+          ,b.role_id as roleId,c.role_code as roleCode
+        from sys_user a
+        left join sys_user_role b on a.id=b.user_id
+        left join sys_role c on b.role_id=c.id
+        <where>
+            a.account = #{account}
+        </where>
+    </select>
+
+    <select id="findById" resultType="cn.hub.jackeroo.system.entity.SysUser">
+        select
+        <include refid="baseColumns"></include>
+        ,c.id as roleId, c.role_name as roleName,c.role_code as roleCode
+        from sys_user a
+        left join sys_user_role b on a.id=b.user_id
+        left join sys_role c on b.role_id=c.id
+        <where>
+            a.id = #{userId}
+        </where>
     </select>
 </mapper>

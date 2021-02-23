@@ -23,6 +23,10 @@ export default {
       type: [String, Function],
       default: 'key'
     },
+    lazy: {
+      type: Boolean,
+      default: false
+    },
     data: {
       type: Function,
       required: true
@@ -89,7 +93,7 @@ export default {
   computed: {
     // 是否支持跨页选择，默认为false
     multiPageSelect(){
-      return (typeof this.alert.multiPageSelect === 'boolean' && this.alert.multiPageSelect) ? this.alert.multiPageSelect : false
+      return (this.alert && typeof this.alert.multiPageSelect === 'boolean' && this.alert.multiPageSelect) ? this.alert.multiPageSelect : false
     }
   },
   watch: {
@@ -125,6 +129,10 @@ export default {
       Object.assign(this.localPagination, {
         showSizeChanger: val
       })
+    },
+    localDataSource(val){
+      // this.$emit('update:dataSource', val)
+      this.$emit('update', val)
     }
   },
   created () {
@@ -140,7 +148,9 @@ export default {
       }
     }) || false
     this.needTotalList = this.initTotalList(this.columns)
-    this.loadData()
+    if(!this.lazy){
+      this.loadData()
+    }
   },
   methods: {
     /**
@@ -177,6 +187,14 @@ export default {
         ...filters
       }
       )
+      if(!parameter.sortField){
+        for(const col of this.columns){
+          if(col.defaultSortOrder){
+            parameter.sortField = col.dataIndex
+            parameter.sortOrder = col.defaultSortOrder
+          }
+        }
+      }
       const result = this.data(parameter)
       // 对接自己的通用数据接口需要修改下方代码中的 r.pageNo, r.totalCount, r.data
       // eslint-disable-next-line
@@ -313,7 +331,7 @@ export default {
 
       // 绘制 alert 组件
       return (
-        <a-alert showIcon={true} style="margin-bottom: 16px">
+        <a-alert showIcon={true} style="margin: 0 10px 10px 10px">
           <template slot="message">
             <span style="margin-right: 12px">已选择: <a style="font-weight: 600">{this.selectedRows.length}</a></span>
             {needTotalItems}

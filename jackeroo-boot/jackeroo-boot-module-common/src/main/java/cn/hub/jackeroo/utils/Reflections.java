@@ -14,6 +14,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 反射工具类. 提供调用getter/setter方法, 访问私有变量, 调用私有方法, 获取泛型类型Class, 被AOP过的真实类等工具函数.
@@ -155,6 +158,17 @@ public class Reflections {
 		}
 		return null;
 	}
+
+	public static Set<Field> getAccessibleFields(Class clazz){
+        Set<Field> fieldSet = new HashSet<>();
+        for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+            Field[] field = superClass.getDeclaredFields();
+            if(field != null && field.length > 0){
+                fieldSet.addAll(Arrays.asList(field));
+            }
+        }
+        return fieldSet;
+    }
 
 	/**
 	 * 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问. 如向上转型到Object仍无法找到, 返回null. 匹配函数名+参数类型。

@@ -73,4 +73,13 @@ public class LoginUser extends IUser implements Serializable {
      * 删除标识
      */
     private Integer delFlag;
+
+    /**
+     * 角色id
+     */
+    private Long roleId;
+    /**
+     * 角色编码
+     */
+    private String roleCode;
 }

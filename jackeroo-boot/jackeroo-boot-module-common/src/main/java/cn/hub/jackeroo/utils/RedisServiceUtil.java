@@ -221,7 +221,7 @@ public class RedisServiceUtil {
 	 */
 	public <T> T getObject(String key, Class<T> cls) {
 		String objStr = redisTemplate.opsForValue().get(key);
-		return (T) JSON.parseObject(objStr, cls);
+		return JSON.parseObject(objStr, cls);
 	}
 
 	public <T> T get(String key, Class<T> cls) {

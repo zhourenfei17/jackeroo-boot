@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 登录用的查询对象
@@ -17,4 +18,8 @@ public class Account {
     private String account;
     @NotBlank
     private String pwd;
+    @NotBlank
+    private String captcha;
+    @NotBlank
+    private String key;
 }

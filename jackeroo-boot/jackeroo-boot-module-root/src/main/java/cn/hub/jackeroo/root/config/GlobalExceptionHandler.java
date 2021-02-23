@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -35,7 +36,7 @@ public class GlobalExceptionHandler {
             ServletRequestBindingException.class, MethodArgumentNotValidException.class, ConstraintViolationException.class })
     public Result handleHttpMessageNotReadableException(Exception e) {
         log.error("参数解析失败", e);
-        return new Result(ResultStatusCode.BAD_REQUEST.getCode(), e.getMessage());
+        return new Result(ResultStatusCode.BAD_REQUEST);
     }
 
     /**
@@ -55,7 +56,7 @@ public class GlobalExceptionHandler {
     public Result unauthorizedException(UnauthorizedException e) {
         log.error(e.getMessage(), e);
 
-        return new Result(ResultStatusCode.UNAUTHO_ERROR);
+        return new Result(ResultStatusCode.UN_AUTH_ERROR);
     }
 
     /**
@@ -67,6 +68,17 @@ public class GlobalExceptionHandler {
     public Result validationException(ValidationException e){
         e.printStackTrace();
         return new Result(ResultStatusCode.BAD_REQUEST.getCode(), e.getMessage());
+    }
+
+    /**
+     * 数据校验异常处理2
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(BindException.class)
+    public Result bindException(BindException e){
+        e.printStackTrace();
+        return new Result(ResultStatusCode.BAD_REQUEST);
     }
 
     /**

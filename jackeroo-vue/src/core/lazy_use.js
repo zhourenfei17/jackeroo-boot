@@ -45,7 +45,9 @@ import {
   Descriptions,
   message,
   notification,
-  FormModel
+  FormModel,
+  Tree,
+  Cascader
 } from 'ant-design-vue'
 import Viser from 'viser-vue'
 
@@ -54,10 +56,13 @@ import VueCropper from 'vue-cropper'
 import Dialog from '@/components/Dialog'
 import MultiTab from '@/components/MultiTab'
 import PageLoading from '@/components/PageLoading'
-import PermissionHelper from '@/utils/helper/permission'
+import $auth from '@/utils/helper/permission'
+import $role from '@/utils/helper/role';
+// 引入自定义指令
 import './directives/action'
+import './directives/role';
 
-import {ActionList, JModal, JSpin} from '@/components'
+import {ActionList, JModal, JSpin, JLink} from '@/components'
 
 Vue.use(ConfigProvider)
 Vue.use(Layout)
@@ -100,6 +105,8 @@ Vue.use(PageHeader)
 Vue.use(Result)
 Vue.use(Statistic)
 Vue.use(Descriptions)
+Vue.use(Tree)
+Vue.use(Cascader)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message
@@ -113,11 +120,16 @@ Vue.use(Viser)
 Vue.use(Dialog) // this.$dialog func
 Vue.use(MultiTab)
 Vue.use(PageLoading)
-Vue.use(PermissionHelper)
+// 自定义权限和角色插件
+Vue.use($auth)
+Vue.use($role)
+
 Vue.use(VueCropper)
 
 Vue.use(FormModel)
 Vue.use(ActionList)
+Vue.use(JLink)
+Vue.component('j-link', JLink)
 Vue.component('j-spin', JSpin)
 Vue.component('j-modal',JModal)
 

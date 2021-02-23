@@ -3,6 +3,8 @@
  */
 import { constantRouterMap } from '@/config/router.config'
 import { generatorDynamicRouter } from '@/router/generator-routers'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+import storage from 'store'
 
 const permission = {
   state: {
@@ -18,7 +20,7 @@ const permission = {
   actions: {
     GenerateRoutes ({ commit }, data) {
       return new Promise(resolve => {
-        const { token } = data
+        const token = storage.get(ACCESS_TOKEN)
         generatorDynamicRouter(token).then(routers => {
           commit('SET_ROUTERS', routers)
           resolve()

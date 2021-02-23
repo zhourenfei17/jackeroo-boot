@@ -1,6 +1,7 @@
 package cn.hub.jackeroo.system.entity;
 
 import cn.hub.jackeroo.persistence.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,6 +21,8 @@ public class SysUserRole extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId
+    private Long id;
     /**
      * 用户id
      */

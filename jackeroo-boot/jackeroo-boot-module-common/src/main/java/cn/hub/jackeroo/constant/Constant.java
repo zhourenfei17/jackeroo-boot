@@ -27,4 +27,44 @@ public interface Constant {
      * 自定义系统异常代码
      */
     int SYSTEM_ERROR_CODE = 5000;
+    /**
+     * 是
+     */
+    int BOOLEAN_YES = 1;
+    /**
+     * 否
+     */
+    int BOOLEAN_NO = 0;
+    /**
+     * 排序-正序
+     */
+    String SORT_ASC = "ascend";
+    /**
+     * 排序-倒序
+     */
+    String SORT_DESC = "descend";
+    /**
+     * 分隔符-逗号
+     */
+    String SPLIT_COMMA = ",";
+    /**
+     * 分隔符-斜杠
+     */
+    String SPLIT_SLASH = "/";
+    /**
+     * 分隔符-点
+     */
+    String SPLIT_DOT = ".";
+    /**
+     * 分隔符-下划线
+     */
+    String SPLIT_UNDER_LINE = "_";
+    /**
+     * 分隔符-中横线
+     */
+    String SPLIT_MIDDLE_LINE = "-";
+    /**
+     * 权限标识中的分隔符
+     */
+    String SPLIT_SECURITY = ":";
 }

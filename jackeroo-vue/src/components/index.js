@@ -27,9 +27,20 @@ import ArticleListContent from '@/components/ArticleListContent'
 
 import Dialog from '@/components/Dialog'
 
-import JSpin from '@/components/jackeroo/Spin'
-import ActionList from '@/components/jackeroo/ActionList'
-import JModal from '@/components/jackeroo/Modal'
+import JSpin from '@/components/Jackeroo/Feedback/Spin'
+import ActionList from '@/components/Jackeroo/DataDisplay/ActionList'
+import JModal from '@/components/Jackeroo/Feedback/Modal'
+import JDrawer from '@/components/Jackeroo/Feedback/Drawer'
+import JTag from '@/components/Jackeroo/DataDisplay/Tag/JTag'
+import DataCard from '@/components/Jackeroo/Layout/DataCard'
+import SearchCard from '@/components/Jackeroo/Layout/SearchCard'
+import EditTable from '@/components/Jackeroo/DataDisplay/EditTable'
+import FileSelector from '@/components/Jackeroo/Form/Selector/FileSelector'
+import JSelect from '@/components/Jackeroo/Form/Selector/Select'
+import JDictSelect from '@/components/Jackeroo/Form/Selector/DictSelector'
+import DragTable from '@/components/Jackeroo/DataDisplay/DragTable'
+import IconSelectInput from '@/components/Jackeroo/Form/Selector/IconSelectorInput'
+import JLink from '@/components/Jackeroo/General/Link';
 
 export {
   AvatarList,
@@ -59,5 +70,16 @@ export {
   Dialog,
   JSpin,
   ActionList,
-  JModal
+  JModal,
+  JDrawer,
+  JTag,
+  DataCard,
+  SearchCard,
+  EditTable,
+  FileSelector,
+  JSelect,
+  JDictSelect,
+  DragTable,
+  IconSelectInput,
+  JLink
 }

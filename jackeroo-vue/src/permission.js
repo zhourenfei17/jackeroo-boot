@@ -14,6 +14,8 @@ const whiteList = ['login', 'register', 'registerResult'] // no redirect whiteli
 const loginRoutePath = '/user/login'
 const defaultRoutePath = '/dashboard/workplace'
 
+
+// 全局前置守卫
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${i18nRender(to.meta.title)} - ${domTitle}`))
@@ -29,10 +31,8 @@ router.beforeEach((to, from, next) => {
         store
           .dispatch('GetInfo')
           .then(res => {
-            const roles = res.result && res.result.role
             // generate dynamic router
-            store.dispatch('GenerateRoutes', { roles }).then(() => {
-              // 根据roles权限生成可访问的路由表
+            store.dispatch('GenerateRoutes').then(() => {
               // 动态添加可访问路由表
               router.addRoutes(store.getters.addRouters)
               // 请求带有 redirect 重定向时，登录自动重定向到该地址
@@ -46,11 +46,11 @@ router.beforeEach((to, from, next) => {
               }
             })
           })
-          .catch(() => {
-            notification.error({
+          .catch((error) => {
+            /* notification.error({
               message: '错误',
               description: '请求用户信息失败，请重试'
-            })
+            }) */
             // 失败时，获取用户信息失败时，调用登出，来清空历史保留信息
             store.dispatch('Logout').then(() => {
               next({ path: loginRoutePath, query: { redirect: to.fullPath } })

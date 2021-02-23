@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hub.jackeroo.system.mapper.SysMenuPermissionConfigMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="baseColumns">
+        a.id AS "id",
+        a.group_id AS "groupId",
+        a.label AS "label",
+        a.value AS "value",
+        a.checked AS "checked",
+        a.sort AS "sort",
+        a.create_by AS "createBy",
+        a.create_time AS "createTime",
+        a.update_by AS "updateBy",
+        a.update_time AS "updateTime"
+    </sql>
+
+    <select id="findList" resultType="cn.hub.jackeroo.system.entity.SysMenuPermissionConfig">
+        SELECT <include refid="baseColumns" />
+        FROM sys_menu_permission_config a
+        <where>
+            <if test="groupId != null">
+                a.group_id = #{groupId}
+            </if>
+        </where>
+        <if test="orderBy != null">
+            order by ${orderBy}
+        </if>
+    </select>
+
+    <select id="findListByDefaultGroup" resultType="cn.hub.jackeroo.system.entity.SysMenuPermissionConfig">
+        SELECT <include refid="baseColumns" />
+        FROM sys_menu_permission_config a left join sys_menu_permission_group b on a.group_id = b.id
+        where b.is_default = '1'
+        order by a.sort asc
+    </select>
+</mapper>

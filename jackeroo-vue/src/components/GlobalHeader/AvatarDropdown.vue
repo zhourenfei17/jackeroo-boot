@@ -54,14 +54,15 @@ export default {
     },
     handleLogout (e) {
       Modal.confirm({
-        title: this.$t('layouts.usermenu.dialog.title'),
-        content: this.$t('layouts.usermenu.dialog.content'),
+        title: this.$t('退出登录'),
+        content: this.$t('您确认要退出登录吗?'),
         onOk: () => {
           /* return new Promise((resolve, reject) => {
             setTimeout(Math.random() > 0.5 ? resolve : reject, 1500)
           }).catch(() => console.log('Oops errors!')) */
 
           this.Logout().then(() => {
+            this.$message.success('退出登录成功')
             this.$router.push({ path: '/user/login' })
           })
         },

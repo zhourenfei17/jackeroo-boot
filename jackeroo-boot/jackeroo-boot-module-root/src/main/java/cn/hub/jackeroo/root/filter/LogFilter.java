@@ -1,9 +1,10 @@
 package cn.hub.jackeroo.root.filter;
 
+import cn.hub.jackeroo.utils.HttpUtils;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
@@ -15,7 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,50 +29,40 @@ public class LogFilter {
 
 	private static final ObjectMapper mapper = new ObjectMapper();
 
-	private long startTimeMillis;
-
-	private long endTimeMillis;
 
 	@Pointcut("execution(* cn.hub.jackeroo.*.controller.*.*(..))")
 	public void controller() {
 	}
 
-	@Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
-	public void requestMapping() {
-	}
-
 	@Before("controller()")
 	public void doBefore(JoinPoint joinPoint) {
-		startTimeMillis = System.currentTimeMillis();
 		org.springframework.web.context.request.RequestAttributes ra = RequestContextHolder.getRequestAttributes();
 		ServletRequestAttributes sra = (ServletRequestAttributes) ra;
 		HttpServletRequest request = sra.getRequest();
-		log.info("===================== request start =====================", new Object[0]);
+		log.info("===================== request start =====================");
 		log.info("URL:[ {} ]", new Object[] { request.getRequestURL() });
 		// log.info("Token=[ {} ]", new Object[] { request.getHeader("Token") });
-		printMap("Request Params", request.getParameterMap());
-		log.info("===================== request end =====================\n", new Object[0]);
-	}
+        if(request.getMethod().equalsIgnoreCase("POST") || request.getMethod().equalsIgnoreCase("PUT")){
+            printMap("request body", JSONObject.parseObject(HttpUtils.getBodyString(request), HashMap.class));
+        }else{
+            printMap("Request Params", request.getParameterMap());
+        }
 
-	@After("controller()")
-	public void doAfter(JoinPoint joinPoint) {
-		endTimeMillis = System.currentTimeMillis();
 	}
 
 	@AfterReturning(pointcut = "controller()", returning = "returnValue")
 	public JoinPoint afterReturning(JoinPoint joinPoint, Object returnValue) {
-		log.info("===================== return start =====================", new Object[0]);
-
 		org.springframework.web.context.request.RequestAttributes ra = RequestContextHolder.getRequestAttributes();
 		ServletRequestAttributes sra = (ServletRequestAttributes) ra;
 		HttpServletRequest request = sra.getRequest();
-		log.info("计时结束：{}  耗时：{}  URI: {}  最大内存: {}m  已分配内存: {}m  已分配内存中的剩余空间: {}m  最大可用内存: {}m",
-		         new SimpleDateFormat("hh:mm:ss.SSS").format(endTimeMillis), 1,
-		         request.getRequestURI(), Runtime.getRuntime().maxMemory() / 1024 / 1024, Runtime.getRuntime().totalMemory() / 1024 / 1024,
-		         Runtime.getRuntime().freeMemory() / 1024 / 1024,
-		         (Runtime.getRuntime().maxMemory() - Runtime.getRuntime().totalMemory() + Runtime.getRuntime().freeMemory()) / 1024 / 1024);
+		log.info("请求结束  URI: {}  最大内存: {}m  已分配内存: {}m  已分配内存中的剩余空间: {}m  最大可用内存: {}m",
+                request.getRequestURI(),
+                Runtime.getRuntime().maxMemory() / 1024 / 1024,
+                Runtime.getRuntime().totalMemory() / 1024 / 1024,
+                Runtime.getRuntime().freeMemory() / 1024 / 1024,
+                (Runtime.getRuntime().maxMemory() - Runtime.getRuntime().totalMemory() + Runtime.getRuntime().freeMemory()) / 1024 / 1024);
 
-		log.info("===================== return end =====================\n", new Object[0]);
+        log.info("===================== request end =====================\n");
 		return joinPoint;
 	}
 
@@ -81,6 +72,9 @@ public class LogFilter {
 	}
 
 	private void printMap(String prefix, Map map) {
+	    if(map == null){
+	        return;
+        }
 		StringBuilder buf = new StringBuilder();
 		for (Object o : map.entrySet()) {
 			Map.Entry entry = (Map.Entry) o;

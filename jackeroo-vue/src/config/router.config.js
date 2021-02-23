@@ -271,14 +271,26 @@ export const asyncRouterMap = [
           {
             path: '/system/user',
             name: 'UserList',
-            component: () => import('@/views/user/UserList'),
+            component: () => import('@/views/system/UserList'),
             meta: { title: '用户管理', permission: [ 'exception' ] }
           },
           {
             path: '/system/role',
             name: 'RoleList',
-            component: () => import('@/views/user/RoleList'),
+            component: () => import('@/views/system/RoleList'),
             meta: { title: '角色管理', permission: [ 'exception' ] }
+          },
+          {
+            path: '/system/menu',
+            name: 'MenuList',
+            component: () => import('@/views/system/MenuList'),
+            meta: { title: '菜单管理', permission: [ 'exception' ] }
+          },
+          {
+            path: '/system/menu/permission/config',
+            name: 'PermissionConfig',
+            component: () => import('@/views/system/MenuPermissionConfig'),
+            meta: { title: '菜单权限配置', permission: [ 'exception' ] }
           }
         ]
       }
@@ -303,11 +315,13 @@ export const constantRouterMap = [
       {
         path: 'login',
         name: 'login',
+        meta: {title: '登录'},
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
       },
       {
         path: 'register',
         name: 'register',
+        meta: {title: '注册'},
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
       },
       {

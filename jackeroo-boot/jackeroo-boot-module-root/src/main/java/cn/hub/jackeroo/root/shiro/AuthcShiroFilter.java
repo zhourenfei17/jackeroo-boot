@@ -38,7 +38,9 @@ public class AuthcShiroFilter extends FormAuthenticationFilter {
                 resp.setStatus(HttpStatus.OK.value());
                 return true;
             }
-
+            if(req.getRequestURI().indexOf("/auth/logout") >= 0){
+                return true;
+            }
             // 取消重定向，直接返回结果
             returnTokenInvalid((HttpServletRequest)request, (HttpServletResponse)response);
             return false;

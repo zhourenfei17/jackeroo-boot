@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +55,7 @@ public class XMLUtil {
 				return null;
 			}
 
-			InputStream in = new ByteArrayInputStream(strxml.getBytes("UTF-8"));
+			InputStream in = new ByteArrayInputStream(strxml.getBytes(StandardCharsets.UTF_8));
 			SAXBuilder builder = new SAXBuilder();
 			Document doc = builder.build(in);
 			Element root = doc.getRootElement();
@@ -217,7 +218,7 @@ public class XMLUtil {
 			if (null == strxml || "".equals(strxml)) {
 				return null;
 			}
-			in = new ByteArrayInputStream(strxml.getBytes("UTF-8"));
+			in = new ByteArrayInputStream(strxml.getBytes(StandardCharsets.UTF_8));
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = dbf.newDocumentBuilder();
 			org.w3c.dom.Document doc = builder.parse(in);

@@ -1,6 +1,6 @@
 package cn.hub.jackeroo.utils.excel;
 
-import cn.hub.jackeroo.utils.Reflections;
+/*import cn.hub.jackeroo.utils.Reflections;
 import cn.hub.jackeroo.utils.excel.annotation.ExcelField;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
+import java.util.List;*/
 
 /**
  * 导入Excel文件（支持“XLS”和“XLSX”格式）
@@ -33,94 +33,94 @@ import java.util.List;
  */
 public class ImportExcel {
 	
-	private static Logger log = LoggerFactory.getLogger(ImportExcel.class);
+	/*private static Logger log = LoggerFactory.getLogger(ImportExcel.class);
 			
-	/**
+	*//**
 	 * 工作薄对象
-	 */
+	 *//*
 	private Workbook wb;
 	
-	/**
+	*//**
 	 * 工作表对象
-	 */
+	 *//*
 	private Sheet sheet;
 	
-	/**
+	*//**
 	 * 标题行号
-	 */
+	 *//*
 	private int headerNum;
 	
-	/**
+	*//**
 	 * 构造函数
 	 * @param path 导入文件，读取第一个工作表
 	 * @param headerNum 标题行号，数据行号=标题行号+1
 	 * @throws InvalidFormatException 
 	 * @throws IOException 
-	 */
+	 *//*
 	public ImportExcel(String fileName, int headerNum) 
 			throws InvalidFormatException, IOException {
 		this(new File(fileName), headerNum);
 	}
 	
-	/**
+	*//**
 	 * 构造函数
 	 * @param path 导入文件对象，读取第一个工作表
 	 * @param headerNum 标题行号，数据行号=标题行号+1
 	 * @throws InvalidFormatException 
 	 * @throws IOException 
-	 */
+	 *//*
 	public ImportExcel(File file, int headerNum) 
 			throws InvalidFormatException, IOException {
 		this(file, headerNum, 0);
 	}
 
-	/**
+	*//**
 	 * 构造函数
 	 * @param path 导入文件
 	 * @param headerNum 标题行号，数据行号=标题行号+1
 	 * @param sheetIndex 工作表编号
 	 * @throws InvalidFormatException 
 	 * @throws IOException 
-	 */
+	 *//*
 	public ImportExcel(String fileName, int headerNum, int sheetIndex) 
 			throws InvalidFormatException, IOException {
 		this(new File(fileName), headerNum, sheetIndex);
 	}
 	
-	/**
+	*//**
 	 * 构造函数
 	 * @param path 导入文件对象
 	 * @param headerNum 标题行号，数据行号=标题行号+1
 	 * @param sheetIndex 工作表编号
 	 * @throws InvalidFormatException 
 	 * @throws IOException 
-	 */
+	 *//*
 	public ImportExcel(File file, int headerNum, int sheetIndex) 
 			throws InvalidFormatException, IOException {
 		this(file.getName(), new FileInputStream(file), headerNum, sheetIndex);
 	}
 	
-	/**
+	*//**
 	 * 构造函数
 	 * @param file 导入文件对象
 	 * @param headerNum 标题行号，数据行号=标题行号+1
 	 * @param sheetIndex 工作表编号
 	 * @throws InvalidFormatException 
 	 * @throws IOException 
-	 */
+	 *//*
 	public ImportExcel(MultipartFile multipartFile, int headerNum, int sheetIndex)
 			throws InvalidFormatException, IOException {
 		this(multipartFile.getOriginalFilename(), multipartFile.getInputStream(), headerNum, sheetIndex);
 	}
 
-	/**
+	*//**
 	 * 构造函数
 	 * @param path 导入文件对象
 	 * @param headerNum 标题行号，数据行号=标题行号+1
 	 * @param sheetIndex 工作表编号
 	 * @throws InvalidFormatException 
 	 * @throws IOException 
-	 */
+	 *//*
 	public ImportExcel(String fileName, InputStream is, int headerNum, int sheetIndex) 
 			throws InvalidFormatException, IOException {
 		if (StringUtils.isBlank(fileName)){
@@ -140,45 +140,45 @@ public class ImportExcel {
 		log.debug("Initialize success.");
 	}
 	
-	/**
+	*//**
 	 * 获取行对象
 	 * @param rownum
 	 * @return
-	 */
+	 *//*
 	public Row getRow(int rownum){
 		return this.sheet.getRow(rownum);
 	}
 
-	/**
+	*//**
 	 * 获取数据行号
 	 * @return
-	 */
+	 *//*
 	public int getDataRowNum(){
 		return headerNum+1;
 	}
 	
-	/**
+	*//**
 	 * 获取最后一个数据行号
 	 * @return
-	 */
+	 *//*
 	public int getLastDataRowNum(){
 		return this.sheet.getLastRowNum()+headerNum;
 	}
 	
-	/**
+	*//**
 	 * 获取最后一个列号
 	 * @return
-	 */
+	 *//*
 	public int getLastCellNum(){
 		return this.getRow(headerNum).getLastCellNum();
 	}
 	
-	/**
+	*//**
 	 * 获取单元格值
 	 * @param row 获取的行
 	 * @param column 获取单元格列号
 	 * @return 单元格值
-	 */
+	 *//*
 	public Object getCellValue(Row row, int column){
 		Object val = "";
 		try{
@@ -202,11 +202,11 @@ public class ImportExcel {
 		return val;
 	}
 	
-	/**
+	*//**
 	 * 获取导入数据列表
 	 * @param cls 导入对象类型
 	 * @param groups 导入分组
-	 */
+	 *//*
 	public <E> List<E> getDataList(Class<E> cls, int... groups) throws InstantiationException, IllegalAccessException{
 		List<Object[]> annotationList = Lists.newArrayList();
 		// Get annotation field 
@@ -262,13 +262,13 @@ public class ImportExcel {
 			public int compare(Object[] o1, Object[] o2) {
 				return new Integer(((ExcelField)o1[0]).sort()).compareTo(
 						new Integer(((ExcelField)o2[0]).sort()));
-			};
-		});
+			}
+        });
 		//log.debug("Import column count:"+annotationList.size());
 		// Get excel data
 		List<E> dataList = Lists.newArrayList();
 		for (int i = this.getDataRowNum(); i < this.getLastDataRowNum(); i++) {
-			E e = (E)cls.newInstance();
+			E e = cls.newInstance();
 			int column = 0;
 			Row row = this.getRow(i);
 			StringBuilder sb = new StringBuilder();
@@ -277,10 +277,10 @@ public class ImportExcel {
 				if (val != null){
 					ExcelField ef = (ExcelField)os[0];
 					// If is dict type, get dict value
-					/*if (StringUtils.isNotBlank(ef.dictType())){
+					*//*if (StringUtils.isNotBlank(ef.dictType())){
 						val = DictUtils.getDictValue(val.toString(), ef.dictType(), "");
 						//log.debug("Dictionary type value: ["+i+","+colunm+"] " + val);
-					}*/
+					}*//*
 					// Get param type and type cast
 					Class<?> valType = Class.class;
 					if (os[1] instanceof Field){
@@ -341,5 +341,5 @@ public class ImportExcel {
 			log.debug("Read success: ["+i+"] "+sb.toString());
 		}
 		return dataList;
-	}
+	}*/
 }

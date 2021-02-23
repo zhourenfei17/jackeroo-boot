@@ -1,15 +1,11 @@
 package cn.hub.jackeroo.root.shiro;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.saxon.functions.Serialize;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
-import org.apache.shiro.session.mgt.SimpleSession;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
-import org.crazycake.shiro.RedisSessionDAO;
-import org.crazycake.shiro.SessionInMemory;
-import org.crazycake.shiro.exception.SerializationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.crazycake.shiro.common.SessionInMemory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +22,7 @@ import java.util.Set;
  * @author alex
  * @date 2020/05/29
  */
-// @Component
+@Component
 @Slf4j
 public class JackerooRedisSessionDao extends AbstractSessionDAO {
 
@@ -37,7 +33,7 @@ public class JackerooRedisSessionDao extends AbstractSessionDAO {
 
     private long sessionInMemoryTimeout = 1000L;
 
-    private String keyPrefix = "SYS:SESSION:USER";
+    private String keyPrefix = "SYS:SESSION:USER:";
 
     @Override
     protected Serializable doCreate(Session session) {
@@ -53,6 +49,7 @@ public class JackerooRedisSessionDao extends AbstractSessionDAO {
 
     private void saveSession(Session session){
         redisTemplate.opsForValue().set(this.keyPrefix + session.getId(), session);
+        log.info("save session: {}", JSON.toJSONString(session));
     }
 
     @Override
@@ -63,6 +60,7 @@ public class JackerooRedisSessionDao extends AbstractSessionDAO {
     @Override
     public void delete(Session session) {
         redisTemplate.delete(this.keyPrefix + session.getId());
+        log.info("delete session from redis");
     }
 
     @Override

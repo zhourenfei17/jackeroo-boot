@@ -1,8 +1,5 @@
 package cn.hub.jackeroo.utils.validator.annotation;
 
-import cn.hub.jackeroo.utils.validator.annotation.validator.CodeNumValidator;
-
-import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -19,12 +16,18 @@ import static java.lang.annotation.ElementType.METHOD;
 @Target({METHOD, FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Unique {
-    String value() default "";
-
+    /**
+     * 字段名称，用于提示
+     * @return
+     */
     String name();
 
     String message() default "不能重复";
 
+    /**
+     * 支持分组，仅对支持的分组进行校验
+     * @return
+     */
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };

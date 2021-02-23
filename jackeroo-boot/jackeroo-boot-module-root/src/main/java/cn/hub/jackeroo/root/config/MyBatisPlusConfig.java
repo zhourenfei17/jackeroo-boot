@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.root.config;
 
+import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.root.config.bean.MyBatisPaginationInterceptor;
 import cn.hub.jackeroo.utils.UserUtils;
 import cn.hub.jackeroo.vo.LoginUser;
@@ -48,6 +49,7 @@ public class MyBatisPlusConfig implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "createBy", String.class, user.getAccount());
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
         this.strictInsertFill(metaObject, "updateBy", String.class, user.getAccount());
+        this.strictInsertFill(metaObject, "delFlag", Integer.class, Constant.DEL_FLAG_NORMAL);
     }
 
     /**

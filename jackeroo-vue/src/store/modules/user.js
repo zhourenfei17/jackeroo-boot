@@ -2,6 +2,7 @@ import storage from 'store'
 import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
+import permission from './async-router'
 
 const user = {
   state: {
@@ -37,7 +38,7 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          if(response.code == 0){
+          if(!response.code){
             storage.set(ACCESS_TOKEN, response.data, 7 * 24 * 60 * 60 * 1000)
             commit('SET_TOKEN', response.data)
             resolve(response)
@@ -54,28 +55,43 @@ const user = {
     GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
-          const result = response.result
+          if(!response.code){
+            const result = response.data
 
-          if (result.role && result.role.permissions.length > 0) {
-            const role = result.role
-            role.permissions = result.role.permissions
-            role.permissions.map(per => {
-              if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
-                const action = per.actionEntitySet.map(action => { return action.action })
-                per.actionList = action
-              }
-            })
-            role.permissionList = role.permissions.map(permission => { return permission.permissionId })
-            commit('SET_ROLES', result.role)
-            commit('SET_INFO', result)
-          } else {
-            reject(new Error('getInfo: roles must be a non-null array !'))
+            /* if (result.role && result.role.permissions.length > 0) {
+              const role = result.role
+              role.permissions = result.role.permissions
+              role.permissions.map(per => {
+                if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
+                  const action = per.actionEntitySet.map(action => { return action.action })
+                  per.actionList = action
+                }
+              })
+              role.permissionList = role.permissions.map(permission => { return permission.permissionId })
+              commit('SET_ROLES', result.role)
+              commit('SET_INFO', result)
+            } else {
+              reject(new Error('getInfo: roles must be a non-null array !'))
+            } */
+
+            if (result.roleCode) {
+              const role = {roleCode: result.roleCode}
+              const permissionList = []
+              result.permissionList && result.permissionList.forEach(permission => {
+                permissionList.push(permission.value)
+              });
+              role.permissionList = permissionList
+              commit('SET_ROLES', [role])
+              commit('SET_INFO', result)
+            } else {
+              reject(new Error('getInfo: roles must be a non-null array !'))
+            }
+
+            commit('SET_NAME', { name: result.name, welcome: welcome() })
+            commit('SET_AVATAR', result.avatar)
+
+            resolve(response)
           }
-
-          commit('SET_NAME', { name: result.name, welcome: welcome() })
-          commit('SET_AVATAR', result.avatar)
-
-          resolve(response)
         }).catch(error => {
           reject(error)
         })
@@ -92,6 +108,7 @@ const user = {
         }).finally(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
+          commit('SET_INFO', {})
           storage.remove(ACCESS_TOKEN)
         })
       })

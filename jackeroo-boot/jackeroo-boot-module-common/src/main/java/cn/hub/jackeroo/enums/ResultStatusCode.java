@@ -19,15 +19,18 @@ public enum ResultStatusCode {
     INVALID_TOKEN(401, "无效的Access-Token"),
     METHOD_NOT_ALLOWED(405, "不支持当前请求方法"),
     SYSTEM_ERR(500, "服务器运行异常"),
-    UNAUTHO_ERROR(10001, "您没有该权限"),
+    UN_AUTH_ERROR(10001, "您没有权限访问"),
     UPLOAD_ERROR(10002, "上传文件异常"),
+    CAPTCHA_ERROR(10003, "验证码错误"),
+    KICK_OUT_ERROR(40001, "账号已在其他地方登录"),
     BUSSINESS_ERROR(50000, "业务异常"),
     NOT_EXIST_USER_OR_ERROR_PWD(50101, "该用户不存在或密码错误"),
     LOGINED_IN(50102, "该用户已登录"),
     USER_FROZEN(50103, "该用户已被冻结"),
     SHIRO_ERROR(50104, "登录异常"),
     INVALID_CAPTCHA(50105, "无效的验证码"),
-    EXIST_SAME_ACCOUNT(50106, "该账号已存在");
+    EXIST_SAME_ACCOUNT(50106, "该账号已存在"),
+    EXCEL_EXPORT_ERROR(6000, "导出excel失败！");
 
     private int code;
 
@@ -49,7 +52,7 @@ public enum ResultStatusCode {
         this.msg = msg;
     }
 
-    private ResultStatusCode(int code, String msg) {
+    ResultStatusCode(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
