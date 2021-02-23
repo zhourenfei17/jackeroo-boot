@@ -1,32 +1,54 @@
 <template>
-  <data-card 
-    :icon="[]"
-    >
+  <div>
+    <data-card 
+      :icon="[]"
+      >
 
-      <template slot="toolbar">
-        <a-button type="primary" @click="handleAdd">添加</a-button>
-        行编辑状态：<a-switch checkedChildren="开" unCheckedChildren="关" @change="handleRowEditChange"></a-switch>
-      </template>
-
-      <edit-table
-        ref="editTable"
-        rowKey="id"
-        :scroll="{x: 2000}"
-        :columns="columns"
-        :editSwitch="editSwitch"
-        :dataSource="dataSource">
-
-        <template v-slot:action="{record, index}">
-          <action-list>
-            <j-link v-if="editSwitch && !record.editAble" @click="handleEdlt(record)">编辑</j-link>
-            <j-link v-if="editSwitch && record.editAble" @click="handleSave(record, index)">保存</j-link>
-            <a-popconfirm title="您确定要删除该行数据吗？" @confirm="() => handleDelete(record)">
-              <j-link>删除</j-link>
-            </a-popconfirm>
-          </action-list>
+        <template slot="toolbar">
+          <a-button-group style="margin-right: 50px;">
+            <a-button @click="handleAdd">添加</a-button>
+            <a-button @click="handleValidateAndGetData">验证并获取数据</a-button>
+            <a-button @click="handleGetData">直接获取数据</a-button>
+            <a-button @click="handleClearValid">清除验证</a-button>
+            <a-button v-if="!disabled" @click="disabled = true">禁用表格</a-button>
+            <a-button v-else @click="disabled = false">启用表格</a-button>
+          </a-button-group>
+          
+          <span>
+            行编辑状态：<a-switch checkedChildren="开" unCheckedChildren="关" @change="handleRowEditChange"></a-switch>
+          </span>
         </template>
-      </edit-table>
-  </data-card>
+
+        <edit-table
+          ref="editTable"
+          rowKey="id"
+          :scroll="{x: 2000}"
+          :columns="columns"
+          :editSwitch="editSwitch"
+          :disabled="disabled"
+          :dataSource="dataSource"
+          :pagination="false">
+
+          <template v-slot:action="{record, index}">
+            <action-list>
+              <j-link v-if="editSwitch && !record.editAble" @click="handleEdlt(record)">编辑</j-link>
+              <j-link v-if="editSwitch && record.editAble" @click="handleSave(record, index)">保存</j-link>
+              <j-link v-if="!disabled && (!editSwitch || record.editAble) && !record.disabled" @click="handleDisableRow(record, index)">禁用行编辑</j-link>
+              <j-link v-if="!disabled && (!editSwitch || record.editAble) && record.disabled" @click="handleEnableRow(record, index)">启用行编辑</j-link>
+              <a-popconfirm title="您确定要删除该行数据吗？" @confirm="() => handleDelete(record)">
+                <j-link>删除</j-link>
+              </a-popconfirm>
+            </action-list>
+          </template>
+        </edit-table>
+    </data-card>
+
+    <a-card :bordered="false" style="margin-top: 20px;">
+      <a-textarea v-model="dataJson" disabled :autosize="{minRows: 10, maxRows: 15}" style="font-size: 16px;">
+
+      </a-textarea>
+    </a-card>
+  </div>
 </template>
 
 <script>
@@ -42,6 +64,7 @@ export default {
   data() {
     return {
       dataSource: [],
+      dataJson: '',
       nativePlace: [
         {
           label: '上海',
@@ -104,7 +127,8 @@ export default {
           value: 'shenzhen'
         }
       ],
-      editSwitch: false
+      editSwitch: false,
+      disabled: false
     }
   },
   computed: {
@@ -118,10 +142,18 @@ export default {
           }
         },
         {
+          dataIndex: 'text',
+          title: '文本',
+          type: 'text',
+          width: 100,
+          length: 7
+        },
+        {
           dataIndex: 'input',
           title: '输入框',
           type: 'input',
           width: 120,
+          length: 5,
           attrs:{
             placeholder: '请输入内容'
           }
@@ -255,11 +287,22 @@ export default {
     handleRowEditChange(){
       this.editSwitch = !this.editSwitch
     },
+    handleIgnoreTempId(){
+      this.ignoreTempId = !this.ignoreTempId
+    },
     handleAdd(){
-      const data = this.$refs.editTable.getData()
-      data.push({id: this.$refs.editTable.generateId(), editAble: false})
+      const data = this.$refs.editTable.getValuesSkipValidate()
+      data.push({id: this.$refs.editTable.generateId(), editAble: false, text: '欢迎使用EditTable'})
 
       this.dataSource = data 
+    },
+    handleDisableRow(record, index){
+      record.disabled = true
+      this.$set(this.dataSource, index, record)
+    },
+    handleEnableRow(record, index){
+      record.disabled = false
+      this.$set(this.dataSource, index, record)
     },
     handleEdlt(record){
       // record.editAble = true
@@ -276,10 +319,30 @@ export default {
       })
     },
     handleDelete(record){
-      const data = this.$refs.editTable.getData()
+      const data = this.$refs.editTable.getValuesSkipValidate()
       const dataSource = data.filter(item => item.id != record.id)
 
       this.dataSource = dataSource
+    },
+    handleValidateAndGetData(){
+      this.$refs.editTable.getValues((data) => {
+        if(data != null){
+          // alert(JSON.stringify(data))
+          this.$message.success('验证通过')
+          this.dataJson = JSON.stringify(data)
+        }else{
+          this.$message.error('验证未通过')
+          this.dataJson = ''
+        }
+      })
+    },
+    handleGetData(){
+      const data = this.$refs.editTable.getValuesSkipValidate()
+      // alert(JSON.stringify(data))
+      this.dataJson = JSON.stringify(data)
+    },
+    handleClearValid(){
+      this.$refs.editTable.clearValidate()
     }
   }
 }

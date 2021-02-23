@@ -208,7 +208,7 @@ export default {
           return null
         }
       }else{
-        return this.icon
+        return this.icon.length === 0 ? null : this.icon
       }
     }
   },

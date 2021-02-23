@@ -69,12 +69,10 @@
 <script>
 import { STable, JTag, DataCard, SearchCard } from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
-import { putAction, getAction, deleteAction } from '@/api/manage'
 import SelectTableModal from './modal/SelectTableModal'
 import GenerateTableColumn from './modal/GenerateTableColumn'
 import GenerateFileSelect from './modal/GenerateFileSelect'
 import DefaultConfigModal from './modal/DefaultConfigModal'
-import {loadDictItemByCode} from '@/api/system';
 
 export default {
   name: 'OnlineTableList',
@@ -130,16 +128,19 @@ export default {
         deleteBatch: '/online/table/deleteBatch'
       },
       dictOptions: {
-        idStrategy: []
+        idStrategy: {
+          code: 'GEN_ID_STRATEGY',
+          options: []
+        }
       }
     }
   },
   methods: {
-    initDictionary(){
+    /* initDictionary(){
       loadDictItemByCode('GEN_ID_STRATEGY').then(result => {
         this.dictOptions.idStrategy = result
       })
-    },
+    }, */
     handleAdd(){
       this.$refs.selectTableModal.visible = true
       this.$refs.selectTableModal.add()

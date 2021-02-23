@@ -1,8 +1,11 @@
 <template>
   <span>
-    <a-input v-bind="$attrs" readOnly :value="text" @mouseenter="showClose" @mouseleave="hideClose">
+    <a-input v-bind="$attrs" readOnly :disabled="disabled" :value="text" @mouseenter="showClose" @mouseleave="hideClose">
       <span v-if="!disabled" slot="addonAfter" @click="showDictCodeSelectorModal" class="j-input-btn">
         <a-icon type="select"></a-icon>
+      </span>
+      <span v-else slot="addonAfter" class="j-input-btn">
+        <a-icon type="select" style="cursor:not-allowed;"></a-icon>
       </span>
 
       <a-icon type="close-circle" v-if="allowClear" slot="suffix" :class="closeClass" @click="clearIcon" @mouseenter="showClose" @mouseleave="hideClose"></a-icon>

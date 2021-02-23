@@ -1,4 +1,5 @@
 import { getAction, deleteAction } from '@/api/manage'
+import {loadDictItemByCodeList} from '@/api/system';
 
 export const JackerooListMixins = {
   data(){
@@ -66,7 +67,9 @@ export const JackerooListMixins = {
         view: 'primary',
         edit: 'primary',
         delete: 'info'
-      }
+      },
+      // 数据字典，结构：{${name}: {code: ${dictCode}, options: []}}
+      dictOptions: {}
     }
   },
   computed: {
@@ -91,11 +94,21 @@ export const JackerooListMixins = {
     },
     // 加载页面数据字典项，组件需要自定义实现
     initDictionary(){
-
+      const dictCodeList = []
+      for (const property in this.dictOptions) {
+        const element = this.dictOptions[property]
+        dictCodeList.push(element.code)
+      }
+      loadDictItemByCodeList(dictCodeList).then(result => {
+        for (const property in this.dictOptions) {
+          const element = this.dictOptions[property]
+          element.options = result[element.code]
+        }
+      })
     },
     // 通过字典值，获取字典文本
     loadDictText(val, dictList){
-      const dict = dictList.filter((item) => item.value == val)
+      const dict = dictList.options.filter((item) => item.value == val)
       if(dict.length === 1){
         return dict[0].label
       }else{

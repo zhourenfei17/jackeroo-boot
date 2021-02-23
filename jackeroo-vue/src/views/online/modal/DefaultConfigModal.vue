@@ -299,7 +299,7 @@ export default {
     },
     handleAddColumn(){
       this.$refs.editTable.clearValidate()
-      const data = this.$refs.editTable.getData()
+      const data = this.$refs.editTable.getValuesSkipValidate()
       data.push({id: new Date().getTime() + this.getRandomNum()})
       this.dataSource = data
     },
@@ -308,7 +308,7 @@ export default {
         this.dataSource = data.filter(item => this.selectedRowKeys.indexOf(item.id) == -1)
       }) */
       this.$refs.editTable.clearValidate()
-      const data = this.$refs.editTable.getData()
+      const data = this.$refs.editTable.getValuesSkipValidate()
       this.dataSource = data.filter(item => this.selectedRowKeys.indexOf(item.id) == -1)
 
       this.selectedRowKeys = []

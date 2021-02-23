@@ -138,6 +138,10 @@
             <span v-else-if="col.type == 'checkbox'">
               {{getCheckboxLabel(formData[col.dataIndex + '_' + index])}}
             </span>
+            <span v-else>
+              <ellipsis v-if="col.length" tooltip :length="col.length">{{formData[col.dataIndex + '_' + index]}}</ellipsis>
+              <span v-else>{{formData[col.dataIndex + '_' + index]}}</span>
+            </span>
           </span>
         </a-form-model-item>
           
@@ -150,6 +154,10 @@
       <template v-for="slotName of scopedSlotKeys" :slot="slotName" slot-scope="text, record, index">
         <slot :name="slotName" :text="text" :record="record" :index="index"></slot>
       </template>
+
+      <template v-for="slotName of slotsKeys" :slot="slotName">
+        <slot :name="slotName"></slot>
+      </template>
     </a-table>
   </a-form-model>
 </template>
@@ -160,7 +168,6 @@ import JDictCodeSelect from '@/components/Jackeroo/Form/Selector/DictCodeSelecto
 import {getAction} from '@/api/manage'
 import {Ellipsis} from '@/components'
 import DynamicComponent from './Component'
-import { call } from 'lodash.pick'
 
 export default {
   name: 'EditTable',
@@ -246,7 +253,11 @@ export default {
       return this.loopColumnsSlot([...this.columns])
     },
     scopedSlotKeys(){
-      return Object.keys(this.$scopedSlots)
+      const slotKeys = Object.keys(this.$slots)
+      return Object.keys(this.$scopedSlots).filter(item => slotKeys.indexOf(item) == -1)
+    },
+    slotsKeys(){
+      return Object.keys(this.$slots)
     },
     rules(){
       const rules = {}
@@ -460,13 +471,14 @@ export default {
      * 获取EditTable所有的行数据；
      * callback为回掉函数，并传入一个参数: 所有行数据，callback: Function(data)；
      * 如果不传callback，则返回一个promise函数
+     * 
      */
     async getValues(callback){
       var success = await this.$refs.formTable.validate().catch((e) => {
         return false
       })
       if(success != undefined && success){
-        const data = this.getData()
+        const data = this.getValuesSkipValidate()
         if (callback && typeof callback === 'function') {
           callback(data)
         }else{
@@ -480,16 +492,8 @@ export default {
         }
       }
     },
-    // 生成临时的行id
-    generateId(){
-      return 'EditTable_' + new Date().getTime() + Math.random().toString().substring(2)
-    },
-    // 清除表单验证
-    clearValidate(){
-      this.$refs.formTable.clearValidate()
-    },
     // 跳过表单校验，并获取数据
-    getData(){
+    getValuesSkipValidate(){
       const data = [...this.dataSource]
       for(const prop in this.formData){
         let index = prop.lastIndexOf('_')
@@ -508,6 +512,14 @@ export default {
         }
       }
       return data
+    },
+    // 生成临时的行id
+    generateId(){
+      return 'EditTable_' + new Date().getTime() + Math.random().toString().substring(2)
+    },
+    // 清除表单验证
+    clearValidate(){
+      this.$refs.formTable.clearValidate()
     }
   }
 }

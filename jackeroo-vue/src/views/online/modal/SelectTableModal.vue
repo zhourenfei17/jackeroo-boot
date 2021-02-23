@@ -48,7 +48,6 @@
 
 <script>
 import { STable, SearchCard } from '@/components'
-import { getAction, postAction, httpAction } from '@/api/manage'
 import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 
@@ -79,13 +78,17 @@ export default {
           dataIndex: 'comment',
         }
       ],
-      rowSelection : {
+      url: {
+        list: '/online/generate/findTableListFromDataSource'
+      }
+    }
+  },
+  computed: {
+    rowSelection() {
+      return {
         selectedRowKeys: this.selectedRowKeys,
         onChange: this.onSelectChange,
         type: 'radio'
-      },
-      url: {
-        list: '/online/generate/findTableListFromDataSource'
       }
     }
   },

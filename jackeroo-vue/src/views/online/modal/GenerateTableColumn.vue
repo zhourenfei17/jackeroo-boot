@@ -359,7 +359,7 @@ export default {
     },
     syncDataSource(){
       this.$refs.onlineTableField.clearValidate()
-      const data = this.$refs.onlineTableField.getData()
+      const data = this.$refs.onlineTableField.getValuesSkipValidate()
       this.dataSource = data
     },
     handleSortColumn(){
