@@ -7,6 +7,9 @@
     <groupId>cn.hub.jackeroo</groupId>
     <artifactId>jackeroo-boot-module-common</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <dependencies>
+
+    </dependencies>
 
     <name>jackeroo-boot-module-common</name>
 
