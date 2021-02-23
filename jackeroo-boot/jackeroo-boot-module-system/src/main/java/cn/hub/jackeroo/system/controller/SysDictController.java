@@ -33,7 +33,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
 * <p>
@@ -106,6 +109,21 @@ public class SysDictController extends BaseController {
     @ApiOperation("通过字典code获取所有字典项列表")
     public Result<List<SysDict>> getDictItemList(@RequestParam String dictCode){
         return ok(service.findDictItemByDictCode(dictCode));
+    }
+
+    /**
+     * 通过多个code获取字典项列表
+     * @param dictCode
+     * @return
+     */
+    @GetMapping("getDictItemByCodes")
+    @ApiOperation("通过多个code获取字典项列表")
+    public Result<Map<String, List<SysDict>>> getDictItemByCodes(@RequestParam List<String> dictCode){
+        Map<String, List<SysDict>> result = new HashMap<>();
+        for (String code : dictCode) {
+            result.put(code, service.findDictItemByDictCode(code));
+        }
+        return ok(result);
     }
 
     /**

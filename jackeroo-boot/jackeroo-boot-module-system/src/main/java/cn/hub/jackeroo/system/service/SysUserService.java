@@ -10,9 +10,6 @@ import cn.hub.jackeroo.system.mapper.SysUserMapper;
 import cn.hub.jackeroo.utils.Assert;
 import cn.hub.jackeroo.utils.PasswordUtil;
 import cn.hub.jackeroo.utils.StringUtils;
-import cn.hub.jackeroo.vo.PageParam;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,25 +36,6 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
     private SysUserRoleService userRoleService;
     @Autowired
     private ISystemApi systemApi;
-
-    /**
-     * 查询数据列表-带分页
-     * @param sysUser
-     * @return
-     */
-    public IPage<SysUser> findPage(SysUser sysUser, PageParam pageParam){
-
-        Page<SysUser> page = sysUser.initPage(pageParam);
-
-        List<SysUser> list = this.findList(sysUser);
-        for (SysUser user : list) {
-            user.setPassword(null);
-        }
-
-        page.setRecords(list);
-
-        return page;
-    }
 
     /**
      * 查询数据列表

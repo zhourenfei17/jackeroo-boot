@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -27,17 +28,14 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
     private SysRoleMapper mapper;
     @Resource
     private SysUserRoleService userRoleService;
+
     /**
-     * 查询数据列表-带分页
-     * @param sysRole
-     * @param pageParam
+     * 查询数据列表
+     * @param role
      * @return
      */
-    public IPage<SysRole> findPage(SysRole sysRole, PageParam pageParam){
-        Page<SysRole> page = sysRole.initPage(pageParam);
-        page.setRecords(mapper.findList(sysRole));
-
-        return page;
+    public List<SysRole> findList(SysRole role){
+        return mapper.findList(role);
     }
 
     /**

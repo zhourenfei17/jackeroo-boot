@@ -16,6 +16,7 @@ import cn.hub.jackeroo.vo.IdList;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -55,7 +56,9 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "角色列表", response = Result.class)
     @RequiresPermissions("system:role:view")
     public Result<IPage<SysRole>> list(SysRole sysRole, @Validated PageParam pageParam){
-        return ok(roleService.findPage(sysRole, pageParam));
+        Page<SysRole> page = sysRole.initPage(pageParam);
+        page.setRecords(roleService.findList(sysRole));
+        return ok(page);
     }
 
     /**

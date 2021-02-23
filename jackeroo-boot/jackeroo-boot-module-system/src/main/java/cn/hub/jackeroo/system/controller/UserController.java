@@ -21,6 +21,7 @@ import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -72,7 +73,13 @@ public class UserController extends BaseController {
     })
     @RequiresPermissions("system:user:view")
     public Result<IPage<SysUser>> list(@ApiIgnore SysUser sysUser, @Validated PageParam pageParam){
-        return ok(userService.findPage(sysUser, pageParam));
+        Page<SysUser> page = sysUser.initPage(pageParam);
+        page.setRecords(userService.findList(sysUser));
+
+        for (SysUser record : page.getRecords()) {
+            record.setPassword(null);
+        }
+        return ok(page);
     }
 
     /**

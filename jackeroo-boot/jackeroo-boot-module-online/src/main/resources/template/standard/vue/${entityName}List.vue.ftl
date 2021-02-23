@@ -192,12 +192,8 @@
 import { STable, DataCard<#if existQuery>, SearchCard</#if><#if existJSelect>, JSelect</#if><#if existJDictSelect>, JDictSelect</#if>} from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import ${table.className}FormModal from './modal/${table.className}FormModal'
-<#if tableDictList?? && tableDictList?size &gt; 0>
-import {loadDictItemByCode} from '@/api/system';
-</#if>
 
 export default {
-  name: 'RoleList',
   components: {
     STable,
     DataCard,
@@ -252,20 +248,21 @@ export default {
         delete: '/${module.code}/${pathName}/delete',
         deleteBatch: '/${module.code}/${pathName}/deleteBatch',
         exportExcel: '/${module.code}/${pathName}/exportExcel'
-      },
+      }<#if tableDictList?? && tableDictList?size &gt; 0>,
+      dictOptions: {
+          <#list tableDictList as dict>
+        // ${dict.dbFieldDesc}
+        ${dict.entityFieldName}: {
+          code: '${dict.formDictCode}',
+          options: []
+        }
+          </#list>
+      }
+      </#if>
     }
   },
   methods: {
-  <#if tableDictList?? && tableDictList?size &gt; 0>
-    initDictionary(){
-    <#list tableDictList as dict>
-      // ${dict.dbFieldDesc}
-      loadDictItemByCode('${dict.formDictCode}').then(result => {
-        this.dictOptions.${dict.entityFieldName} = result
-      })
-    </#list>
-    }
-  </#if>
+
   }
 }
 </script>
