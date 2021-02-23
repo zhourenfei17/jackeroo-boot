@@ -1,7 +1,6 @@
 package cn.hub.jackeroo.utils;
 
 import cn.hub.jackeroo.constant.Constant;
-import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.util.Random;
 
