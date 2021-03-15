@@ -5672,10 +5672,10 @@ http-proxy-middleware@0.19.1:
     lodash "^4.17.11"
     micromatch "^3.1.10"
 
-http-proxy@^1.18.1:
-  version "1.18.0"
-  resolved "https://registry.npm.taobao.org/http-proxy/download/http-proxy-1.18.0.tgz#dbe55f63e75a347db7f3d99974f2692a314a6a3a"
-  integrity sha1-2+VfY+daNH2389mZdPJpKjFKajo=
+http-proxy@^1.17.0:
+  version "1.18.1"
+  resolved "https://registry.npm.taobao.org/http-proxy/download/http-proxy-1.18.1.tgz#401541f0534884bbf95260334e72f88ee3976549"
+  integrity sha1-QBVB8FNIhLv5UmAzTnL4juOXZUk=
   dependencies:
     eventemitter3 "^4.0.0"
     follow-redirects "^1.0.0"
@@ -9540,7 +9540,7 @@ selfsigned@^1.10.7:
   resolved "https://registry.npm.taobao.org/selfsigned/download/selfsigned-1.10.7.tgz#da5819fd049d5574f28e88a9bcc6dbc6e6f3906b"
   integrity sha1-2lgZ/QSdVXTyjoipvMbbxubzkGs=
   dependencies:
-    node-forge "0.10.0"
+    node-forge "0.9.0"
 
 "semver@2 || 3 || 4 || 5", semver@^5.4.1, semver@^5.5, semver@^5.5.0, semver@^5.5.1, semver@^5.6.0:
   version "5.7.1"
@@ -10899,7 +10899,7 @@ vue-copy-to-clipboard@^1.0.1:
   dependencies:
     copy-to-clipboard "^3.3.1"
 
-vue-cropper@0.4.9:
+vue-cropper@^0.4.9:
   version "0.4.9"
   resolved "https://registry.npm.taobao.org/vue-cropper/download/vue-cropper-0.4.9.tgz#fe650f32516ecf29014bbd4a9079191c8dc5a5ae"
   integrity sha1-/mUPMlFuzykBS71KkHkZHI3Fpa4=

@@ -5,7 +5,8 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  validUniqueUrl: '/system/valid/unique'
+  validUniqueUrl: '/system/valid/unique',
+  uploadImg: '/upload/uploadImg'
 }
 
 export default api
@@ -68,6 +69,20 @@ export function getFile(url, parameter) {
     method: method.GET,
     params: parameter,
     responseType: 'blob'
+  })
+}
+
+// 上传图片
+export function uploadImg(parameter){
+  const data = new FormData();
+  data.append('file', parameter);
+  return axios({
+    url: api.uploadImg,
+    data: data,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    method: method.POST,
   })
 }
 

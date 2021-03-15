@@ -40,7 +40,8 @@ import JSelect from '@/components/Jackeroo/Form/Selector/Select'
 import JDictSelect from '@/components/Jackeroo/Form/Selector/DictSelector'
 import DragTable from '@/components/Jackeroo/DataDisplay/DragTable'
 import IconSelectInput from '@/components/Jackeroo/Form/Selector/IconSelectorInput'
-import JLink from '@/components/Jackeroo/General/Link';
+import JLink from '@/components/Jackeroo/General/Link'
+import UploadImage from '@/components/Jackeroo/Form/Upload/UploadImage'
 
 export {
   AvatarList,
@@ -81,5 +82,6 @@ export {
   JDictSelect,
   DragTable,
   IconSelectInput,
-  JLink
+  JLink,
+  UploadImage
 }

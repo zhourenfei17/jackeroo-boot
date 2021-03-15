@@ -15,6 +15,11 @@
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
         <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
+            <a-form-model-item label="头像" prop="img">
+              <upload-image v-model="form.img"></upload-image>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="rowSpan">
             <a-form-model-item label="姓名" prop="name">
               <a-input v-model="form.name" placeholder="请输入姓名" :disabled="flag.view"></a-input>
             </a-form-model-item>
@@ -74,12 +79,13 @@
 import { getAction, postAction, httpAction } from '@/api/manage'
 import md5 from 'md5'
 import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
-import {JSelect, JDictSelect} from '@/components'
+import {JSelect, JDictSelect, UploadImage} from '@/components'
 
 export default {
   components: {
     JSelect,
-    JDictSelect
+    JDictSelect,
+    UploadImage
   },
   mixins: [JackerooFormMixins],
   data(){
@@ -99,9 +105,15 @@ export default {
         phone: undefined,
         telephone: undefined,
         birthday: undefined,
-        roleId: undefined
+        roleId: undefined,
+        img: undefined
+      },
+      imageUrl: null,
+      headers: {
+        'Content-Type': 'multipart/form-data',  // 文件上传
       },
       rules: {
+        img:[],
         name: [
           {required: true, message: '请输入姓名'},
           {max: 20, message: '长度需要在0和20之间'}
