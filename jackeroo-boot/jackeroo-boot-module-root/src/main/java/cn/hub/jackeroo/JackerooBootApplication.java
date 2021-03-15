@@ -1,6 +1,7 @@
 package cn.hub.jackeroo;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -38,10 +39,15 @@ public class JackerooBootApplication implements WebMvcConfigurer {
 		return new ServerEndpointExporter();
 	}*/
 
+    @Value("${jackeroo.path.upload}")
+    private String basePath;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        // 上传图片路径资源映射
+        registry.addResourceHandler("/**").addResourceLocations("file:" + basePath + "/");
     }
 }

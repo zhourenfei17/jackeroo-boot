@@ -15,24 +15,19 @@ public class PathUtil {
 	private static String LINUX = "/data/";
 
 	/**
-	 * 创建上传目录
-	 * 
-	 * @param source
-	 * @param date
+	 * 创建图片上传目录
+	 *
+     * @param basePath 根路径
 	 */
-	public static String initDirUpload(String source, String date) {
-		String realBaseDir = PathUtil.getFileSavePath(source);
-		String path = realBaseDir + "/" + date;
+	public static String initUpload(String basePath, String appendPath) {
+		String path = basePath +  appendPath;
 		File baseFile = new File(path);
 		if (!baseFile.exists()) {
 			baseFile.mkdirs();
 		}
 		return path;
-		// File softLinkFile = new File(softLink);
-		// if (!softLinkFile.exists()) {
-		// PathUtil.createSoftLink(softLink,realBaseDir);
-		// }
 	}
+
 
 	/**
 	 * @author

@@ -2,7 +2,10 @@ package cn.hub.jackeroo.root.filter;
 
 import cn.hub.jackeroo.root.filter.wrapper.HttpRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -22,10 +25,20 @@ import java.io.IOException;
 @Slf4j
 @WebFilter(filterName = "aBodyFilter", urlPatterns = "/*")
 public class BodyFilter implements Filter {
+
+    @Value("${server.servlet.context-path}")
+    private String contentPath;
+    private static final String prefix = "/upload/";
+
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
+        // 过滤掉上传文件等请求
+        if(request.getRequestURI().startsWith(contentPath + prefix)){
+            chain.doFilter(req, res);
+            return;
+        }
         if(request.getMethod().equalsIgnoreCase(HttpMethod.POST.name()) || request.getMethod().equalsIgnoreCase(HttpMethod.PUT.name())
             || request.getMethod().equalsIgnoreCase(HttpMethod.DELETE.name())){
             HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);

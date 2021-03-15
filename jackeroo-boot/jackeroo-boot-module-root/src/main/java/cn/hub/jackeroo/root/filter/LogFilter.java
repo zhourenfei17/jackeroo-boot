@@ -10,9 +10,12 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -28,6 +31,9 @@ import java.util.Map;
 public class LogFilter {
 
 	private static final ObjectMapper mapper = new ObjectMapper();
+    @Value("${server.servlet.context-path}")
+    private String contentPath;
+    private static final String prefix = "/upload/";
 
 
 	@Pointcut("execution(* cn.hub.jackeroo.*.controller.*.*(..))")
@@ -39,15 +45,19 @@ public class LogFilter {
 		org.springframework.web.context.request.RequestAttributes ra = RequestContextHolder.getRequestAttributes();
 		ServletRequestAttributes sra = (ServletRequestAttributes) ra;
 		HttpServletRequest request = sra.getRequest();
+
 		log.info("===================== request start =====================");
 		log.info("URL:[ {} ]", new Object[] { request.getRequestURL() });
+        // 过滤掉上传文件等请求，不输出请求体内容
+        if(request.getRequestURI().startsWith(contentPath + prefix)){
+            return;
+        }
 		// log.info("Token=[ {} ]", new Object[] { request.getHeader("Token") });
         if(request.getMethod().equalsIgnoreCase("POST") || request.getMethod().equalsIgnoreCase("PUT")){
             printMap("request body", JSONObject.parseObject(HttpUtils.getBodyString(request), HashMap.class));
         }else{
             printMap("Request Params", request.getParameterMap());
         }
-
 	}
 
 	@AfterReturning(pointcut = "controller()", returning = "returnValue")
