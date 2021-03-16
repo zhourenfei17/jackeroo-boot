@@ -30,8 +30,23 @@ export default {
   props:{
     //回显图片路径
     value:{
-      type:String,
-      default:''
+      type: String,
+      default: ''
+    },
+    //是否支持多图片上传-待实现
+    multiple: {
+      type: Boolean,
+      default: false
+    },
+    // 最多上传的图片数量-待实现
+    multipleSize: {
+      type: Number,
+      default: 9
+    },
+    // 图片是否需要裁剪-待实现
+    isCrop: {
+      type: Boolean,
+      default: true
     }
   },
   mixins: [UploadMixins],
@@ -56,13 +71,6 @@ export default {
   methods: {
     //从本地选择文件
     handleChange (info) {
-      /* let { options } = this;
-      Utils.file2Base64(info.file.originFileObj, (imageUrl) => {
-        let target = Object.assign({},options,{
-          img:imageUrl
-        })
-        this.$refs['cropperModal'].edit(target);
-      }) */
       var reader = new FileReader()
       reader .onload = (e ) => { 
         let data 
@@ -78,31 +86,16 @@ export default {
       // reader.readAsDataURL(file) 
       // 转化为blob 
       reader.readAsArrayBuffer(info.file.originFileObj)  
-      
-      /* uploadImg(info.file.originFileObj).then(res => {
-        if(!res.code){
-          this.imageUrl = res.data[0]
-        }
-      }) */
     },
     //裁剪成功后的File对象
     handleCropperSuccess(data){
-      console.log('File:',data);
-      //进行图片上传动作
-      // 模拟后端请求 2000 毫秒延迟
-      let that=this;
-      that.loading = true
-      new Promise((resolve) => {
-          setTimeout(() => resolve(), 2000)
-      }).then((res) => {
-        that.$message.success('上传成功')
-        //将返回的数据回显
-        that.imageUrl = res.img;
-        that.$emit('ok')
-      }).catch(() => {
-        // Do something
-      }).finally(() => {
-        that.loading = false
+      uploadImg(data).then(res => {
+        if(!res.code){
+          this.imageUrl = res.data[0]
+          this.$emit('input', this.imageUrl)
+        }else{
+          this.$message.success('上传成功')
+        }
       })
     }
   }

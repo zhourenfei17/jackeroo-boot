@@ -15,8 +15,8 @@
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
         <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
-            <a-form-model-item label="头像" prop="img">
-              <upload-image v-model="form.img"></upload-image>
+            <a-form-model-item label="头像" prop="imgUrl">
+              <upload-image v-model="form.imgUrl"></upload-image>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -46,7 +46,7 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="角色" prop="roleId">
-              <j-select v-model="form.roleId" placeholder="请选择角色" url="/system/role/findAll" textField="roleName"></j-select>
+              <j-select v-model="form.roleId" placeholder="请选择角色" :disabled="flag.view" url="/system/role/findAll" textField="roleName"></j-select>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -106,14 +106,14 @@ export default {
         telephone: undefined,
         birthday: undefined,
         roleId: undefined,
-        img: undefined
+        imgUrl: undefined
       },
       imageUrl: null,
       headers: {
         'Content-Type': 'multipart/form-data',  // 文件上传
       },
       rules: {
-        img:[],
+        imgUrl:[],
         name: [
           {required: true, message: '请输入姓名'},
           {max: 20, message: '长度需要在0和20之间'}

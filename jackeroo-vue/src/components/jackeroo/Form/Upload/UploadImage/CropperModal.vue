@@ -31,15 +31,17 @@
       </a-col>
       <a-col :span="12">
         <div class="result-wrapper">
-          <div class="tar-img" :style=" {...previews.div, borderRadius: '50%', border: '1px solid'}">
-            <img :src="previews.url" :style="previews.img"/>
+          <div :style="previewStyle">
+            <div class="tar-img" :style=" {...previews.div, borderRadius: '50%', border: '1px solid'}">
+              <img :src="previews.url" :style="previews.img"/>
+            </div>
           </div>
         </div>
       </a-col>
     </a-row>
     <template slot="footer">
       <a-button key="back" @click="cancelHandel">取消</a-button>
-      <a-button key="submit" type="primary" :loading="confirmLoading" @click="okHandel">保存</a-button>
+      <a-button key="submit" type="primary" :loading="confirmLoading" @click="okHandel">确定</a-button>
     </template>
   </a-modal>
 </template>
@@ -73,6 +75,8 @@
           canMove: false, // 上传图片是否可以移动
         },
         previews: {},
+        previewStyle: {},
+        file: undefined
       };
     },
     methods: {
@@ -80,6 +84,7 @@
         this.confirmLoading = true
         this.visible = true
         this.options.img = file
+        this.file = file
         this.confirmLoading = false
       },
       cancelHandel() {
@@ -87,16 +92,24 @@
         // this.options.img = null
       },
       okHandel() {
-        const that = this
-        that.confirmLoading = true
+        this.confirmLoading = true
         // 获取截图的base64 数据
-        this.$refs.cropper.getCropData((data) => {
+        this.$refs.cropper.getCropBlob((data) => {
           // 转换为File对象
           // let file = Utils.dataURLtoFile(data,'测试哟');
           //将裁剪侯的图片对象返回给父组件
-          // that.$emit('ok',file);
-          that.cancelHandel()
+          this.$emit('ok',this.blobToFile(data));
+          this.cancelHandel()
         })
+      },
+      blobToFile(blob){
+        // blob.lastModifiedDate = new Date()
+        // blob.name = 'test.jpg'
+        // return blob
+
+        const file = new File([blob], new Date().getTime() + '.jpg', {type: 'image/jpeg'})
+        console.log('f', file)
+        return file
       },
       //下载输入框里的图片
       downloadNewImg(){
@@ -126,6 +139,15 @@
       //移动框的事件
       realTime(data) {
         this.previews = data
+        
+        this.previewStyle = {
+          width: data.w + "px",
+          height: data.h + "px",
+          overflow: "hidden",
+          margin: "0",
+          zoom: 200 / data.h
+        };
+
       },
       //图片缩放
       changeScale (num) {
@@ -151,7 +173,6 @@
   .result-wrapper{
     width: 100%;
     height: 400px;
-    border-radius: 50%;
     display: flex;
     padding: 20px;
     justify-content: center;
