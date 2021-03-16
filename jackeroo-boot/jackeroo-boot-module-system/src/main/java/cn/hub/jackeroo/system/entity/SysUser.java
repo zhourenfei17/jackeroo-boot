@@ -50,6 +50,12 @@ public class SysUser extends BaseEntity<SysUser> {
     @ApiModelProperty(value = "用户id")
     private Long id;
     /**
+     * 头像地址
+     */
+    @Length(max = 255)
+    @ApiModelProperty("头像地址")
+    private String imgUrl;
+    /**
      * 姓名
      */
     @NotBlank

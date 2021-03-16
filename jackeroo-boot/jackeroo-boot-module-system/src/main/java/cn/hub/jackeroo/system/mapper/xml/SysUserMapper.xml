@@ -5,6 +5,7 @@
     <sql id="baseColumns">
         a.id as id,
         a.name as name,
+        a.img_url as imgUrl,
         a.account as account,
         a.code as code,
         a.password as password,

@@ -28,7 +28,7 @@ public class DictValidator implements ConstraintValidator<Dict, Serializable> {
     @Override
     public boolean isValid(Serializable value, ConstraintValidatorContext context) {
         String val = String.valueOf(value);
-        if(StringUtils.isNotBlank(val)){
+        if(StringUtils.isNotBlank(val) && !"null".equals(val)){
             ISystemApi api = (ISystemApi) SpringContextHolder.getApplicationContext().getBean("systemApi");
 
             List<JSONObject> dictList = api.getDictItemByCode(dictCode);
