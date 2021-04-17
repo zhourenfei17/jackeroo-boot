@@ -31,6 +31,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableField;
 </#if>
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 <#if existLocker>
 import com.baomidou.mybatisplus.annotation.Version;
 </#if>
@@ -82,6 +83,7 @@ import javax.validation.constraints.Null;
 <#if scheme.enableSwagger == 1>
 @ApiModel(value = "${table.comment}")
 </#if>
+@TableName("${table.tableName}")
 public class ${table.className} extends BaseEntity<${table.className}> {
 
     private static final long serialVersionUID = 1L;
