@@ -5,16 +5,28 @@
       listType="picture-card"
       class="avatar-uploader"
       :accept="accept"
-      :showUploadList="false"
+      :disabled="disabled"
+      :showUploadList="multiple"
       :beforeUpload="beforeUpload"
+      :fileList="fileList"
+      :multiple="multiple"
       :customRequest="function(){}"
+      :remove="handleRemove"
       @change="handleChange"
     >
-      <img class="default-img" v-if="imageUrl" :src="baseUrl + imageUrl" alt="avatar" />
-      <div v-else>
-        <a-icon :type="loading ? 'loading' : 'plus'" />
-        <div class="ant-upload-text">点击上传</div>
-      </div>
+      <template v-if="!multiple">
+        <img class="default-img" v-if="imageUrl" :src="imageUrl" alt="avatar" />
+        <div v-else>
+          <a-icon :type="loading ? 'loading' : 'plus'" />
+          <div class="ant-upload-text">点击上传</div>
+        </div>
+      </template>
+      <template v-else>
+        <div v-if="fileList.length < multipleSize">
+          <a-icon type="plus" />
+          <div class="ant-upload-text">点击上传</div>
+        </div>
+      </template>
     </a-upload>
 
     <cropper-modal ref="cropperModal" @ok="handleCropperSuccess"></cropper-modal>
@@ -33,7 +45,7 @@ export default {
       type: String,
       default: ''
     },
-    //是否支持多图片上传-待实现
+    //是否支持多图片上传
     multiple: {
       type: Boolean,
       default: false
@@ -43,10 +55,18 @@ export default {
       type: Number,
       default: 9
     },
-    // 图片是否需要裁剪-待实现
+    // 如果multiple=true，则需要返回Array还是String
+    isArray: {
+      type: Boolean,
+      default: false
+    },
+    // 图片是否需要裁剪，仅multiple=false时有效
     isCrop: {
       type: Boolean,
       default: true
+    },
+    disabled:{
+      type: Boolean
     }
   },
   mixins: [UploadMixins],
@@ -56,8 +76,10 @@ export default {
   data () {
     return {
       loading: false,
-      baseUrl: '/jackeroo/api',
-      imageUrl: ''
+      imageUrl: '',
+      fileList: [],
+      imageList: [],
+      imageCount: 0
     }
   },
   watch:{
@@ -71,32 +93,77 @@ export default {
   methods: {
     //从本地选择文件
     handleChange (info) {
-      var reader = new FileReader()
-      reader .onload = (e ) => { 
-        let data 
-        if ( typeof e.target.result === 'object' ) { 
-          // 把Array Buffer转化为blob 如果是base64不需要 
-          data = window.URL.createObjectURL (new Blob([e.target.result])) 
-        } else { 
-          data = e .target .result 
-        } 
-        this.$refs['cropperModal'].edit(data);
-      } 
-      // 转化为base64
-      // reader.readAsDataURL(file) 
-      // 转化为blob 
-      reader.readAsArrayBuffer(info.file.originFileObj)  
+      if(info.file.status === 'removed'){
+        return
+      }
+      this.imageCount++
+      if(this.multiple){
+        if(this.imageCount > this.multipleSize){
+          this.$message.warning(`最多只能上传${this.multipleSize}张图片`)
+          return
+        }
+        this.upload(info.file.originFileObj)
+      }else{
+        if(this.isCrop){
+          var reader = new FileReader()
+          reader.onload = (e) => {
+            let data
+            if (typeof e.target.result === 'object'){ 
+              // 把Array Buffer转化为blob 如果是base64不需要 
+              data = window.URL.createObjectURL(new Blob([e.target.result]))
+            }else{
+              data = e.target.result
+            }
+            this.$refs['cropperModal'].edit(data)
+          }
+          // 转化为base64
+          // reader.readAsDataURL(file) 
+          // 转化为blob 
+          reader.readAsArrayBuffer(info.file.originFileObj)  
+        }else{
+          this.upload(info.file.originFileObj)
+        }
+      }
     },
     //裁剪成功后的File对象
     handleCropperSuccess(data){
-      uploadImg(data).then(res => {
+      this.upload(data)
+    },
+    // 上传图片
+    upload(file){
+      uploadImg(file).then(res => {
         if(!res.code){
-          this.imageUrl = res.data[0]
-          this.$emit('input', this.imageUrl)
+          if(this.multiple){
+            this.fileList.push(this.transformUrl(res.data[0]))
+            this.imageList.push(res.data[0])
+            if(this.isArray){
+              this.$emit('input', this.imageList)
+            }else{
+              this.$emit('input', this.imageList.join(","))
+            }
+          }else{
+            this.imageUrl = res.data[0]
+            this.$emit('input', this.imageUrl)
+          }
+          
         }else{
-          this.$message.success('上传成功')
+          this.$message.success('上传失败！')
         }
       })
+    },
+    transformUrl(url){
+      return {url: url, uid: new Date().getTime(), name: url.substring(url.lastIndexOf('/') + 1), status: 'done'}
+    },
+    handleRemove(file){
+      this.fileList = this.fileList.filter(item => item.url != file.url)
+      this.imageList = this.imageList.filter(item => item.url != file.url)
+      if(this.isArray){
+        this.$emit('input', this.imageList)
+      }else{
+        this.$emit('input', this.imageList.join(","))
+      }
+      this.imageCount--
+      return true
     }
   }
 }

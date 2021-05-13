@@ -16,7 +16,7 @@
         <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
             <a-form-model-item label="头像" prop="imgUrl">
-              <upload-image v-model="form.imgUrl"></upload-image>
+              <upload-image v-model="form.imgUrl" :disabled="flag.view"></upload-image>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">

@@ -103,12 +103,7 @@
         })
       },
       blobToFile(blob){
-        // blob.lastModifiedDate = new Date()
-        // blob.name = 'test.jpg'
-        // return blob
-
         const file = new File([blob], new Date().getTime() + '.jpg', {type: 'image/jpeg'})
-        console.log('f', file)
         return file
       },
       //下载输入框里的图片
