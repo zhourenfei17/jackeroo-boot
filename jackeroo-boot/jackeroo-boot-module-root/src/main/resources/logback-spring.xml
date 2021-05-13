@@ -30,89 +30,18 @@
         </filter>
     </appender>
 
-    <!-- 日志记录器，日期滚动记录
-            DEBUG  级别
+    <!-- 日志记录器，日期滚动记录 ALL
     -->
-    <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- 此日志文件只记录debug级别的 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>debug</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
+    <appender name="ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--日志名称，如果没有File 属性，那么只会使用FileNamePattern的文件路径规则
             如果同时有<File>和<FileNamePattern>，那么当天日志是<File>，明天会自动把今天
             的日志改名为今天的日期。即，<File> 的日志都是当天的。
         -->
-        <File>${logback.logdir}/debug.${logback.appname}.log</File>
+        <File>${logback.logdir}/all.${logback.appname}.log</File>
         <!--滚动策略，按照时间滚动 TimeBasedRollingPolicy-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--文件路径,定义了日志的切分方式——把每一天的日志归档到一个文件中,以防止日志填满整个磁盘空间-->
-            <FileNamePattern>${logback.logdir}/history/debug.${logback.appname}.%d{yyyy-MM-dd}.log</FileNamePattern>
-            <!--只保留最近90天的日志-->
-            <maxHistory>90</maxHistory>
-            <!--用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志-->
-            <!--<totalSizeCap>1GB</totalSizeCap>-->
-        </rollingPolicy>
-        <!-- 追加方式记录日志 -->
-        <append>true</append>
-        <!--日志输出编码格式化-->
-        <encoder>
-            <charset>UTF-8</charset>
-            <pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
-        </encoder>
-    </appender>
-
-    <!-- 日志记录器，日期滚动记录
-            INFO  级别
-    -->
-    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- 此日志文件只记录info级别的 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>info</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <!--日志名称，如果没有File 属性，那么只会使用FileNamePattern的文件路径规则
-            如果同时有<File>和<FileNamePattern>，那么当天日志是<File>，明天会自动把今天
-            的日志改名为今天的日期。即，<File> 的日志都是当天的。
-        -->
-        <File>${logback.logdir}/info.${logback.appname}.log</File>
-        <!--滚动策略，按照时间滚动 TimeBasedRollingPolicy-->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--文件路径,定义了日志的切分方式——把每一天的日志归档到一个文件中,以防止日志填满整个磁盘空间-->
-            <FileNamePattern>${logback.logdir}/history/info.${logback.appname}.%d{yyyy-MM-dd}.log</FileNamePattern>
-            <!--只保留最近90天的日志-->
-            <maxHistory>90</maxHistory>
-            <!--用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志-->
-            <!--<totalSizeCap>1GB</totalSizeCap>-->
-        </rollingPolicy>
-        <!--日志输出编码格式化-->
-        <encoder>
-            <charset>UTF-8</charset>
-            <pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
-        </encoder>
-    </appender>
-
-    <!-- 日志记录器，日期滚动记录
-            WARN  级别
-    -->
-    <appender name="WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- 此日志文件只记录warn级别的 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>warn</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <!--日志名称，如果没有File 属性，那么只会使用FileNamePattern的文件路径规则
-            如果同时有<File>和<FileNamePattern>，那么当天日志是<File>，明天会自动把今天
-            的日志改名为今天的日期。即，<File> 的日志都是当天的。
-        -->
-        <File>${logback.logdir}/warn.${logback.appname}.log</File>
-        <!--滚动策略，按照时间滚动 TimeBasedRollingPolicy-->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--文件路径,定义了日志的切分方式——把每一天的日志归档到一个文件中,以防止日志填满整个磁盘空间-->
-            <FileNamePattern>${logback.logdir}/history/warn.${logback.appname}.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${logback.logdir}/history/all.${logback.appname}.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!--只保留最近90天的日志-->
             <maxHistory>90</maxHistory>
             <!--用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志-->
@@ -160,9 +89,7 @@
     <!-- 生产环境下，将此级别配置为适合的级别，以免日志文件太多或影响程序性能 -->
     <root level="INFO">
         <appender-ref ref="ERROR" />
-        <appender-ref ref="WARN" />
-        <appender-ref ref="INFO" />
-        <appender-ref ref="DEBUG" />
+        <appender-ref ref="ALL" />
         <!-- 生产环境将请sout去掉 -->
         <appender-ref ref="SOUT" />
     </root>

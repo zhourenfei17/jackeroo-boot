@@ -5,7 +5,6 @@ import cn.hub.jackeroo.utils.DateUtils;
 import cn.hub.jackeroo.utils.PathUtil;
 import cn.hub.jackeroo.vo.FileVo;
 import cn.hub.jackeroo.vo.Result;
-import com.github.xiaoymin.swaggerbootstrapui.util.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,11 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,6 +32,8 @@ public class UploadController extends BaseController {
 
 	@Value("${jackeroo.path.upload}")
 	private String basePath;
+	@Value("${server.servlet.context-path}")
+	private String contentPath;
 
 	/**
 	 * 上传图片
@@ -89,7 +88,7 @@ public class UploadController extends BaseController {
 					try {
 						vo.getFile().transferTo(vo.getLocalPath());
 
-						src.add(vo.getFileName());
+						src.add(contentPath + vo.getFileName());
 					}
 					catch (Exception e) {
 						e.printStackTrace();

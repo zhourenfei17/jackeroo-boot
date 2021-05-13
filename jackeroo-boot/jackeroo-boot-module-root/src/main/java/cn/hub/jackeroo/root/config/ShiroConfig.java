@@ -86,8 +86,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/**/*.js", "anon");
         filterChainDefinitionMap.put("/**/*.css", "anon");
         filterChainDefinitionMap.put("/**/*.html", "anon");
-        //上传图片
-        filterChainDefinitionMap.put("/upload/*", "anon");
 
         if(sameUserCount > 0){
             // 此处需要添加一个kickout，上面添加的自定义拦截器才能生效，authc表示需要认证才能访问
