@@ -2,11 +2,9 @@ package cn.hub.jackeroo.system.controller;
 
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysRole;
-import cn.hub.jackeroo.system.entity.SysRoleMenu;
 import cn.hub.jackeroo.system.query.RolePermission;
 import cn.hub.jackeroo.system.service.SysRoleMenuService;
 import cn.hub.jackeroo.system.service.SysRoleService;
-import cn.hub.jackeroo.system.service.ValidService;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
 import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
@@ -19,8 +17,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,11 +41,10 @@ import java.util.List;
 @Api(tags = "角色管理")
 @RestController
 @RequestMapping("/system/role")
+@RequiredArgsConstructor
 public class RoleController extends BaseController {
-    @Autowired
-    private SysRoleService roleService;
-    @Autowired
-    private SysRoleMenuService roleMenuService;
+    private final SysRoleService roleService;
+    private final SysRoleMenuService roleMenuService;
     /**
      * 角色列表
      * @return

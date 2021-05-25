@@ -10,12 +10,12 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -27,9 +27,8 @@ import java.util.List;
 * @since 2020-10-10
 */
 @Service
+@RequiredArgsConstructor
 public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
-    @Resource
-    private SysDictMapper mapper;
 
     /**
     * 查询数据列表-带分页
@@ -39,7 +38,7 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
     */
     public IPage<SysDict> findPage(SysDict entity, PageParam pageParam){
         Page<SysDict> page = entity.initPage(pageParam);
-        page.setRecords(mapper.findList(entity));
+        page.setRecords(getBaseMapper().findList(entity));
 
         return page;
     }
@@ -76,7 +75,7 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
      * 保存字典信息
      * @param entity
      */
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void saveDict(SysDict entity) {
         entity.setType(SysDict.TYPE_DICT);
         super.save(entity);
@@ -87,7 +86,7 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
      * @param dict
      */
     @CacheEvict(value = RedisKeyPrefix.CACHE_DICT, key = "#dict.dictCode")
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void saveDictItem(SysDict dict){
         dict.setType(SysDict.TYPE_DICT_ITEM);
         super.save(dict);
@@ -98,7 +97,7 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
      * @param dict
      */
     @CacheEvict(value = RedisKeyPrefix.CACHE_DICT, key = "#dict.dictCode")
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void updateDict(SysDict dict){
         SysDict oldDict = super.getById(dict.getId());
         if(oldDict.getCategory() == SysDict.CATEGORY_SYSTEM){
@@ -122,7 +121,7 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
      * @param dict
      */
     @CacheEvict(value = RedisKeyPrefix.CACHE_DICT, key = "#dict.dictCode")
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void updateDictItem(SysDict dict){
         SysDict oldDict = super.getById(dict.getId());
         if(oldDict.getCategory() == SysDict.CATEGORY_SYSTEM){
@@ -156,7 +155,7 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
      * 删除字典信息或字典项
      * @param id
      */
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void delete(String ...id){
         for (String s : id) {
             SysDict dict = super.getById(s);

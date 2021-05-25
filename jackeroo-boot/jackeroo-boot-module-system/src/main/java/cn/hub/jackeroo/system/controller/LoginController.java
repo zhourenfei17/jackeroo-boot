@@ -7,8 +7,8 @@ import cn.hub.jackeroo.utils.RandImageUtil;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.utils.captcha.Captcha;
 import cn.hub.jackeroo.utils.captcha.GifCaptcha;
-import cn.hub.jackeroo.utils.captcha.SpecCaptcha;
 import cn.hub.jackeroo.vo.Result;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -16,7 +16,6 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,10 +30,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class LoginController extends BaseController {
 
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     private static final String CAPTCHA_PREFIX = "CAPTCHA:";
 

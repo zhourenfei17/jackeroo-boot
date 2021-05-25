@@ -3,15 +3,12 @@ package cn.hub.jackeroo.system.service;
 import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.system.entity.SysRole;
 import cn.hub.jackeroo.system.mapper.SysRoleMapper;
-import cn.hub.jackeroo.vo.PageParam;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -23,11 +20,10 @@ import java.util.List;
  * @since 2020-05-18
  */
 @Service
+@RequiredArgsConstructor
 public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
-    @Resource
-    private SysRoleMapper mapper;
-    @Resource
-    private SysUserRoleService userRoleService;
+
+    private final SysUserRoleService userRoleService;
 
     /**
      * 查询数据列表
@@ -35,7 +31,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
      * @return
      */
     public List<SysRole> findList(SysRole role){
-        return mapper.findList(role);
+        return getBaseMapper().findList(role);
     }
 
     /**
@@ -54,7 +50,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
      * 删除角色
      * @param id
      */
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void delete(String ...id){
         for (String roleId : id) {
             SysRole role = super.getById(roleId);

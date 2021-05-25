@@ -1,6 +1,5 @@
 package cn.hub.jackeroo.system.mapper;
 
-import cn.hub.jackeroo.system.query.UniqueVo;
 import cn.hub.jackeroo.utils.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.annotations.SelectProvider;

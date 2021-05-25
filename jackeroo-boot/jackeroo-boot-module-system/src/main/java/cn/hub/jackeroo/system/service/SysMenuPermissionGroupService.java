@@ -9,12 +9,10 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -26,13 +24,10 @@ import java.util.List;
  * @since 2020-08-27
  */
 @Service
+@RequiredArgsConstructor
 public class SysMenuPermissionGroupService extends ServiceImpl<SysMenuPermissionGroupMapper, SysMenuPermissionGroup> {
 
-    @Resource
-    private SysMenuPermissionGroupMapper mapper;
-    @Autowired
-    @Lazy
-    private SysMenuPermissionConfigService configService;
+    private final SysMenuPermissionConfigService configService;
     /**
      * 查询数据列表-带分页
      * @param sysMenuPermissionGroup
@@ -41,7 +36,7 @@ public class SysMenuPermissionGroupService extends ServiceImpl<SysMenuPermission
      */
     public IPage<SysMenuPermissionGroup> findPage(SysMenuPermissionGroup sysMenuPermissionGroup, PageParam pageParam){
         Page<SysMenuPermissionGroup> page = sysMenuPermissionGroup.initPage(pageParam);
-        page.setRecords(mapper.findList(sysMenuPermissionGroup));
+        page.setRecords(getBaseMapper().findList(sysMenuPermissionGroup));
 
         return page;
     }
@@ -61,7 +56,7 @@ public class SysMenuPermissionGroupService extends ServiceImpl<SysMenuPermission
      * 设为默认
      * @param id
      */
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void setDefault(String id){
         SysMenuPermissionGroup group = super.getById(id);
         if(group == null){
@@ -81,7 +76,7 @@ public class SysMenuPermissionGroupService extends ServiceImpl<SysMenuPermission
      * @param id
      * @param disabledFlag
      */
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void updateDisabled(String id, Integer disabledFlag){
         LambdaUpdateWrapper<SysMenuPermissionGroup> update = new LambdaUpdateWrapper<>();
         update.eq(SysMenuPermissionGroup::getId, id);
@@ -94,6 +89,7 @@ public class SysMenuPermissionGroupService extends ServiceImpl<SysMenuPermission
      * 删除菜单权限配置
      * @param id
      */
+    @Transactional(rollbackFor = RuntimeException.class)
     public void delete(String ...id){
         for (String groupId : id) {
             SysMenuPermissionGroup group = super.getById(groupId);

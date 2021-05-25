@@ -8,8 +8,8 @@ import cn.hub.jackeroo.system.mapper.SysRoleMenuMapper;
 import cn.hub.jackeroo.system.query.RolePermission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +26,10 @@ import java.util.stream.Collectors;
  * @since 2020-05-18
  */
 @Service
+@RequiredArgsConstructor
 public class SysRoleMenuService extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> {
 
-    @Autowired
-    private ISystemApi systemApi;
+    private final ISystemApi systemApi;
     /**
      * 根据角色id获取拥有的菜单、权限列表
      * @param roleId

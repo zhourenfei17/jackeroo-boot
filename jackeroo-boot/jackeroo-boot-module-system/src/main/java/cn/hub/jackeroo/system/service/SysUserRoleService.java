@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * 用户角色 服务实现类
@@ -31,10 +33,22 @@ public class SysUserRoleService extends ServiceImpl<SysUserRoleMapper, SysUserRo
     }
 
     /**
+     * 通过用户id获取用户角色关系
+     * @param userId
+     * @return
+     */
+    public SysUserRole getByUserId(Serializable userId){
+        LambdaQueryWrapper<SysUserRole> query = new LambdaQueryWrapper<>();
+        query.eq(SysUserRole::getUserId, userId);
+
+        return super.getOne(query, false);
+    }
+
+    /**
      * 根据用户id删除
      * @param userId
      */
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void deleteByUserId(String userId){
         LambdaQueryWrapper<SysUserRole> query = new LambdaQueryWrapper<>();
         query.eq(SysUserRole::getUserId, userId);

@@ -6,7 +6,7 @@ import cn.hub.jackeroo.system.service.ValidService;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.Result;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/system/valid")
+@RequiredArgsConstructor
 public class ValidController extends BaseController {
 
-    @Autowired
-    private ValidService service;
+    private final ValidService service;
 
     @Value("${mybatis-plus.configuration.map-underscore-to-camel-case}")
     private Boolean mapUnderscoreToCamelCase;

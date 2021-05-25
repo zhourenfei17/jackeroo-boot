@@ -8,10 +8,10 @@ import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.utils.validator.annotation.Unique;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import javax.validation.ValidationException;
 import javax.validation.constraints.Null;
 import java.lang.reflect.Field;
@@ -22,10 +22,10 @@ import java.lang.reflect.Field;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ValidService {
 
-    @Resource
-    private ValidMapper mapper;
+    private final ValidMapper mapper;
 
     /**
      * 唯一性判断，唯一返回true，不唯一返回false

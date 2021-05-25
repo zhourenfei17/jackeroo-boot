@@ -20,8 +20,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,10 +42,10 @@ import java.util.List;
 @Api(tags = "菜单管理")
 @RestController
 @RequestMapping("/system/menu")
+@RequiredArgsConstructor
 public class MenuController extends BaseController {
 
-    @Autowired
-    private SysMenuService menuService;
+    private final SysMenuService menuService;
 
     /**
      * 获取完整菜单树

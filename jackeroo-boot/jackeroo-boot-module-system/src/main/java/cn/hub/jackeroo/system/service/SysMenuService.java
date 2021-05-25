@@ -16,19 +16,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -40,12 +38,10 @@ import java.util.stream.Collectors;
  * @since 2020-05-18
  */
 @Service
+@RequiredArgsConstructor
 public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
-    @Resource
-    private SysMenuMapper mapper;
-    @Resource
-    private SysRoleService roleService;
+    private final SysRoleService roleService;
 
     /**
      * 获取叶子菜单权限列表
@@ -59,7 +55,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         sysMenu.setType(SysMenu.TYPE_PERMISSION);
 
         Page<SysMenu> page = sysMenu.initPage(pageParam);
-        page.setRecords(mapper.findPermissionList(sysMenu));
+        page.setRecords(getBaseMapper().findPermissionList(sysMenu));
 
         return page;
     }
@@ -120,7 +116,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         if(role == null){
             return null;
         }
-        List<SysMenu> menuList = mapper.findMenuByRoleId(role.getId());
+        List<SysMenu> menuList = getBaseMapper().findMenuByRoleId(role.getId());
 
         List<SysMenu> rootTreeNode = menuList
                 .stream()
@@ -232,7 +228,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     }
 
     @CacheEvict(value = RedisKeyPrefix.CACHE_MENU, allEntries = true)
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public boolean save(SysMenu menu) {
         menu.setId(IdWorker.getId());
@@ -339,6 +335,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * @param menu
      */
     @CacheEvict(value = RedisKeyPrefix.CACHE_MENU, allEntries = true)
+    @Transactional(rollbackFor = RuntimeException.class)
     public void update(SysMenu menu){
         validMenu(menu);
         SysMenu sysMenu = super.getById(menu.getId());

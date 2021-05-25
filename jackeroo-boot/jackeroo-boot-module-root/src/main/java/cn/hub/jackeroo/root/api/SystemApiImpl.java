@@ -15,7 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -30,14 +30,17 @@ import java.util.List;
 @Service("systemApi")
 public class SystemApiImpl implements ISystemApi {
 
-    @Autowired
-    private SysModuleService moduleService;
-    @Autowired
-    private SysDictService dictService;
-    @Autowired
-    private RedisService redisService;
-    @Autowired
-    private SysUserService userService;
+    private final SysModuleService moduleService;
+    private final SysDictService dictService;
+    private final RedisService redisService;
+    private final SysUserService userService;
+
+    public SystemApiImpl(SysModuleService moduleService, SysDictService dictService, RedisService redisService, @Lazy SysUserService userService) {
+        this.moduleService = moduleService;
+        this.dictService = dictService;
+        this.redisService = redisService;
+        this.userService = userService;
+    }
 
     /**
      * 通过id获取模块信息
@@ -58,6 +61,7 @@ public class SystemApiImpl implements ISystemApi {
      * @param dictCode
      * @return
      */
+    @Override
     public List<JSONObject> getDictItemByCode(String dictCode){
         List list = dictService.findDictItemByDictCode(dictCode);
         return JSONArray.parseArray(JSONArray.toJSONString(list), JSONObject.class);
@@ -66,6 +70,7 @@ public class SystemApiImpl implements ISystemApi {
     /**
      * 清除当前用户缓存
      */
+    @Override
     public void clearAuthorizationCache(){
         DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager)SecurityUtils.getSecurityManager();
         ShiroRealm realm = (ShiroRealm)securityManager.getRealms().iterator().next();
@@ -76,6 +81,7 @@ public class SystemApiImpl implements ISystemApi {
      * 踢用户下线。直接删除redis的session和shiro缓存
      * @param userId
      */
+    @Override
     public void kickOutUser(Serializable userId){
         SysUser user = userService.findById(userId);
         if(user != null){

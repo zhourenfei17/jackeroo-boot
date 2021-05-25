@@ -10,10 +10,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -27,10 +26,12 @@ import java.util.List;
 @Service
 public class SysMenuPermissionConfigService extends ServiceImpl<SysMenuPermissionConfigMapper, SysMenuPermissionConfig>  {
 
-    @Resource
-    private SysMenuPermissionConfigMapper mapper;
+    private final SysMenuPermissionGroupService groupService;
+
     @Autowired
-    private SysMenuPermissionGroupService groupService;
+    public SysMenuPermissionConfigService(@Lazy SysMenuPermissionGroupService groupService) {
+        this.groupService = groupService;
+    }
 
     /**
      * 查询数据列表-带分页
@@ -40,7 +41,7 @@ public class SysMenuPermissionConfigService extends ServiceImpl<SysMenuPermissio
      */
     public IPage<SysMenuPermissionConfig> findPage(SysMenuPermissionConfig sysMenuPermissionConfig, PageParam pageParam){
         Page<SysMenuPermissionConfig> page = sysMenuPermissionConfig.initPage(pageParam);
-        page.setRecords(mapper.findList(sysMenuPermissionConfig));
+        page.setRecords(getBaseMapper().findList(sysMenuPermissionConfig));
 
         return page;
     }

@@ -11,11 +11,10 @@ import cn.hub.jackeroo.utils.Assert;
 import cn.hub.jackeroo.utils.PasswordUtil;
 import cn.hub.jackeroo.utils.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
 
@@ -28,14 +27,11 @@ import java.util.List;
  * @since 2020-05-18
  */
 @Service
+@RequiredArgsConstructor
 public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
 
-    @Resource
-    private SysUserMapper mapper;
-    @Autowired
-    private SysUserRoleService userRoleService;
-    @Autowired
-    private ISystemApi systemApi;
+    private final SysUserRoleService userRoleService;
+    private final ISystemApi systemApi;
 
     /**
      * 查询数据列表
@@ -44,7 +40,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      */
     public List<SysUser> findList(SysUser sysUser){
         sysUser.setDelFlag(Constant.DEL_FLAG_NORMAL);
-        return mapper.findList(sysUser);
+        return getBaseMapper().findList(sysUser);
     }
     /**
      * 通过登录账号获取用户信息
@@ -52,7 +48,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * @return
      */
     public SysUser findByAccount(String account){
-        SysUser user = mapper.findByAccount(account);
+        SysUser user = getBaseMapper().findByAccount(account);
 
         return user;
     }
@@ -63,14 +59,14 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * @return
      */
     public SysUser findById(Serializable userId){
-        return mapper.findById(userId);
+        return getBaseMapper().findById(userId);
     }
 
     /**
      *  保存用户
      * @param user
      */
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void insertUser(SysUser user){
         if(findByAccount(user.getAccount()) != null){
             throw new JackerooException(ResultStatusCode.EXIST_SAME_ACCOUNT);
@@ -94,7 +90,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * 更新用户信息
      * @param user
      */
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void updateUser(SysUser user){
         // 编辑用户无法修改密码和账号
         user.setPassword(null);
@@ -103,7 +99,10 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         super.updateById(user);
 
         // 保存用户角色关系
-        SysUserRole userRole = new SysUserRole();
+        SysUserRole userRole = userRoleService.getByUserId(user.getId());
+        if(userRole == null){
+            userRole = new SysUserRole();
+        }
         userRole.setRoleId(user.getRoleId());
         userRole.setUserId(user.getId());
         userRoleService.saveOrUpdate(userRole);
@@ -113,6 +112,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * 冻结用户
      * @param id
      */
+    @Transactional(rollbackFor = RuntimeException.class)
     public void frozenUser(String ...id){
         for (String userId : id) {
             SysUser sysUser = getById(userId);
@@ -130,6 +130,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
      * 解冻用户
      * @param id
      */
+    @Transactional(rollbackFor = RuntimeException.class)
     public void unfrozenUser(String ...id){
         for (String userId : id) {
             SysUser sysUser = getById(userId);

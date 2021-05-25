@@ -4,13 +4,13 @@ import cn.hub.jackeroo.system.service.ValidService;
 import cn.hub.jackeroo.utils.HttpUtils;
 import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import com.alibaba.fastjson.JSONObject;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -27,9 +27,10 @@ import java.util.Map;
 @Slf4j
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class UniqueValidFilter {
-    @Autowired
-    private ValidService validService;
+
+    private final ValidService validService;
 
     @Pointcut("@annotation(cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique)")
     public void validatedUnique() {

@@ -15,8 +15,8 @@ import cn.hub.jackeroo.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -42,10 +41,10 @@ import java.util.List;
 @Api(tags = "菜单权限配置组别")
 @RestController
 @RequestMapping("/system/menu/permission/group")
+@RequiredArgsConstructor
 public class SysMenuPermissionGroupController extends BaseController {
 
-    @Autowired
-    private SysMenuPermissionGroupService permissionGroupService;
+    private final SysMenuPermissionGroupService permissionGroupService;
     /**
      * 菜单权限配置组别列表
      * @return

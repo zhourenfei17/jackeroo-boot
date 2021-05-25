@@ -9,7 +9,6 @@ import cn.hub.jackeroo.system.service.SysUserService;
 import cn.hub.jackeroo.utils.ResultUtil;
 import cn.hub.jackeroo.utils.UserUtils;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
-import cn.hub.jackeroo.utils.easyexcel.EasyExcelUtils;
 import cn.hub.jackeroo.utils.easyexcel.model.ExportExcelWriteBuilder;
 import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
@@ -19,16 +18,15 @@ import cn.hub.jackeroo.vo.IdList;
 import cn.hub.jackeroo.vo.LoginUser;
 import cn.hub.jackeroo.vo.PageParam;
 import cn.hub.jackeroo.vo.Result;
-import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +40,6 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URLEncoder;
 
 /**
  * 系统用户相关接口
@@ -54,11 +51,10 @@ import java.net.URLEncoder;
 @Api(tags = "用户管理")
 @RestController
 @RequestMapping("/system/user")
+@RequiredArgsConstructor
 public class UserController extends BaseController {
-    @Autowired
-    private SysUserService userService;
-    @Autowired
-    private SysMenuService menuService;
+    private final SysUserService userService;
+    private final SysMenuService menuService;
 
     /**
      * 用户列表
