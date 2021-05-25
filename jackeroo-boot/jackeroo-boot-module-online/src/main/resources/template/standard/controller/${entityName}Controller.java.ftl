@@ -22,10 +22,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 </#if>
+import lombok.RequiredArgsConstructor;
 <#if scheme.enableSecurity == 1>
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 </#if>
-import org.springframework.beans.factory.annotation.Autowired;
 <#if scheme.enableServerValid == 1>
 import org.springframework.validation.annotation.Validated;
 </#if>
@@ -53,10 +53,10 @@ import org.springframework.web.bind.annotation.RestController;
 </#if>
 @RestController
 @RequestMapping("/${module.code}/${pathName}")
+@RequiredArgsConstructor
 public class ${table.className}Controller extends BaseController {
 
-    @Autowired
-    private ${table.className}Service service;
+    private final ${table.className}Service service;
 
     /**
      * ${table.comment}列表

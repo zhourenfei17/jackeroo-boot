@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -21,8 +20,6 @@ import java.util.List;
  */
 @Service
 public class ${table.className}Service extends ServiceImpl<${table.className}Mapper, ${table.className}> {
-    @Resource
-    private ${table.className}Mapper mapper;
 
     /**
      * 查询数据列表-带分页
@@ -43,6 +40,6 @@ public class ${table.className}Service extends ServiceImpl<${table.className}Map
      * @return
      */
     public List<${table.className}> findList(${table.className} ${varName}){
-        return mapper.findList(${varName});
+        return getBaseMapper().findList(${varName});
     }
 }
