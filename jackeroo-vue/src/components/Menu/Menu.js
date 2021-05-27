@@ -146,18 +146,25 @@ export default {
       }
       const props = {}
       typeof (icon) === 'object' ? props.component = icon : props.type = icon
-      return (
-        <a-icon {... { props } }/>
-      )
+      if(icon.indexOf('icon-') === 0){
+        return (
+          <icon-font {... { props }}></icon-font>
+        )
+      }else{
+        return (
+          <a-icon {... { props } }/>
+        )
+      }
     }
   },
 
   render () {
     const { mode, theme, menu } = this
     const props = {
+      ...this.$attrs,
       mode: mode,
       theme: theme,
-      openKeys: this.openKeys
+      openKeys: this.openKeys,
     }
     const on = {
       select: obj => {

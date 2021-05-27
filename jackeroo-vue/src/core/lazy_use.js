@@ -62,7 +62,7 @@ import $role from '@/utils/helper/role';
 import './directives/action'
 import './directives/role';
 
-import {ActionList, JModal, JSpin, JLink} from '@/components'
+import {ActionList, JModal, JSpin, JLink, JIcon} from '@/components'
 
 Vue.use(ConfigProvider)
 Vue.use(Layout)
@@ -129,8 +129,10 @@ Vue.use(VueCropper)
 Vue.use(FormModel)
 Vue.use(ActionList)
 Vue.use(JLink)
+Vue.use(JIcon)
 Vue.component('j-link', JLink)
 Vue.component('j-spin', JSpin)
 Vue.component('j-modal',JModal)
+Vue.component('j-icon', JIcon)
 
 process.env.NODE_ENV !== 'production' && console.warn('[antd-pro] NOTICE: Antd use lazy-load.')

@@ -1,9 +1,9 @@
 <template>
   <a-layout class="jackeroo-body">
-    <a-layout-sider v-model="collapsed" :trigger="null" collapsible :class="{'jackeroo-sider': !collapsed}">
-      <logo title="Jackeroo Boot" :show-title="!collapsed"></logo>
+    <a-layout-sider v-model="collapsed" :trigger="null" collapsible width="256">
+      <logo title="Jackeroo Boot" :collapsed="!collapsed"></logo>
       
-      <s-menu :menu="menus"></s-menu>
+      <s-menu :menu="menus" :collapsed="collapsed"></s-menu>
     </a-layout-sider>
     <a-layout-content>
       <a-layout>
@@ -15,14 +15,14 @@
                 :type="collapsed ? 'menu-unfold' : 'menu-fold'"
               />
             </div>
-            <right-content></right-content>
+            <right-content :top-menu="settings.layout === 'topmenu'" :theme="settings.theme"></right-content>
           </div>
         </a-layout-header>
         <a-layout-content>
           <router-view />
         </a-layout-content>
         <a-layout-footer>
-          <page-footer></page-footer>
+          <global-footer></global-footer>
         </a-layout-footer>
       </a-layout>
     </a-layout-content>
@@ -31,6 +31,7 @@
 
 <script>
 import PageFooter from '@/components/Layout/PageFooter'
+import GlobalFooter from '@/components/GlobalFooter/index';
 import Logo from '@/components/Layout/Logo'
 import { mapState } from 'vuex'
 import SMenu from '@/components/Menu/Menu'
@@ -41,13 +42,30 @@ export default {
     PageFooter,
     Logo,
     SMenu,
-    RightContent
+    RightContent,
+    GlobalFooter
   },
   data() {
     return {
       menus: [],
       // 侧栏收起状态
-      collapsed: false
+      collapsed: false,
+      settings: {
+        // 布局类型
+        layout: 'sidemenu', // 'sidemenu', 'topmenu'
+        // 定宽: true / 流式: false
+        contentWidth: false,
+        // 主题 'dark' | 'light'
+        theme: 'dark',
+        // 主色调
+        primaryColor: '#1890ff',
+        fixedHeader: false,
+        fixSiderbar: false,
+        colorWeak: false,
+
+        hideHintAlert: false,
+        hideCopyButton: false
+      }
     }
   },
   computed: {
@@ -56,16 +74,15 @@ export default {
       mainMenu: state => state.permission.addRouters
     })
   },
+  /* watch: {
+    collapsed(){
+      this.$store.commit(SIDEBAR_TYPE, this.collapsed)
+    }
+  }, */
   created() {
     const routes = this.mainMenu.find(item => item.path === '/')
     this.menus = (routes && routes.children) || []
-    // 处理侧栏收起状态
-    this.$watch('collapsed', () => {
-      this.$store.commit(SIDEBAR_TYPE, this.collapsed)
-    })
-    this.$watch('isMobile', () => {
-      this.$store.commit(TOGGLE_MOBILE_TYPE, this.isMobile)
-    })
+    
   },
   methods: {
     handleCollapse(){
@@ -113,5 +130,7 @@ export default {
 
 .jackeroo-body{
   min-height: 100vh;
+  max-height: 100vh;
+  height: 100vh;
 }
 </style>

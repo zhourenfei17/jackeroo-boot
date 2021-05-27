@@ -46,7 +46,8 @@
         @expandedRowsChange="handleExpandedRowsChange"
       >
         <template slot="iconSlot" slot-scope="text">
-          <a-icon v-if="text != '' && text != null" :type="text" style="font-size:18px;"></a-icon>
+          <!-- <a-icon v-if="text && text.indexOf('icon-') != 0" :type="text" style="font-size:18px;"></a-icon> -->
+          <j-icon v-if="text" :type="text" style="font-size:18px;"></j-icon>
         </template>
 
         <template slot="permission" slot-scope="text,record">

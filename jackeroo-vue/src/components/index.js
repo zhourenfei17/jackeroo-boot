@@ -42,6 +42,7 @@ import DragTable from '@/components/Jackeroo/DataDisplay/DragTable'
 import IconSelectInput from '@/components/Jackeroo/Form/Selector/IconSelectorInput'
 import JLink from '@/components/Jackeroo/General/Link'
 import UploadImage from '@/components/Jackeroo/Form/Upload/UploadImage'
+import JIcon from '@/components/Jackeroo/General/Icon/Icon';
 
 export {
   AvatarList,
@@ -83,5 +84,6 @@ export {
   DragTable,
   IconSelectInput,
   JLink,
-  UploadImage
+  UploadImage,
+  JIcon
 }
