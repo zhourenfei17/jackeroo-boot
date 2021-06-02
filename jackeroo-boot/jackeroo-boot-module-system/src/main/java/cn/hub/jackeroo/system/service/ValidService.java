@@ -6,6 +6,7 @@ import cn.hub.jackeroo.utils.ArrayUtils;
 import cn.hub.jackeroo.utils.Reflections;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.utils.validator.annotation.Unique;
+import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.RequiredArgsConstructor;
@@ -43,24 +44,32 @@ public class ValidService {
         return mapper.uniqueFromTable(json) == 0;
     }
 
-    public void validEntityUniqueField(Object obj){
-        this.validEntityUniqueField(obj, null, null);
+    public void validEntityUniqueField(Object obj, ValidatedUnique unique){
+        if(unique != null){
+            this.validEntityUniqueField(obj, unique.groups(), unique.tableName(), unique.condition(), unique.primaryKey());
+        }
     }
     /**
      * 验证实体类带有@Unique注解的字段
      * @param obj 当前数据对象
      * @param validGroupClass 指定验证的group
+     * @param tableName 数据库表名称
      * @param condition 额外的唯一性条件
      */
-    public void validEntityUniqueField(Object obj, Class<?> validGroupClass, String condition) {
+    public void validEntityUniqueField(Object obj, Class<?> validGroupClass, String tableName, String condition, String primaryKey) {
         String tableNameStr;
-        TableName tableName = obj.getClass().getAnnotation(TableName.class);
-        if(tableName != null){
-            tableNameStr = tableName.value();
+        if(StringUtils.isNotBlank(tableName)){
+            tableNameStr = tableName;
         }else{
-            tableNameStr = StringUtils.toUnderScoreCase(obj.getClass().getSimpleName());
+            TableName table = obj.getClass().getAnnotation(TableName.class);
+            if(table != null){
+                tableNameStr = table.value();
+            }else{
+                tableNameStr = StringUtils.toUnderScoreCase(obj.getClass().getSimpleName());
+            }
         }
-        Object dataId = Reflections.getFieldValue(obj, "id");
+
+        Object dataId = Reflections.getFieldValue(obj, primaryKey);
         Field[] fields = obj.getClass().getDeclaredFields();
         if(fields != null){
             for (Field field : fields) {

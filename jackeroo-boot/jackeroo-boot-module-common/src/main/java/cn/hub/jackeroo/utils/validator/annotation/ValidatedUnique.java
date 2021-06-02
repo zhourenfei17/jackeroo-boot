@@ -25,6 +25,12 @@ public @interface ValidatedUnique {
     Class<?> clazz();
 
     /**
+     * 数据库表名
+     * @return
+     */
+    String tableName() default "";
+
+    /**
      * 指定校验的分组
      * @see Unique groups()
      * @return
@@ -36,4 +42,10 @@ public @interface ValidatedUnique {
      * @return
      */
     String condition() default "";
+
+    /**
+     * 主键
+     * @return
+     */
+    String primaryKey() default "id";
 }

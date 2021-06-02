@@ -49,14 +49,14 @@ public class UniqueValidFilter {
             if(request.getMethod().equals("POST") || request.getMethod().equals("PUT")){
                 String body = HttpUtils.getBodyString(request);
 
-                validService.validEntityUniqueField(JSONObject.parseObject(body, annotation.clazz()), annotation.groups(), annotation.condition());
+                validService.validEntityUniqueField(JSONObject.parseObject(body, annotation.clazz()), annotation);
             }else{
                 Map<String, String[]> parameterMap = request.getParameterMap();
                 JSONObject entity = new JSONObject();
                 for (String paramKey : parameterMap.keySet()) {
                     entity.put(paramKey, parameterMap.get(paramKey)[0]);
                 }
-                validService.validEntityUniqueField(entity.toJavaObject(annotation.clazz()), annotation.groups(), annotation.condition());
+                validService.validEntityUniqueField(entity.toJavaObject(annotation.clazz()), annotation);
             }
         }
     }
