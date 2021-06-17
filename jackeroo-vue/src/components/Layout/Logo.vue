@@ -49,10 +49,13 @@ export default {
   box-shadow: none !important;
   transition: background 300ms;
   padding: 0 10px;
-  text-align: center;
+  display: flex;
+  align-items: center;
 
   img{
     height: 32px;
+    width: 32px;
+    margin-left: 14px;
   }
   span{
     margin-left: 10px;

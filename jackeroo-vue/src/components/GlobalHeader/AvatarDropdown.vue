@@ -14,6 +14,10 @@
           <a-icon type="setting" />
           个人设置
         </a-menu-item>
+        <a-menu-item v-if="menu" key="globalSetting" @click="handleGlobalSetting">
+          <a-icon type="global" />
+          系统设置
+        </a-menu-item>
         <a-menu-divider v-if="menu" />
         <a-menu-item key="logout" @click="handleLogout">
           <a-icon type="logout" />
@@ -51,6 +55,9 @@ export default {
     },
     handleToSettings () {
       this.$router.push({ path: '/account/settings' })
+    },
+    handleGlobalSetting(){
+      this.$emit('globalSetting')
     },
     handleLogout (e) {
       Modal.confirm({

@@ -1,19 +1,23 @@
 <template>
   <div :class="wrpCls">
-    <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
+    <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" @globalSetting="handleGlobalSetting"/>
     <select-lang :class="prefixCls" />
+
+    <global-setting ref="globalSetting"></global-setting>
   </div>
 </template>
 
 <script>
 import AvatarDropdown from './AvatarDropdown'
 import SelectLang from '@/components/SelectLang'
+import GlobalSetting from '@/components/Layout/GlobalSetting'
 
 export default {
   name: 'RightContent',
   components: {
     AvatarDropdown,
-    SelectLang
+    SelectLang,
+    GlobalSetting
   },
   props: {
     prefixCls: {
@@ -53,6 +57,11 @@ export default {
         name: 'Serati Ma'
       }
     }, 1500)
+  },
+  methods: {
+    handleGlobalSetting(){
+      this.$refs.globalSetting.show()
+    }
   }
 }
 </script>
