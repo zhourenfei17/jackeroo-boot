@@ -45,7 +45,7 @@
           <a-col :span="rowSpan" v-if="type == 0">
             <a-form-model-item label="页面布局" prop="layout">
               <a-select v-model="form.layout" placeholder="请选择页面布局" :disabled="flag.view">
-                <a-select-option value="PageView">基础布局（包含面包屑）</a-select-option>
+                <a-select-option value="PageHeaderView">页头布局</a-select-option>
                 <a-select-option value="RouteView">空布局</a-select-option>
               </a-select>
             </a-form-model-item>
