@@ -11,11 +11,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -24,6 +23,7 @@ import java.util.Map;
 
 /**
  * 日志过滤器
+ * @author alex
  */
 @Slf4j
 @Aspect
@@ -48,12 +48,12 @@ public class LogFilter {
 
 		log.info("===================== request start =====================");
 		log.info("URL:[ {} ]", new Object[] { request.getRequestURL() });
+		log.info("METHOD:[ {} ]", request.getMethod());
         // 过滤掉上传文件等请求，不输出请求体内容
         if(request.getRequestURI().startsWith(contentPath + prefix)){
             return;
         }
-		// log.info("Token=[ {} ]", new Object[] { request.getHeader("Token") });
-        if(request.getMethod().equalsIgnoreCase("POST") || request.getMethod().equalsIgnoreCase("PUT")){
+        if(request.getMethod().equals(HttpMethod.POST) || request.getMethod().equals(HttpMethod.PUT)){
             printMap("request body", JSONObject.parseObject(HttpUtils.getBodyString(request), HashMap.class));
         }else{
             printMap("Request Params", request.getParameterMap());
@@ -100,7 +100,8 @@ public class LogFilter {
 			}
 		}
 
-		if (buf.length() > 0)
-			log.info("{}:\n{}", new Object[] { prefix, buf.substring(0, buf.length() - 1) });
+		if (buf.length() > 0){
+            log.info("{}:\n{}", new Object[] { prefix, buf.substring(0, buf.length() - 1) });
+        }
 	}
 }

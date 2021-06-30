@@ -45,10 +45,12 @@ public class MyBatisPlusConfig implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         LoginUser user = UserUtils.getUser();
+        if(user != null){
+            this.strictInsertFill(metaObject, "createBy", String.class, user.getAccount());
+            this.strictInsertFill(metaObject, "updateBy", String.class, user.getAccount());
+        }
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "createBy", String.class, user.getAccount());
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "updateBy", String.class, user.getAccount());
         this.strictInsertFill(metaObject, "delFlag", Integer.class, Constant.DEL_FLAG_NORMAL);
     }
 
@@ -58,7 +60,10 @@ public class MyBatisPlusConfig implements MetaObjectHandler {
      */
     @Override
     public void updateFill(MetaObject metaObject) {
+        LoginUser user = UserUtils.getUser();
+        if(user != null){
+            this.strictUpdateFill(metaObject, "updateBy", String.class, UserUtils.getUser().getAccount());
+        }
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
-        this.strictUpdateFill(metaObject, "updateBy", String.class, UserUtils.getUser().getAccount());
     }
 }

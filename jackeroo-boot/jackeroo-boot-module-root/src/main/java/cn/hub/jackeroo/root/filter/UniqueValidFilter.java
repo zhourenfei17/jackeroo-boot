@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -46,7 +47,7 @@ public class UniqueValidFilter {
             ServletRequestAttributes sra = (ServletRequestAttributes) ra;
             HttpServletRequest request = sra.getRequest();
 
-            if(request.getMethod().equals("POST") || request.getMethod().equals("PUT")){
+            if(request.getMethod().equals(HttpMethod.POST) || request.getMethod().equals(HttpMethod.PUT)){
                 String body = HttpUtils.getBodyString(request);
 
                 validService.validEntityUniqueField(JSONObject.parseObject(body, annotation.clazz()), annotation);

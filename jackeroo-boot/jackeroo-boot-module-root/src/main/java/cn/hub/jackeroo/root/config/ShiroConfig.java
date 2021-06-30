@@ -60,8 +60,8 @@ public class ShiroConfig {
 		// 限制同一帐号同时在线的个数。
         if(sameUserCount > 0){
             filtersMap.put("kickout", kickOutSessionControlFilter());
-            shiroFilterFactoryBean.setFilters(filtersMap);
         }
+        shiroFilterFactoryBean.setFilters(filtersMap);
 
 		// 权限控制map.
 		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
@@ -74,6 +74,8 @@ public class ShiroConfig {
 		// 获取登录验证码
 		filterChainDefinitionMap.put("/auth/generateImg/**", "anon");
         filterChainDefinitionMap.put("/auth/generateGif/**", "anon");
+        // actuator监控
+        filterChainDefinitionMap.put("/actuator/**", "anon");
 
         filterChainDefinitionMap.put("/auth/logout", "logout");
 
