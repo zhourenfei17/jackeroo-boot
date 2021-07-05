@@ -21,7 +21,7 @@
       </a-col>
       <a-col :span="24" class="jackeroo-setting-check-color">
         <a-tooltip :title="color.name" v-for="color in colorList" :key="color.name">
-          <div class="jackeroo-setting-color-item" :style="{backgroundColor: color.color}" @click="() => checkColor = color.color">
+          <div class="jackeroo-setting-color-item" :style="{backgroundColor: color.color}" @click="handleChangePrimaryColor(color.color)">
             <a-icon type="check" v-show="checkColor == color.color" class="jackeroo-setting-check-icon"></a-icon>
           </div>
         </a-tooltip>
@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import { updateTheme } from '@/components/SettingDrawer/settingConfig'
+
 export default {
   data() {
     return {
@@ -83,35 +85,35 @@ export default {
       colorList:[
         {
           name: '拂晓蓝',
-          color: 'rgb(24, 144, 255)'
+          color: '#1890FF'
         },
         {
           name: '薄暮',
-          color: 'rgb(245, 34, 45)'
+          color: '#F5222D'
         },
         {
           name: '火山',
-          color: 'rgb(250, 84, 28)'
+          color: '#FA541C'
         },
         {
           name: '日暮',
-          color: 'rgb(250, 173, 20)'
+          color: '#FAAD14'
         },
         {
           name: '明青',
-          color: 'rgb(19, 194, 194)'
+          color: '#13C2C2'
         },
         {
           name: '极光绿',
-          color: 'rgb(82, 196, 26)'
+          color: '#52C41A'
         },
         {
           name: '极客蓝',
-          color: 'rgb(47, 84, 235)'
+          color: '#2F54EB'
         },
         {
           name: '酱紫',
-          color: 'rgb(114, 46, 209)'
+          color: '#722ED1'
         }
       ],
       // 当前选中的主题色
@@ -140,6 +142,10 @@ export default {
   methods: {
     show(){
       this.visible = true
+    },
+    handleChangePrimaryColor(color){
+      this.checkColor = color
+      updateTheme(color)
     }
   }
 }

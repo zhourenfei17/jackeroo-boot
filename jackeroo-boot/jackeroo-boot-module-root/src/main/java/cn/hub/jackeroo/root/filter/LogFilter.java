@@ -53,7 +53,8 @@ public class LogFilter {
         if(request.getRequestURI().startsWith(contentPath + prefix)){
             return;
         }
-        if(request.getMethod().equals(HttpMethod.POST) || request.getMethod().equals(HttpMethod.PUT)){
+        if(request.getMethod().equalsIgnoreCase(HttpMethod.POST.name()) ||
+                request.getMethod().equalsIgnoreCase(HttpMethod.PUT.name())){
             printMap("request body", JSONObject.parseObject(HttpUtils.getBodyString(request), HashMap.class));
         }else{
             printMap("Request Params", request.getParameterMap());

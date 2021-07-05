@@ -216,7 +216,6 @@ Table 重封装组件说明
 | alert          | 设置是否显示表格信息栏                          | [object, boolean] | null   |
 | showPagination | 显示分页选择器，可传 'auto' \| boolean          | [string, boolean] | 'auto' |
 | data           | 加载数据方法 必须为 `Promise` 对象 **必须绑定** | Promise           | -      |
-| lazy           | 数据是否懒加载，即created的时候不执行loadData()方法，手动调用  | boolean | false   |
 
 
 `alert` 属性对象：
@@ -334,15 +333,9 @@ result.then(r => {
 }
 ```
 
-======更新时间 2020.6.19======
 
-`alert` 属性对象添加multiPageSelect：
 
-```javascript
-alert: {
-  show: Boolean, 
-  clear: [Function, Boolean],
-  // 是否可跨页选择，默认为false
-  multiPageSelect: Boolean
-}
-```
+更新时间
+----
+
+该文档最后更新于： 2019-06-23 PM 17:19

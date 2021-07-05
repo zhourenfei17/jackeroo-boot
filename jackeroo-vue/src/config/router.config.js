@@ -230,7 +230,7 @@ export const asyncRouterMap = [
               {
                 path: '/account/settings/base',
                 name: 'BaseSettings',
-                component: () => import('@/views/account/settings/BaseSetting'),
+                component: () => import('@/views/account/settings/BasicSetting'),
                 meta: { title: '基本设置', hidden: true, permission: [ 'user' ] }
               },
               {

@@ -9,7 +9,7 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 // 创建 axios 实例
 const request = axios.create({
   // API 请求的默认前缀
-  baseURL: '/jackeroo/api',
+  baseURL: process.env.VUE_APP_API_BASE_URL,
   // 服务器响应的数据类型
   responseType: 'json',
   timeout: 6000 // 请求超时时间
@@ -47,11 +47,17 @@ request.interceptors.request.use(config => {
   if (token) {
     config.headers['Access-Token'] = token
   }
+  if(config.method == 'post' || config.method == 'post') {
+    this.$loading.show()
+  }
   return config
 }, errorHandler)
 
 // response interceptor
 request.interceptors.response.use((response) => {
+  if(response.config.method == 'post' || response.config.method == 'post') {
+    this.$loading.hide()
+  }
   if(response.config.responseType == 'json'){
     if(response.data.code === 401){
       // token失效退出登录

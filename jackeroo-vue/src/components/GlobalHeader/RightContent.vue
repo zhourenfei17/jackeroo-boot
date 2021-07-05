@@ -1,7 +1,7 @@
 <template>
   <div :class="wrpCls">
     <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" @globalSetting="handleGlobalSetting"/>
-    <select-lang :class="prefixCls" />
+    <!-- <select-lang :class="prefixCls" /> -->
 
     <global-setting ref="globalSetting"></global-setting>
   </div>
@@ -9,14 +9,13 @@
 
 <script>
 import AvatarDropdown from './AvatarDropdown'
-import SelectLang from '@/components/SelectLang'
+// import SelectLang from '@/components/SelectLang'
 import GlobalSetting from '@/components/Layout/GlobalSetting'
 
 export default {
   name: 'RightContent',
   components: {
     AvatarDropdown,
-    SelectLang,
     GlobalSetting
   },
   props: {
@@ -47,7 +46,7 @@ export default {
     wrpCls () {
       return {
         'ant-pro-global-header-index-right': true,
-        [`ant-pro-global-header-index-${(this.topMenu && this.isMobile) && this.theme || 'light'}`]: true
+        [`ant-pro-global-header-index-${(this.isMobile || !this.topMenu) ? 'light' : this.theme}`]: true
       }
     }
   },

@@ -84,6 +84,17 @@ export default {
     this.menus = (routes && routes.children) || []
     
   },
+  mounted () {
+    const userAgent = navigator.userAgent
+    if (userAgent.indexOf('Edge') > -1) {
+      this.$nextTick(() => {
+        this.collapsed = !this.collapsed
+        setTimeout(() => {
+          this.collapsed = !this.collapsed
+        }, 16)
+      })
+    }
+  },
   methods: {
     handleCollapse(){
       this.collapsed = !this.collapsed
@@ -110,6 +121,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "~ant-design-vue/es/style/themes/default.less";
+
 @height: 59px;
 
 .jackeroo-body{

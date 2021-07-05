@@ -7,6 +7,8 @@
     :fullscreen.sync="fullscreen"
     :switchFullscreen="showFullscreenBtn"
     :confirmLoading="loading"
+    :autoHeight="false"
+    maxHeight="60vh"
     :disabled="flag.view"
     @ok="handleSubmit"
     @cancel="cancel"

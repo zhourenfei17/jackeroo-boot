@@ -8,12 +8,16 @@
 
 <script>
 import { domTitle, setDocumentTitle } from '@/utils/domUtil'
+import { removeLoadingAnimate } from '@/utils/util'
 import { i18nRender } from '@/locales'
 
 export default {
   data () {
     return {
     }
+  },
+  mounted() {
+    removeLoadingAnimate('page-pre-loading')
   },
   computed: {
     locale () {

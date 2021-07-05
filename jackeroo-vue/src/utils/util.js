@@ -1,4 +1,3 @@
-import { add } from "lodash"
 import store from '@/store'
 
 export function timeFix () {
@@ -68,6 +67,35 @@ export function removeLoadingAnimate (id = '', timeout = 1500) {
     document.body.removeChild(document.getElementById(id))
   }, timeout)
 }
+export function scorePassword (pass) {
+  let score = 0
+  if (!pass) {
+    return score
+  }
+  // award every unique letter until 5 repetitions
+  const letters = {}
+  for (let i = 0; i < pass.length; i++) {
+      letters[pass[i]] = (letters[pass[i]] || 0) + 1
+      score += 5.0 / letters[pass[i]]
+  }
+
+  // bonus points for mixing it up
+  const variations = {
+      digits: /\d/.test(pass),
+      lower: /[a-z]/.test(pass),
+      upper: /[A-Z]/.test(pass),
+      nonWords: /\W/.test(pass)
+  }
+
+  let variationCount = 0
+  for (var check in variations) {
+      variationCount += (variations[check] === true) ? 1 : 0
+  }
+  score += (variationCount - 1) * 10
+
+  return parseInt(score)
+}
+
 
 /**
  * 判断是否拥有权限指令
@@ -75,7 +103,7 @@ export function removeLoadingAnimate (id = '', timeout = 1500) {
  * @param {String} logic 多权限指令时的逻辑策略，可选 and、or，默认为and
  * @returns {Boolean} true为有权限，false为无权限
  */
-export function hasPermissions(permissions, logic){
+ export function hasPermissions(permissions, logic){
   logic = logic != 'or' ? 'and' : 'or'
   // 所有的角色，以及角色拥有的权限指令
   const roles = store.getters.roles

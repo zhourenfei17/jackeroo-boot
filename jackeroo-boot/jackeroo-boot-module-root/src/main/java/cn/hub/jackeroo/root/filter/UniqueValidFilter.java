@@ -47,7 +47,8 @@ public class UniqueValidFilter {
             ServletRequestAttributes sra = (ServletRequestAttributes) ra;
             HttpServletRequest request = sra.getRequest();
 
-            if(request.getMethod().equals(HttpMethod.POST) || request.getMethod().equals(HttpMethod.PUT)){
+            if(request.getMethod().equalsIgnoreCase(HttpMethod.POST.name()) ||
+                    request.getMethod().equalsIgnoreCase(HttpMethod.PUT.name())){
                 String body = HttpUtils.getBodyString(request);
 
                 validService.validEntityUniqueField(JSONObject.parseObject(body, annotation.clazz()), annotation);

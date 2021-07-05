@@ -4,10 +4,17 @@ const GitRevisionPlugin = require('git-revision-webpack-plugin')
 const GitRevision = new GitRevisionPlugin()
 const buildDate = JSON.stringify(new Date().toLocaleString())
 const createThemeColorReplacerPlugin = require('./config/plugin.config')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 function resolve (dir) {
   return path.join(__dirname, dir)
+}
+
+// check Git
+function getGitHash () {
+  try {
+    return GitRevision.version()
+  } catch (e) {}
+  return 'unknown'
 }
 
 const isProd = process.env.NODE_ENV === 'production'
@@ -39,14 +46,9 @@ const vueConfig = {
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       new webpack.DefinePlugin({
         APP_VERSION: `"${require('./package.json').version}"`,
-        GIT_HASH: JSON.stringify(GitRevision.version()),
+        GIT_HASH: JSON.stringify(getGitHash()),
         BUILD_DATE: buildDate
-      }),
-      new CleanWebpackPlugin({
-        cleanOnceBeforeBuildPatterns: [`**/*.hot-update.*`],
-        dry: false,
-        dangerouslyAllowCleanPatternsOutsideProject: true
-      }),
+      })
     ],
     // if prod, add externals
     externals: isProd ? assetsCDN.externals : {}

@@ -247,7 +247,7 @@ export default {
     },
     changeColor (color) {
       if (this.primaryColor !== color) {
-        this.$store.dispatch('ToggleColor', color)
+        // this.$store.dispatch('ToggleColor', color)
         updateTheme(color)
       }
     },

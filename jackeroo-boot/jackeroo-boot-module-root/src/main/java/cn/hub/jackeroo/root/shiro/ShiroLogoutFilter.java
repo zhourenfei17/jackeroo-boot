@@ -45,7 +45,7 @@ public class ShiroLogoutFilter extends LogoutFilter {
         // Check if POST only logout is enabled
         if (isPostOnlyLogout()) {
             // check if the current request's method is a POST, if not redirect
-            if (!WebUtils.toHttp(request).getMethod().toUpperCase(Locale.ENGLISH).equals(HttpMethod.POST)) {
+            if (!WebUtils.toHttp(request).getMethod().toUpperCase(Locale.ENGLISH).equals(HttpMethod.POST.name())) {
                 return onLogoutRequestNotAPost(request, response);
             }
         }

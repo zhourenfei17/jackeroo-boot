@@ -164,8 +164,8 @@
 <script>
 import pick from 'lodash.pick'
 import { STable } from '@/components'
-import { getAction } from '@/api/manage'
-import { PERMISSION_ENUM } from '@/utils/helper/permission'
+// import { getRoleList, getServiceList } from '@/api/manage'
+import { PERMISSION_ENUM } from '@/core/permission/permission'
 
 const STATUS = {
   1: '启用',
@@ -228,13 +228,13 @@ export default {
       columns,
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return getAction(parameter)
+        /* return getRoleList(parameter)
           .then(res => {
             console.log('getRoleList', res)
             // 展开全部行
             this.expandedRowKeys = res.result.data.map(item => item.id)
             return res.result
-          })
+          }) */
       },
 
       expandedRowKeys: [],
@@ -252,9 +252,13 @@ export default {
     }
   },
   created () {
-    getAction().then(res => {
-      console.log('getRoleList.call()', res)
+    /* getServiceList().then(res => {
+      console.log('getServiceList.call()', res)
     })
+
+    getRoleList().then(res => {
+      console.log('getRoleList.call()', res)
+    }) */
   },
   methods: {
     handleEdit (record) {

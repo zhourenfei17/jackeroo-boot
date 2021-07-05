@@ -1,57 +1,34 @@
 <template>
   <div class="account-settings-info-view">
-    <a-row :gutter="16">
-      <a-col :md="24" :lg="16">
+    <a-row :gutter="16" type="flex" justify="center">
+      <a-col :order="isMobile ? 2 : 1" :md="24" :lg="16">
 
         <a-form layout="vertical">
           <a-form-item
-            label="昵称"
+            :label="$t('account.settings.basic.nickname')"
           >
-            <a-input placeholder="给自己起个名字" />
+            <a-input :placeholder="$t('account.settings.basic.nickname-message')" />
           </a-form-item>
           <a-form-item
-            label="Bio"
+            :label="$t('account.settings.basic.profile')"
           >
-            <a-textarea rows="4" placeholder="You are not alone."/>
+            <a-textarea rows="4" :placeholder="$t('account.settings.basic.profile-message')"/>
           </a-form-item>
 
           <a-form-item
-            label="电子邮件"
+            :label="$t('account.settings.basic.email')"
             :required="false"
           >
-            <a-input placeholder="exp@admin.com"/>
-          </a-form-item>
-          <a-form-item
-            label="加密方式"
-            :required="false"
-          >
-            <a-select defaultValue="aes-256-cfb">
-              <a-select-option value="aes-256-cfb">aes-256-cfb</a-select-option>
-              <a-select-option value="aes-128-cfb">aes-128-cfb</a-select-option>
-              <a-select-option value="chacha20">chacha20</a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item
-            label="连接密码"
-            :required="false"
-          >
-            <a-input placeholder="h3gSbecd"/>
-          </a-form-item>
-          <a-form-item
-            label="登录密码"
-            :required="false"
-          >
-            <a-input placeholder="密码"/>
+            <a-input placeholder="example@ant.design"/>
           </a-form-item>
 
           <a-form-item>
-            <a-button type="primary">提交</a-button>
-            <a-button style="margin-left: 8px">保存</a-button>
+            <a-button type="primary">{{ $t('account.settings.basic.update') }}</a-button>
           </a-form-item>
         </a-form>
 
       </a-col>
-      <a-col :md="24" :lg="8" :style="{ minHeight: '180px' }">
+      <a-col :order="1" :md="24" :lg="8" :style="{ minHeight: '180px' }">
         <div class="ant-upload-preview" @click="$refs.modal.edit(1)" >
           <a-icon type="cloud-upload-o" class="upload-icon"/>
           <div class="mask">
@@ -70,8 +47,10 @@
 
 <script>
 import AvatarModal from './AvatarModal'
+import { baseMixin } from '@/store/app-mixin'
 
 export default {
+  mixins: [baseMixin],
   components: {
     AvatarModal
   },
