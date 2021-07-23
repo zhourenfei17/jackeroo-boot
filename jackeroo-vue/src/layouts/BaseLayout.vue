@@ -1,7 +1,7 @@
 <template>
   <a-layout class="jackeroo-body">
     <a-layout-sider v-model="collapsed" :trigger="null" collapsible width="256" :class="{'jackeroo-fixed-sider': settings.fixSiderbar}">
-      <logo title="Jackeroo Boot" :collapsed="!collapsed"></logo>
+      <logo :title="title" :collapsed="!collapsed"></logo>
       
       <s-menu :menu="menus" :collapsed="collapsed"></s-menu>
     </a-layout-sider>
@@ -15,7 +15,8 @@
                 :type="collapsed ? 'menu-unfold' : 'menu-fold'"
               />
             </div>
-            <right-content :top-menu="settings.layout === 'topmenu'" :theme="settings.theme"></right-content>
+            <right-content :top-menu="settings.layout === 'topmenu'" :theme="settings.theme" @globalSetting="handleGlobalSetting"></right-content>
+            <global-setting :settings="settings" @change="handleSettingChange" ref="globalSetting"></global-setting>
           </div>
         </a-layout-header>
         <a-layout-content :class="{'jackeroo-fixed-content': settings.fixedHeader, 'jackeroo-content': true}">
@@ -31,11 +32,14 @@
 
 <script>
 import PageFooter from '@/components/Layout/PageFooter'
-import GlobalFooter from '@/components/GlobalFooter/index';
+import GlobalFooter from '@/components/GlobalFooter/index'
 import Logo from '@/components/Layout/Logo'
 import { mapState } from 'vuex'
 import SMenu from '@/components/Menu/Menu'
-import RightContent from '@/components/GlobalHeader/RightContent';
+import RightContent from '@/components/GlobalHeader/RightContent'
+import GlobalSetting from '@/components/Layout/GlobalSetting'
+import defaultSettings from '@/config/defaultSettings'
+import { CONTENT_WIDTH_TYPE, SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mutation-types'
 
 export default {
   components: {
@@ -43,25 +47,30 @@ export default {
     Logo,
     SMenu,
     RightContent,
-    GlobalFooter
+    GlobalFooter,
+    GlobalSetting
   },
   data() {
     return {
       menus: [],
       // 侧栏收起状态
       collapsed: false,
+      title: defaultSettings.title,
       settings: {
         // 布局类型
-        layout: 'sidemenu', // 'sidemenu', 'topmenu'
-        // 定宽: true / 流式: false
-        contentWidth: false,
+        layout: defaultSettings.layout, // 'sidemenu', 'topmenu'
+        // CONTENT_WIDTH_TYPE
+        contentWidth: defaultSettings.layout === 'sidemenu' ? CONTENT_WIDTH_TYPE.Fluid : defaultSettings.contentWidth,
         // 主题 'dark' | 'light'
-        theme: 'dark',
+        theme: defaultSettings.navTheme,
         // 主色调
-        primaryColor: '#1890ff',
-        fixedHeader: true,
-        fixSiderbar: true,
-        colorWeak: false,
+        primaryColor: defaultSettings.primaryColor,
+        // 固定头部
+        fixedHeader: defaultSettings.fixedHeader,
+        // 固定侧边栏
+        fixSiderbar: defaultSettings.fixSiderbar,
+        // 色弱模式
+        colorWeak: defaultSettings.colorWeak,
 
         hideHintAlert: false,
         hideCopyButton: false
@@ -100,7 +109,6 @@ export default {
       this.collapsed = !this.collapsed
     },
     handleSettingChange ({ type, value }) {
-      console.log('type', type, value)
       type && (this.settings[type] = value)
       switch (type) {
         case 'contentWidth':
@@ -115,6 +123,9 @@ export default {
           }
           break
       }
+    },
+    handleGlobalSetting(){
+      this.$refs.globalSetting.show()
     }
   }
 }

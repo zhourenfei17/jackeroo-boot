@@ -8,9 +8,9 @@
         <a-row>
           <a-col :span="6" v-for="style in styleList" :key="style.name">
             <a-tooltip :title="style.label">
-              <img :src="style.url" @click="() => checkStyle = style.name"/>
+              <img :src="style.url" @click="handleChangeStyle(style.name)"/>
 
-              <a-icon type="check" v-show="checkStyle == style.name" class="jackeroo-setting-check-icon"></a-icon>
+              <a-icon type="check" v-show="settings.theme == style.name" class="jackeroo-setting-check-icon"></a-icon>
             </a-tooltip>
           </a-col>
         </a-row>
@@ -22,7 +22,7 @@
       <a-col :span="24" class="jackeroo-setting-check-color">
         <a-tooltip :title="color.name" v-for="color in colorList" :key="color.name">
           <div class="jackeroo-setting-color-item" :style="{backgroundColor: color.color}" @click="handleChangePrimaryColor(color.color)">
-            <a-icon type="check" v-show="checkColor == color.color" class="jackeroo-setting-check-icon"></a-icon>
+            <a-icon type="check" v-show="settings.primaryColor == color.color" class="jackeroo-setting-check-icon"></a-icon>
           </div>
         </a-tooltip>
       </a-col>
@@ -38,9 +38,9 @@
         <a-row>
           <a-col :span="6" v-for="nav in navList" :key="nav.name">
             <a-tooltip :title="nav.label">
-              <img :src="nav.url" @click="() => checkNav = nav.name"/>
+              <img :src="nav.url" @click="handleChangeLayout"/>
 
-              <a-icon type="check" v-show="checkNav == nav.name" class="jackeroo-setting-check-icon"></a-icon>
+              <a-icon type="check" v-show="settings.layout == nav.name" class="jackeroo-setting-check-icon"></a-icon>
             </a-tooltip>
           </a-col>
         </a-row>
@@ -48,24 +48,33 @@
 
       <a-col :span="24" class="jackeroo-setting-switch">
         <div class="jackeroo-setting-switch-label">固定头部</div>
-        <div class="jackeroo-setting-switch-item"><a-switch v-model="fixedHeader" size="small"></a-switch></div>
+        <div class="jackeroo-setting-switch-item"><a-switch v-model="fixedHeader" @click="handleFixedHeaderChange" size="small"></a-switch></div>
       </a-col>
 
       <a-col :span="24" class="jackeroo-setting-switch">
         <div class="jackeroo-setting-switch-label">固定侧边栏</div>
-        <div class="jackeroo-setting-switch-item"><a-switch v-model="fixedSider" size="small"></a-switch></div>
+        <div class="jackeroo-setting-switch-item"><a-switch v-model="fixedSider" @click="handleFixedSiderChange" size="small"></a-switch></div>
       </a-col>
     </a-row>
   </a-drawer>
 </template>
 
 <script>
-import { updateTheme } from '@/components/SettingDrawer/settingConfig'
+import { updateTheme, colorList } from '@/components/SettingDrawer/settingConfig'
+import {
+  TOGGLE_CONTENT_WIDTH,
+  TOGGLE_FIXED_HEADER,
+  TOGGLE_FIXED_SIDEBAR, TOGGLE_HIDE_HEADER,
+  TOGGLE_LAYOUT, TOGGLE_NAV_THEME, TOGGLE_WEAK,
+  TOGGLE_COLOR, TOGGLE_MULTI_TAB
+} from '@/store/mutation-types'
 
 export default {
+  props: ['settings'],
   data() {
     return {
       visible: false,
+      colorList,
       // 整体布局风格
       styleList: [
         {
@@ -81,52 +90,17 @@ export default {
       ],
       // 当前选中的风格
       checkStyle: undefined,
-      // 主题色
-      colorList:[
-        {
-          name: '拂晓蓝',
-          color: '#1890FF'
-        },
-        {
-          name: '薄暮',
-          color: '#F5222D'
-        },
-        {
-          name: '火山',
-          color: '#FA541C'
-        },
-        {
-          name: '日暮',
-          color: '#FAAD14'
-        },
-        {
-          name: '明青',
-          color: '#13C2C2'
-        },
-        {
-          name: '极光绿',
-          color: '#52C41A'
-        },
-        {
-          name: '极客蓝',
-          color: '#2F54EB'
-        },
-        {
-          name: '酱紫',
-          color: '#722ED1'
-        }
-      ],
       // 当前选中的主题色
       checkColor: undefined,
       // 导航模式
       navList: [
         {
-          name: 'sideMenu',
+          name: 'sidemenu',
           label: '侧边菜单布局',
           url: 'https://gw.alipayobjects.com/zos/antfincdn/XwFOFbLkSM/LCkqqYNmvBEbokSDscrm.svg'
         },
         {
-          name: 'topMenu',
+          name: 'topmenu',
           label: '顶部菜单布局',
           url: 'https://gw.alipayobjects.com/zos/antfincdn/URETY8%24STp/KDNDBbriJhLwuqMoxcAr.svg'
         }
@@ -139,13 +113,47 @@ export default {
       fixedSider: false
     }
   },
+  watch: {
+    settings: {
+      immediate: true,
+      deep: true,
+      handler(val) {
+        this.fixedHeader = val.fixedHeader
+        this.fixedSider = val.fixSiderbar
+      }
+    }
+  },
   methods: {
     show(){
       this.visible = true
     },
     handleChangePrimaryColor(color){
-      this.checkColor = color
-      updateTheme(color)
+      // this.checkColor = color
+      if(this.settings.primaryColor != color){
+        this.$store.commit(TOGGLE_COLOR, color)
+        updateTheme(color)
+        this.$emit('change', {type: 'primaryColor', value: color})
+      }
+    },
+    handleChangeStyle(style){
+      if(this.settings.theme != style){
+        this.$store.commit(TOGGLE_NAV_THEME, theme)
+        this.$emit('change', {type: 'theme', value: style})
+      }
+    },
+    handleChangeLayout(layout){
+      if(this.settings.layout != layout){
+        this.$store.commit(TOGGLE_LAYOUT, mode)
+        this.$emit('change', {type: 'layout', value: layout})
+      }
+    },
+    handleFixedHeaderChange(checked) {
+      this.$store.commit(TOGGLE_FIXED_HEADER, checked)
+      this.$emit('change', {type: 'fixedHeader', value: checked})
+    },
+    handleFixedSiderChange(checked) {
+      this.$store.commit(TOGGLE_FIXED_SIDEBAR, checked)
+      this.$emit('change', {type: 'fixSiderbar', value: checked})
     }
   }
 }
