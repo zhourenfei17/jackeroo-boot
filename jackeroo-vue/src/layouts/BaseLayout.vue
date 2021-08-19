@@ -20,7 +20,7 @@
           </div>
         </a-layout-header>
         <a-layout-content :class="{'jackeroo-fixed-content': settings.fixedHeader, 'jackeroo-content': true}">
-          <router-view />
+          <tab-layout :multi-tab="settings.multiTab"></tab-layout>
         </a-layout-content>
         <a-layout-footer class="jackeroo-footer">
           <global-footer></global-footer>
@@ -32,6 +32,7 @@
 
 <script>
 import PageFooter from '@/components/Layout/PageFooter'
+import TabLayout from '@/components/Layout/TabLayout'
 import GlobalFooter from '@/components/GlobalFooter/index'
 import Logo from '@/components/Layout/Logo'
 import { mapState } from 'vuex'
@@ -48,7 +49,8 @@ export default {
     SMenu,
     RightContent,
     GlobalFooter,
-    GlobalSetting
+    GlobalSetting,
+    TabLayout
   },
   data() {
     return {
@@ -71,7 +73,8 @@ export default {
         fixSiderbar: defaultSettings.fixSiderbar,
         // 色弱模式
         colorWeak: defaultSettings.colorWeak,
-
+        // 多页模式
+        multiTab: defaultSettings.multiTab,
         hideHintAlert: false,
         hideCopyButton: false
       }

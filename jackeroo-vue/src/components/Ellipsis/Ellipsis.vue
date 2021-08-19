@@ -21,7 +21,8 @@ export default {
       default: 'ant-pro-ellipsis'
     },
     tooltip: {
-      type: Boolean
+      type: Boolean,
+      default: true
     },
     length: {
       type: Number,

@@ -55,6 +55,11 @@
         <div class="jackeroo-setting-switch-label">固定侧边栏</div>
         <div class="jackeroo-setting-switch-item"><a-switch v-model="fixedSider" @click="handleFixedSiderChange" size="small"></a-switch></div>
       </a-col>
+
+      <a-col :span="24" class="jackeroo-setting-switch">
+        <div class="jackeroo-setting-switch-label">多页模式</div>
+        <div class="jackeroo-setting-switch-item"><a-switch v-model="multiTab" @click="handleMultiTabChange" size="small"></a-switch></div>
+      </a-col>
     </a-row>
   </a-drawer>
 </template>
@@ -110,7 +115,9 @@ export default {
       // 固定头部
       fixedHeader: false,
       // 固定侧边栏
-      fixedSider: false
+      fixedSider: false,
+      // 多页模式
+      multiTab: false
     }
   },
   watch: {
@@ -120,6 +127,7 @@ export default {
       handler(val) {
         this.fixedHeader = val.fixedHeader
         this.fixedSider = val.fixSiderbar
+        this.multiTab = val.multiTab
       }
     }
   },
@@ -154,6 +162,10 @@ export default {
     handleFixedSiderChange(checked) {
       this.$store.commit(TOGGLE_FIXED_SIDEBAR, checked)
       this.$emit('change', {type: 'fixSiderbar', value: checked})
+    },
+    handleMultiTabChange(checked) {
+      this.$store.commit(TOGGLE_MULTI_TAB, checked)
+      this.$emit('change', {type: 'multiTab', value: checked})
     }
   }
 }
