@@ -1,12 +1,11 @@
 package cn.hub.jackeroo.root.config;
 
 import cn.hub.jackeroo.constant.Constant;
-import cn.hub.jackeroo.root.config.bean.MyBatisPaginationInterceptor;
+import cn.hub.jackeroo.root.config.bean.MybatisPaginationInnerInterceptor;
 import cn.hub.jackeroo.utils.UserUtils;
 import cn.hub.jackeroo.vo.LoginUser;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import org.apache.ibatis.reflection.MetaObject;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
@@ -26,16 +25,28 @@ import java.time.LocalDateTime;
 public class MyBatisPlusConfig implements MetaObjectHandler {
 
     /**
-     * 分页插件配置
+     * 分页插件配置 -- 旧版本
      * @return
      */
-    @Bean
+    /*@Bean
     public PaginationInterceptor paginationInterceptor(){
         PaginationInterceptor paginationInterceptor = new MyBatisPaginationInterceptor();
         // 开启count的join优化，只针对部分 left join
         paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
 
         return paginationInterceptor;
+    }*/
+
+    /**
+     * 分页插件配置
+     * @return
+     */
+    @Bean
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        // 自定义实现的分页处理器
+        interceptor.addInnerInterceptor(new MybatisPaginationInnerInterceptor());
+        return interceptor;
     }
 
     /**

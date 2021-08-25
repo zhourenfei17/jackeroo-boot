@@ -43,7 +43,7 @@ public class ValidRulesValidator implements ConstraintValidator<ValidRules, Seri
                 case VALID_TELEPHONE:
                     validStatus.add(ValidatorUtils.isTelephone(val));
                     break;
-                case VALID_POSTCDOE:
+                case VALID_POSTCODE:
                     validStatus.add(ValidatorUtils.isPostCode(val));
                     break;
                 case VALID_ID_CARD:
@@ -51,6 +51,15 @@ public class ValidRulesValidator implements ConstraintValidator<ValidRules, Seri
                     break;
                 case VALID_LETTER_AND_UNDERLINE:
                     validStatus.add(ValidatorUtils.isLetterAndUnderline(val));
+                    break;
+                case VALID_IP:
+                    validStatus.add(ValidatorUtils.isIPAddr(val));
+                    break;
+                case VALID_IP_HOST:
+                    validStatus.add(ValidatorUtils.isIpAndHost(val));
+                    break;
+                case VALID_URL:
+                    validStatus.add(ValidatorUtils.isUrl(val));
                     break;
             }
         }

@@ -12,44 +12,50 @@ public class ValidatorUtils {
     /**
      * 正则表达式：验证手机号码
      */
-    public static final String REGEX_MOBILE = "^1[3456789]\\d{9}$";
+    private static final String REGEX_MOBILE = "^1[3456789]\\d{9}$";
     /**
      * 正则表达式：验证电话号码
      */
-    public static final String REGEX_TELEPHONE = "^((0[0-9]{2,3}\\-)?([2-9][0-9]{6,7})+(\\-[0-9]{1,4})?)$";
+    private static final String REGEX_TELEPHONE = "^((0[0-9]{2,3}\\-)?([2-9][0-9]{6,7})+(\\-[0-9]{1,4})?)$";
 
     /**
      * 正则表达式：验证邮箱
      */
-    public static final String REGEX_EMAIL = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+    private static final String REGEX_EMAIL = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
 
     /**
      * 正则表达式：验证汉字
      */
-    public static final String REGEX_CHINESE = "^[\u4e00-\u9fa5],{0,}$";
+    private static final String REGEX_CHINESE = "^[\u4e00-\u9fa5],{0,}$";
 
     /**
      * 正则表达式：验证身份证
      */
-    public static final String REGEX_ID_CARD = "^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X|x)$";
+    private static final String REGEX_ID_CARD = "^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X|x)$";
 
     /**
      * 正则表达式：验证URL
      */
-    public static final String REGEX_URL = "http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?";
+    private static final String REGEX_URL = "^http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?$";
 
     /**
      * 正则表达式：验证IP地址
      */
-    public static final String REGEX_IP_ADDR = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)";
+    private static final String REGEX_IP_ADDR = "^(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)$";
+
+    /**
+     * 正则表达式：验证ip和域名
+     */
+    private static final String REGEX_IP_HOST = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)+([A-Za-z]|[A-Za-z][A-Za-z0-9\\-]*[A-Za-z0-9])$";
+
     /**
      * 正则表达式：验证邮政编码
      */
-    public static final String REGEX_POST_CODE = "^[1-9]\\\\d{5}$";
+    private static final String REGEX_POST_CODE = "^[1-9]\\\\d{5}$";
     /**
      * 正则表达式：验证字母和下划线
      */
-    public static final String REGEX_LETTER_UNDERLINE = "^[A-Za-z_]+?$";
+    private static final String REGEX_LETTER_UNDERLINE = "^[A-Za-z_]+?$";
 
     /**
      * 校验手机号
@@ -138,4 +144,12 @@ public class ValidatorUtils {
         return Pattern.matches(REGEX_LETTER_UNDERLINE, str);
     }
 
+    /**
+     * 校验ip或者域名
+     * @param str
+     * @return
+     */
+    public static boolean isIpAndHost(String str){
+        return Pattern.matches(REGEX_IP_HOST, str);
+    }
 }

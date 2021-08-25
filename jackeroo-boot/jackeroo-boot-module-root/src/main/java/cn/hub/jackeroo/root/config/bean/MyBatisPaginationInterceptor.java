@@ -1,57 +1,26 @@
 package cn.hub.jackeroo.root.config.bean;
 
-import cn.hub.jackeroo.utils.Reflections;
-import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.parser.SqlInfo;
-import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.pagination.DialectFactory;
-import com.baomidou.mybatisplus.extension.plugins.pagination.DialectModel;
-import com.baomidou.mybatisplus.extension.plugins.pagination.dialects.IDialect;
-import com.baomidou.mybatisplus.extension.toolkit.JdbcUtils;
-import com.baomidou.mybatisplus.extension.toolkit.SqlParserUtils;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-import org.apache.ibatis.executor.statement.StatementHandler;
-import org.apache.ibatis.mapping.BoundSql;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.ParameterMapping;
-import org.apache.ibatis.mapping.SqlCommandType;
-import org.apache.ibatis.mapping.StatementType;
-import org.apache.ibatis.plugin.Intercepts;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.plugin.Signature;
-import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.reflection.SystemMetaObject;
-import org.apache.ibatis.session.Configuration;
-
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 /**
+ * mybatis-puls 3.4.0版本以前（不含）使用此版本
  * 主要是重写了PaginationInterceptor中的intercept方法，增加了Page对象从实体类中获取
  * @author alex
  * @date 2020/06/22
  */
-@Setter
-@Accessors(chain = true)
-@Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
-public class MyBatisPaginationInterceptor extends PaginationInterceptor {
+// @Setter
+// @Accessors(chain = true)
+// @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
+public class MyBatisPaginationInterceptor /*extends PaginationInterceptor*/ {
     /**
      * 数据库类型
      *
      * @since 3.3.1
-     */
+     *//*
     private DbType dbType;
-    /**
+    *//**
      * 方言实现类
      *
      * @since 3.3.1
-     */
+     *//*
     private IDialect dialect;
 
     @Override
@@ -88,9 +57,9 @@ public class MyBatisPaginationInterceptor extends PaginationInterceptor {
             page = (IPage<?>)Reflections.invokeGetter(paramObj, "page");
         }
 
-        /*
+        *//*
          * 不需要分页的场合，如果 size 小于 0 返回结果集
-         */
+         *//*
         if (null == page || page.getSize() < 0) {
             return invocation.proceed();
         }
@@ -121,5 +90,5 @@ public class MyBatisPaginationInterceptor extends PaginationInterceptor {
         metaObject.setValue("delegate.boundSql.sql", model.getDialectSql());
         metaObject.setValue("delegate.boundSql.parameterMappings", mappings);
         return invocation.proceed();
-    }
+    }*/
 }

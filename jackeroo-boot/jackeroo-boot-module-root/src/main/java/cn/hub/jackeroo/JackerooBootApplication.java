@@ -34,11 +34,6 @@ public class JackerooBootApplication implements WebMvcConfigurer {
                 "----------------------------------------------------------");
 	}
 
-	/*@Bean
-	public ServerEndpointExporter serverEndpointExporter() {
-		return new ServerEndpointExporter();
-	}*/
-
     @Value("${jackeroo.path.upload}")
     private String basePath;
 

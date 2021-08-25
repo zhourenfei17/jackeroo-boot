@@ -114,7 +114,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         String base = "qwertyuioplkjhgfdsazxcvbnmQAZWSXEDCRFVTGBYHNUJMIKLOP0123456789";
         StringBuffer sb = new StringBuffer();
         Random rd = new Random();
-        for(int i=0;i<place;i++) {
+        for(int i = 0; i < place; i++) {
             sb.append(base.charAt(rd.nextInt(base.length())));
         }
         return sb.toString();

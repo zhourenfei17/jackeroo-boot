@@ -35,10 +35,13 @@ public abstract class BaseEntity<T extends Serializable> implements Serializable
     @JsonIgnore
     @ApiModelProperty(hidden = true)
 	protected Map<String, String> sqlMap;
+    /**
+     * 当前数据库类型
+     */
     @TableField(exist = false)
     @JsonIgnore
     @ApiModelProperty(hidden = true)
-	private String dbName = "mysql"; // 当前数据库类型
+	private String dbName = "mysql";
     /**
      * 排序字段
      */

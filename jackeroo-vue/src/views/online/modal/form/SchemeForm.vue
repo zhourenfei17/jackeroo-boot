@@ -23,11 +23,11 @@
           <j-select v-model="formScheme.moduleId" placeholder="请选择所属模块" :url="url.findModuleList"></j-select>
         </a-form-model-item>
       </a-col>
-      <a-col :span="rowSpan">
+      <!-- <a-col :span="rowSpan">
         <a-form-model-item label="生成功能名" prop="funName">
           <a-input v-model="formScheme.funName" placeholder="请输入生成功能名"></a-input>
         </a-form-model-item>
-      </a-col>
+      </a-col> -->
       <a-col :span="rowSpan">
         <a-form-model-item label="表单风格" prop="formStyle">
           <j-dict-select v-model="formScheme.formStyle" placeholder="请选择表单风格" dictCode="GEN_FORM_STYLE"></j-dict-select>
@@ -101,7 +101,6 @@ export default {
           {required: true, message: '请选择生成模板'}
         ],
         author: [
-          {required: true, message: '请填写生成作者'},
           {max: 50, message: '长度需要在0到50之间'}
         ],
         packageName: [
@@ -110,6 +109,9 @@ export default {
         ],
         moduleId: [
           {required: true, message: '请选择所属模块'}
+        ],
+        formStyle: [
+          {required: true, message: '请选择表单风格'}
         ],
         outputDir: [
           {required: true, message: '请填写代码生成路径'},

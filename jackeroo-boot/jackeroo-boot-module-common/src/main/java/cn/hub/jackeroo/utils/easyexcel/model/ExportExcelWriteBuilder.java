@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.utils.easyexcel.model;
 
+import cn.hub.jackeroo.utils.Assert;
 import cn.hub.jackeroo.utils.LocalDateUtils;
 import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.utils.easyexcel.annotation.ExcelField;
@@ -15,7 +16,6 @@ import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.alibaba.excel.write.style.row.SimpleRowHeightStyleStrategy;
-import com.baomidou.mybatisplus.core.toolkit.Assert;
 import net.sf.cglib.beans.BeanMap;
 
 import javax.servlet.http.HttpServletResponse;

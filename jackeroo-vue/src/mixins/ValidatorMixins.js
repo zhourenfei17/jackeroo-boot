@@ -34,6 +34,16 @@ export const ValidatorMixins = {
         callback('请输入正确的邮政编码')
       }
     },
+    // 验证ip或者域名地址
+    validIpAndHost(rule, value, callback){
+      let reg = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$" 
+        + "|^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)+([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$"
+      if(value && new RegExp(reg).test(value)){
+        callback()
+      }else{
+        callback(rule.message)
+      }
+    },
     // 验证网址
     validUrl(rule, value, callback){
       let reg = "^((https|http|ftp|rtsp|mms)?://)"

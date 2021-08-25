@@ -32,10 +32,12 @@
         <shiro.version>1.6.0</shiro.version>
         <shiro-redis.version>3.3.1</shiro-redis.version>
         <poi.version>4.1.2</poi.version>
-        <mybatis-plus-boot.version>3.3.1.tmp</mybatis-plus-boot.version>
+        <mybatis-plus-boot.version>3.4.3</mybatis-plus-boot.version>
         <hibernate-validator.version>6.1.2.Final</hibernate-validator.version>
         <swagger2.version>2.9.2</swagger2.version>
         <swagger2-bootstrap-ui.version>1.9.6</swagger2-bootstrap-ui.version>
+        <druid.version>1.2.6</druid.version>
+        <dynamic-datasource.version>3.4.1</dynamic-datasource.version>
     </properties>
 
     <dependencies>
@@ -47,11 +49,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus-boot.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
@@ -75,12 +73,26 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
-        <!-- mybatis plus代码生成工具 -->
+        <!-- mybatis plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus-boot.version}</version>
         </dependency>
+
+        <!-- 动态数据源 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+            <version>${dynamic-datasource.version}</version>
+        </dependency>
+
+        <!-- mybatis plus代码生成工具 -->
+        <!--<dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>3.4.1</version>
+        </dependency>-->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
@@ -119,14 +131,8 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.20</version>
+            <version>${druid.version}</version>
         </dependency>
-        <!--<dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.1.8</version>
-        </dependency>-->
-
 
         <!--@Slf4j自动化日志对象-log-->
         <dependency>

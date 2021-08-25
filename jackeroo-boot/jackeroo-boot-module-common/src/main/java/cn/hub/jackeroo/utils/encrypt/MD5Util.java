@@ -1,4 +1,4 @@
-package cn.hub.jackeroo.utils;
+package cn.hub.jackeroo.utils.encrypt;
 
 import java.security.MessageDigest;
 

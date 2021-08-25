@@ -1,22 +1,11 @@
 package cn.hub.jackeroo.utils;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 
-@Component
 public class Global {
-
-
-	public static String jdbcUrl;
-
-	@Value("${spring.datasource.url}")
-	public void setJdbcUrl(String jdbcUrl) {
-		Global.jdbcUrl = jdbcUrl;
-	}
 
 	/**
 	 * 获取工程路径
