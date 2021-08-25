@@ -47,17 +47,17 @@ request.interceptors.request.use(config => {
   if (token) {
     config.headers['Access-Token'] = token
   }
-  /* if(config.method == 'post' || config.method == 'post') {
+  if(config.method == 'post' || config.method == 'post') {
     this.$loading.show()
-  } */
+  }
   return config
 }, errorHandler)
 
 // response interceptor
 request.interceptors.response.use((response) => {
-  /* if(response.config.method == 'post' || response.config.method == 'post') {
+  if(response.config.method == 'post' || response.config.method == 'post') {
     this.$loading.hide()
-  } */
+  }
   if(response.config.responseType == 'json'){
     if(response.data.code === 401){
       // token失效退出登录

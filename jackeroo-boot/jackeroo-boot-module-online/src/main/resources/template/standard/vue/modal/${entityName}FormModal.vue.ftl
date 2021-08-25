@@ -20,7 +20,7 @@
             <a-form-model-item label="${column.dbFieldDesc}" prop="${column.entityFieldName}">
                 <#if column.formType == "input">
                     <#if column.entityFieldType == 'Integer' || column.entityFieldType == 'Double' || column.entityFieldType == 'Float' || column.entityFieldType == 'BigDecimal'>
-              <a-input-number v-model="form.${column.entityFieldName}" placeholder="请输入${column.dbFieldDesc}" :precision="${column.dbFieldDecimal}" style="width: 100%;" :disabled="flag.view"></a-input-number>
+              <a-input-number v-model="form.${column.entityFieldName}" placeholder="请输入${column.dbFieldDesc}" precision="${column.dbFieldDecimal}" :disabled="flag.view"></a-input-number>
                     <#else>
               <a-input v-model="form.${column.entityFieldName}" placeholder="请输入${column.dbFieldDesc}" :disabled="flag.view"></a-input>
                     </#if>
@@ -71,17 +71,15 @@
 import { getAction, httpAction } from '@/api/manage'
 import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 <#if existJSelect || existJDictSelect>
-import { <#if existJSelect && existJDictSelect>JSelect, JDictSelect<#elseif existJSelect>JSelect<#elseif existJDictSelect>JDictSelect</#if> } from '@/components'
+import {<#if existJSelect>JSelect</#if><#if existJDictSelect>, JDictSelect</#if>} from '@/components'
 </#if>
 
 export default {
   mixins: [JackerooFormMixins],
     <#if existJSelect || existJDictSelect>
   components: {
-    <#if existJSelect && existJDictSelect>
-    JSelect,
-    JDictSelect<#elseif existJSelect>
-    JSelect<#elseif existJDictSelect>
+    <#if existJSelect>
+    JSelect</#if><#if existJDictSelect>,
     JDictSelect</#if>
   },
     </#if>
@@ -109,11 +107,7 @@ export default {
           {required: true, message: '请输入${column.dbFieldDesc}'},
                 </#if>
                 <#if column.formType == 'input' || column.formType == 'textArea'>
-                    <#if column.entityFieldType == 'Integer' || column.entityFieldType == 'Double' || column.entityFieldType == 'Float' || column.entityFieldType == 'BigDecimal'>
-          {max: ${column.dbFieldLength}, message: '范围需要在0到${column.dbFieldLength}之间', type: 'number'},
-                    <#else>
-          {max: ${column.dbFieldLength}, message: '长度需要在0到${column.dbFieldLength}之间'},
-                    </#if>
+          {max: ${column.dbFieldLength}, message: '长度需要在0到${column.dbFieldLength}之间'<#if column.entityFieldType == 'Integer' || column.entityFieldType == 'Double' || column.entityFieldType == 'Float' || column.entityFieldType == 'BigDecimal'>, type: 'number'</#if>},
                 </#if>
                 <#if column.formValidator?? && column.formValidator != ''>
                     <#if column.formValidator?contains('validUnique')>

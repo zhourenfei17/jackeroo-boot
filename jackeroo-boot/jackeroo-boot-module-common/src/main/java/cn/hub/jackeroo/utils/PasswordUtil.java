@@ -1,4 +1,4 @@
-package cn.hub.jackeroo.utils.encrypt;
+package cn.hub.jackeroo.utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

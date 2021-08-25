@@ -6,7 +6,6 @@ import ${scheme.packageName}.${module.code}.service.${table.className}Service;
 <#if scheme.enableSwagger == 1>
 import ${scheme.packageName}.utils.annotation.ApiModule;
 </#if>
-import cn.hub.jackeroo.utils.easyexcel.model.ExportExcelWriteBuilder;
 <#if scheme.enableServerValid == 1>
     <#if existUnique>
 import ${scheme.packageName}.utils.validator.annotation.ValidatedUnique;
@@ -151,7 +150,7 @@ public class ${table.className}Controller extends BaseController {
 
     /**
      * 批量删除${table.comment}
-     * @param ids
+     * @param id
      * @return
      */
     @DeleteMapping("deleteBatch")

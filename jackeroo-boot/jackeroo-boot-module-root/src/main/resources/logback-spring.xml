@@ -96,4 +96,5 @@
 
     <!-- FrameworkServlet日志-->
     <logger name="org.springframework" level="WARN" />
+    <logger name="cn.hub.jackeroo" level="DEBUG" />
 </configuration>
