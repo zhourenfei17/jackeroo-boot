@@ -5,6 +5,6 @@ mvnw*
 *iml
 logs
 .DS_Store
-*.yml
+#*.yml
 node_modules
 CodeGenerator.java
