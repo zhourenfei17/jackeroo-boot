@@ -1,0 +1,14 @@
+generate:
+  sourceRootPackage: src.main.java
+  encoding: utf-8
+  templateRootPath: classpath:/template/
+  javaType:
+    String: String
+    Long: Long
+    Integer: Integer
+    Double: Double
+    Float: Float
+    Boolean: Boolean
+    BigDecimal: java.math.BigDecimal
+    LocalDateTime: java.time.LocalDateTime
+    LocalDate: java.time.LocalDate

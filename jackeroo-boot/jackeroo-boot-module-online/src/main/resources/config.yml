@@ -1,0 +1,18 @@
+config:
+  # mysql字段类型对应java变量类型的mapping关系
+  # 其中int和bigint类型都是默认为有符号，如果mysql设为无符号，则需要分别对应Long和BigInteger
+  mysqlToJavaMapping:
+    varchar: String
+    char: Char
+    blob: byte[]
+    text: String
+    int: Integer
+    tinyint: Integer
+    smallint: Integer
+    mediumint: Integer
+    bigint: Long
+    float: Float
+    double: Double
+    decimal: BigDecimal
+    date: LocalDate
+    datetime: LocalDateTime

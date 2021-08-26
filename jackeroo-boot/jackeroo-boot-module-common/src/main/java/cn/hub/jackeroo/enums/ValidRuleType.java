@@ -17,7 +17,7 @@ public enum ValidRuleType {
     /**
      * 验证邮编
      */
-    VALID_POSTCDOE,
+    VALID_POSTCODE,
     /**
      * 验证身份证号
      */
@@ -25,5 +25,17 @@ public enum ValidRuleType {
     /**
      * 验证字母和下划线
      */
-    VALID_LETTER_AND_UNDERLINE
+    VALID_LETTER_AND_UNDERLINE,
+    /**
+     * 验证ip地址
+     */
+    VALID_IP,
+    /**
+     * 验证ip和域名
+     */
+    VALID_IP_HOST,
+    /**
+     * 验证url网址
+     */
+    VALID_URL
 }

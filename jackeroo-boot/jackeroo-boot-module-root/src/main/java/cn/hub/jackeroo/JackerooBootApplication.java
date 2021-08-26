@@ -20,6 +20,10 @@ import java.net.UnknownHostException;
 @ServletComponentScan("cn.hub.jackeroo.root.filter")
 public class JackerooBootApplication implements WebMvcConfigurer {
 
+    static {
+        System.setProperty("druid.mysql.usePingMethod","false");
+    }
+
 	public static void main(String[] args) throws UnknownHostException {
         ConfigurableApplicationContext application = SpringApplication.run(JackerooBootApplication.class, args);
         Environment env = application.getEnvironment();

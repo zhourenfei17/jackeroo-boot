@@ -8,7 +8,7 @@ import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.entity.SysUserRole;
 import cn.hub.jackeroo.system.mapper.SysUserMapper;
 import cn.hub.jackeroo.utils.Assert;
-import cn.hub.jackeroo.utils.PasswordUtil;
+import cn.hub.jackeroo.utils.encrypt.PasswordUtil;
 import cn.hub.jackeroo.utils.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;

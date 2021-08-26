@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hub.jackeroo.online.mapper.OnlineDatasourceMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="baseColumns">
+        a.id as "id",
+        a.type as "type",
+        a.ip as "ip",
+        a.port as "port",
+        a.user as "user",
+        a.slat as "slat",
+        a.password as "password",
+        a.database_name as "databaseName",
+        a.create_by as "createBy",
+        a.create_time as "createTime",
+        a.update_by as "updateBy",
+        a.update_time as "updateTime"
+    </sql>
+
+    <select id="findList" resultType="cn.hub.jackeroo.online.entity.OnlineDatasource">
+        select
+        <include refid="baseColumns"/>
+        from online_datasource a
+        <where>
+            <if test="type != null and type != ''">
+                and a.type = #{type}
+            </if>
+            <if test="databaseName != null and databaseName != ''">
+                and a.database_name like CONCAT('%', #{databaseName}, '%')
+            </if>
+        </where>
+        <choose>
+            <when test="orderBy != null and orderBy != ''">
+                order by a.${orderBy}
+            </when>
+            <otherwise>
+                order by a.create_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

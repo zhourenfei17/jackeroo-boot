@@ -1,6 +1,6 @@
 package cn.hub.jackeroo.root.shiro;
 
-import cn.hub.jackeroo.utils.PasswordUtil;
+import cn.hub.jackeroo.utils.encrypt.PasswordUtil;
 import cn.hub.jackeroo.vo.LoginUser;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
