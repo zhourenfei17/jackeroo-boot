@@ -5,6 +5,7 @@
     <!-- 通用查询结果列 -->
     <sql id="baseColumns">
         a.id as "id",
+        a.name as "name",
         a.type as "type",
         a.ip as "ip",
         a.port as "port",

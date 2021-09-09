@@ -48,6 +48,14 @@ public class OnlineDatasource extends BaseEntity<OnlineDatasource> {
     private Long id;
 
     /**
+     * 数据源名称
+     */
+    @NotBlank
+    @Length(max = 50)
+    @ApiModelProperty(value = "数据源名称")
+    private String name;
+
+    /**
      * 数据库类型
      */
     @NotBlank

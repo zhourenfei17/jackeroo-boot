@@ -67,7 +67,7 @@ public class OnlineTableController extends BaseController {
     @DeleteMapping("delete")
     @ApiOperation("删除业务表配置")
     @RequiresPermissions("online:generate:delete")
-    public Result delete(@Validated Id id){
+    public Result delete(@Validated @RequestBody Id id){
         service.delete(id.getId());
 
         return ok();

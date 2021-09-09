@@ -83,6 +83,7 @@ public class CustomizeModelAttributeParameterExpander extends ModelAttributePara
         this.enumTypeDeterminer = enumTypeDeterminer;
     }
 
+    @Override
     public List<Parameter> expand(ExpansionContext context) {
         List<Parameter> parameters = newArrayList();
         Set<PropertyDescriptor> propertyDescriptors = propertyDescriptors(context.getParamType().getErasedType());

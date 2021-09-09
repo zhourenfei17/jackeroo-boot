@@ -8,6 +8,8 @@ import cn.hub.jackeroo.system.entity.SysUser;
 import cn.hub.jackeroo.system.entity.SysUserRole;
 import cn.hub.jackeroo.system.mapper.SysUserMapper;
 import cn.hub.jackeroo.utils.Assert;
+import cn.hub.jackeroo.utils.UserUtils;
+import cn.hub.jackeroo.utils.encrypt.MD5Util;
 import cn.hub.jackeroo.utils.encrypt.PasswordUtil;
 import cn.hub.jackeroo.utils.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -152,10 +154,24 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
             Assert.notEmpty(sysUser.getPhone(), "重置密码失败");
 
             String passwordEncode = PasswordUtil.encrypt(sysUser.getAccount(),
-                    sysUser.getPhone().substring(sysUser.getPhone().length() - 6), sysUser.getSalt());
+                    MD5Util.encrypt(sysUser.getPhone().substring(sysUser.getPhone().length() - 6)), sysUser.getSalt());
             sysUser.setPassword(passwordEncode);
 
             super.updateById(sysUser);
+        }
+    }
+
+    /**
+     * 修改当前登录用户密码
+     * @param pwd
+     */
+    public void changeLoginUserPwd(String pwd){
+        SysUser user = getById(UserUtils.getUser().getId());
+        if(user != null){
+            String passwordEncode = PasswordUtil.encrypt(user.getAccount(), pwd, user.getSalt());
+            user.setPassword(passwordEncode);
+
+            super.updateById(user);
         }
     }
 }

@@ -126,7 +126,7 @@ public class SysMenuPermissionConfigController extends BaseController {
     @DeleteMapping("delete")
     @ApiOperation(value = "删除菜单权限配置", response = Result.class)
     @RequiresPermissions("system:permission:delete")
-    public Result delete(@Validated Id id){
+    public Result delete(@Validated @RequestBody Id id){
         permissionConfigService.removeById(id.getId());
 
         return ok();

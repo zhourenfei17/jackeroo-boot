@@ -91,7 +91,9 @@
         <appender-ref ref="ERROR" />
         <appender-ref ref="ALL" />
         <!-- 生产环境将请sout去掉 -->
-        <appender-ref ref="SOUT" />
+        <springProfile name="dev">
+            <appender-ref ref="SOUT" />
+        </springProfile>
     </root>
 
     <!-- FrameworkServlet日志-->

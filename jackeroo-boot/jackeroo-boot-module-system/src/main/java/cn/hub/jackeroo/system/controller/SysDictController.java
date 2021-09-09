@@ -209,7 +209,7 @@ public class SysDictController extends BaseController {
     @DeleteMapping("deleteDict")
     @ApiOperation("删除字典信息")
     @RequiresPermissions("system:dict:delete")
-    public Result deleteDict(@Validated Id id){
+    public Result deleteDict(@Validated @RequestBody Id id){
         service.delete(id.getId());
         return ok();
     }
@@ -235,7 +235,7 @@ public class SysDictController extends BaseController {
     @DeleteMapping("deleteDictItem")
     @ApiOperation("删除字典项信息")
     @RequiresPermissions("system:dict:delete")
-    public Result deleteDictItem(@Validated Id id){
+    public Result deleteDictItem(@Validated @RequestBody Id id){
         service.delete(id.getId());
         return ok();
     }

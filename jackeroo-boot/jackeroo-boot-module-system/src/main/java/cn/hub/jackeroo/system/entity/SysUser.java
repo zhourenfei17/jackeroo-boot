@@ -50,11 +50,11 @@ public class SysUser extends BaseEntity<SysUser> {
     @ApiModelProperty(value = "用户id")
     private Long id;
     /**
-     * 头像地址
+     * 头像
      */
     @Length(max = 255)
-    @ApiModelProperty("头像地址")
-    private String imgUrl;
+    @ApiModelProperty(value = "头像")
+    private String avatar;
     /**
      * 姓名
      */
@@ -77,7 +77,7 @@ public class SysUser extends BaseEntity<SysUser> {
      */
     @Unique(name = "登录账号", groups = {Insert.class})
     @NotBlank
-    @Length(min = 5, max = 30)
+    @Length(min = 1, max = 30)
     @ApiModelProperty(value = "登录账号")
     @ExcelField(title = "登录账号", sort = 2)
     private String account;
@@ -97,12 +97,6 @@ public class SysUser extends BaseEntity<SysUser> {
     @Null
     @ApiModelProperty(hidden = true)
     private String salt;
-
-    /**
-     * 头像
-     */
-    @ApiModelProperty(value = "头像")
-    private String avatar;
 
     /**
      * 性别

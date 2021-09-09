@@ -24,10 +24,6 @@ management:
       enabled: true
 
 spring:
-  boot:
-    admin:
-      client:
-        url: http:localhost:8081
   redis-template:
     # 配置RedisService中的RedisTemplate的默认过期时间，单位：s
     timeout: 3600
@@ -82,15 +78,15 @@ spring:
       datasource:
         # 默认数据源
         master:
-          url: jdbc:mysql://127.0.0.1:3306/jackeroo-boot?allowMultiQueries=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://47.98.33.15:3306/jackeroo-boot?allowMultiQueries=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=GMT%2B8
           username: root
-          password: 123456
+          password: away123!@#
           driver-class-name: com.mysql.jdbc.Driver
   redis:
-    database: 0
+    database: 2
     host: 127.0.0.1
     port: 6379
-    password : 123456
+    password : wcf123
     timeout: 2000
     lettuce:
       pool:
@@ -130,5 +126,5 @@ logging:
 jackeroo:
   path:
     #上传文件、图片本地根路径
-    upload: /data
+    upload: /Users/wangchengfei/develop/idea/data
 

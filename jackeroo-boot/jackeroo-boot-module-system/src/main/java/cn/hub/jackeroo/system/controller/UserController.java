@@ -4,6 +4,7 @@ import cn.hub.jackeroo.constant.ParamType;
 import cn.hub.jackeroo.enums.ResultStatusCode;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.entity.SysUser;
+import cn.hub.jackeroo.system.query.ChangePwd;
 import cn.hub.jackeroo.system.service.SysMenuService;
 import cn.hub.jackeroo.system.service.SysUserService;
 import cn.hub.jackeroo.utils.ResultUtil;
@@ -130,12 +131,6 @@ public class UserController extends BaseController {
     @ValidatedUnique(clazz = SysUser.class, groups = Update.class)
     @RequiresPermissions("system:user:update")
     public Result update(@Validated(Update.class) @RequestBody SysUser user){
-        // SysUser sysUser = new SysUser();
-        // BeanUtils.copyProperties(user, sysUser);
-        // 编辑用户无法修改密码和账号
-        // sysUser.setPassword(null);
-        // sysUser.setAccount(null);
-        // userService.updateById(sysUser);
         userService.updateUser(user);
         return ok();
     }
@@ -148,7 +143,7 @@ public class UserController extends BaseController {
     @DeleteMapping("delete")
     @ApiOperation(value = "删除用户", notes = "根据id删除用户")
     @RequiresPermissions("system:user:delete")
-    public Result delete(@Validated Id id){
+    public Result delete(@Validated @RequestBody Id id){
         userService.removeById(id.getId());
 
         return ok();
@@ -232,6 +227,17 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:frozen")
     public Result unfrozenBatch(@Validated @RequestBody IdList ids){
         userService.unfrozenUser(ids.getIds().toArray(new String[]{}));
+        return ok();
+    }
+
+    /**
+     * 修改当前用户密码
+     * @return
+     */
+    @PutMapping("changeSelfPwd")
+    @ApiOperation("修改当前用户密码")
+    public Result changeSelfPwd(@Validated @RequestBody ChangePwd changePwd){
+        userService.changeLoginUserPwd(changePwd.getPwd());
         return ok();
     }
 

@@ -117,7 +117,6 @@ public class RoleController extends BaseController {
     @ValidatedUnique(clazz = SysRole.class)
     @RequiresPermissions("system:role:add")
     public Result save(@Validated(Insert.class) @RequestBody SysRole role){
-        // validService.validEntityUniqueField(role);
         roleService.save(role);
         return ok();
     }
@@ -132,7 +131,6 @@ public class RoleController extends BaseController {
     @ValidatedUnique(clazz = SysRole.class)
     @RequiresPermissions("system:role:update")
     public Result update(@Validated(Update.class) @RequestBody SysRole role){
-        // validService.validEntityUniqueField(role);
         roleService.updateById(role);
         return ok();
     }
@@ -145,7 +143,7 @@ public class RoleController extends BaseController {
     @DeleteMapping("delete")
     @ApiOperation(value = "删除角色", response = Result.class)
     @RequiresPermissions("system:role:delete")
-    public Result delete(@Validated Id id){
+    public Result delete(@Validated @RequestBody Id id){
         roleService.delete(id.getId());
 
         return ok();

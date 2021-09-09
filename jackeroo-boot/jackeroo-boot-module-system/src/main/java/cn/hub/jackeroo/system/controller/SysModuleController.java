@@ -125,7 +125,7 @@ public class SysModuleController extends BaseController {
     @DeleteMapping("delete")
     @ApiOperation("删除模块")
     @RequiresPermissions("system:module:delete")
-    public Result delete(@Validated Id id){
+    public Result delete(@Validated @RequestBody Id id){
         service.removeById(id.getId());
         return ok();
     }

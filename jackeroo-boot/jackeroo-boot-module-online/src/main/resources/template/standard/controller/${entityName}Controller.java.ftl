@@ -144,7 +144,7 @@ public class ${table.className}Controller extends BaseController {
 <#if scheme.enableSecurity == 1>
     @RequiresPermissions("${module.code}:${scheme.securitySign}:delete")
 </#if>
-    public Result delete(<#if scheme.enableServerValid == 1>@Validated </#if>Id id){
+    public Result delete(<#if scheme.enableServerValid == 1>@Validated </#if>@RequestBody Id id){
         service.removeById(id.getId());
         return ok();
     }

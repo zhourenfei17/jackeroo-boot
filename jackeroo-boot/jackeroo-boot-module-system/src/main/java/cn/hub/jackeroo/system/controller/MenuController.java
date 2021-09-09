@@ -136,7 +136,7 @@ public class MenuController extends BaseController {
     @DeleteMapping("delete")
     @ApiOperation(value = "删除菜单")
     @RequiresPermissions("system:menu:delete")
-    public Result delete(@Validated Id id){
+    public Result delete(@Validated @RequestBody Id id){
         menuService.removeById(id.getId());
 
         return ok();

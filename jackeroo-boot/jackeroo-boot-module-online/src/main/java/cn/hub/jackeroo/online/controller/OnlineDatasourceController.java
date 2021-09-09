@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * <p>
@@ -61,6 +62,16 @@ public class OnlineDatasourceController extends BaseController {
     @RequiresPermissions("online:datasource:view")
     public Result<IPage<OnlineDatasource>> list(OnlineDatasource onlineDatasource, @Validated PageParam pageParam){
         return ok(service.findPage(onlineDatasource, pageParam));
+    }
+
+    /**
+     * 数据源列表
+     * @return
+     */
+    @GetMapping("allList")
+    @ApiOperation("数据源列表")
+    public Result<List<OnlineDatasource>> allList(){
+        return ok(service.list());
     }
 
     /**
@@ -111,7 +122,7 @@ public class OnlineDatasourceController extends BaseController {
     @DeleteMapping("delete")
     @ApiOperation("删除数据源配置")
     @RequiresPermissions("online:datasource:delete")
-    public Result delete(@Validated Id id){
+    public Result delete(@Validated @RequestBody Id id){
         service.removeById(id.getId());
         return ok();
     }
