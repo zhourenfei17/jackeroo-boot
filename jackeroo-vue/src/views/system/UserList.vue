@@ -259,7 +259,7 @@ export default {
         content: "确认删除用户【" + record.name + "】吗？",
         onOk: () => {
           this.$loading.show()
-          putAction(this.url.delete, {id: record.id}).then(res => {
+          deleteAction(this.url.delete, {id: record.id}).then(res => {
             if(!res.code){
               this.$message.success('操作成功')
               this.refreshData()

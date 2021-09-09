@@ -15,6 +15,11 @@
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
         <a-row :gutter="formGutter"> 
           <a-col :span="rowSpan">
+            <a-form-model-item label="数据源名称" prop="ip">
+              <a-input v-model="form.name" placeholder="请输入数据源名称" :disabled="flag.view"></a-input>
+            </a-form-model-item>
+          </a-col> 
+          <a-col :span="rowSpan">
             <a-form-model-item label="数据库类型" prop="type">
               <j-dict-select
                 v-model="form.type"
@@ -80,6 +85,7 @@ export default {
       formCol: 1,
       form: {
         id: undefined,
+        name: undefined,
         type: undefined,
         ip: undefined,
         port: undefined,
@@ -97,6 +103,10 @@ export default {
   computed: {
     rules() {
       const rules = {
+        name: [
+          {required: true, message: '请输入数据源名称'},
+          {max: 50, message: '长度需要在0到50之间'}
+        ],
         type: [
           {required: true, message: '请输入数据库类型'},
         ],

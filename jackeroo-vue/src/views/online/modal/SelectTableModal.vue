@@ -15,6 +15,13 @@
   >
     <search-card :enter="refreshData" :gutter="24">
       <a-col :md="9" :sm="12">
+        <a-form-item label="数据源">
+          <a-select v-model="queryParam.dataSourceName" placeholder="请选择数据源">
+            <a-select-option key="" value=""></a-select-option>
+          </a-select>
+        </a-form-item>
+      </a-col>
+      <a-col :md="9" :sm="12">
         <a-form-item label="表名">
           <a-input v-model="queryParam.tableName" placeholder="请输入表名"/>
         </a-form-item>
@@ -50,6 +57,7 @@
 import { STable, SearchCard } from '@/components'
 import {JackerooFormMixins} from '@/mixins/JackerooFormMixins'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
+import { getAction } from '@/api/manage';
 
 export default {
   components: {
@@ -78,8 +86,10 @@ export default {
           dataIndex: 'comment',
         }
       ],
+      dataSourceList: [],
       url: {
-        list: '/online/generate/findTableListFromDataSource'
+        list: '/online/generate/findTableListFromDataSource',
+        dataSourceList: '/online/datasource/allList'
       }
     }
   },
@@ -93,6 +103,11 @@ export default {
     }
   },
   methods: {
+    initDatasourc(){
+      getAction(this.url.dataSourceList).then(res => {
+        this.dataSourceList = [{id: -1}]
+      })
+    },
     add(){
       this.loading = false
       this.selectedRowKeys = []

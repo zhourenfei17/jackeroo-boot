@@ -17,8 +17,8 @@
       <a-form-model ref="formModel" :model="form" :rules="rules" v-bind="layout">
         <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
-            <a-form-model-item label="头像" prop="imgUrl">
-              <upload-image v-model="form.imgUrl" :disabled="flag.view"></upload-image>
+            <a-form-model-item label="头像" prop="avatar">
+              <upload-image v-model="form.avatar" :disabled="flag.view"></upload-image>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -108,14 +108,14 @@ export default {
         telephone: undefined,
         birthday: undefined,
         roleId: undefined,
-        imgUrl: undefined
+        avatar: undefined
       },
       imageUrl: null,
       headers: {
         'Content-Type': 'multipart/form-data',  // 文件上传
       },
       rules: {
-        imgUrl:[],
+        avatar:[],
         name: [
           {required: true, message: '请输入姓名'},
           {max: 20, message: '长度需要在0和20之间'}
@@ -123,7 +123,7 @@ export default {
         account: [
           {required: true, message: '请输入账号'},
           {validator: this.validUnique, message: '该账号已存在', trigger: 'blur'},
-          {min: 5, max: 30, message: '长度需要在5和30之间'}
+          {min: 1, max: 30, message: '长度需要在1和30之间'}
         ],
         code: [{max: 60, message: '长度需要在0到60之间'}],
         password: [{required: true, message: '请输入密码'}],

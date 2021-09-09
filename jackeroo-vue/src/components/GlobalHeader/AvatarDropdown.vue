@@ -1,31 +1,36 @@
 <template>
-  <a-dropdown v-if="currentUser && currentUser.name" placement="bottomRight">
-    <span class="ant-pro-account-avatar">
-      <a-avatar size="small" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" class="antd-pro-global-header-index-avatar" />
-      <span>{{ currentUser.name }}</span>
-    </span>
-    <template v-slot:overlay>
-      <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
-        <a-menu-item v-if="menu" key="center" @click="handleToCenter">
-          <a-icon type="user" />
-          个人中心
-        </a-menu-item>
-        <a-menu-item v-if="menu" key="settings" @click="handleToSettings">
-          <a-icon type="setting" />
-          个人设置
-        </a-menu-item>
-        <a-menu-item v-if="menu" key="globalSetting" @click="handleGlobalSetting">
-          <a-icon type="global" />
-          系统设置
-        </a-menu-item>
-        <a-menu-divider v-if="menu" />
-        <a-menu-item key="logout" @click="handleLogout">
-          <a-icon type="logout" />
-          退出登录
-        </a-menu-item>
-      </a-menu>
-    </template>
-  </a-dropdown>
+  <div v-if="nickname">
+    <change-pwd ref="changePwd"></change-pwd>
+    <a-dropdown  placement="bottomRight">
+      <span class="ant-pro-account-avatar">
+        <a-avatar v-if="avatar" size="small" :src="avatar" class="antd-pro-global-header-index-avatar" />
+        <img v-else src="~@/assets/avatar.png" class="jackeroo-header-default-avatar">
+        <span>{{ nickname }}</span>
+      </span>
+      
+      <template v-slot:overlay>
+        <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
+          <a-menu-item v-if="menu" key="center" @click="handleToCenter">
+            <a-icon type="user" />
+            个人中心
+          </a-menu-item>
+          <a-menu-item v-if="menu" key="key" @click="handleChangePwd">
+            <a-icon type="key" />
+            修改密码
+          </a-menu-item>
+          <a-menu-item v-if="menu" key="globalSetting" @click="handleGlobalSetting">
+            <a-icon type="global" />
+            系统设置
+          </a-menu-item>
+          <a-menu-divider v-if="menu" />
+          <a-menu-item key="logout" @click="handleLogout">
+            <a-icon type="logout" />
+            退出登录
+          </a-menu-item>
+        </a-menu>
+      </template>
+    </a-dropdown>
+  </div>
   <span v-else>
     <a-spin size="small" :style="{ marginLeft: 8, marginRight: 8 }" />
   </span>
@@ -33,8 +38,8 @@
 
 <script>
 import { Modal } from 'ant-design-vue'
-import { mapActions } from 'vuex'
-import { logout } from '../../api/login'
+import { mapActions, mapGetters } from 'vuex'
+import ChangePwd from './ChangePwd'
 
 export default {
   name: 'AvatarDropdown',
@@ -48,13 +53,19 @@ export default {
       default: true
     }
   },
+  components: {
+    ChangePwd
+  },
+  computed: {
+    ...mapGetters(['nickname', 'avatar'])
+  },
   methods: {
     ...mapActions(['Login', 'Logout']),
     handleToCenter () {
       this.$router.push({ path: '/account/center' })
     },
-    handleToSettings () {
-      this.$router.push({ path: '/account/settings' })
+    handleChangePwd() {
+      this.$refs.changePwd.show()
     },
     handleGlobalSetting(){
       this.$emit('globalSetting')
@@ -84,5 +95,12 @@ export default {
   /deep/ .ant-dropdown-menu-item {
     min-width: 160px;
   }
+}
+
+.jackeroo-header-default-avatar{
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 8px;
 }
 </style>
