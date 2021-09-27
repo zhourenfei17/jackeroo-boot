@@ -85,41 +85,42 @@ export default {
       columns: [
         {
           title: '#',
+          width: 60,
           customRender: (text, record, index) => {
             return index + 1
           }
         },
         {
+          title: '数据源名称',
+          dataIndex: 'name'
+        },
+        {
           title: '数据库类型',
-          dataIndex: 'type',
+          dataIndex: 'driverClassName',
           customRender: (text) => {
             return this.loadDictText(text, this.dictOptions.type)
           }
         },
         {
-          title: 'ip地址',
-          dataIndex: 'ip',
-        },
-        {
-          title: '端口',
-          dataIndex: 'port',
+          title: '连接地址',
+          dataIndex: 'url',
+          width: 380,
+          ellipsis: true,
         },
         {
           title: '用户名',
-          dataIndex: 'user',
-        },
-        {
-          title: '数据库名',
-          dataIndex: 'databaseName',
+          dataIndex: 'username',
         },
         {
           title: '更新时间',
           dataIndex: 'updateTime',
+          width: 180,
           sort: true,
         },
         {
           title: '操作',
           dataIndex: 'action',
+          width: 220,
           scopedSlots: { customRender: 'action' }
         }
       ],

@@ -1,4 +1,4 @@
-import { getAction, deleteAction } from '@/api/manage'
+import { getAction, deleteAction, getFile } from '@/api/manage'
 import {loadDictItemByCodeList} from '@/api/system';
 
 export const JackerooListMixins = {

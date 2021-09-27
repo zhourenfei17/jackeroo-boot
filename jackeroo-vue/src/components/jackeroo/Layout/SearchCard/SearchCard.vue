@@ -8,14 +8,14 @@
             <slot name="more" v-if="$slots.more && advanced"></slot>
 
             <a-col v-bind="advanced ? slave : master" v-if="$slots.operate">
-              <span class="table-page-search-submitButtons" :style="{ float: 'right', overflow: 'hidden' } || {} ">
+              <div class="table-page-search-submitButtons">
                 <slot name="operate"></slot>
 
-                <a @click="toggleAdvanced" style="margin-left: 8px" v-if="$slots.more">
+                <a @click="toggleAdvanced" v-if="$slots.more">
                   {{ advanced ? '收起' : '展开' }}
                   <a-icon :type="advanced ? 'up' : 'down'"/>
                 </a>
-              </span>
+              </div>
             </a-col>
           </a-row>
         </a-form>

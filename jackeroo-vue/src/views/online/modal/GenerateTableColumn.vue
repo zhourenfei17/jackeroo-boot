@@ -276,15 +276,15 @@ export default {
         get: '/online/table/',
         save: '/online/generate/save',
       },
-      tableName: ''
+      tableName: '',
     }
   },
   methods: {
-    add(tableName){
+    add(tableName, dataSource){
       this.tableName = tableName
       this.visible = true
 
-      getAction(this.url.detail, {tableName: tableName}).then(result => {
+      getAction(this.url.detail, {tableName: tableName, dataSource: dataSource}).then(result => {
         if(!result.code){
           this.copyProperties(result.data.table, this.formTable)
           this.copyProperties(result.data.scheme, this.formScheme)

@@ -1,6 +1,6 @@
 <template>
   <a-select v-if="type == 'select'" :value="realValue" v-bind="$attrs" :mode="multi ? 'multiple' : 'default'"
-    @change="handleSelectChange" :getPopupContainer = "(target) => target.parentNode">
+    @change="handleSelectChange" :getPopupContainer = "(target) => target.parentNode" v-on="$listeners">
     <a-select-option :value="undefined" class="unselect" style="color:#ccc;">
       <span style="display: inline-block;width: 100%;color: rgb(197, 197, 197);">
         请选择
@@ -162,7 +162,7 @@ export default {
       })
     },
     // select
-    handleSelectChange(value){
+    handleSelectChange(value, option){
       if(this.multi){
         // 如果是多选，根据value的数据类型返回对应的数据类型格式，string类型的多个值用,隔开
         // 如果传入的值是null或者undefined，无法判断其类型，则根据multiArray属性来返回对应类型的结果值
@@ -183,6 +183,9 @@ export default {
         }
       }else{
         this.$emit('input', this.transformResultValue(value))
+      }
+      if(this.$listeners.change){
+        this.$listeners.change(value, option)
       }
     },
     handleRadioChange(e){

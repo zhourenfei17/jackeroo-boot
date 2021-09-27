@@ -20,11 +20,13 @@
         <a-row :gutter="formGutter">
           <a-col :span="rowSpan">
             <a-form-model-item label="排序字段" prop="sortColumn">
-              <a-input v-model="form.sortColumn" placeholder="请输入排序字段" style="width:90%"></a-input>
+              <div class="jackeroo-form-item-tips">
+                <a-input v-model="form.sortColumn" placeholder="请输入排序字段"></a-input>
 
-              <a-tooltip title="支持【数据库字段】或者【java实体类字段】">
-                <a-icon type="question-circle" style="margin-left:10px;"></a-icon>
-              </a-tooltip>
+                <a-tooltip title="支持【数据库字段】或者【java实体类字段】">
+                  <a-icon type="question-circle" style="margin-left:10px;"></a-icon>
+                </a-tooltip>
+              </div>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -34,19 +36,23 @@
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="主键策略" prop="idStrategy">
-              <j-dict-select v-model="form.idStrategy" dictCode="GEN_ID_STRATEGY" placeholder="请选择主键策略" style="width:90%"></j-dict-select>
-              <a-tooltip title="请参考MyBatis-Plus的IdType可选值的解释">
-                <a-icon type="question-circle" style="margin-left:10px;"></a-icon>
-              </a-tooltip>
+              <div class="jackeroo-form-item-tips">
+                <j-dict-select v-model="form.idStrategy" dictCode="GEN_ID_STRATEGY" placeholder="请选择主键策略"></j-dict-select>
+                <a-tooltip title="请参考MyBatis-Plus的IdType可选值的解释">
+                  <a-icon type="question-circle" style="margin-left:10px;"></a-icon>
+                </a-tooltip>
+              </div>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
             <a-form-model-item label="逻辑删字段" prop="logicColumn">
-              <a-input v-model="form.logicColumn" placeholder="请输入逻辑删字段" style="width: 90%;"></a-input>
+              <div class="jackeroo-form-item-tips">
+                <a-input v-model="form.logicColumn" placeholder="请输入逻辑删字段"></a-input>
 
-              <a-tooltip title="如果新建选择的数据库表包含该字段，则默认删除策略为逻辑删，支持【数据库字段】或者【java实体类字段】">
-                <a-icon type="question-circle" style="margin-left:10px;"></a-icon>
-              </a-tooltip>
+                <a-tooltip title="如果新建选择的数据库表包含该字段，则默认删除策略为逻辑删，支持【数据库字段】或者【java实体类字段】">
+                  <a-icon type="question-circle" style="margin-left:10px;"></a-icon>
+                </a-tooltip>
+              </div>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -57,6 +63,19 @@
           <a-col :span="rowSpan">
             <a-form-model-item label="表单风格" prop="formStyle">
               <j-dict-select v-model="form.formStyle" dictCode="GEN_FORM_STYLE" placeholder="请选择表单风格"></j-dict-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="rowSpan">
+            <a-form-model-item label="忽略表前缀"> 
+              <div class="jackeroo-form-item-tips">
+                <a-select v-model="form.prefix" mode="tags" placeholder="请选择忽略表前缀">
+                  <a-select-option value="t_">t_</a-select-option>
+                </a-select>
+
+                <a-tooltip title="设置忽略的表前缀后，生成的实体类名将忽略该前缀">
+                  <a-icon type="question-circle" style="margin-left:10px;"></a-icon>
+                </a-tooltip>
+              </div>
             </a-form-model-item>
           </a-col>
           <a-col :span="rowSpan">
@@ -156,7 +175,9 @@ export default {
         enablePagination: undefined,
         enableSwagger: undefined,
         enableServerValid: undefined,
-        enableSecurity: undefined
+        enableSecurity: undefined,
+        ignorePrefix: undefined,
+        prefix: undefined
       },
       columns:[
         {
@@ -271,7 +292,8 @@ export default {
         enableServerValid: [
         ],
         enableSecurity:[
-        ]
+        ],
+        prefix: []
       }
     }
   },
@@ -280,7 +302,11 @@ export default {
       getAction(this.url.getConfig).then(result => {
         if(!result.code){
           if(result.data){
+            if(result.data.ignorePrefix){
+              result.data.prefix = result.data.ignorePrefix.split(',')
+            }
             this.copyProperties(result.data, this.form)
+            
             if(result.data.columnConfig){
               this.dataSource = JSON.parse(result.data.columnConfig)
             }
@@ -318,6 +344,9 @@ export default {
       this.$refs.formModel.validate((success) => {
         if(success){
           const formData = {...this.form}
+          if(formData.prefix && formData.prefix.length > 0){
+            formData.ignorePrefix = formData.prefix.join(',')
+          }
 
           this.$refs.editTable.getValues(data => {
             if(data){
@@ -347,3 +376,10 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.jackeroo-form-item-tips{
+  display: flex;
+  align-items: center;
+}
+</style>

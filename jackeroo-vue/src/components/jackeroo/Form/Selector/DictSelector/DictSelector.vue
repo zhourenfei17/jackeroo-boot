@@ -1,6 +1,6 @@
 <template>
   <j-select v-bind="$attrs" :value="value" :url="url.getDictItemByDictCode" :param="{dictCode: dictCode}" 
-    valueField="value" textField="label" @input="handleChange" :type="type" :allowClear="allowClear">
+    valueField="value" textField="label" @input="handleChange" :type="type" :allowClear="allowClear" v-on="$listeners">
 
   </j-select>
 </template>

@@ -35,8 +35,8 @@
       </template>
       
       <template slot="operate">
-          <a-button type="primary" icon="search" @click="refreshData(true)">查询</a-button>
-          <a-button style="margin-left: 8px" icon="reload" @click="reset">重置</a-button>
+        <a-button type="primary" icon="search" @click="refreshData(true)">查询</a-button>
+        <a-button style="margin-left: 8px" icon="reload" @click="reset">重置</a-button>
       </template>
     </search-card>
 
@@ -317,7 +317,46 @@ export default {
           })
         }
       });
-    }
+    },
+    handleExport(){
+      if(!this.url.exportExcel){
+        this.$message.warning('请设置url.exportExcel属性')
+        return
+      }
+      this.$loading.show()
+      getFile(this.url.exportExcel).then(result => {
+        if(result.data.type == 'application/json'){
+          let reader = new FileReader()
+          reader.readAsText(result.data, 'utf-8')
+          reader.onload = () => {
+            let data = JSON.parse(reader.result)
+
+            if(data.code){
+              this.$message.error('导出excel失败')
+              return
+            }
+          }
+          return
+        }
+        
+        let fileName = decodeURI(result.headers['content-disposition'].substring(result.headers['content-disposition'].indexOf('=') + 1))
+        if (typeof window.navigator.msSaveBlob !== 'undefined') {
+          window.navigator.msSaveBlob(new Blob([result.data],{type: 'application/vnd.ms-excel'}), fileName)
+        }else{
+          let url = window.URL.createObjectURL(new Blob([result.data],{type: 'application/vnd.ms-excel'}))
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          link.setAttribute('download', fileName)
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link); //下载完成移除元素
+          window.URL.revokeObjectURL(url); //释放掉blob对象
+        }
+      }).finally(() => {
+        this.$loading.hide()
+      })
+    },
   }
 }
 </script>

@@ -145,8 +145,8 @@ export default {
       this.$refs.selectTableModal.visible = true
       this.$refs.selectTableModal.add()
     },
-    handleSelectOk(table){
-      this.$refs.generateTableColumn.add(table)
+    handleSelectOk({table, dataSource}){
+      this.$refs.generateTableColumn.add(table, dataSource)
     },
     handleGenerateOk(){
       this.refreshData()
