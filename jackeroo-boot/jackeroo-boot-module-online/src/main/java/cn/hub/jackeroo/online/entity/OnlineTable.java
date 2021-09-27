@@ -123,6 +123,12 @@ public class OnlineTable extends BaseEntity<OnlineTable> {
     private LocalDateTime updateTime;
 
     /**
+     * 数据源
+     */
+    @TableField(exist = false)
+    private String dataSource;
+
+    /**
      * 删除策略--物理删除
      */
     public static final int DEL_STRATEGY_DATABASE = 0;

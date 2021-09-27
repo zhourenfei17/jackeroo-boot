@@ -5,6 +5,7 @@ import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.system.entity.SysDict;
 import cn.hub.jackeroo.system.mapper.SysDictMapper;
 import cn.hub.jackeroo.vo.PageParam;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -61,6 +62,7 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
      * @param dictCode
      * @return
      */
+    @DS("master")
     @Cacheable(value = RedisKeyPrefix.CACHE_DICT, key = "#dictCode")
     public List<SysDict> findDictItemByDictCode(String dictCode){
         LambdaQueryWrapper<SysDict> query = new LambdaQueryWrapper<>();

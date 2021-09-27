@@ -28,17 +28,23 @@ public class BodyFilter implements Filter {
 
     @Value("${server.servlet.context-path}")
     private String contentPath;
-    private static final String prefix = "/upload/";
+    /**
+     * 白名单
+     */
+    private static final String[] whiteList = {"/upload/"};
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        // 过滤掉上传文件等请求
-        if(request.getRequestURI().startsWith(contentPath + prefix)){
-            chain.doFilter(req, res);
-            return;
+        // 过滤掉白名单中的链接请求
+        for (String str : whiteList) {
+            if(request.getRequestURI().startsWith(contentPath + str)){
+                chain.doFilter(req, res);
+                return;
+            }
         }
+
         if(request.getMethod().equalsIgnoreCase(HttpMethod.POST.name()) || request.getMethod().equalsIgnoreCase(HttpMethod.PUT.name())
             || request.getMethod().equalsIgnoreCase(HttpMethod.DELETE.name())){
             HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);

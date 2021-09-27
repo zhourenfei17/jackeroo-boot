@@ -9,7 +9,6 @@
                 c.COMMENTS AS comment
             FROM user_tables t, user_tab_comments c
             WHERE t.table_name = c.table_name
-            and t.TABLE_NAME not in (select a.table_name from online_table a)
             <if test="tableName != null and tableName != ''">
                 AND t.TABLE_NAME = #{tableName}
             </if>
@@ -19,7 +18,6 @@
             SELECT t.name AS tableName,b.value AS comments
             FROM sys.objects t LEFT JOIN sys.extended_properties b ON b.major_id=t.object_id and b.minor_id=0 and b.class=1 AND b.name='MS_Description'
             WHERE t.type='U'
-            and t.name not in (select a.table_name from online_table a)
             <if test="tableName != null and tableName != ''">
                 AND t.tableName = #{tableName}
             </if>
@@ -29,7 +27,6 @@
             SELECT t.table_name AS tableName,t.TABLE_COMMENT AS comment
             FROM information_schema.`TABLES` t
             WHERE t.TABLE_SCHEMA = (select database())
-            and t.table_name not in (select a.table_name from online_table a)
             <if test="tableName != null and tableName != ''">
                 AND t.TABLE_NAME like CONCAT('%', #{tableName}, '%')
             </if>

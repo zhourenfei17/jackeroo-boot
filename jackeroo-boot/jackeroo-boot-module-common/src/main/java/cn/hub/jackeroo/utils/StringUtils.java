@@ -107,6 +107,24 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
+     * 删除前缀
+     * @param str
+     * @param prefix
+     * @return
+     */
+    public static String removePrefix(String str, String[] prefix){
+	    if(StringUtils.isBlank(str) || prefix == null || prefix.length == 0){
+	        return str;
+        }
+        for (String s : prefix) {
+            if(str.startsWith(s)){
+                return str.replaceFirst(s, "");
+            }
+        }
+        return str;
+    }
+
+    /**
      * 随机数
      * @param place 定义随机数的位数
      */

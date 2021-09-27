@@ -1,8 +1,10 @@
 package cn.hub.jackeroo.online.controller;
 
+import cn.hub.jackeroo.online.entity.OnlineDatasource;
 import cn.hub.jackeroo.online.entity.OnlineTable;
 import cn.hub.jackeroo.online.param.GenerateCodeParam;
 import cn.hub.jackeroo.online.param.GenerateTableDetail;
+import cn.hub.jackeroo.online.service.OnlineDatasourceService;
 import cn.hub.jackeroo.online.service.OnlineGenerateService;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
@@ -37,6 +39,8 @@ public class OnlineGenerateController extends BaseController {
 
     @Autowired
     private OnlineGenerateService service;
+    @Autowired
+    private OnlineDatasourceService datasourceService;
 
     /**
      * 获取数据库业务表列表
@@ -46,8 +50,9 @@ public class OnlineGenerateController extends BaseController {
      */
     @GetMapping("findTableListFromDataSource")
     @ApiOperation("获取数据库业务表列表")
-    public Result<IPage<OnlineTable>> findTableListFromDataSource(OnlineTable onlineTable, @Validated PageParam pageParam){
-        return ok(service.findTableListFromDataSoure(onlineTable, pageParam));
+    public Result<IPage<OnlineTable>> findTableListFromDataSource(OnlineTable onlineTable, @Validated PageParam pageParam, @RequestParam String dataSourceName){
+        String dataSource = datasourceService.getDataSourceName(dataSourceName);
+        return ok(service.findTableListFromDataSource(onlineTable, pageParam, dataSource));
     }
 
     /**
@@ -55,11 +60,11 @@ public class OnlineGenerateController extends BaseController {
      * @param tableName
      * @return
      */
-    @GetMapping("findTableColumnList")
+    /*@GetMapping("findTableColumnList")
     @ApiOperation("获取数据库业务表字段列表")
     public Result findTableColumnList(String tableName){
-        return ok(service.findTableColumnList(tableName));
-    }
+        return ok(service.findTableColumnList(tableName, "0"));
+    }*/
 
     /**
      * 获取数据库业务表详细内容
@@ -68,8 +73,8 @@ public class OnlineGenerateController extends BaseController {
      */
     @GetMapping("findTableDetailInfo")
     @ApiOperation("获取数据库业务表详细内容")
-    public Result findTableDetailInfo(String tableName){
-        return ok(service.findTableDetailInfo(tableName));
+    public Result findTableDetailInfo(String tableName, String dataSource){
+        return ok(service.findTableDetailInfo(tableName, dataSource));
     }
 
     /**

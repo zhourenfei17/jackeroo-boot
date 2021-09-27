@@ -6,6 +6,7 @@ import cn.hub.jackeroo.online.entity.OnlineTable;
 import cn.hub.jackeroo.online.entity.OnlineTableField;
 import cn.hub.jackeroo.online.mapper.OnlineTableMapper;
 import cn.hub.jackeroo.vo.PageParam;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,6 +24,7 @@ import java.util.Map;
  * @author alex
  * @date 2020/09/17
  */
+@DS("master")
 @Service
 public class OnlineTableService extends ServiceImpl<OnlineTableMapper, OnlineTable> {
     @Resource

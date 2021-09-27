@@ -6,13 +6,11 @@
     <sql id="baseColumns">
         a.id as "id",
         a.name as "name",
-        a.type as "type",
-        a.ip as "ip",
-        a.port as "port",
-        a.user as "user",
+        a.url as "url",
+        a.driver_class_name as "driverClassName",
+        a.username as "username",
         a.slat as "slat",
         a.password as "password",
-        a.database_name as "databaseName",
         a.create_by as "createBy",
         a.create_time as "createTime",
         a.update_by as "updateBy",
@@ -24,12 +22,7 @@
         <include refid="baseColumns"/>
         from online_datasource a
         <where>
-            <if test="type != null and type != ''">
-                and a.type = #{type}
-            </if>
-            <if test="databaseName != null and databaseName != ''">
-                and a.database_name like CONCAT('%', #{databaseName}, '%')
-            </if>
+
         </where>
         <choose>
             <when test="orderBy != null and orderBy != ''">

@@ -11,6 +11,7 @@
         a.logic_column as "logicColumn",
         a.package_name as "packageName",
         a.form_style as "formStyle",
+        a.ignore_prefix as "ignorePrefix",
         a.show_checkbox as "showCheckbox",
         a.enable_pagination as "enablePagination",
         a.enable_swagger as "enableSwagger",

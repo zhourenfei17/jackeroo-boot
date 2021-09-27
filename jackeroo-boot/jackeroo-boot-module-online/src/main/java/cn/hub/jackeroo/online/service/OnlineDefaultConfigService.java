@@ -3,6 +3,7 @@ package cn.hub.jackeroo.online.service;
 import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.online.entity.OnlineDefaultConfig;
 import cn.hub.jackeroo.online.mapper.OnlineDefaultConfigMapper;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 * @author jackeroo
 * @since 2020-10-26
 */
+@DS("master")
 @Service
 public class OnlineDefaultConfigService extends ServiceImpl<OnlineDefaultConfigMapper, OnlineDefaultConfig> {
     @Resource

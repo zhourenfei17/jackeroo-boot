@@ -3,6 +3,7 @@ package cn.hub.jackeroo.online.controller;
 import cn.hub.jackeroo.enums.ResultStatusCode;
 import cn.hub.jackeroo.online.entity.OnlineDatasource;
 import cn.hub.jackeroo.online.service.OnlineDatasourceService;
+import cn.hub.jackeroo.online.vo.DataSourceVo;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.utils.ResultUtil;
 import cn.hub.jackeroo.utils.StringUtils;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -157,5 +159,20 @@ public class OnlineDatasourceController extends BaseController {
         } catch (IOException e) {
             ResultUtil.writeJson(response, ResultStatusCode.EXCEL_EXPORT_ERROR);
         }
+    }
+
+    /**
+     * 数据源连接测试
+     * @param dataSourceVo
+     * @return
+     */
+    @GetMapping("testConnect")
+    @ApiOperation("数据源连接测试")
+    @RequiresPermissions({"online:datasource:add", "online:datasource:update"})
+    public Result testConnect(@Validated DataSourceVo dataSourceVo){
+        if(!service.testConnect(dataSourceVo.getUrl(), dataSourceVo.getUsername(), dataSourceVo.getPassword(), dataSourceVo.getDriverClassName())){
+            return error("连接失败！");
+        }
+        return ok();
     }
 }

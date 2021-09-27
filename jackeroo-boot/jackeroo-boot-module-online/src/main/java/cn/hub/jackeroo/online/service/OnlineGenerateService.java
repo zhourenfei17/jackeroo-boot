@@ -6,6 +6,7 @@ import cn.hub.jackeroo.exception.JackerooException;
 import cn.hub.jackeroo.online.bo.GenTemplateBO;
 import cn.hub.jackeroo.online.config.Config;
 import cn.hub.jackeroo.online.config.GenerateConfig;
+import cn.hub.jackeroo.online.entity.OnlineDatasource;
 import cn.hub.jackeroo.online.entity.OnlineDefaultConfig;
 import cn.hub.jackeroo.online.entity.OnlineScheme;
 import cn.hub.jackeroo.online.entity.OnlineTable;
@@ -19,11 +20,14 @@ import cn.hub.jackeroo.utils.StringUtils;
 import cn.hub.jackeroo.vo.PageParam;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
@@ -41,12 +45,11 @@ import java.util.stream.Collectors;
  * @author alex
  * @date 2020/09/18
  */
+@DS("master")
 @Slf4j
 @Service
 public class OnlineGenerateService {
 
-    @Resource
-    private OnlineDataBaseMapper dataBaseMapper;
     @Autowired
     private OnlineTableService tableService;
     @Autowired
@@ -63,7 +66,10 @@ public class OnlineGenerateService {
     private ISystemApi systemApi;
     @Autowired
     private OnlineDefaultConfigService defaultConfigService;
-
+    @Autowired
+    private OnlineDatasourceService datasourceService;
+    @Autowired
+    private DynamicDataSourceService dynamicDataSourceService;
 
     /**
      * 获取数据库业务表列表-带分页
@@ -71,27 +77,11 @@ public class OnlineGenerateService {
      * @param pageParam
      * @return
      */
-    public IPage<OnlineTable> findTableListFromDataSoure(OnlineTable onlineTable, PageParam pageParam){
+    public IPage<OnlineTable> findTableListFromDataSource(OnlineTable onlineTable, PageParam pageParam, String dataSourceName){
         Page<OnlineTable> page = onlineTable.initPage(pageParam);
-        page.setRecords(dataBaseMapper.findTableInfo(onlineTable));
+        page.setRecords(dynamicDataSourceService.findTableInfoByDataSource(onlineTable, dataSourceName));
 
         return page;
-    }
-
-    /**
-     * 获取数据库业务表的所有字段列表
-     * @param tableName
-     * @return
-     */
-    public List<OnlineTableField> findTableColumnList(String tableName){
-        List<OnlineTableField> list = dataBaseMapper.findTableColumnList(tableName, "mysql");
-        for (OnlineTableField field : list) {
-            if("text".equals(field.getDbFieldType())){
-                field.setDbFieldLength(null);
-            }
-        }
-
-        return list;
     }
 
     /**
@@ -99,21 +89,26 @@ public class OnlineGenerateService {
      * @param tableName
      * @return
      */
-    public Map findTableDetailInfo(String tableName){
+    public Map findTableDetailInfo(String tableName, String dataSource){
         final OnlineDefaultConfig defaultConfig = defaultConfigService.getConfig();
+
+        String dataSourceName = datasourceService.getDataSourceName(dataSource);
 
         Map<String, Object> map = new HashMap<>();
 
         // 构建数据库列对象
-        List<OnlineTableField> columnList = buildTableField(findTableColumnList(tableName), defaultConfig);
+        List<OnlineTableField> columnList = buildTableField(dynamicDataSourceService.findTableColumnListByDataSource(tableName, dataSourceName), defaultConfig);
         map.put("columns", columnList);
 
         OnlineTable query = new OnlineTable();
         query.setTableName(tableName);
-        List<OnlineTable> tableList = dataBaseMapper.findTableInfo(query);
+
+        List<OnlineTable> tableList = dynamicDataSourceService.findTableInfoByDataSource(query, dataSourceName);
         if(CollectionUtils.isNotEmpty(tableList)){
             OnlineTable table = tableList.get(0);
-            table.setClassName(StringUtils.toCapitalizeCamelCase(tableName));
+            // 删除表前缀
+            String[] prefix = StringUtils.isNotBlank(defaultConfig.getIgnorePrefix()) ? defaultConfig.getIgnorePrefix().split(",") : null;
+            table.setClassName(StringUtils.toCapitalizeCamelCase(StringUtils.removePrefix(tableName, prefix)));
             table.setIdStrategy(defaultConfig.getIdStrategy());
             // 如果当前数据库列对象中存在配置项的默认逻辑删字段，则删除策略为逻辑删
             if(columnList.stream().filter(item -> item.getDbFieldName().equals(defaultConfig.getLogicColumn()) || item.getEntityFieldName().equals(defaultConfig.getLogicColumn())).count() > 0){

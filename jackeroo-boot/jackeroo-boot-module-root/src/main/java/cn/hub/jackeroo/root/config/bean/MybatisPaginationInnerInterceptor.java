@@ -138,7 +138,11 @@ public class MybatisPaginationInnerInterceptor extends PaginationInnerIntercepto
             } else if (parameterObject instanceof IPage) {
                 return Optional.of((IPage) parameterObject);
             }else if(Reflections.isExistField("page", parameterObject)){
-                return Optional.of((IPage<?>)Reflections.invokeGetter(parameterObject, "page"));
+                try {
+                    return Optional.of((IPage<?>)Reflections.invokeGetter(parameterObject, "page"));
+                }catch (Exception e){
+
+                }
             }
         }
         return Optional.empty();

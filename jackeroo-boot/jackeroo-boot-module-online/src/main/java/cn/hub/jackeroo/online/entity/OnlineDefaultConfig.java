@@ -76,6 +76,12 @@ public class OnlineDefaultConfig extends BaseEntity<OnlineDefaultConfig> {
     private Integer formStyle;
 
     /**
+     * 忽略表前缀
+     */
+    @Length(max = 100)
+    private String ignorePrefix;
+
+    /**
      * 显示复选框
      */
     @Min(0)

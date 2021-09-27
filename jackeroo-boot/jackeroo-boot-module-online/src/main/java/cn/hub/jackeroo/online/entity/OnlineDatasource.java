@@ -2,6 +2,7 @@ package cn.hub.jackeroo.online.entity;
 
 import cn.hub.jackeroo.persistence.BaseEntity;
 import cn.hub.jackeroo.utils.validator.annotation.Dict;
+import cn.hub.jackeroo.utils.validator.annotation.Unique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
 import cn.hub.jackeroo.utils.validator.groups.Update;
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -53,31 +54,25 @@ public class OnlineDatasource extends BaseEntity<OnlineDatasource> {
     @NotBlank
     @Length(max = 50)
     @ApiModelProperty(value = "数据源名称")
+    @Unique(name = "数据源名称")
     private String name;
 
     /**
-     * 数据库类型
+     * 驱动包
      */
     @NotBlank
-    @Length(max = 20)
+    @Length(max = 50)
     @Dict(dictCode = "GEN_DATABASE_TYPE")
-    @ApiModelProperty(value = "数据库类型")
-    private String type;
+    @ApiModelProperty(value = "驱动包")
+    private String driverClassName;
 
     /**
-     * ip地址
+     * 连接地址
      */
     @NotBlank
-    @Length(max = 20)
-    @ApiModelProperty(value = "ip地址")
-    private String ip;
-
-    /**
-     * 端口
-     */
-    @NotNull
-    @ApiModelProperty(value = "端口")
-    private Integer port;
+    @Length(max = 500)
+    @ApiModelProperty(value = "连接地址")
+    private String url;
 
     /**
      * 用户名
@@ -85,7 +80,7 @@ public class OnlineDatasource extends BaseEntity<OnlineDatasource> {
     @NotBlank
     @Length(max = 50)
     @ApiModelProperty(value = "用户名")
-    private String user;
+    private String username;
 
     /**
      * 密钥
@@ -100,14 +95,6 @@ public class OnlineDatasource extends BaseEntity<OnlineDatasource> {
     @Length(max = 100)
     @ApiModelProperty(value = "密码")
     private String password;
-
-    /**
-     * 数据库名
-     */
-    @NotBlank
-    @Length(max = 50)
-    @ApiModelProperty(value = "数据库名")
-    private String databaseName;
 
     /**
      * 创建人
