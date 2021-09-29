@@ -73,6 +73,7 @@ import {
   TOGGLE_LAYOUT, TOGGLE_NAV_THEME, TOGGLE_WEAK,
   TOGGLE_COLOR, TOGGLE_MULTI_TAB
 } from '@/store/mutation-types'
+import defaultSettings from '@/config/defaultSettings';
 
 export default {
   props: ['settings'],
@@ -118,6 +119,11 @@ export default {
       fixedSider: false,
       // 多页模式
       multiTab: false
+    }
+  },
+  created() {
+    if(this.settings.primaryColor != defaultSettings.primaryColor){
+      updateTheme(this.settings.primaryColor)
     }
   },
   watch: {

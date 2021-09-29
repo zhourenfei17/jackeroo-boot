@@ -57,33 +57,35 @@ export default {
       menus: [],
       // 侧栏收起状态
       collapsed: false,
-      title: defaultSettings.title,
-      settings: {
-        // 布局类型
-        layout: defaultSettings.layout, // 'sidemenu', 'topmenu'
-        // CONTENT_WIDTH_TYPE
-        contentWidth: defaultSettings.layout === 'sidemenu' ? CONTENT_WIDTH_TYPE.Fluid : defaultSettings.contentWidth,
-        // 主题 'dark' | 'light'
-        theme: defaultSettings.navTheme,
-        // 主色调
-        primaryColor: defaultSettings.primaryColor,
-        // 固定头部
-        fixedHeader: defaultSettings.fixedHeader,
-        // 固定侧边栏
-        fixSiderbar: defaultSettings.fixSiderbar,
-        // 色弱模式
-        colorWeak: defaultSettings.colorWeak,
-        // 多页模式
-        multiTab: defaultSettings.multiTab,
-        hideHintAlert: false,
-        hideCopyButton: false
-      }
+      title:  defaultSettings.title,
     }
   },
   computed: {
     ...mapState({
       // 动态主路由
-      mainMenu: state => state.permission.addRouters
+      mainMenu: state => state.permission.addRouters,
+      settings: state => {
+        return {
+          // 布局类型
+          layout: state.app.layout,
+          // CONTENT_WIDTH_TYPE
+          contentWidth: state.app.layout === 'sidemenu' ? CONTENT_WIDTH_TYPE.Fluid : state.app.contentWidth,
+          // 主题 'dark' | 'light'
+          theme: state.app.theme,
+          // 主色调
+          primaryColor: state.app.color,
+          // 固定头部
+          fixedHeader: state.app.fixedHeader,
+          // 固定侧边栏
+          fixSiderbar: state.app.fixedSidebar,
+          // 色弱模式
+          colorWeak: state.app.weak,
+          // 多页模式
+          multiTab: state.app.multiTab,
+          hideHintAlert: false,
+          hideCopyButton: false
+        }
+      }
     })
   },
   /* watch: {
@@ -94,7 +96,6 @@ export default {
   created() {
     const routes = this.mainMenu.find(item => item.path === '/')
     this.menus = (routes && routes.children) || []
-    
   },
   mounted () {
     const userAgent = navigator.userAgent

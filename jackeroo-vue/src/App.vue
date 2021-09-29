@@ -10,6 +10,7 @@
 import { domTitle, setDocumentTitle } from '@/utils/domUtil'
 import { removeLoadingAnimate } from '@/utils/util'
 import { i18nRender } from '@/locales'
+import Watermark from '@/utils/waterMark';
 
 export default {
   data () {
@@ -18,6 +19,7 @@ export default {
   },
   mounted() {
     removeLoadingAnimate('page-pre-loading')
+    Watermark.set('Jackeroo Boot')
   },
   computed: {
     locale () {
