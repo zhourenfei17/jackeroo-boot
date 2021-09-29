@@ -249,7 +249,10 @@ public class UserController extends BaseController {
     @GetMapping("exportExcel")
     public void exportExcel(HttpServletResponse response, SysUser sysUser){
         try {
-            new ExportExcelWriteBuilder().autoTrim(true).fileAndSheetName("用户信息").doWrite(response, userService.findList(sysUser), SysUser.class);
+            new ExportExcelWriteBuilder()
+                    .autoTrim(true)
+                    .fileAndSheetName("用户信息")
+                    .doWrite(response, userService.findList(sysUser), SysUser.class);
         } catch (IOException e) {
             ResultUtil.writeJson(response, ResultStatusCode.EXCEL_EXPORT_ERROR);
         }

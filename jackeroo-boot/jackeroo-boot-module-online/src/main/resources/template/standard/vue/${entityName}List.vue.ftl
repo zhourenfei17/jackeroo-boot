@@ -214,6 +214,7 @@ export default {
       columns: [
         {
           title: '#',
+          width: 60,
           customRender: (text, record, index) => {
             return index + 1
           }
@@ -240,6 +241,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'action',
+          width: 220,
           scopedSlots: { customRender: 'action' }
         }
       ],

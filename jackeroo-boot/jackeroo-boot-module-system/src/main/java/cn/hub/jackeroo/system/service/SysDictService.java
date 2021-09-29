@@ -27,6 +27,7 @@ import java.util.List;
 * @author jackeroo
 * @since 2020-10-10
 */
+@DS("master")
 @Service
 @RequiredArgsConstructor
 public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
@@ -62,7 +63,6 @@ public class SysDictService extends ServiceImpl<SysDictMapper, SysDict> {
      * @param dictCode
      * @return
      */
-    @DS("master")
     @Cacheable(value = RedisKeyPrefix.CACHE_DICT, key = "#dictCode")
     public List<SysDict> findDictItemByDictCode(String dictCode){
         LambdaQueryWrapper<SysDict> query = new LambdaQueryWrapper<>();

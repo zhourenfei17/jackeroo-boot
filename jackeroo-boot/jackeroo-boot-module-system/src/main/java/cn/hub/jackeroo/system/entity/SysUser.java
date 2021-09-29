@@ -103,7 +103,7 @@ public class SysUser extends BaseEntity<SysUser> {
      */
     @Dict(dictCode = "COMMON.SEX")
     @ApiModelProperty(value = "性别")
-    @ExcelField(title = "性别", sort = 3, dictType = "COMMON_SEX")
+    @ExcelField(title = "性别", sort = 3, dictType = "COMMON.SEX")
     private Integer gender;
 
     /**
@@ -120,7 +120,7 @@ public class SysUser extends BaseEntity<SysUser> {
     @ValidRules(type = ValidRuleType.VALID_MOBILE)
     @NotBlank
     @ApiModelProperty(value = "手机号")
-    @ExcelField(title = "手机", sort = 6, width = 40)
+    @ExcelField(title = "手机", sort = 5, width = 40)
     private String phone;
 
     /**
@@ -157,7 +157,7 @@ public class SysUser extends BaseEntity<SysUser> {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间")
-    @ExcelField(title = "创建时间", sort = 5)
+    @ExcelField(title = "创建时间", sort = 6)
     private LocalDateTime createTime;
     /**
      * 更新人
@@ -173,6 +173,7 @@ public class SysUser extends BaseEntity<SysUser> {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新时间")
+    @ExcelField(title = "创建时间", sort = 7)
     private LocalDateTime updateTime;
 
     /**

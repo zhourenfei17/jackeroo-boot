@@ -127,8 +127,9 @@ public class LoadExcelFieldCellHandler implements CellWriteHandler {
             return null;
         }
         for (JSONObject json : dictItemList) {
-            if(dictItemValue.equals(json.getString("value"))){}
-            return json.getString("label");
+            if(dictItemValue.equals(json.getString("value"))){
+                return json.getString("label");
+            }
         }
         return null;
     }
