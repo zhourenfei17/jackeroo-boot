@@ -33,7 +33,7 @@
         <shiro-redis.version>3.3.1</shiro-redis.version>
         <poi.version>4.1.2</poi.version>
         <mybatis-plus-boot.version>3.4.3</mybatis-plus-boot.version>
-        <hibernate-validator.version>6.1.2.Final</hibernate-validator.version>
+        <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
         <swagger2.version>2.9.2</swagger2.version>
         <swagger2-bootstrap-ui.version>1.9.6</swagger2-bootstrap-ui.version>
         <druid.version>1.2.6</druid.version>
