@@ -101,7 +101,7 @@ const user = {
     // 登出
     Logout ({ commit, state }) {
       return new Promise((resolve) => {
-        logout(state.token).then(() => {
+        logout({account: state.info.account}).then(() => {
           resolve()
         }).catch(() => {
           resolve()
