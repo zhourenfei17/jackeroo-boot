@@ -1,5 +1,6 @@
 package cn.hub.jackeroo.system.controller;
 
+import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.constant.ParamType;
 import cn.hub.jackeroo.enums.ResultStatusCode;
 import cn.hub.jackeroo.persistence.BaseController;
@@ -10,6 +11,7 @@ import cn.hub.jackeroo.system.service.SysUserService;
 import cn.hub.jackeroo.utils.ResultUtil;
 import cn.hub.jackeroo.utils.UserUtils;
 import cn.hub.jackeroo.utils.annotation.ApiModule;
+import cn.hub.jackeroo.utils.annotation.OperateLog;
 import cn.hub.jackeroo.utils.easyexcel.model.ExportExcelWriteBuilder;
 import cn.hub.jackeroo.utils.validator.annotation.ValidatedUnique;
 import cn.hub.jackeroo.utils.validator.groups.Insert;
@@ -130,6 +132,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "更新用户", notes = "更新用户信息")
     @ValidatedUnique(clazz = SysUser.class, groups = Update.class)
     @RequiresPermissions("system:user:update")
+    @OperateLog(value = "用户信息", type = Constant.OPERATE_EDIT)
     public Result update(@Validated(Update.class) @RequestBody SysUser user){
         userService.updateUser(user);
         return ok();

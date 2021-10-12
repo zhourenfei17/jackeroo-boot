@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hub.jackeroo.system.mapper.SysOperateLogMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="baseColumns">
+        a.id as "id",
+        a.operate_content as "operateContent",
+        a.operate_type as "operateType",
+        a.operate_user as "operateUser",
+        a.request_ip as "requestIp",
+        a.request_method as "requestMethod",
+        a.request_uri as "requestUri",
+        a.request_params as "requestParams",
+        a.execute_time as "executeTime",
+        a.response_status as "responseStatus",
+        a.create_time as "createTime"
+    </sql>
+
+    <select id="findList" resultType="cn.hub.jackeroo.system.entity.SysOperateLog">
+        select
+            <include refid="baseColumns"/>
+        from sys_operate_log a
+        <where>
+        </where>
+        <choose>
+            <when test="orderBy != null and orderBy != ''">
+                order by a.${orderBy}
+            </when>
+            <otherwise>
+                order by a.create_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

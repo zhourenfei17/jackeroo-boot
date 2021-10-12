@@ -67,4 +67,24 @@ public interface Constant {
      * 权限标识中的分隔符
      */
     String SPLIT_SECURITY = ":";
+    /**
+     * 系统操作日志操作类型-登录
+     */
+    String OPERATE_LOGIN = "0";
+    /**
+     * 系统操作日志操作类型-退出
+     */
+    String OPERATE_LOGOUT = "1";
+    /**
+     * 系统操作日志操作类型-添加
+     */
+    String OPERATE_ADD = "2";
+    /**
+     * 系统操作日志操作类型-修改
+     */
+    String OPERATE_EDIT = "3";
+    /**
+     * 系统操作日志操作类型-删除
+     */
+    String OPERATE_DELETE = "4";
 }

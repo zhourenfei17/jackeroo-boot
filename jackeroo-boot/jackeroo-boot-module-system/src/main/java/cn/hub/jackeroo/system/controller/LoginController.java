@@ -1,10 +1,13 @@
 package cn.hub.jackeroo.system.controller;
 
+import cn.hub.jackeroo.constant.Constant;
 import cn.hub.jackeroo.enums.ResultStatusCode;
 import cn.hub.jackeroo.persistence.BaseController;
 import cn.hub.jackeroo.system.query.Account;
+import cn.hub.jackeroo.system.service.SysOperateLogService;
 import cn.hub.jackeroo.utils.RandImageUtil;
 import cn.hub.jackeroo.utils.StringUtils;
+import cn.hub.jackeroo.utils.annotation.OperateLog;
 import cn.hub.jackeroo.utils.captcha.Captcha;
 import cn.hub.jackeroo.utils.captcha.GifCaptcha;
 import cn.hub.jackeroo.vo.Result;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -37,11 +41,14 @@ public class LoginController extends BaseController {
 
     private static final String CAPTCHA_PREFIX = "CAPTCHA:";
 
+    private final SysOperateLogService operateLogService;
+
     /**
      * 账号、密码登录
      * @param account
      * @return
      */
+    @OperateLog(value = "用户登录", type = Constant.OPERATE_LOGIN)
 	@RequestMapping("/login")
 	public Result login(@Validated Account account) {
 		try {
@@ -76,9 +83,11 @@ public class LoginController extends BaseController {
 	 * 
 	 * @return
 	 */
+    @OperateLog(value = "退出登录", type = Constant.OPERATE_LOGOUT)
 	@RequestMapping("/logout")
-	public Result logout() {
+	public Result logout(HttpServletRequest request) {
 		// SecurityUtils.getSubject().logout();
+
 		return ok();
 	}
 

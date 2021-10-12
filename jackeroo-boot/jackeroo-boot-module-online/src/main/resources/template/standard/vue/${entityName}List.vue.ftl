@@ -189,7 +189,7 @@
 </template>-
 
 <script>
-import { STable, DataCard<#if existQuery>, SearchCard</#if><#if existJSelect>, JSelect</#if><#if existJDictSelect>, JDictSelect</#if>} from '@/components'
+import { STable, DataCard<#if existQuery??>, SearchCard</#if><#if existJSelect??>, JSelect</#if><#if existJDictSelect??>, JDictSelect</#if>} from '@/components'
 import {JackerooListMixins} from '@/mixins/JackerooListMixins'
 import ${table.className}FormModal from './modal/${table.className}FormModal'
 
@@ -197,13 +197,13 @@ export default {
   components: {
     STable,
     DataCard,
-  <#if existQuery>
+  <#if existQuery??>
     SearchCard,
   </#if>
-  <#if existJSelect>
+  <#if existJSelect??>
     JSelect,
   </#if>
-  <#if existJDictSelect>
+  <#if existJDictSelect??>
     JDictSelect,
   </#if>
     ${table.className}FormModal
