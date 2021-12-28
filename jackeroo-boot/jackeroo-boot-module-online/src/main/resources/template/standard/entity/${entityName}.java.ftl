@@ -1,12 +1,14 @@
 package ${scheme.packageName}.${module.code}.entity;
 
+<#if existBigDecimal>
+import java.math.BigDecimal;
+</#if>
 <#if existLocalDateTime>
 import java.time.LocalDateTime;
 </#if>
 <#if existLocalDate>
 import java.time.LocalDate;
 </#if>
-import java.io.Serializable;
 
 <#if existValidRules && scheme.enableServerValid == 1>
 import cn.hub.jackeroo.enums.ValidRuleType;

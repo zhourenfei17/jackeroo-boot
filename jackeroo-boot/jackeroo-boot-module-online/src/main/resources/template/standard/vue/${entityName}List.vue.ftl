@@ -176,9 +176,9 @@
         >
         <template slot="action" slot-scope="text, record">
           <action-list>
-            <a :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</a>
-            <a :type="actionType.edit" :icon="actionIcon.edit"<#if scheme.enableSecurity == 1> v-action="'${module.code}:${scheme.securitySign}:update'"</#if> @click="handleEdit(record)">编辑</a>
-            <a :type="actionType.delete" :icon="actionIcon.delete"<#if scheme.enableSecurity == 1> v-action="'${module.code}:${scheme.securitySign}:delete'"</#if> @click="handleDelete(record)">删除</a>
+            <j-link :type="actionType.view" :icon="actionIcon.view" @click="handleView(record)">详情</j-link>
+            <j-link :type="actionType.edit" :icon="actionIcon.edit"<#if scheme.enableSecurity == 1> v-action="'${module.code}:${scheme.securitySign}:update'"</#if> @click="handleEdit(record)">编辑</j-link>
+            <j-link :type="actionType.delete" :icon="actionIcon.delete"<#if scheme.enableSecurity == 1> v-action="'${module.code}:${scheme.securitySign}:delete'"</#if> @click="handleDelete(record)">删除</j-link>
           </action-list>
         </template>
       </s-table>

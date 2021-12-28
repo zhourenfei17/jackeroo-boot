@@ -87,10 +87,10 @@ export default {
     </#if>
   data(){
     return {
-      title: '${table.comment}',
-      <#if existUnique>tableName: '${table.tableName}',</#if>
-      width: '60vw',
-      <#if scheme.formStyle?number &gt; 1>formCol: ${scheme.formStyle},</#if>
+      title: '${table.comment}',<#if existUnique>
+      tableName: '${table.tableName}',</#if>
+      width: '60vw',<#if scheme.formStyle?number &gt; 1>
+      formCol: ${scheme.formStyle},</#if>
       form: {
             <#list columnList as column>
             <#if column.enableForm == 1 || column.primaryKey == 1>

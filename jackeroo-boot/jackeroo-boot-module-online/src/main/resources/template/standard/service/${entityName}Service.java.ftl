@@ -6,6 +6,7 @@ import ${scheme.packageName}.vo.PageParam;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
  * @since ${createDate}
  */
 @Service
+@RequiredArgsConstructor
 public class ${table.className}Service extends ServiceImpl<${table.className}Mapper, ${table.className}> {
 
     /**

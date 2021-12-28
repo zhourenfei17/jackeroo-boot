@@ -1,5 +1,6 @@
 package ${scheme.packageName}.${module.code}.controller;
 
+import cn.hub.jackeroo.enums.ResultStatusCode;
 import ${scheme.packageName}.persistence.BaseController;
 import ${scheme.packageName}.${module.code}.entity.${table.className};
 import ${scheme.packageName}.${module.code}.service.${table.className}Service;
@@ -37,8 +38,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * <p>
